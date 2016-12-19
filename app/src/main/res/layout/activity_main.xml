@@ -8,51 +8,47 @@
     <LinearLayout
         android:id="@+id/main_control"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/main_control_device"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:background="@color/color_red_light"
             android:text="DEV" />
 
         <TextView
             android:id="@+id/main_control_calendar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:background="@color/color_green_light"
             android:text="CAL" />
 
         <TextView
             android:id="@+id/main_control_dashboard"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:background="@color/color_blue_light"
             android:text="DAS" />
 
         <TextView
             android:id="@+id/main_control_profile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:minHeight="64dp"
             android:background="@color/color_orange"
             android:text="PRO" />
 

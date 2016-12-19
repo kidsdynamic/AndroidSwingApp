@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
         mViewProfile = findViewById(R.id.main_control_profile);
         mViewProfile.setOnClickListener(mControlClickListener);
+
+        selectFragment(FragmentRegistration.class.getName(), null);
     }
 
     private void showFragment(String className, Bundle args) {
