@@ -11,18 +11,29 @@ import android.view.ViewGroup;
  */
 
 public class FragmentRegistration extends Fragment {
-
-    public View mMainView;
+    private MainActivity mMainActivity;
+    private View mMainView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMainActivity = (MainActivity) getActivity();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mMainView = inflater.inflate(R.layout.fragment_registration, container, false);
 
+        mMainView.findViewById(R.id.registration_label).setOnClickListener(mLabelClickListener);
+
         return mMainView;
     }
+
+    View.OnClickListener mLabelClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mMainActivity.showControl(true);
+            mMainActivity.selectFragment(FragmentDevice.class.getName(), null);
+        }
+    };
 }

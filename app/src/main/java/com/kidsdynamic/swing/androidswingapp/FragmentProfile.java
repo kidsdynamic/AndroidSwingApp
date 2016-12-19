@@ -11,12 +11,13 @@ import android.view.ViewGroup;
  */
 
 public class FragmentProfile extends Fragment {
-
-    public View mMainView;
+    private MainActivity mMainActivity;
+    private View mMainView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mMainActivity = (MainActivity) getActivity();
     }
 
     @Override
