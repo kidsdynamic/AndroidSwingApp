@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">@color/color_orange</color>
-    <color name="colorPrimaryDark">@color/color_orange_deep</color>
+    <color name="colorPrimary">@color/color_blue_light</color>
+    <color name="colorPrimaryDark">@color/color_orange_main</color>
     <color name="colorAccent">@color/color_white_snow</color>
 
     <color name="color_white">#FFFFFF</color>
@@ -35,6 +35,7 @@
     <color name="color_orange_light">#FFE4C4</color>
     <color name="color_orange_deep">#FF4500</color>
     <color name="color_orange_gold">#FFD700</color>
+    <color name="color_orange_main">#FF7231</color>
 
     <color name="color_pink_light">#FFC0CB</color>
     <color name="color_pink">#FF69B4</color>
