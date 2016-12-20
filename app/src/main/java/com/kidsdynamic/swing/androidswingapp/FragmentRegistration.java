@@ -33,7 +33,7 @@ public class FragmentRegistration extends Fragment {
         @Override
         public void onClick(View view) {
             mMainActivity.showControl(true);
-            mMainActivity.selectFragment(FragmentDevice.class.getName(), null);
+            mMainActivity.selectControl(null);
         }
     };
 }

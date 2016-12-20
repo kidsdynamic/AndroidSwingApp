@@ -12,45 +12,45 @@
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:id="@+id/main_control_device"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/control_button_background"
             android:gravity="center"
-            android:background="@color/color_red_light"
-            android:text="DEV" />
+            android:src="@drawable/control_button_device" />
 
-        <TextView
+        <ImageView
             android:id="@+id/main_control_calendar"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/control_button_background"
             android:gravity="center"
-            android:background="@color/color_green_light"
-            android:text="CAL" />
+            android:src="@drawable/control_button_calendar" />
 
-        <TextView
+        <ImageView
             android:id="@+id/main_control_dashboard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/control_button_background"
             android:gravity="center"
-            android:background="@color/color_blue_light"
-            android:text="DAS" />
+            android:src="@drawable/control_button_dashboard" />
 
-        <TextView
+        <ImageView
             android:id="@+id/main_control_profile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:background="@drawable/control_button_background"
             android:gravity="center"
-            android:background="@color/color_orange"
-            android:text="PRO" />
+            android:src="@drawable/control_button_profile" />
 
     </LinearLayout>
 

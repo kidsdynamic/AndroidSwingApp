@@ -76,22 +76,42 @@ public class MainActivity extends AppCompatActivity {
         anim.start();
     }
 
+    public void selectControl(View view) {
+        if (view == mViewDevice || view == null) {
+            mViewCalendar.setSelected(false);
+            mViewDashboard.setSelected(false);
+            mViewProfile.setSelected(false);
+            mViewDevice.setSelected(true);
+            selectFragment(FragmentDevice.class.getName(), null);
+
+        } else if (view == mViewCalendar) {
+            mViewDashboard.setSelected(false);
+            mViewProfile.setSelected(false);
+            mViewDevice.setSelected(false);
+            mViewCalendar.setSelected(true);
+            selectFragment(FragmentCalendar.class.getName(), null);
+
+        } else if (view == mViewDashboard) {
+            mViewProfile.setSelected(false);
+            mViewDevice.setSelected(false);
+            mViewCalendar.setSelected(false);
+            mViewDashboard.setSelected(true);
+            selectFragment(FragmentDashboard.class.getName(), null);
+
+        } else if (view == mViewProfile) {
+            mViewDevice.setSelected(false);
+            mViewCalendar.setSelected(false);
+            mViewDashboard.setSelected(false);
+            mViewProfile.setSelected(true);
+            selectFragment(FragmentProfile.class.getName(), null);
+
+        }
+    }
+
     View.OnClickListener mControlClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view == mViewDevice) {
-                selectFragment(FragmentDevice.class.getName(), null);
-
-            } else if (view == mViewCalendar) {
-                selectFragment(FragmentCalendar.class.getName(), null);
-
-            } else if (view == mViewDashboard) {
-                selectFragment(FragmentDashboard.class.getName(), null);
-
-            } else if (view == mViewProfile) {
-                selectFragment(FragmentProfile.class.getName(), null);
-
-            }
+            selectControl(view);
         }
     };
 }
