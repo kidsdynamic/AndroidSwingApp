@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 mViewControl.setLayoutParams(layoutParams);
             }
         });
-        anim.setDuration(250);
+        anim.setDuration(500);
         anim.start();
     }
 

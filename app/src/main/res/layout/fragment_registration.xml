@@ -7,20 +7,31 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/city_newyork"
         android:layout_alignParentBottom="true"
-        android:scaleType="centerCrop"
+        android:adjustViewBounds="false"
         android:cropToPadding="true"
-        android:adjustViewBounds="false" />
+        android:scaleType="centerCrop"
+        android:src="@mipmap/city_newyork" />
 
-    <TextView
-        android:id="@+id/registration_label"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="Registration"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:orientation="vertical">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewPagerRegistration
+            android:id="@+id/registration_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2" />
+
+        <TextView
+            android:id="@+id/registration_label"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Registration" />
+    </LinearLayout>
 
 </RelativeLayout>

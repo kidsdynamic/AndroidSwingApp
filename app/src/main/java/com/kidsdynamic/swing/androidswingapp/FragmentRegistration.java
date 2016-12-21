@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 public class FragmentRegistration extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
+    private ViewPagerRegistration mViewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,8 @@ public class FragmentRegistration extends Fragment {
 
         mMainView.findViewById(R.id.registration_label).setOnClickListener(mLabelClickListener);
 
+        mViewPager = (ViewPagerRegistration) mMainView.findViewById(R.id.registration_viewpager);
+
         return mMainView;
     }
 
@@ -36,4 +39,5 @@ public class FragmentRegistration extends Fragment {
             mMainActivity.selectControl(null);
         }
     };
+
 }
