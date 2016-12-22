@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/registration_info_last"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
             android:text="First Name" />
 
         <Button
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/registration_info_phone"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
             android:text="Last Name" />
 
         <Button
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/registration_info_zip"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
             android:text="Phone Number" />
 
         <Button
@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="5dp"
+            android:layout_marginBottom="0dp"
             android:text="Zip Code" />
 
     </RelativeLayout>
