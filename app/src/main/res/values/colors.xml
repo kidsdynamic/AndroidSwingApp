@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">@color/color_orange</color>
-    <color name="colorPrimaryDark">@color/color_orange_deep</color>
-    <color name="colorAccent">@color/color_white_snow</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
 
     <color name="color_white">#FFFFFF</color>
     <color name="color_white_snow">#FFFAFA</color>
@@ -22,6 +22,7 @@
     <color name="color_blue_light">#6060FF</color>
     <color name="color_blue_deep">#2020FF</color>
     <color name="color_blue_main">#0077B0</color>
+    <color name="color_blue_sky">#CCEEF7</color>
 
     <color name="color_green">#40FF40</color>
     <color name="color_green_light">#60FF60</color>
@@ -34,6 +35,7 @@
     <color name="color_orange_light">#FFE4C4</color>
     <color name="color_orange_deep">#FF4500</color>
     <color name="color_orange_gold">#FFD700</color>
+    <color name="color_orange_main">#FF7231</color>
 
     <color name="color_pink_light">#FFC0CB</color>
     <color name="color_pink">#FF69B4</color>

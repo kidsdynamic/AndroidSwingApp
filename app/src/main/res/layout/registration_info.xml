@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5">
+
+        <Button
+            android:id="@+id/registration_info_first"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/registration_info_last"
+            android:layout_marginBottom="10dp"
+            android:text="First Name" />
+
+        <Button
+            android:id="@+id/registration_info_last"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/registration_info_phone"
+            android:layout_marginBottom="10dp"
+            android:text="Last Name" />
+
+        <Button
+            android:id="@+id/registration_info_phone"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/registration_info_zip"
+            android:layout_marginBottom="10dp"
+            android:text="Phone Number" />
+
+        <Button
+            android:id="@+id/registration_info_zip"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp"
+            android:text="Zip Code" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+</LinearLayout>

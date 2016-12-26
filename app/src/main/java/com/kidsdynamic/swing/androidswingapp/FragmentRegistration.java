@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 public class FragmentRegistration extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
+    private ViewPagerRegistration mViewPager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,16 +26,18 @@ public class FragmentRegistration extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mMainView = inflater.inflate(R.layout.fragment_registration, container, false);
 
-        mMainView.findViewById(R.id.registration_label).setOnClickListener(mLabelClickListener);
+        mViewPager = (ViewPagerRegistration) mMainView.findViewById(R.id.registration_viewpager);
+        mViewPager.setOnFinishListener(mOnFinishListener);
 
         return mMainView;
     }
 
-    View.OnClickListener mLabelClickListener = new View.OnClickListener() {
+    private ViewPagerRegistration.OnFinishListener mOnFinishListener = new ViewPagerRegistration.OnFinishListener() {
         @Override
-        public void onClick(View view) {
+        public void finish() {
             mMainActivity.showControl(true);
-            mMainActivity.selectFragment(FragmentDevice.class.getName(), null);
+            mMainActivity.selectControl(null);
         }
     };
+
 }
