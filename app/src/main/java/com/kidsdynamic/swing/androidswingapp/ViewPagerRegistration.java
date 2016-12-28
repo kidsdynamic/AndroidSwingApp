@@ -4,10 +4,15 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -18,14 +23,14 @@ import java.util.ArrayList;
 public class ViewPagerRegistration extends ViewPager {
     private ArrayList<View> mViewList;
 
-    private Button mButtonLogin;
-    private Button mButtonFacebook;
-    private Button mButtonEmail;
-    private Button mButtonPassword;
-    private Button mButtonFirstName;
-    private Button mButtonLastName;
-    private Button mButtonPhone;
-    private Button mButtonZip;
+    private Button mViewLogin;
+    private Button mViewFacebook;
+    private EditText mViewEmail;
+    private EditText mViewPassword;
+    private EditText mViewFirstName;
+    private EditText mViewLastName;
+    private EditText mViewPhone;
+    private EditText mViewZip;
     private Button mButtonWatchYes;
     private Button mButtonWatchNo;
     private Button mButtonKidFirstName;
@@ -46,37 +51,37 @@ public class ViewPagerRegistration extends ViewPager {
         view = inflater.inflate(R.layout.registration_login, null);
         mViewList.add(view);
 
-        mButtonLogin = (Button) view.findViewById(R.id.registration_login_login);
-        mButtonLogin.setOnClickListener(mButtonClickListener);
+        mViewLogin = (Button) view.findViewById(R.id.registration_login_login);
+        mViewLogin.setOnClickListener(mButtonClickListener);
 
-        mButtonFacebook = (Button) view.findViewById(R.id.registration_login_facebook);
-        mButtonFacebook.setOnClickListener(mButtonClickListener);
+        mViewFacebook = (Button) view.findViewById(R.id.registration_login_facebook);
+        mViewFacebook.setOnClickListener(mButtonClickListener);
 
         // Page Account
         view = inflater.inflate(R.layout.registration_account, null);
         mViewList.add(view);
 
-        mButtonEmail = (Button) view.findViewById(R.id.registration_account_email);
-        mButtonEmail.setOnClickListener(mButtonClickListener);
+        mViewEmail = (EditText) view.findViewById(R.id.registration_account_email);
+        mViewEmail.setOnEditorActionListener(mEdittextActionListener);
 
-        mButtonPassword = (Button) view.findViewById(R.id.registration_account_password);
-        mButtonPassword.setOnClickListener(mButtonClickListener);
+        mViewPassword = (EditText) view.findViewById(R.id.registration_account_password);
+        mViewPassword.setOnEditorActionListener(mEdittextActionListener);
 
         // Page Info
         view = inflater.inflate(R.layout.registration_info, null);
         mViewList.add(view);
 
-        mButtonFirstName = (Button) view.findViewById(R.id.registration_info_first);
-        mButtonFirstName.setOnClickListener(mButtonClickListener);
+        mViewFirstName = (EditText) view.findViewById(R.id.registration_info_first);
+        mViewFirstName.setOnEditorActionListener(mEdittextActionListener);
 
-        mButtonLastName = (Button) view.findViewById(R.id.registration_info_last);
-        mButtonLastName.setOnClickListener(mButtonClickListener);
+        mViewLastName = (EditText) view.findViewById(R.id.registration_info_last);
+        mViewLastName.setOnEditorActionListener(mEdittextActionListener);
 
-        mButtonPhone = (Button) view.findViewById(R.id.registration_info_phone);
-        mButtonPhone.setOnClickListener(mButtonClickListener);
+        mViewPhone = (EditText) view.findViewById(R.id.registration_info_phone);
+        mViewPhone.setOnEditorActionListener(mEdittextActionListener);
 
-        mButtonZip = (Button) view.findViewById(R.id.registration_info_zip);
-        mButtonZip.setOnClickListener(mButtonClickListener);
+        mViewZip = (EditText) view.findViewById(R.id.registration_info_zip);
+        mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         // Page Have Watch
         view = inflater.inflate(R.layout.registration_have_watch, null);
@@ -110,22 +115,10 @@ public class ViewPagerRegistration extends ViewPager {
     Button.OnClickListener mButtonClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view == mButtonLogin) {
+            if (view == mViewLogin) {
                 setCurrentItem(1, true);
-            } else if (view == mButtonFacebook) {
+            } else if (view == mViewFacebook) {
                 setCurrentItem(2, true);
-            } else if (view == mButtonEmail) {
-                setCurrentItem(2, true);
-            } else if (view == mButtonPassword) {
-                setCurrentItem(2, true);
-            } else if (view == mButtonFirstName) {
-                setCurrentItem(3, true);
-            } else if (view == mButtonLastName) {
-                setCurrentItem(3, true);
-            } else if (view == mButtonPhone) {
-                setCurrentItem(3, true);
-            } else if (view == mButtonZip) {
-                setCurrentItem(3, true);
             } else if (view == mButtonWatchYes) {
                 setCurrentItem(4, true);
             } else if (view == mButtonWatchNo) {
@@ -137,6 +130,19 @@ public class ViewPagerRegistration extends ViewPager {
                 if(mOnFinishListener != null)
                     mOnFinishListener.finish();
             }
+        }
+    };
+
+    private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+            if(view == mViewPassword && actionId== EditorInfo.IME_ACTION_DONE)
+                setCurrentItem(2, true);
+
+            if(view == mViewZip && actionId== EditorInfo.IME_ACTION_DONE)
+                setCurrentItem(3, true);
+
+            return false;
         }
     };
 
@@ -181,4 +187,5 @@ public class ViewPagerRegistration extends ViewPager {
             return mViewList.get(position);
         }
     };
+
 }

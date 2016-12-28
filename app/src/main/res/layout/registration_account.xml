@@ -14,23 +14,30 @@
         android:layout_height="match_parent"
         android:layout_weight="5">
 
-        <Button
+        <EditText
             android:id="@+id/registration_account_email"
-            style="@style/button_main"
+            style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/registration_account_password"
             android:layout_marginBottom="10dp"
-            android:text="Email" />
+            android:gravity="center"
+            android:hint="Email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:nextFocusForward="@+id/registration_account_password" />
 
-        <Button
+        <EditText
             android:id="@+id/registration_account_password"
-            style="@style/button_main"
+            style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="100dp"
-            android:text="Password" />
+            android:gravity="center"
+            android:hint="Password"
+            android:imeOptions="actionDone"
+            android:inputType="textPassword" />
 
     </RelativeLayout>
 
