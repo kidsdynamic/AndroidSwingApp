@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 /**
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupLanguage extends Fragment {
+public class FragmentSignupCaregiver extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
@@ -23,18 +22,8 @@ public class FragmentSignupLanguage extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_language, container, false);
-
-        Button button = (Button) mMainView.findViewById(R.id.signup_language_select);
-        button.setOnClickListener(mOnButtonListener);
+        mMainView = inflater.inflate(R.layout.fragment_signup_caregiver, container, false);
 
         return mMainView;
     }
-
-    private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupCaregiver.class.getName(), null);
-        }
-    };
 }

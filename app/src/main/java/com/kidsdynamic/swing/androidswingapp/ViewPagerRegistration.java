@@ -64,6 +64,7 @@ public class ViewPagerRegistration extends ViewPager {
         View view;
 
         // Page Explore the World
+/*
         mPageWorld = inflater.inflate(R.layout.registration_explore_world, null);
         mViewList.add(mPageWorld);
 
@@ -72,7 +73,7 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewNanny = (Button) mPageWorld.findViewById(R.id.registration_nanny);
         mViewNanny.setOnClickListener(mButtonClickListener);
-
+*/
         // Page Login
         mPageLogin = inflater.inflate(R.layout.registration_login, null);
         mViewList.add(mPageLogin);

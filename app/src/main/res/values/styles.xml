@@ -14,7 +14,7 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
-    <style name="registration_label">
+    <style name="textview_main">
         <item name="android:textColor">@color/color_orange_main</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
