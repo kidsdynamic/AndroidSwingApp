@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="false"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/city_newyork" />
+
     <LinearLayout
         android:id="@+id/main_control"
         android:layout_width="match_parent"
@@ -59,6 +68,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/main_control"
-        android:layout_alignParentTop="true"
         android:orientation="vertical" />
+
 </RelativeLayout>

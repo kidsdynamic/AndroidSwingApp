@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
         mViewControl = findViewById(R.id.main_control);
 
-        selectFragment(FragmentRegistration.class.getName(), null);
+        selectFragment(FragmentSignupLanguage.class.getName(), null);
     }
 
     @Override
