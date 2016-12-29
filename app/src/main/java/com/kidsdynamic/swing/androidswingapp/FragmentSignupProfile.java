@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -15,12 +14,14 @@ import android.widget.TextView;
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupAccount extends Fragment {
+public class FragmentSignupProfile extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
-    private EditText mViewEmail;
-    private EditText mViewPassword;
+    private EditText mViewFirstName;
+    private EditText mViewLastName;
+    private EditText mViewPhone;
+    private EditText mViewZip;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,13 +31,19 @@ public class FragmentSignupAccount extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_account, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_signup_profile, container, false);
 
-        mViewEmail = (EditText) mMainView.findViewById(R.id.signup_account_email);
-        mViewEmail.setOnEditorActionListener(mEdittextActionListener);
+        mViewFirstName = (EditText) mMainView.findViewById(R.id.signup_profile_first);
+        mViewFirstName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewPassword = (EditText) mMainView.findViewById(R.id.signup_account_password);
-        mViewPassword.setOnEditorActionListener(mEdittextActionListener);
+        mViewLastName = (EditText) mMainView.findViewById(R.id.signup_profile_last);
+        mViewLastName.setOnEditorActionListener(mEdittextActionListener);
+
+        mViewPhone = (EditText) mMainView.findViewById(R.id.signup_profile_phone);
+        mViewPhone.setOnEditorActionListener(mEdittextActionListener);
+
+        mViewZip = (EditText) mMainView.findViewById(R.id.signup_profile_zip);
+        mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         return mMainView;
     }
@@ -44,8 +51,8 @@ public class FragmentSignupAccount extends Fragment {
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            if (view == mViewPassword && actionId == EditorInfo.IME_ACTION_DONE) {
-                mMainActivity.selectFragment(FragmentSignupProfile.class.getName(), null);
+            if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
+
             }
 
             return false;

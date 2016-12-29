@@ -99,7 +99,8 @@ public class ViewPagerRegistration extends ViewPager {
         mViewPassword = (EditText) mPageAccount.findViewById(R.id.registration_account_password);
         mViewPassword.setOnEditorActionListener(mEdittextActionListener);
 */
-        // Page Info
+        // Page Info/
+        /*
         mPageInfo = inflater.inflate(R.layout.registration_info, null);
         mViewList.add(mPageInfo);
 
@@ -114,7 +115,7 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewZip = (EditText) mPageInfo.findViewById(R.id.registration_info_zip);
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
-
+*/
         // Page Have Watch
         mPageHaveWatch = inflater.inflate(R.layout.registration_have_watch, null);
         mViewList.add(mPageHaveWatch);

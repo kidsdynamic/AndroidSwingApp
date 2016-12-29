@@ -21,7 +21,7 @@
             android:layout_weight="3" />
 
         <EditText
-            android:id="@+id/registration_info_first"
+            android:id="@+id/signup_profile_first"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -34,7 +34,7 @@
             android:nextFocusForward="@+id/registration_info_last" />
 
         <EditText
-            android:id="@+id/registration_info_last"
+            android:id="@+id/signup_profile_last"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -47,7 +47,7 @@
             android:nextFocusForward="@+id/registration_info_phone" />
 
         <EditText
-            android:id="@+id/registration_info_phone"
+            android:id="@+id/signup_profile_phone"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -60,7 +60,7 @@
             android:nextFocusForward="@+id/registration_info_zip" />
 
         <EditText
-            android:id="@+id/registration_info_zip"
+            android:id="@+id/signup_profile_zip"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
