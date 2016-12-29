@@ -75,6 +75,7 @@ public class ViewPagerRegistration extends ViewPager {
         mViewNanny.setOnClickListener(mButtonClickListener);
 */
         // Page Login
+        /*
         mPageLogin = inflater.inflate(R.layout.registration_login, null);
         mViewList.add(mPageLogin);
 
@@ -86,7 +87,7 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewGoogle = (Button) mPageLogin.findViewById(R.id.registration_login_google);
         mViewGoogle.setOnClickListener(mButtonClickListener);
-
+*/
         // Page Account
         mPageAccount = inflater.inflate(R.layout.registration_account, null);
         mViewList.add(mPageAccount);
