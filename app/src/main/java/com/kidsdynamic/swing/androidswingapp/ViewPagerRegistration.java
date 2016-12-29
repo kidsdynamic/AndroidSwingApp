@@ -23,20 +23,33 @@ import java.util.ArrayList;
 public class ViewPagerRegistration extends ViewPager {
     private ArrayList<View> mViewList;
 
+    private Button mViewParent;
+    private Button mViewNanny;
     private Button mViewLogin;
     private Button mViewFacebook;
+    private Button mViewGoogle;
     private EditText mViewEmail;
     private EditText mViewPassword;
     private EditText mViewFirstName;
     private EditText mViewLastName;
     private EditText mViewPhone;
     private EditText mViewZip;
-    private Button mButtonWatchYes;
-    private Button mButtonWatchNo;
+    private Button mViewWatchYes;
+    private Button mViewWatchNo;
+    private Button mViewRegisterWatch;
+    private Button mViewRequestWatch;
     private Button mButtonKidFirstName;
     private Button mButtonKidLastName;
 
     private OnFinishListener mOnFinishListener = null;
+
+    private View mPageWorld;
+    private View mPageLogin;
+    private View mPageAccount;
+    private View mPageInfo;
+    private View mPageHaveWatch;
+    private View mPageRegisterWatch;
+    private View mPageSelectWatch;
 
     public ViewPagerRegistration(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,55 +60,78 @@ public class ViewPagerRegistration extends ViewPager {
 
         View view;
 
-        // Page Login
-        view = inflater.inflate(R.layout.registration_login, null);
-        mViewList.add(view);
+        // Page Explore the World
+        mPageWorld = inflater.inflate(R.layout.registration_explore_world, null);
+        mViewList.add(mPageWorld);
 
-        mViewLogin = (Button) view.findViewById(R.id.registration_login_login);
+        mViewParent = (Button) mPageWorld.findViewById(R.id.registration_parent);
+        mViewParent.setOnClickListener(mButtonClickListener);
+
+        mViewNanny = (Button) mPageWorld.findViewById(R.id.registration_nanny);
+        mViewNanny.setOnClickListener(mButtonClickListener);
+
+        // Page Login
+        mPageLogin = inflater.inflate(R.layout.registration_login, null);
+        mViewList.add(mPageLogin);
+
+        mViewLogin = (Button) mPageLogin.findViewById(R.id.registration_login_login);
         mViewLogin.setOnClickListener(mButtonClickListener);
 
-        mViewFacebook = (Button) view.findViewById(R.id.registration_login_facebook);
+        mViewFacebook = (Button) mPageLogin.findViewById(R.id.registration_login_facebook);
         mViewFacebook.setOnClickListener(mButtonClickListener);
 
-        // Page Account
-        view = inflater.inflate(R.layout.registration_account, null);
-        mViewList.add(view);
+        mViewGoogle = (Button) mPageLogin.findViewById(R.id.registration_login_google);
+        mViewGoogle.setOnClickListener(mButtonClickListener);
 
-        mViewEmail = (EditText) view.findViewById(R.id.registration_account_email);
+        // Page Account
+        mPageAccount = inflater.inflate(R.layout.registration_account, null);
+        mViewList.add(mPageAccount);
+
+        mViewEmail = (EditText) mPageAccount.findViewById(R.id.registration_account_email);
         mViewEmail.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewPassword = (EditText) view.findViewById(R.id.registration_account_password);
+        mViewPassword = (EditText) mPageAccount.findViewById(R.id.registration_account_password);
         mViewPassword.setOnEditorActionListener(mEdittextActionListener);
 
         // Page Info
-        view = inflater.inflate(R.layout.registration_info, null);
-        mViewList.add(view);
+        mPageInfo = inflater.inflate(R.layout.registration_info, null);
+        mViewList.add(mPageInfo);
 
-        mViewFirstName = (EditText) view.findViewById(R.id.registration_info_first);
+        mViewFirstName = (EditText) mPageInfo.findViewById(R.id.registration_info_first);
         mViewFirstName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewLastName = (EditText) view.findViewById(R.id.registration_info_last);
+        mViewLastName = (EditText) mPageInfo.findViewById(R.id.registration_info_last);
         mViewLastName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewPhone = (EditText) view.findViewById(R.id.registration_info_phone);
+        mViewPhone = (EditText) mPageInfo.findViewById(R.id.registration_info_phone);
         mViewPhone.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewZip = (EditText) view.findViewById(R.id.registration_info_zip);
+        mViewZip = (EditText) mPageInfo.findViewById(R.id.registration_info_zip);
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         // Page Have Watch
-        view = inflater.inflate(R.layout.registration_have_watch, null);
-        mViewList.add(view);
+        mPageHaveWatch = inflater.inflate(R.layout.registration_have_watch, null);
+        mViewList.add(mPageHaveWatch);
 
-        mButtonWatchYes = (Button) view.findViewById(R.id.registration_have_watch_yes);
-        mButtonWatchYes.setOnClickListener(mButtonClickListener);
+        mViewWatchYes = (Button) mPageHaveWatch.findViewById(R.id.registration_have_watch_yes);
+        mViewWatchYes.setOnClickListener(mButtonClickListener);
 
-        mButtonWatchNo = (Button) view.findViewById(R.id.registration_have_watch_no);
-        mButtonWatchNo.setOnClickListener(mButtonClickListener);
+        mViewWatchNo = (Button) mPageHaveWatch.findViewById(R.id.registration_have_watch_no);
+        mViewWatchNo.setOnClickListener(mButtonClickListener);
+
+        // Page Register Watch
+        mPageRegisterWatch = inflater.inflate(R.layout.registration_register_watch, null);
+        mViewList.add(mPageRegisterWatch);
+
+        mViewRegisterWatch = (Button)mPageRegisterWatch.findViewById(R.id.registration_register_search);
+        mViewRegisterWatch.setOnClickListener(mButtonClickListener);
+
+        mViewRequestWatch = (Button)mPageRegisterWatch.findViewById(R.id.registration_register_other);
+        mViewRequestWatch.setOnClickListener(mButtonClickListener);
 
         // Page Select Watch
-        view = inflater.inflate(R.layout.registration_select_watch, null);
-        mViewList.add(view);
+        mPageSelectWatch = inflater.inflate(R.layout.registration_select_watch, null);
+        mViewList.add(mPageSelectWatch);
 
         // Page Kid
         view = inflater.inflate(R.layout.registration_kid, null);
@@ -119,9 +155,15 @@ public class ViewPagerRegistration extends ViewPager {
                 setCurrentItem(1, true);
             } else if (view == mViewFacebook) {
                 setCurrentItem(2, true);
-            } else if (view == mButtonWatchYes) {
+            } else if (view == mViewGoogle) {
+                setCurrentItem(2, true);
+            } else if (view == mViewWatchYes) {
                 setCurrentItem(4, true);
-            } else if (view == mButtonWatchNo) {
+            } else if (view == mViewWatchNo) {
+                setCurrentItem(4, true);
+            } else if (view == mViewRegisterWatch) {
+                setCurrentItem(4, true);
+            } else if (view == mViewRequestWatch) {
                 setCurrentItem(4, true);
             } else if (view == mButtonKidFirstName) {
                 if(mOnFinishListener != null)
