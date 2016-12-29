@@ -117,6 +117,7 @@ public class ViewPagerRegistration extends ViewPager {
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
 */
         // Page Have Watch
+/*
         mPageHaveWatch = inflater.inflate(R.layout.registration_have_watch, null);
         mViewList.add(mPageHaveWatch);
 
@@ -125,8 +126,9 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewWatchNo = (Button) mPageHaveWatch.findViewById(R.id.registration_have_watch_no);
         mViewWatchNo.setOnClickListener(mButtonClickListener);
-
+*/
         // Page Register Watch
+/*
         mPageRegisterWatch = inflater.inflate(R.layout.registration_register_watch, null);
         mViewList.add(mPageRegisterWatch);
 
@@ -135,7 +137,7 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewRequestWatch = (Button)mPageRegisterWatch.findViewById(R.id.registration_register_other);
         mViewRequestWatch.setOnClickListener(mButtonClickListener);
-
+*/
         // Page Request Other
         mPageRequest = inflater.inflate(R.layout.registration_request, null);
         mViewList.add(mPageRequest);
