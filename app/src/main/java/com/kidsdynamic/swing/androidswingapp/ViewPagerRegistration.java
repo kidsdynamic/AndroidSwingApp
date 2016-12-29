@@ -139,6 +139,7 @@ public class ViewPagerRegistration extends ViewPager {
         mViewRequestWatch.setOnClickListener(mButtonClickListener);
 */
         // Page Request Other
+        /*
         mPageRequest = inflater.inflate(R.layout.registration_request, null);
         mViewList.add(mPageRequest);
 
@@ -147,7 +148,7 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewRequestDashboard = (Button)mPageRequest.findViewById(R.id.registration_request_dashboard);
         mViewRequestDashboard.setOnClickListener(mButtonClickListener);
-
+*/
         // Page Select Watch
         mPageSelectWatch = inflater.inflate(R.layout.registration_select_watch, null);
         mViewList.add(mPageSelectWatch);
