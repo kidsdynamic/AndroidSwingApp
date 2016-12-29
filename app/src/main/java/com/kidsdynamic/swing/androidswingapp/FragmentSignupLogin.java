@@ -44,7 +44,7 @@ public class FragmentSignupLogin extends Fragment {
     private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupCaregiver.class.getName(), null);
+            mMainActivity.selectFragment(FragmentSignupAccount.class.getName(), null);
         }
     };
 

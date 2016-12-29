@@ -89,6 +89,7 @@ public class ViewPagerRegistration extends ViewPager {
         mViewGoogle.setOnClickListener(mButtonClickListener);
 */
         // Page Account
+        /*
         mPageAccount = inflater.inflate(R.layout.registration_account, null);
         mViewList.add(mPageAccount);
 
@@ -97,7 +98,7 @@ public class ViewPagerRegistration extends ViewPager {
 
         mViewPassword = (EditText) mPageAccount.findViewById(R.id.registration_account_password);
         mViewPassword.setOnEditorActionListener(mEdittextActionListener);
-
+*/
         // Page Info
         mPageInfo = inflater.inflate(R.layout.registration_info, null);
         mViewList.add(mPageInfo);

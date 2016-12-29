@@ -21,7 +21,7 @@
             android:layout_weight="5" />
 
         <EditText
-            android:id="@+id/registration_account_email"
+            android:id="@+id/signup_account_email"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -34,7 +34,7 @@
             android:nextFocusForward="@+id/registration_account_password" />
 
         <EditText
-            android:id="@+id/registration_account_password"
+            android:id="@+id/signup_account_password"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
