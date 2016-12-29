@@ -38,6 +38,8 @@ public class ViewPagerRegistration extends ViewPager {
     private Button mViewWatchNo;
     private Button mViewRegisterWatch;
     private Button mViewRequestWatch;
+    private Button mViewRequestBack;
+    private Button mViewRequestDashboard;
     private Button mButtonKidFirstName;
     private Button mButtonKidLastName;
 
@@ -50,6 +52,7 @@ public class ViewPagerRegistration extends ViewPager {
     private View mPageHaveWatch;
     private View mPageRegisterWatch;
     private View mPageSelectWatch;
+    private View mPageRequest;
 
     public ViewPagerRegistration(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -129,6 +132,16 @@ public class ViewPagerRegistration extends ViewPager {
         mViewRequestWatch = (Button)mPageRegisterWatch.findViewById(R.id.registration_register_other);
         mViewRequestWatch.setOnClickListener(mButtonClickListener);
 
+        // Page Request Other
+        mPageRequest = inflater.inflate(R.layout.registration_request, null);
+        mViewList.add(mPageRequest);
+
+        mViewRequestBack = (Button)mPageRequest.findViewById(R.id.registration_request_back);
+        mViewRequestBack.setOnClickListener(mButtonClickListener);
+
+        mViewRequestDashboard = (Button)mPageRequest.findViewById(R.id.registration_request_dashboard);
+        mViewRequestDashboard.setOnClickListener(mButtonClickListener);
+
         // Page Select Watch
         mPageSelectWatch = inflater.inflate(R.layout.registration_select_watch, null);
         mViewList.add(mPageSelectWatch);
@@ -164,6 +177,10 @@ public class ViewPagerRegistration extends ViewPager {
             } else if (view == mViewRegisterWatch) {
                 setCurrentItem(4, true);
             } else if (view == mViewRequestWatch) {
+                setCurrentItem(4, true);
+            } else if (view == mViewRequestBack) {
+                setCurrentItem(4, true);
+            } else if (view == mViewRequestDashboard) {
                 setCurrentItem(4, true);
             } else if (view == mButtonKidFirstName) {
                 if(mOnFinishListener != null)
