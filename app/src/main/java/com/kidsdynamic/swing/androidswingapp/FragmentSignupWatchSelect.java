@@ -16,6 +16,8 @@ public class FragmentSignupWatchSelect extends Fragment {
     private View mMainView;
 
     private Button mButtonDashboard;
+    private ContactLabelView mContactLabelView1;
+    private ContactLabelView mContactLabelView2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,11 +29,24 @@ public class FragmentSignupWatchSelect extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mMainView = inflater.inflate(R.layout.fragment_signup_watch_select, container, false);
 
+        mContactLabelView1 = (ContactLabelView)mMainView.findViewById(R.id.signup_watch_select_contact1);
+        mContactLabelView1.setOnClickListener(mOnContactListener);
+
+        mContactLabelView2 = (ContactLabelView)mMainView.findViewById(R.id.signup_watch_select_contact2);
+        mContactLabelView2.setOnClickListener(mOnContactListener);
+
         mButtonDashboard = (Button) mMainView.findViewById(R.id.signup_watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
         return mMainView;
     }
+
+    private View.OnClickListener mOnContactListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mMainActivity.selectFragment(FragmentSignupWatchAdded.class.getName(), null);
+        }
+    };
 
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override

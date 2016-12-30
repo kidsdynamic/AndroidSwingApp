@@ -26,39 +26,30 @@
             android:layout_height="0dp"
             android:layout_weight="3"
             android:gravity="center"
-            android:text="Please Select\nYour Swing Watch" />
+            android:text="Added" />
 
-        <com.kidsdynamic.swing.androidswingapp.ContactLabelView
-            android:id="@+id/signup_watch_select_contact1"
+        <TextView
+            style="@style/textview_hint"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1" />
-
-        <com.kidsdynamic.swing.androidswingapp.ContactLabelView
-            android:id="@+id/signup_watch_select_contact2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3" />
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="We've successfully added your\nSwing Watch." />
 
         <Button
-            android:id="@+id/signup_watch_select_dashboard"
+            android:id="@+id/signup_watch_added_profile"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="Go to Dashboard" />
+            android:text="Set up Your Profile" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="5" />
     </LinearLayout>
 
     <View
