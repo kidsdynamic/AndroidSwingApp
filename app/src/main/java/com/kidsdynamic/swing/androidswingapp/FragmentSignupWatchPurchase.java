@@ -51,7 +51,7 @@ public class FragmentSignupWatchPurchase extends Fragment {
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupWatchBind.class.getName(), null);
+            mMainActivity.selectFragment(FragmentSignupWatchOwner.class.getName(), null);
         }
     };
 

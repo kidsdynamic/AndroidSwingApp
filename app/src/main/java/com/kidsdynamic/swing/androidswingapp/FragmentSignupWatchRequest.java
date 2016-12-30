@@ -40,7 +40,7 @@ public class FragmentSignupWatchRequest extends Fragment {
     private Button.OnClickListener mOnBackListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupWatchBind.class.getName(), null);
+            mMainActivity.selectFragment(FragmentSignupWatchOwner.class.getName(), null);
         }
     };
 
