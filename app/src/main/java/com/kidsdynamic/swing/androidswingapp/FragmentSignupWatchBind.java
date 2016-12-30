@@ -40,7 +40,7 @@ public class FragmentSignupWatchBind extends Fragment {
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentSignupLogin.class.getName(), null);
+            mMainActivity.selectFragment(FragmentSignupWatchSearch.class.getName(), null);
         }
     };
 
