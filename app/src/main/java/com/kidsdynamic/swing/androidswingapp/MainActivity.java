@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity
     public final static int BLUETOOTH_PERMISSION = 0x1000;
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
 
+    public Config mConfig;
+
     private View mViewDevice;
     private View mViewCalendar;
     private View mViewDashboard;
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mConfig = new Config(this, null);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / 12;
