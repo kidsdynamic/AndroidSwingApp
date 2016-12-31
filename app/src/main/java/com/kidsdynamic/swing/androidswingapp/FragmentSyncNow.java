@@ -44,14 +44,16 @@ public class FragmentSyncNow extends Fragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchOwner.class.getName(), null);
+//            mMainActivity.selectFragment(FragmentWatchOwner.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnNoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchPurchase.class.getName(), null);
+            mMainActivity.selectControl(null);
+            mMainActivity.showControl(true);
+            mMainActivity.selectFragment(FragmentDashboard.class.getName(), null);
         }
     };
 

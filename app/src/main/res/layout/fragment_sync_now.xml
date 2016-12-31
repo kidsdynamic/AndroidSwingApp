@@ -30,33 +30,32 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/sync_now_yes"
                 style="@style/button_main"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="5"
                 android:text="Yes, Please" />
 
             <Button
                 android:id="@+id/sync_now_no"
                 style="@style/button_main"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="5"
                 android:text="No, Go to Dashboard" />
 
             <Button
                 android:id="@+id/sync_now_another"
                 style="@style/button_main"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="5"
                 android:text="Sync Another Watch" />
 
         </LinearLayout>
