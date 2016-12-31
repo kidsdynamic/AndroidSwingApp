@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupWatchOwner extends Fragment {
+public class FragmentWatchOwner extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
@@ -26,12 +26,12 @@ public class FragmentSignupWatchOwner extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_watch_owner, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_watch_owner, container, false);
 
-        mButtonSearch = (Button) mMainView.findViewById(R.id.signup_watch_owner_search);
+        mButtonSearch = (Button) mMainView.findViewById(R.id.watch_owner_search);
         mButtonSearch.setOnClickListener(mOnSearchListener);
 
-        mButtonOthers = (Button) mMainView.findViewById(R.id.signup_watch_owner_others);
+        mButtonOthers = (Button) mMainView.findViewById(R.id.watch_owner_others);
         mButtonOthers.setOnClickListener(mOnOthersListener);
 
         return mMainView;
@@ -40,14 +40,14 @@ public class FragmentSignupWatchOwner extends Fragment {
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupWatchSearch.class.getName(), null);
+            mMainActivity.selectFragment(FragmentWatchSearch.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnOthersListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupWatchRequest.class.getName(), null);
+            mMainActivity.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
     };
 }

@@ -29,7 +29,7 @@
             android:text="Register Your\nWatch" />
 
         <Button
-            android:id="@+id/signup_watch_owner_search"
+            android:id="@+id/watch_owner_search"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -77,7 +77,7 @@
             android:text="Request Access\nto Others" />
 
         <Button
-            android:id="@+id/signup_watch_owner_others"
+            android:id="@+id/watch_owner_others"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"

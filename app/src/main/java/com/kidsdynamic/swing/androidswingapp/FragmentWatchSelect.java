@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/31.
  */
 
-public class FragmentSignupWatchSelect extends Fragment {
+public class FragmentWatchSelect extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
@@ -27,15 +27,15 @@ public class FragmentSignupWatchSelect extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_watch_select, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
-        mContactLabelView1 = (ContactLabelView) mMainView.findViewById(R.id.signup_watch_select_contact1);
+        mContactLabelView1 = (ContactLabelView) mMainView.findViewById(R.id.watch_select_contact1);
         mContactLabelView1.setOnClickListener(mOnContactListener);
 
-        mContactLabelView2 = (ContactLabelView) mMainView.findViewById(R.id.signup_watch_select_contact2);
+        mContactLabelView2 = (ContactLabelView) mMainView.findViewById(R.id.watch_select_contact2);
         mContactLabelView2.setOnClickListener(mOnContactListener);
 
-        mButtonDashboard = (Button) mMainView.findViewById(R.id.signup_watch_select_dashboard);
+        mButtonDashboard = (Button) mMainView.findViewById(R.id.watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
         return mMainView;
@@ -45,9 +45,9 @@ public class FragmentSignupWatchSelect extends Fragment {
         @Override
         public void onClick(View view) {
             if (view == mContactLabelView1)
-                mMainActivity.selectFragment(FragmentSignupWatchAdded.class.getName(), null);
+                mMainActivity.selectFragment(FragmentWatchAdded.class.getName(), null);
             else
-                mMainActivity.selectFragment(FragmentSignupWatchRegistered.class.getName(), null);
+                mMainActivity.selectFragment(FragmentWatchRegistered.class.getName(), null);
         }
     };
 

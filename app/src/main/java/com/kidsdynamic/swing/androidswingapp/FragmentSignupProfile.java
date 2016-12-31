@@ -52,7 +52,7 @@ public class FragmentSignupProfile extends Fragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
-                mMainActivity.selectFragment(FragmentSignupWatchHave.class.getName(), null);
+                mMainActivity.selectFragment(FragmentWatchHave.class.getName(), null);
             }
 
             return false;

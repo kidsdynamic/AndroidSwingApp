@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/31.
  */
 
-public class FragmentSignupWatchAdded extends Fragment {
+public class FragmentWatchAdded extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
@@ -25,9 +25,9 @@ public class FragmentSignupWatchAdded extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_watch_added, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_watch_added, container, false);
 
-        mButtonProfile = (Button) mMainView.findViewById(R.id.signup_watch_added_profile);
+        mButtonProfile = (Button) mMainView.findViewById(R.id.watch_added_profile);
         mButtonProfile.setOnClickListener(mOnProfileListener);
 
         return mMainView;
@@ -36,7 +36,7 @@ public class FragmentSignupWatchAdded extends Fragment {
     private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentSignupWatchOwner.class.getName(), null);
+//            mMainActivity.selectFragment(FragmentWatchOwner.class.getName(), null);
         }
     };
 

@@ -26,24 +26,25 @@
             android:layout_height="0dp"
             android:layout_weight="3"
             android:gravity="center"
-            android:text="DO YOU HAVE\nA SWING WATCH?" />
+            android:text="Added" />
+
+        <TextView
+            style="@style/textview_hint"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="We've successfully added your\nSwing Watch." />
 
         <Button
-            android:id="@+id/signup_watch_have_yes"
+            android:id="@+id/watch_added_profile"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
-            android:text="Yes" />
-
-        <Button
-            android:id="@+id/signup_watch_have_no"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="No" />
+            android:text="Set up Your Profile" />
 
         <View
             android:layout_width="match_parent"

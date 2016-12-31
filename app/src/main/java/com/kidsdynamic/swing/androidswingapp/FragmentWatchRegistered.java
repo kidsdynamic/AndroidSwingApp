@@ -11,13 +11,13 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/31.
  */
 
-public class FragmentSignupWatchPurchase extends Fragment {
+public class FragmentWatchRegistered extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
-    private Button mButtonYes;
     private Button mButtonRequest;
     private Button mButtonGuest;
+    private Button mButtonContact;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,39 +27,38 @@ public class FragmentSignupWatchPurchase extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_watch_purchase, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_watch_registered, container, false);
 
-        mButtonYes = (Button) mMainView.findViewById(R.id.signup_watch_purchase_yes);
-        mButtonYes.setOnClickListener(mOnYesListener);
-
-        mButtonRequest = (Button) mMainView.findViewById(R.id.signup_watch_purchase_request);
+        mButtonRequest = (Button) mMainView.findViewById(R.id.watch_registered_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
 
-        mButtonGuest = (Button) mMainView.findViewById(R.id.signup_watch_purchase_guest);
+        mButtonGuest = (Button) mMainView.findViewById(R.id.watch_registered_guest);
         mButtonGuest.setOnClickListener(mOnGuestListener);
+
+        mButtonContact = (Button) mMainView.findViewById(R.id.watch_registered_contact);
+        mButtonContact.setOnClickListener(mOnContactListener);
 
         return mMainView;
     }
 
-    private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentSignupWatchBind.class.getName(), null);
-        }
-    };
-
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupWatchOwner.class.getName(), null);
+            mMainActivity.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnGuestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentSignupWatchBind.class.getName(), null);
+//            mMainActivity.selectFragment(FragmentWatchPurchase.class.getName(), null);
         }
     };
 
+    private Button.OnClickListener mOnContactListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+//            mMainActivity.selectFragment(FragmentWatchPurchase.class.getName(), null);
+        }
+    };
 }

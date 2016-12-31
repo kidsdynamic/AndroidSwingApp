@@ -6,16 +6,13 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by 03543 on 2016/12/31.
  */
 
-public class FragmentSignupWatchSearch extends Fragment {
+public class FragmentWatchSearch extends Fragment {
     private MainActivity mMainActivity;
     private View mMainView;
 
@@ -31,9 +28,9 @@ public class FragmentSignupWatchSearch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_watch_search, container, false);
+        mMainView = inflater.inflate(R.layout.fragment_watch_search, container, false);
 
-        mTextViewSearching = (TextView) mMainView.findViewById(R.id.signup_watch_searching);
+        mTextViewSearching = (TextView) mMainView.findViewById(R.id.watch_searching);
         mTextViewSearching.setOnClickListener(mSearchCancelListener);
 
         mSearchHandler = new Handler();
@@ -46,14 +43,14 @@ public class FragmentSignupWatchSearch extends Fragment {
         @Override
         public void onClick(View v) {
             mSearchHandler.removeCallbacks(mSearchRunnable);
-            mMainActivity.selectFragment(FragmentSignupWatchSorry.class.getName(), null);
+            mMainActivity.selectFragment(FragmentWatchSorry.class.getName(), null);
         }
     };
 
     private Runnable mSearchRunnable = new Runnable() {
         @Override
         public void run() {
-            mMainActivity.selectFragment(FragmentSignupWatchSelect.class.getName(), null);
+            mMainActivity.selectFragment(FragmentWatchSelect.class.getName(), null);
         }
     };
 }
