@@ -19,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
-    implements ActivityCompat.OnRequestPermissionsResultCallback {
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
     public final static int BLUETOOTH_PERMISSION = 0x1000;
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
 
@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity
 
         mViewControl = findViewById(R.id.main_control);
 
+        // todo: select fragment to start, sign-up, sync-now or dashboard?
         selectFragment(FragmentSignupLanguage.class.getName(), null);
     }
 
@@ -68,17 +69,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private void showFragment(String className, Bundle args) {
+    public void selectFragment(String className, Bundle args) {
         Fragment fragment = Fragment.instantiate(this, className, args);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, className)
                 .commit();
-    }
-
-    public void selectFragment(String className, Bundle args) {
-        showFragment(className, args);
     }
 
     public void showControl(boolean enable) {
@@ -100,35 +96,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void selectControl(View view) {
-        if (view == mViewDevice || view == null) {
-            mViewCalendar.setSelected(false);
-            mViewDashboard.setSelected(false);
-            mViewProfile.setSelected(false);
-            mViewDevice.setSelected(true);
-            selectFragment(FragmentDevice.class.getName(), null);
-
-        } else if (view == mViewCalendar) {
-            mViewDashboard.setSelected(false);
-            mViewProfile.setSelected(false);
-            mViewDevice.setSelected(false);
-            mViewCalendar.setSelected(true);
-            selectFragment(FragmentCalendar.class.getName(), null);
-
-        } else if (view == mViewDashboard) {
-            mViewProfile.setSelected(false);
-            mViewDevice.setSelected(false);
-            mViewCalendar.setSelected(false);
-            mViewDashboard.setSelected(true);
-            selectFragment(FragmentDashboard.class.getName(), null);
-
-        } else if (view == mViewProfile) {
-            mViewDevice.setSelected(false);
-            mViewCalendar.setSelected(false);
-            mViewDashboard.setSelected(false);
-            mViewProfile.setSelected(true);
-            selectFragment(FragmentProfile.class.getName(), null);
-
-        }
+        mViewDevice.setSelected(view == mViewDevice);
+        mViewCalendar.setSelected(view == mViewCalendar);
+        mViewDashboard.setSelected(view == null || view == mViewDashboard);
+        mViewProfile.setSelected(view == mViewProfile);
     }
 
     View.OnClickListener mControlClickListener = new View.OnClickListener() {
