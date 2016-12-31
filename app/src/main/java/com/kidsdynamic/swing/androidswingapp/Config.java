@@ -12,16 +12,24 @@ import java.util.StringTokenizer;
  */
 
 public class Config {
-    public SharedPreferences mSharedPreferences;
-    public SharedPreferences.OnSharedPreferenceChangeListener mOnChangeListener = null;
-    public Context mContext;
+    private SharedPreferences mSharedPreferences;
+    private SharedPreferences.OnSharedPreferenceChangeListener mOnChangeListener = null;
+    private Context mContext;
 
-    public final static String DEF_NAME = "Config";
-    public final static String DEF_VERSION = "0000-0000-0000";
-    public final static String PREFS_SPLIT = "__BPPS:__";
+    final static String DEF_APPNAME = "Config";
+    final static String DEF_APPVERSION = "0000-0000-0000";
+    final static String PREFS_SPLIT = "__BPPS:__";
 
-    public final static String KEY_NAME = "KEY_NAME";
-    public final static String KEY_VERSION = "KEY_VERSION";
+    public final static String KEY_APPNAME = "KEY_NAME";
+    public final static String KEY_APPVERSION = "KEY_VERSION";
+
+    public final static String KEY_LANGUAGE = "KEY_LANGUAGE";
+    public final static String KEY_MAIL = "KEY_MAIL";
+    public final static String KEY_PASSWORD = "KEY_PASSWORD";
+    public final static String KEY_FIRST_NAME = "KEY_FIRST_NAME";
+    public final static String KEY_LAST_NAME = "KEY_LAST_NAME";
+    public final static String KEY_PHONE = "KEY_PHONE";
+    public final static String KEY_ZIP = "KEY_ZIP";
 
     private void LOG(String message) {
         Log.d("Config", message);
@@ -31,9 +39,9 @@ public class Config {
         mContext = context;
         mSharedPreferences = mContext.getSharedPreferences("AndroidSwingApp", Context.MODE_PRIVATE);
 
-        String name = mSharedPreferences.getString(KEY_NAME, "__ERROR__");
-        String version = mSharedPreferences.getString(KEY_VERSION, "__ERROR__");
-        if (!name.equals(DEF_NAME) || !version.equals(DEF_VERSION)) {
+        String name = mSharedPreferences.getString(KEY_APPNAME, "__ERROR__");
+        String version = mSharedPreferences.getString(KEY_APPVERSION, "__ERROR__");
+        if (!name.equals(DEF_APPNAME) || !version.equals(DEF_APPVERSION)) {
             loadDefaultTable();
         }
 
@@ -44,8 +52,8 @@ public class Config {
     public void loadDefaultTable() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.clear();
-        editor.putString(KEY_NAME, DEF_NAME);
-        editor.putString(KEY_VERSION, DEF_VERSION);
+        editor.putString(KEY_APPNAME, DEF_APPNAME);
+        editor.putString(KEY_APPVERSION, DEF_APPVERSION);
 
         LOG("loadDefaultTable");
 

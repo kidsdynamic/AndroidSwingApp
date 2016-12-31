@@ -34,7 +34,10 @@ public class FragmentSignupLanguage extends Fragment {
     private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentSignupCaregiver.class.getName(), null);
+            // todo: Save default or language
+            mMainActivity.mConfig.setString(Config.KEY_LANGUAGE, "Default");
+
+            mMainActivity.selectFragment(FragmentSignupLogin.class.getName(), null);
         }
     };
 }

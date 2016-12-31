@@ -57,8 +57,10 @@ public class MainActivity extends AppCompatActivity
 
         mViewControl = findViewById(R.id.main_control);
 
-        // todo: select fragment to start, sign-up, sync-now or dashboard?
-        selectFragment(FragmentSignupLanguage.class.getName(), null);
+        if (mConfig.getString(Config.KEY_LANGUAGE).equals(""))
+            selectFragment(FragmentSignupLanguage.class.getName(), null);
+        else
+            selectFragment(FragmentSignupLogin.class.getName(), null);
     }
 
     @Override

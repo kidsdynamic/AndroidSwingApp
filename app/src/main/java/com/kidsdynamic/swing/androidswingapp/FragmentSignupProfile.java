@@ -52,10 +52,16 @@ public class FragmentSignupProfile extends Fragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
+                mMainActivity.mConfig.setString(Config.KEY_FIRST_NAME, mViewFirstName.getText().toString());
+                mMainActivity.mConfig.setString(Config.KEY_LAST_NAME, mViewLastName.getText().toString());
+                mMainActivity.mConfig.setString(Config.KEY_PHONE, mViewPhone.getText().toString());
+                mMainActivity.mConfig.setString(Config.KEY_ZIP, mViewZip.getText().toString());
+
                 mMainActivity.selectFragment(FragmentWatchHave.class.getName(), null);
             }
 
             return false;
         }
     };
+
 }
