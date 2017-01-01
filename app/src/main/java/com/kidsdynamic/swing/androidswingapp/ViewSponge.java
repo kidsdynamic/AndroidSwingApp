@@ -10,17 +10,17 @@ import android.view.View;
  * Created by 03543 on 2016/12/31.
  */
 
-public class SpongeView extends View {
+public class ViewSponge extends View {
     private float mShrinkWidth = 0f;
     private float mShrinkHeight = 0f;
 
-    public SpongeView(Context context, AttributeSet attrs) {
+    public ViewSponge(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
 
     }
 
-    public SpongeView(Context context, AttributeSet attrs, int defStyle) {
+    public ViewSponge(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
@@ -28,16 +28,16 @@ public class SpongeView extends View {
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(
-                    attrs, R.styleable.SpongeView);
+                    attrs, R.styleable.ViewSponge);
 
             final int count = typedArray.getIndexCount();
             for (int idx = 0; idx < count; idx++) {
                 final int attr = typedArray.getIndex(idx);
 
-                if (attr == R.styleable.SpongeView_shrinkWidth) {
-                    mShrinkWidth = typedArray.getFloat(R.styleable.SpongeView_shrinkWidth, 0f);
-                } else if (attr == R.styleable.SpongeView_shrinkHeight) {
-                    mShrinkHeight = typedArray.getFloat(R.styleable.SpongeView_shrinkHeight, 0f);
+                if (attr == R.styleable.ViewSponge_shrinkWidth) {
+                    mShrinkWidth = typedArray.getFloat(R.styleable.ViewSponge_shrinkWidth, 0f);
+                } else if (attr == R.styleable.ViewSponge_shrinkHeight) {
+                    mShrinkHeight = typedArray.getFloat(R.styleable.ViewSponge_shrinkHeight, 0f);
                 }
             }
 

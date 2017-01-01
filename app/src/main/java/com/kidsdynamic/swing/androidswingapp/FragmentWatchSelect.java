@@ -16,8 +16,8 @@ public class FragmentWatchSelect extends Fragment {
     private View mMainView;
 
     private Button mButtonDashboard;
-    private ContactLabelView mContactLabelView1;
-    private ContactLabelView mContactLabelView2;
+    private ViewContactLabel mViewContactLabel1;
+    private ViewContactLabel mViewContactLabel2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,11 +29,11 @@ public class FragmentWatchSelect extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mMainView = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
-        mContactLabelView1 = (ContactLabelView) mMainView.findViewById(R.id.watch_select_contact1);
-        mContactLabelView1.setOnClickListener(mOnContactListener);
+        mViewContactLabel1 = (ViewContactLabel) mMainView.findViewById(R.id.watch_select_contact1);
+        mViewContactLabel1.setOnClickListener(mOnContactListener);
 
-        mContactLabelView2 = (ContactLabelView) mMainView.findViewById(R.id.watch_select_contact2);
-        mContactLabelView2.setOnClickListener(mOnContactListener);
+        mViewContactLabel2 = (ViewContactLabel) mMainView.findViewById(R.id.watch_select_contact2);
+        mViewContactLabel2.setOnClickListener(mOnContactListener);
 
         mButtonDashboard = (Button) mMainView.findViewById(R.id.watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
@@ -44,7 +44,7 @@ public class FragmentWatchSelect extends Fragment {
     private View.OnClickListener mOnContactListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view == mContactLabelView1)
+            if (view == mViewContactLabel1)
                 mMainActivity.selectFragment(FragmentWatchAdded.class.getName(), null);
             else
                 mMainActivity.selectFragment(FragmentWatchRegistered.class.getName(), null);

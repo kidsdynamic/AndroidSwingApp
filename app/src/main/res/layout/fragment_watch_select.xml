@@ -28,14 +28,14 @@
             android:gravity="center"
             android:text="Please Select\nYour Swing Watch" />
 
-        <com.kidsdynamic.swing.androidswingapp.ContactLabelView
+        <com.kidsdynamic.swing.androidswingapp.ViewContactLabel
             android:id="@+id/watch_select_contact1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1" />
 
-        <com.kidsdynamic.swing.androidswingapp.ContactLabelView
+        <com.kidsdynamic.swing.androidswingapp.ViewContactLabel
             android:id="@+id/watch_select_contact2"
             android:layout_width="match_parent"
             android:layout_height="0dp"

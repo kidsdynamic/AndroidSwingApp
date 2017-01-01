@@ -12,24 +12,24 @@ import android.view.View;
  * Created by 03543 on 2016/12/30.
  */
 
-public class ContactLabelView extends View {
+public class ViewContactLabel extends View {
     private int mDesiredWidth;
     private int mDesiredHeight;
 
     private Bitmap mBackgroundBitmap;
     private int mBackgroundWidth = 0, mBackgroundHeight = 0;
 
-    public ContactLabelView(Context context) {
+    public ViewContactLabel(Context context) {
         super(context);
         init();
     }
 
-    public ContactLabelView(Context context, AttributeSet attrs) {
+    public ViewContactLabel(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ContactLabelView(Context context, AttributeSet attrs, int defStyle) {
+    public ViewContactLabel(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }

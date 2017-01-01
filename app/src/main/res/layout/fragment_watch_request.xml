@@ -23,7 +23,7 @@
             android:gravity="center"
             android:text="Request Access\nto Device" />
 
-        <com.kidsdynamic.swing.androidswingapp.ContactLabelView
+        <com.kidsdynamic.swing.androidswingapp.ViewContactLabel
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
