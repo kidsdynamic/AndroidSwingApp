@@ -11,13 +11,13 @@ import android.view.ViewGroup;
  */
 
 public class FragmentCalendar extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
