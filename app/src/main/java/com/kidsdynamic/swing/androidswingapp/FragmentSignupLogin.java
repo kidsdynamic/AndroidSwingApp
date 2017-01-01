@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 public class FragmentSignupLogin extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonLogin;
     private Button mButtonFacebook;
@@ -28,18 +28,18 @@ public class FragmentSignupLogin extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_login, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_signup_login, container, false);
 
-        mButtonLogin = (Button) mMainView.findViewById(R.id.signup_login_login);
+        mButtonLogin = (Button) mViewMain.findViewById(R.id.signup_login_login);
         mButtonLogin.setOnClickListener(mOnLoginListener);
 
-        mButtonFacebook = (Button) mMainView.findViewById(R.id.signup_login_facebook);
+        mButtonFacebook = (Button) mViewMain.findViewById(R.id.signup_login_facebook);
         mButtonFacebook.setOnClickListener(mOnFacebookListener);
 
-        mButtonGoogle = (Button) mMainView.findViewById(R.id.signup_login_google);
+        mButtonGoogle = (Button) mViewMain.findViewById(R.id.signup_login_google);
         mButtonGoogle.setOnClickListener(mOnGoogleListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnLoginListener = new View.OnClickListener() {

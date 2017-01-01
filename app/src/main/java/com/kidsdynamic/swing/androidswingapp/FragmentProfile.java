@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 public class FragmentProfile extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,8 +22,8 @@ public class FragmentProfile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_profile, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        return mMainView;
+        return mViewMain;
     }
 }

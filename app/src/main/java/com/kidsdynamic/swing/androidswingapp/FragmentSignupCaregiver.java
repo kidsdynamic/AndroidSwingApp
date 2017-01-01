@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentSignupCaregiver extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonParent;
     private Button mButtonNanny;
@@ -26,15 +26,15 @@ public class FragmentSignupCaregiver extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_caregiver, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_signup_caregiver, container, false);
 
-        mButtonParent = (Button) mMainView.findViewById(R.id.signup_caregiver_parent);
+        mButtonParent = (Button) mViewMain.findViewById(R.id.signup_caregiver_parent);
         mButtonParent.setOnClickListener(mOnButtonListener);
 
-        mButtonNanny = (Button) mMainView.findViewById(R.id.signup_caregiver_nanny);
+        mButtonNanny = (Button) mViewMain.findViewById(R.id.signup_caregiver_nanny);
         mButtonNanny.setOnClickListener(mOnButtonListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class FragmentSignupAccount extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private EditText mViewEmail;
     private EditText mViewPassword;
@@ -32,17 +32,17 @@ public class FragmentSignupAccount extends Fragment {
         String mail = mActivityMain.mConfig.getString(Config.KEY_MAIL);
         String password = mActivityMain.mConfig.getString(Config.KEY_PASSWORD);
 
-        mMainView = inflater.inflate(R.layout.fragment_signup_account, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_signup_account, container, false);
 
-        mViewEmail = (EditText) mMainView.findViewById(R.id.signup_account_email);
+        mViewEmail = (EditText) mViewMain.findViewById(R.id.signup_account_email);
         mViewEmail.setText(mail);
         mViewEmail.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewPassword = (EditText) mMainView.findViewById(R.id.signup_account_password);
+        mViewPassword = (EditText) mViewMain.findViewById(R.id.signup_account_password);
         mViewPassword.setText(password);
         mViewPassword.setOnEditorActionListener(mEdittextActionListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {

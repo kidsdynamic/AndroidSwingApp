@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentSignupLanguage extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,12 +23,12 @@ public class FragmentSignupLanguage extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_language, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_signup_language, container, false);
 
-        Button button = (Button) mMainView.findViewById(R.id.signup_language_select);
+        Button button = (Button) mViewMain.findViewById(R.id.signup_language_select);
         button.setOnClickListener(mOnButtonListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {

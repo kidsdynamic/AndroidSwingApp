@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchSorry extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonSearch;
     private Button mButtonRequest;
@@ -28,21 +28,21 @@ public class FragmentWatchSorry extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_sorry, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_sorry, container, false);
 
-        mButtonSearch = (Button) mMainView.findViewById(R.id.watch_sorry_search);
+        mButtonSearch = (Button) mViewMain.findViewById(R.id.watch_sorry_search);
         mButtonSearch.setOnClickListener(mOnSearchListener);
 
-        mButtonRequest = (Button) mMainView.findViewById(R.id.watch_sorry_request);
+        mButtonRequest = (Button) mViewMain.findViewById(R.id.watch_sorry_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
 
-        mButtonGuest = (Button) mMainView.findViewById(R.id.watch_sorry_guest);
+        mButtonGuest = (Button) mViewMain.findViewById(R.id.watch_sorry_guest);
         mButtonGuest.setOnClickListener(mOnGuestListener);
 
-        mButtonContact = (Button) mMainView.findViewById(R.id.watch_sorry_contact);
+        mButtonContact = (Button) mViewMain.findViewById(R.id.watch_sorry_contact);
         mButtonContact.setOnClickListener(mOnContactListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {

@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchHave extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonYes;
     private Button mButtonNo;
@@ -26,15 +26,15 @@ public class FragmentWatchHave extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_have, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_have, container, false);
 
-        mButtonYes = (Button) mMainView.findViewById(R.id.watch_have_yes);
+        mButtonYes = (Button) mViewMain.findViewById(R.id.watch_have_yes);
         mButtonYes.setOnClickListener(mOnYesListener);
 
-        mButtonNo = (Button) mMainView.findViewById(R.id.watch_have_no);
+        mButtonNo = (Button) mViewMain.findViewById(R.id.watch_have_no);
         mButtonNo.setOnClickListener(mOnNoListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {

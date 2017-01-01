@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchOwner extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonSearch;
     private Button mButtonOthers;
@@ -26,15 +26,15 @@ public class FragmentWatchOwner extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_owner, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_owner, container, false);
 
-        mButtonSearch = (Button) mMainView.findViewById(R.id.watch_owner_search);
+        mButtonSearch = (Button) mViewMain.findViewById(R.id.watch_owner_search);
         mButtonSearch.setOnClickListener(mOnSearchListener);
 
-        mButtonOthers = (Button) mMainView.findViewById(R.id.watch_owner_others);
+        mButtonOthers = (Button) mViewMain.findViewById(R.id.watch_owner_others);
         mButtonOthers.setOnClickListener(mOnOthersListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {

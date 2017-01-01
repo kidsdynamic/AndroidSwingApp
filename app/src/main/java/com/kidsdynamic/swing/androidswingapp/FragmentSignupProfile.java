@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 public class FragmentSignupProfile extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private EditText mViewFirstName;
     private EditText mViewLastName;
@@ -31,21 +31,21 @@ public class FragmentSignupProfile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_signup_profile, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_signup_profile, container, false);
 
-        mViewFirstName = (EditText) mMainView.findViewById(R.id.signup_profile_first);
+        mViewFirstName = (EditText) mViewMain.findViewById(R.id.signup_profile_first);
         mViewFirstName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewLastName = (EditText) mMainView.findViewById(R.id.signup_profile_last);
+        mViewLastName = (EditText) mViewMain.findViewById(R.id.signup_profile_last);
         mViewLastName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewPhone = (EditText) mMainView.findViewById(R.id.signup_profile_phone);
+        mViewPhone = (EditText) mViewMain.findViewById(R.id.signup_profile_phone);
         mViewPhone.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewZip = (EditText) mMainView.findViewById(R.id.signup_profile_zip);
+        mViewZip = (EditText) mViewMain.findViewById(R.id.signup_profile_zip);
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {

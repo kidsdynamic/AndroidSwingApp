@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentSyncNow extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonYes;
     private Button mButtonNo;
@@ -27,18 +27,18 @@ public class FragmentSyncNow extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_sync_now, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_sync_now, container, false);
 
-        mButtonYes = (Button) mMainView.findViewById(R.id.sync_now_yes);
+        mButtonYes = (Button) mViewMain.findViewById(R.id.sync_now_yes);
         mButtonYes.setOnClickListener(mOnYesListener);
 
-        mButtonNo = (Button) mMainView.findViewById(R.id.sync_now_no);
+        mButtonNo = (Button) mViewMain.findViewById(R.id.sync_now_no);
         mButtonNo.setOnClickListener(mOnNoListener);
 
-        mbuttonAnother = (Button) mMainView.findViewById(R.id.sync_now_another);
+        mbuttonAnother = (Button) mViewMain.findViewById(R.id.sync_now_another);
         mbuttonAnother.setOnClickListener(mOnAnotherListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {

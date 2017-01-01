@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 public class FragmentWatchSearch extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private TextView mTextViewSearching;
 
@@ -28,15 +28,15 @@ public class FragmentWatchSearch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_search, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_search, container, false);
 
-        mTextViewSearching = (TextView) mMainView.findViewById(R.id.watch_searching);
+        mTextViewSearching = (TextView) mViewMain.findViewById(R.id.watch_searching);
         mTextViewSearching.setOnClickListener(mSearchCancelListener);
 
         mSearchHandler = new Handler();
         mSearchHandler.postDelayed(mSearchRunnable, 3000);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private View.OnClickListener mSearchCancelListener = new View.OnClickListener() {

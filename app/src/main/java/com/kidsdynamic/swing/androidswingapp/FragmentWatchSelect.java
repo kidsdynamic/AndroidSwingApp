@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchSelect extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonDashboard;
     private ViewContactLabel mViewContactLabel1;
@@ -27,18 +27,18 @@ public class FragmentWatchSelect extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_select, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
-        mViewContactLabel1 = (ViewContactLabel) mMainView.findViewById(R.id.watch_select_contact1);
+        mViewContactLabel1 = (ViewContactLabel) mViewMain.findViewById(R.id.watch_select_contact1);
         mViewContactLabel1.setOnClickListener(mOnContactListener);
 
-        mViewContactLabel2 = (ViewContactLabel) mMainView.findViewById(R.id.watch_select_contact2);
+        mViewContactLabel2 = (ViewContactLabel) mViewMain.findViewById(R.id.watch_select_contact2);
         mViewContactLabel2.setOnClickListener(mOnContactListener);
 
-        mButtonDashboard = (Button) mMainView.findViewById(R.id.watch_select_dashboard);
+        mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private View.OnClickListener mOnContactListener = new View.OnClickListener() {

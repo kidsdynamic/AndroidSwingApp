@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchPurchase extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonYes;
     private Button mButtonRequest;
@@ -27,18 +27,18 @@ public class FragmentWatchPurchase extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_purchase, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_purchase, container, false);
 
-        mButtonYes = (Button) mMainView.findViewById(R.id.watch_purchase_yes);
+        mButtonYes = (Button) mViewMain.findViewById(R.id.watch_purchase_yes);
         mButtonYes.setOnClickListener(mOnYesListener);
 
-        mButtonRequest = (Button) mMainView.findViewById(R.id.watch_purchase_request);
+        mButtonRequest = (Button) mViewMain.findViewById(R.id.watch_purchase_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
 
-        mButtonGuest = (Button) mMainView.findViewById(R.id.watch_purchase_guest);
+        mButtonGuest = (Button) mViewMain.findViewById(R.id.watch_purchase_guest);
         mButtonGuest.setOnClickListener(mOnGuestListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {

@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchRequest extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonBack;
     private Button mButtonDashboard;
@@ -26,15 +26,15 @@ public class FragmentWatchRequest extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_request, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_request, container, false);
 
-        mButtonBack = (Button) mMainView.findViewById(R.id.watch_request_back);
+        mButtonBack = (Button) mViewMain.findViewById(R.id.watch_request_back);
         mButtonBack.setOnClickListener(mOnBackListener);
 
-        mButtonDashboard = (Button) mMainView.findViewById(R.id.watch_request_dashboard);
+        mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_request_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnBackListener = new View.OnClickListener() {

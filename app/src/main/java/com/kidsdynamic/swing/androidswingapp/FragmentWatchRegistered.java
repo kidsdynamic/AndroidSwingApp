@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class FragmentWatchRegistered extends Fragment {
     private ActivityMain mActivityMain;
-    private View mMainView;
+    private View mViewMain;
 
     private Button mButtonRequest;
     private Button mButtonGuest;
@@ -27,18 +27,18 @@ public class FragmentWatchRegistered extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mMainView = inflater.inflate(R.layout.fragment_watch_registered, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_registered, container, false);
 
-        mButtonRequest = (Button) mMainView.findViewById(R.id.watch_registered_request);
+        mButtonRequest = (Button) mViewMain.findViewById(R.id.watch_registered_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
 
-        mButtonGuest = (Button) mMainView.findViewById(R.id.watch_registered_guest);
+        mButtonGuest = (Button) mViewMain.findViewById(R.id.watch_registered_guest);
         mButtonGuest.setOnClickListener(mOnGuestListener);
 
-        mButtonContact = (Button) mMainView.findViewById(R.id.watch_registered_contact);
+        mButtonContact = (Button) mViewMain.findViewById(R.id.watch_registered_contact);
         mButtonContact.setOnClickListener(mOnContactListener);
 
-        return mMainView;
+        return mViewMain;
     }
 
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
