@@ -12,7 +12,7 @@ import android.widget.Button;
  */
 
 public class FragmentWatchSorry extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonSearch;
@@ -23,7 +23,7 @@ public class FragmentWatchSorry extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -48,28 +48,28 @@ public class FragmentWatchSorry extends Fragment {
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchSearch.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchSearch.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchRequest.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnGuestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentWatchRequest.class.getName(), null);
+//            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnContactListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentWatchRequest.class.getName(), null);
+//            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
     };
 }

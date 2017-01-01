@@ -13,7 +13,7 @@ import android.widget.Toast;
  */
 
 public class FragmentSignupLogin extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonLogin;
@@ -23,7 +23,7 @@ public class FragmentSignupLogin extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -45,29 +45,29 @@ public class FragmentSignupLogin extends Fragment {
     private Button.OnClickListener mOnLoginListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            String mail = mMainActivity.mConfig.getString(Config.KEY_MAIL);
-            String password = mMainActivity.mConfig.getString(Config.KEY_PASSWORD);
+            String mail = mActivityMain.mConfig.getString(Config.KEY_MAIL);
+            String password = mActivityMain.mConfig.getString(Config.KEY_PASSWORD);
 
             if (mail.equals("") || password.equals(""))
-                mMainActivity.selectFragment(FragmentSignupAccount.class.getName(), null);
+                mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
             else
-                mMainActivity.selectFragment(FragmentSyncNow.class.getName(), null);
+                mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnFacebookListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(mMainActivity, "Login failed!", Toast.LENGTH_SHORT).show();
-            mMainActivity.selectFragment(FragmentSignupAccount.class.getName(), null);
+            Toast.makeText(mActivityMain, "Login failed!", Toast.LENGTH_SHORT).show();
+            mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnGoogleListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(mMainActivity, "Login failed!", Toast.LENGTH_SHORT).show();
-            mMainActivity.selectFragment(FragmentSignupAccount.class.getName(), null);
+            Toast.makeText(mActivityMain, "Login failed!", Toast.LENGTH_SHORT).show();
+            mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
         }
     };
 }

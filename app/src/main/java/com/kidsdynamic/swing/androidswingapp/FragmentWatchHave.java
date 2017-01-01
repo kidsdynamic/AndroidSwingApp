@@ -12,7 +12,7 @@ import android.widget.Button;
  */
 
 public class FragmentWatchHave extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonYes;
@@ -21,7 +21,7 @@ public class FragmentWatchHave extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -40,14 +40,14 @@ public class FragmentWatchHave extends Fragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchOwner.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchOwner.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnNoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchPurchase.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchPurchase.class.getName(), null);
         }
     };
 }

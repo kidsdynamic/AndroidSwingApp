@@ -13,7 +13,7 @@ import android.widget.TextView;
  */
 
 public class FragmentWatchSearch extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private TextView mTextViewSearching;
@@ -23,7 +23,7 @@ public class FragmentWatchSearch extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -43,14 +43,14 @@ public class FragmentWatchSearch extends Fragment {
         @Override
         public void onClick(View v) {
             mSearchHandler.removeCallbacks(mSearchRunnable);
-            mMainActivity.selectFragment(FragmentWatchSorry.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchSorry.class.getName(), null);
         }
     };
 
     private Runnable mSearchRunnable = new Runnable() {
         @Override
         public void run() {
-            mMainActivity.selectFragment(FragmentWatchSelect.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), null);
         }
     };
 }

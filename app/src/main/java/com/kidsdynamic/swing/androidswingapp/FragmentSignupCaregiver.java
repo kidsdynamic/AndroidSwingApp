@@ -12,7 +12,7 @@ import android.widget.Button;
  */
 
 public class FragmentSignupCaregiver extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonParent;
@@ -21,7 +21,7 @@ public class FragmentSignupCaregiver extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FragmentSignupCaregiver extends Fragment {
 
             }
 
-            mMainActivity.selectFragment(FragmentSignupLogin.class.getName(), null);
+            mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
         }
     };
 }

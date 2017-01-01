@@ -12,13 +12,13 @@ import android.widget.Button;
  */
 
 public class FragmentSignupLanguage extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -35,9 +35,9 @@ public class FragmentSignupLanguage extends Fragment {
         @Override
         public void onClick(View view) {
             // todo: Save default or language
-            mMainActivity.mConfig.setString(Config.KEY_LANGUAGE, "Default");
+            mActivityMain.mConfig.setString(Config.KEY_LANGUAGE, "Default");
 
-            mMainActivity.selectFragment(FragmentSignupLogin.class.getName(), null);
+            mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
         }
     };
 }

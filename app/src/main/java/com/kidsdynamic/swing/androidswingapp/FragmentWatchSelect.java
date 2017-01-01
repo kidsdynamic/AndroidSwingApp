@@ -12,7 +12,7 @@ import android.widget.Button;
  */
 
 public class FragmentWatchSelect extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonDashboard;
@@ -22,7 +22,7 @@ public class FragmentWatchSelect extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -45,16 +45,16 @@ public class FragmentWatchSelect extends Fragment {
         @Override
         public void onClick(View view) {
             if (view == mViewContactLabel1)
-                mMainActivity.selectFragment(FragmentWatchAdded.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
             else
-                mMainActivity.selectFragment(FragmentWatchRegistered.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentSignupLogin.class.getName(), null);
+//            mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
         }
     };
 }

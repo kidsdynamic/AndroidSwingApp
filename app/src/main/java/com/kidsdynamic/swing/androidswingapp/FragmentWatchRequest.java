@@ -12,7 +12,7 @@ import android.widget.Button;
  */
 
 public class FragmentWatchRequest extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonBack;
@@ -21,7 +21,7 @@ public class FragmentWatchRequest extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -40,14 +40,14 @@ public class FragmentWatchRequest extends Fragment {
     private Button.OnClickListener mOnBackListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchOwner.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchOwner.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mMainActivity.selectFragment(FragmentSignupLogin.class.getName(), null);
+//            mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
         }
     };
 }

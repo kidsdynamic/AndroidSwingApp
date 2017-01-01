@@ -15,7 +15,7 @@ import android.widget.TextView;
  */
 
 public class FragmentSignupProfile extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private EditText mViewFirstName;
@@ -26,7 +26,7 @@ public class FragmentSignupProfile extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -52,12 +52,12 @@ public class FragmentSignupProfile extends Fragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
-                mMainActivity.mConfig.setString(Config.KEY_FIRST_NAME, mViewFirstName.getText().toString());
-                mMainActivity.mConfig.setString(Config.KEY_LAST_NAME, mViewLastName.getText().toString());
-                mMainActivity.mConfig.setString(Config.KEY_PHONE, mViewPhone.getText().toString());
-                mMainActivity.mConfig.setString(Config.KEY_ZIP, mViewZip.getText().toString());
+                mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mViewFirstName.getText().toString());
+                mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mViewLastName.getText().toString());
+                mActivityMain.mConfig.setString(Config.KEY_PHONE, mViewPhone.getText().toString());
+                mActivityMain.mConfig.setString(Config.KEY_ZIP, mViewZip.getText().toString());
 
-                mMainActivity.selectFragment(FragmentWatchHave.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
             }
 
             return false;

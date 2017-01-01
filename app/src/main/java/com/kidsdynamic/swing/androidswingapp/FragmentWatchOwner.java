@@ -12,7 +12,7 @@ import android.widget.Button;
  */
 
 public class FragmentWatchOwner extends Fragment {
-    private MainActivity mMainActivity;
+    private ActivityMain mActivityMain;
     private View mMainView;
 
     private Button mButtonSearch;
@@ -21,7 +21,7 @@ public class FragmentWatchOwner extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMainActivity = (MainActivity) getActivity();
+        mActivityMain = (ActivityMain) getActivity();
     }
 
     @Override
@@ -40,14 +40,14 @@ public class FragmentWatchOwner extends Fragment {
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchSearch.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchSearch.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnOthersListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mMainActivity.selectFragment(FragmentWatchRequest.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
     };
 }
