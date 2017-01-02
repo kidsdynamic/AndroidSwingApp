@@ -44,7 +44,8 @@ public class FragmentSignupLogin extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sign up", false, false);
+        return new ViewFragmentConfig("Sign up", false, false,
+                ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
     private Button.OnClickListener mOnLoginListener = new View.OnClickListener() {

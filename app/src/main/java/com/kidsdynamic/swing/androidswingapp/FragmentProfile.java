@@ -29,6 +29,7 @@ public class FragmentProfile extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Profile", true, true);
+        return new ViewFragmentConfig("Profile", true, true,
+                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_edit, R.mipmap.icon_settings);
     }
 }

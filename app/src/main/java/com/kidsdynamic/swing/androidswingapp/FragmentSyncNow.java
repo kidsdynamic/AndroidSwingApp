@@ -43,7 +43,8 @@ public class FragmentSyncNow extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sync", true, true);
+        return new ViewFragmentConfig("Sync", true, true,
+                R.mipmap.city_overall, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {

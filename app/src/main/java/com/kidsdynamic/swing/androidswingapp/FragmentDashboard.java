@@ -14,10 +14,14 @@ public class FragmentDashboard extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
+    private int mBackgroundRes;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        mBackgroundRes = R.mipmap.city_florida;
     }
 
     @Override
@@ -29,6 +33,7 @@ public class FragmentDashboard extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Dashboard", true, true);
+        return new ViewFragmentConfig("Dashboard", true, true,
+                mBackgroundRes, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 }

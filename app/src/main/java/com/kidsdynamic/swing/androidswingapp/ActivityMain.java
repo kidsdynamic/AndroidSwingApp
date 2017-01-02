@@ -39,6 +39,10 @@ public class ActivityMain extends AppCompatActivity
 
     final private int mTransitionDuration = 500;
 
+    final static int RESOURCE_IGNORE = 0;
+    final static int RESOURCE_HIDE = -1;
+    private int mBackgroundRes, mIconRes1, mIconRes2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,12 +126,12 @@ public class ActivityMain extends AppCompatActivity
         return null;
     }
 
-    public void consoleShow(boolean enable) {
-        boolean cur_enable = mViewConsole.getLayoutParams().height != 0;
-        if (cur_enable == enable)
+    public void consoleShow(boolean visible) {
+        boolean cur_visible = mViewConsole.getLayoutParams().height != 0;
+        if (cur_visible == visible)
             return;
 
-        ValueAnimator anim = enable ?
+        ValueAnimator anim = visible ?
                 ValueAnimator.ofInt(0, mControlHeight) : ValueAnimator.ofInt(mControlHeight, 0);
 
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -158,12 +162,12 @@ public class ActivityMain extends AppCompatActivity
         }
     };
 
-    public void toolbarShow(boolean enable) {
-        boolean cur_enable = mViewToolbar.getLayoutParams().height != 0;
-        if (cur_enable == enable)
+    public void toolbarShow(boolean visible) {
+        boolean cur_visible = mViewToolbar.getLayoutParams().height != 0;
+        if (cur_visible == visible)
             return;
 
-        ValueAnimator anim = enable ?
+        ValueAnimator anim = visible ?
                 ValueAnimator.ofInt(0, mToolbarHeight) : ValueAnimator.ofInt(mToolbarHeight, 0);
 
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -182,6 +186,53 @@ public class ActivityMain extends AppCompatActivity
 
     public void toolbarSetTitle(String title) {
         mViewTitle.setText(title);
+    }
+
+    public void toolbarSetIcon1(int resource) {
+        if (resource == mIconRes1 || resource == RESOURCE_IGNORE)
+            return;
+
+        if (resource == RESOURCE_HIDE) {
+            // todo: hide action1 in toolbar
+        } else {
+            if( mIconRes1 == RESOURCE_HIDE) {
+                // todo: show action1 in toolbar
+            }
+
+            // todo: change action1 image
+        }
+
+        mIconRes1 = resource;
+    }
+
+    public void toolbarSetIcon2(int resource) {
+        if (resource == mIconRes2 || resource == RESOURCE_IGNORE)
+            return;
+
+        if (resource == RESOURCE_HIDE) {
+            // todo: hide action2 in toolbar
+        } else {
+            if( mIconRes2 == RESOURCE_HIDE) {
+                // todo: show action2 in toolbar
+            }
+
+            // todo: change action2 image
+        }
+
+        mIconRes2 = resource;
+    }
+
+    public void backgroundSet(int resource) {
+        if (resource == mBackgroundRes || resource == RESOURCE_IGNORE)
+            return;
+
+        if (resource == RESOURCE_HIDE) {
+            // todo: set background in primary color (light blue)
+        } else {
+            // todo: change background resource
+        }
+
+        mBackgroundRes = resource;
     }
 
     private View.OnClickListener mToolbarClickListener = new View.OnClickListener() {
