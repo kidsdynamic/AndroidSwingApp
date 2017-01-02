@@ -34,6 +34,7 @@ public class ActivityMain extends AppCompatActivity
 
     private int mControlHeight;
     private int mToolbarHeight;
+
     final private int mTransitionDuration = 500;
 
     @Override
@@ -44,8 +45,8 @@ public class ActivityMain extends AppCompatActivity
         mConfig = new Config(this, null);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        mControlHeight = metrics.heightPixels / 12;
-        mToolbarHeight = metrics.heightPixels / 15;
+        mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
+        mToolbarHeight = metrics.heightPixels / getResources().getInteger(R.integer.toolbar_height_denominator);
 
         mViewDevice = findViewById(R.id.main_console_device);
         mViewDevice.setOnClickListener(mConsoleClickListener);
@@ -107,7 +108,7 @@ public class ActivityMain extends AppCompatActivity
 
     public void consoleShow(boolean enable) {
         boolean cur_enable = mViewConsole.getLayoutParams().height != 0;
-        if(cur_enable == enable)
+        if (cur_enable == enable)
             return;
 
         ValueAnimator anim = enable ?
@@ -143,7 +144,7 @@ public class ActivityMain extends AppCompatActivity
 
     public void toolbarShow(boolean enable) {
         boolean cur_enable = mViewToolbar.getLayoutParams().height != 0;
-        if(cur_enable == enable)
+        if (cur_enable == enable)
             return;
 
         ValueAnimator anim = enable ?

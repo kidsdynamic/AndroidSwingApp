@@ -2,12 +2,14 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -20,6 +22,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
     private EditText mViewEmail;
     private EditText mViewPassword;
+    private ImageView mViewBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,9 @@ public class FragmentSignupAccount extends ViewFragment {
         mViewPassword.setText(password);
         mViewPassword.setOnEditorActionListener(mEdittextActionListener);
 
+        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
+        mViewBack.setOnClickListener(mBackOnClickListener);
+
         return mViewMain;
     }
 
@@ -49,6 +55,18 @@ public class FragmentSignupAccount extends ViewFragment {
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Sign up", false, false);
     }
+
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
+    }
+
+    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onToolbarAction1();
+        }
+    };
 
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
