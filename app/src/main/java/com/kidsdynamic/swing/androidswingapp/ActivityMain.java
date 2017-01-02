@@ -6,6 +6,8 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -71,10 +73,19 @@ public class ActivityMain extends AppCompatActivity
         mViewConsole = findViewById(R.id.main_console);
         mViewToolbar = findViewById(R.id.main_toolbar);
 
+        // Put the first fragment.
+        String fragmentName;
         if (mConfig.getString(Config.KEY_LANGUAGE).equals(""))
-            selectFragment(FragmentSignupLanguage.class.getName(), null);
+            fragmentName = FragmentSignupLanguage.class.getName();
         else
-            selectFragment(FragmentSignupLogin.class.getName(), null);
+            fragmentName = FragmentSignupLogin.class.getName();
+
+        Fragment fragment = Fragment.instantiate(this, fragmentName, null);
+
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fragment, fragment, fragmentName)
+                .commit();
     }
 
     @Override
