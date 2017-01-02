@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by 03543 on 2016/12/30.
@@ -17,6 +18,7 @@ public class FragmentWatchOwner extends ViewFragment {
 
     private Button mButtonSearch;
     private Button mButtonOthers;
+    private ImageView mViewBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,9 @@ public class FragmentWatchOwner extends ViewFragment {
         mButtonOthers = (Button) mViewMain.findViewById(R.id.watch_owner_others);
         mButtonOthers.setOnClickListener(mOnOthersListener);
 
+        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
+        mViewBack.setOnClickListener(mBackOnClickListener);
+
         return mViewMain;
     }
 
@@ -41,6 +46,18 @@ public class FragmentWatchOwner extends ViewFragment {
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Watch", false, false);
     }
+
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.popFragment();
+    }
+
+    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onToolbarAction1();
+        }
+    };
 
     private Button.OnClickListener mOnSearchListener = new View.OnClickListener() {
         @Override

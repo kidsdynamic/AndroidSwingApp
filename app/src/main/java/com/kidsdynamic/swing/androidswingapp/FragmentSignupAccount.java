@@ -58,7 +58,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
+        mActivityMain.popFragment();
     }
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {

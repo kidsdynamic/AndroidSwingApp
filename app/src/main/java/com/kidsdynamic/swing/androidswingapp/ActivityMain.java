@@ -89,12 +89,17 @@ public class ActivityMain extends AppCompatActivity
         }
     }
 
+    public void popFragment() {
+        getFragmentManager().popBackStack();
+    }
+
     public void selectFragment(String className, Bundle args) {
         Fragment fragment = Fragment.instantiate(this, className, args);
 
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, className)
+                .addToBackStack(null)
                 .commit();
     }
 

@@ -49,7 +49,7 @@ public class FragmentWatchHave extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
+        mActivityMain.popFragment();
     }
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
