@@ -14,7 +14,7 @@ import android.widget.TextView;
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupAccount extends Fragment {
+public class FragmentSignupAccount extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 

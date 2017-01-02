@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupCaregiver extends Fragment {
+public class FragmentSignupCaregiver extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 

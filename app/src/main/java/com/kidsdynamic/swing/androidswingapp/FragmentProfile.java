@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * Created by 03543 on 2016/12/19.
  */
 
-public class FragmentProfile extends Fragment {
+public class FragmentProfile extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 

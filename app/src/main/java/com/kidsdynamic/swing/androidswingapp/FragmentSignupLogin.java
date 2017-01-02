@@ -12,7 +12,7 @@ import android.widget.Toast;
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupLogin extends Fragment {
+public class FragmentSignupLogin extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 

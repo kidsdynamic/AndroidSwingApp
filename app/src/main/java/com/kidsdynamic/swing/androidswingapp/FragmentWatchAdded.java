@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/31.
  */
 
-public class FragmentWatchAdded extends Fragment {
+public class FragmentWatchAdded extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -32,6 +32,7 @@ public class FragmentWatchAdded extends Fragment {
 
         return mViewMain;
     }
+
 
     private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
         @Override

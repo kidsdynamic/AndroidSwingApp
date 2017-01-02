@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2017/1/1.
  */
 
-public class FragmentSyncNow extends Fragment {
+public class FragmentSyncNow extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -53,6 +53,7 @@ public class FragmentSyncNow extends Fragment {
         public void onClick(View view) {
             mActivityMain.selectControl(null);
             mActivityMain.showControl(true);
+            mActivityMain.showToolbar(true);
             mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
         }
     };

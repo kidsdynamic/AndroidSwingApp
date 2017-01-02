@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/31.
  */
 
-public class FragmentWatchRegistered extends Fragment {
+public class FragmentWatchRegistered extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
