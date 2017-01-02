@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -22,6 +23,7 @@ public class FragmentSignupProfile extends ViewFragment {
     private EditText mViewLastName;
     private EditText mViewPhone;
     private EditText mViewZip;
+    private ImageView mViewBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,9 @@ public class FragmentSignupProfile extends ViewFragment {
         mViewZip = (EditText) mViewMain.findViewById(R.id.signup_profile_zip);
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
+        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
+        mViewBack.setOnClickListener(mBackOnClickListener);
+
         return mViewMain;
     }
 
@@ -52,6 +57,18 @@ public class FragmentSignupProfile extends ViewFragment {
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Sign up", false, false);
     }
+
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
+    }
+
+    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onToolbarAction1();
+        }
+    };
 
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
