@@ -6,17 +6,14 @@ import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.List;
 
 public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -29,8 +26,11 @@ public class ActivityMain extends AppCompatActivity
     private View mViewCalendar;
     private View mViewDashboard;
     private View mViewProfile;
+    private View mViewAction1;
+    private View mViewAction2;
+    private TextView mViewTitle;
     private View mViewControl;
-    private ViewToolbar mViewToolbar;
+    private View mViewToolbar;
 
     private int mControlHeight;
     private int mToolbarHeight;
@@ -47,22 +47,28 @@ public class ActivityMain extends AppCompatActivity
         mControlHeight = metrics.heightPixels / 12;
         mToolbarHeight = metrics.heightPixels / 15;
 
-        mViewDevice = findViewById(R.id.main_control_device);
-        mViewDevice.setOnClickListener(mControlClickListener);
+        mViewDevice = findViewById(R.id.main_console_device);
+        mViewDevice.setOnClickListener(mConsoleClickListener);
 
-        mViewCalendar = findViewById(R.id.main_control_calendar);
-        mViewCalendar.setOnClickListener(mControlClickListener);
+        mViewCalendar = findViewById(R.id.main_console_calendar);
+        mViewCalendar.setOnClickListener(mConsoleClickListener);
 
-        mViewDashboard = findViewById(R.id.main_control_dashboard);
-        mViewDashboard.setOnClickListener(mControlClickListener);
+        mViewDashboard = findViewById(R.id.main_console_dashboard);
+        mViewDashboard.setOnClickListener(mConsoleClickListener);
 
         mViewProfile = findViewById(R.id.main_control_profile);
-        mViewProfile.setOnClickListener(mControlClickListener);
+        mViewProfile.setOnClickListener(mConsoleClickListener);
 
-        mViewControl = findViewById(R.id.main_control);
+        mViewTitle = (TextView) findViewById(R.id.main_toolbar_title);
 
-        mViewToolbar = (ViewToolbar) findViewById(R.id.main_toolbar);
-        mViewToolbar.setOnActionListener(mToolbarActionListener);
+        mViewAction1 = findViewById(R.id.main_toolbar_action1);
+        mViewAction1.setOnClickListener(mToolbarClickListener);
+
+        mViewAction2 = findViewById(R.id.main_toolbar_action2);
+        mViewAction2.setOnClickListener(mToolbarClickListener);
+
+        mViewControl = findViewById(R.id.main_console);
+        mViewToolbar = findViewById(R.id.main_toolbar);
 
         if (mConfig.getString(Config.KEY_LANGUAGE).equals(""))
             selectFragment(FragmentSignupLanguage.class.getName(), null);
@@ -94,12 +100,12 @@ public class ActivityMain extends AppCompatActivity
     public ViewFragment getTopViewFragment() {
         Fragment fragment = getFragmentManager().findFragmentById(R.id.main_fragment);
 
-        if(fragment instanceof ViewFragment)
-            return (ViewFragment)fragment;
+        if (fragment instanceof ViewFragment)
+            return (ViewFragment) fragment;
         return null;
     }
 
-    public void showControl(boolean enable) {
+    public void consoleShow(boolean enable) {
         ValueAnimator anim = enable ?
                 ValueAnimator.ofInt(0, mControlHeight) : ValueAnimator.ofInt(mControlHeight, 0);
 
@@ -117,7 +123,21 @@ public class ActivityMain extends AppCompatActivity
         anim.start();
     }
 
-    public void showToolbar(boolean enable) {
+    public void consoleSelect(View view) {
+        mViewDevice.setSelected(view == mViewDevice);
+        mViewCalendar.setSelected(view == mViewCalendar);
+        mViewDashboard.setSelected(view == null || view == mViewDashboard);
+        mViewProfile.setSelected(view == mViewProfile);
+    }
+
+    private View.OnClickListener mConsoleClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            consoleSelect(view);
+        }
+    };
+
+    public void toolbarShow(boolean enable) {
         ValueAnimator anim = enable ?
                 ValueAnimator.ofInt(0, mToolbarHeight) : ValueAnimator.ofInt(mToolbarHeight, 0);
 
@@ -135,25 +155,13 @@ public class ActivityMain extends AppCompatActivity
         anim.start();
     }
 
-    public void selectControl(View view) {
-        mViewDevice.setSelected(view == mViewDevice);
-        mViewCalendar.setSelected(view == mViewCalendar);
-        mViewDashboard.setSelected(view == null || view == mViewDashboard);
-        mViewProfile.setSelected(view == mViewProfile);
+    public void toolbarSetTitle(String title) {
+        mViewTitle.setText(title);
     }
 
-    private View.OnClickListener mControlClickListener = new View.OnClickListener() {
+    private View.OnClickListener mToolbarClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            selectControl(view);
-        }
-    };
-
-    private ViewToolbar.OnActionListener mToolbarActionListener = new ViewToolbar.OnActionListener() {
-        @Override
-        public void onClick(View view, int action) {
-            ViewFragment fragment = getTopViewFragment();
-            fragment.onToolbarAction(action);
         }
     };
 

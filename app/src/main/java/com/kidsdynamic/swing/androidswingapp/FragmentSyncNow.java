@@ -51,9 +51,9 @@ public class FragmentSyncNow extends ViewFragment {
     private Button.OnClickListener mOnNoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectControl(null);
-            mActivityMain.showControl(true);
-            mActivityMain.showToolbar(true);
+            mActivityMain.consoleSelect(null);
+            mActivityMain.consoleShow(true);
+            mActivityMain.toolbarShow(true);
             mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
         }
     };

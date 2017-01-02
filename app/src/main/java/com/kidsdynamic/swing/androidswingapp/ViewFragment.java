@@ -8,8 +8,6 @@ import android.view.View;
  */
 
 public class ViewFragment extends Fragment {
-    protected ActivityMain mActivityMain;
-    protected View mViewMain;
-
-    public void onToolbarAction(int action) {}
+    public void onToolbarAction1() {}
+    public void onToolbarAction2() {}
 }
