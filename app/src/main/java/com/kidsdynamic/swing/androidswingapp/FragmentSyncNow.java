@@ -41,6 +41,11 @@ public class FragmentSyncNow extends ViewFragment {
         return mViewMain;
     }
 
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Sync", true, true);
+    }
+
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

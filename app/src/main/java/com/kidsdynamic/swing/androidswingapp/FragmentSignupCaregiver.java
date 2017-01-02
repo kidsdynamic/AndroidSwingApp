@@ -37,6 +37,11 @@ public class FragmentSignupCaregiver extends ViewFragment {
         return mViewMain;
     }
 
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Sign up", false, false);
+    }
+
     private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

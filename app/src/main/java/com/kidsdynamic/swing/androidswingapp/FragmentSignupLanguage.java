@@ -11,7 +11,7 @@ import android.widget.Button;
  * Created by 03543 on 2016/12/30.
  */
 
-public class FragmentSignupLanguage extends Fragment {
+public class FragmentSignupLanguage extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -29,6 +29,11 @@ public class FragmentSignupLanguage extends Fragment {
         button.setOnClickListener(mOnButtonListener);
 
         return mViewMain;
+    }
+
+    @Override
+    public ViewFragment.ViewFragmentConfig getConfig() {
+        return new ViewFragment.ViewFragmentConfig("Sign up", false, false);
     }
 
     private Button.OnClickListener mOnButtonListener = new View.OnClickListener() {

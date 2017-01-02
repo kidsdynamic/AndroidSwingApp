@@ -29,7 +29,7 @@ public class ActivityMain extends AppCompatActivity
     private View mViewAction1;
     private View mViewAction2;
     private TextView mViewTitle;
-    private View mViewControl;
+    private View mViewConsole;
     private View mViewToolbar;
 
     private int mControlHeight;
@@ -67,7 +67,7 @@ public class ActivityMain extends AppCompatActivity
         mViewAction2 = findViewById(R.id.main_toolbar_action2);
         mViewAction2.setOnClickListener(mToolbarClickListener);
 
-        mViewControl = findViewById(R.id.main_console);
+        mViewConsole = findViewById(R.id.main_console);
         mViewToolbar = findViewById(R.id.main_toolbar);
 
         if (mConfig.getString(Config.KEY_LANGUAGE).equals(""))
@@ -106,6 +106,10 @@ public class ActivityMain extends AppCompatActivity
     }
 
     public void consoleShow(boolean enable) {
+        boolean cur_enable = mViewConsole.getLayoutParams().height != 0;
+        if(cur_enable == enable)
+            return;
+
         ValueAnimator anim = enable ?
                 ValueAnimator.ofInt(0, mControlHeight) : ValueAnimator.ofInt(mControlHeight, 0);
 
@@ -114,9 +118,9 @@ public class ActivityMain extends AppCompatActivity
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int val = (Integer) valueAnimator.getAnimatedValue();
                 RelativeLayout.LayoutParams layoutParams =
-                        (RelativeLayout.LayoutParams) mViewControl.getLayoutParams();
+                        (RelativeLayout.LayoutParams) mViewConsole.getLayoutParams();
                 layoutParams.height = val;
-                mViewControl.setLayoutParams(layoutParams);
+                mViewConsole.setLayoutParams(layoutParams);
             }
         });
         anim.setDuration(mTransitionDuration);
@@ -138,6 +142,10 @@ public class ActivityMain extends AppCompatActivity
     };
 
     public void toolbarShow(boolean enable) {
+        boolean cur_enable = mViewToolbar.getLayoutParams().height != 0;
+        if(cur_enable == enable)
+            return;
+
         ValueAnimator anim = enable ?
                 ValueAnimator.ofInt(0, mToolbarHeight) : ValueAnimator.ofInt(mToolbarHeight, 0);
 

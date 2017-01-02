@@ -26,4 +26,9 @@ public class FragmentDevice extends ViewFragment {
 
         return mViewMain;
     }
+
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Device", true, true);
+    }
 }

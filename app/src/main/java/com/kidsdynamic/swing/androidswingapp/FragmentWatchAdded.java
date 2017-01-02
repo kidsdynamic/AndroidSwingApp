@@ -33,6 +33,10 @@ public class FragmentWatchAdded extends ViewFragment {
         return mViewMain;
     }
 
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Watch", false, false);
+    }
 
     private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
         @Override

@@ -39,6 +39,11 @@ public class FragmentWatchSearch extends ViewFragment {
         return mViewMain;
     }
 
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Watch", false, false);
+    }
+
     private View.OnClickListener mSearchCancelListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {

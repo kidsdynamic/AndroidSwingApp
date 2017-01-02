@@ -48,6 +48,11 @@ public class FragmentSignupProfile extends ViewFragment {
         return mViewMain;
     }
 
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Sign up", false, false);
+    }
+
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {

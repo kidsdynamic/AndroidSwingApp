@@ -26,4 +26,9 @@ public class FragmentDashboard extends ViewFragment {
 
         return mViewMain;
     }
+
+    @Override
+    public ViewFragmentConfig getConfig() {
+        return new ViewFragmentConfig("Dashboard", true, true);
+    }
 }
