@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -43,10 +44,16 @@ public class FragmentBoot extends ViewFragment {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals(""))
-                mActivityMain.selectFragment(FragmentSignupLanguage.class.getName(), null);
-            else
-                mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
+            String name =
+                    (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals("")) ?
+                            FragmentSignupLanguage.class.getName() :
+                            FragmentSignupLogin.class.getName();
+
+            Fragment fragment = Fragment.instantiate(mActivityMain, name, null);
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment, fragment, name)
+                    .commit();
         }
     };
 
