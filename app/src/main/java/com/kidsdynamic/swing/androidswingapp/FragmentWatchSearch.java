@@ -34,7 +34,7 @@ public class FragmentWatchSearch extends ViewFragment {
         mTextViewSearching.setOnClickListener(mSearchCancelListener);
 
         mSearchHandler = new Handler();
-        mSearchHandler.postDelayed(mSearchRunnable, 3000);
+//        mSearchHandler.postDelayed(mSearchRunnable, 3000);
 
         return mViewMain;
     }
