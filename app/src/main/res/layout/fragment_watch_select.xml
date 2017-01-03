@@ -1,69 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+    <ImageView
+        android:id="@+id/fragment_back"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitStart"
+        android:src="@mipmap/icon_left" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="5"
-        android:orientation="vertical">
+    <TextView
+        style="@style/textview_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:gravity="center"
+        android:text="Please Select\nYour Swing Watch" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
 
-        <TextView
-            style="@style/textview_main"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:text="Please Select\nYour Swing Watch" />
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_select_label_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:shrinkWidth="0.1" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_select_label_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:shrinkWidth="0.1" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewContactLabel
             android:id="@+id/watch_select_contact1"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1" />
+            android:layout_toEndOf="@+id/watch_select_label_start"
+            android:layout_toStartOf="@+id/watch_select_label_end" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewContactLabel
             android:id="@+id/watch_select_contact2"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/watch_select_contact1"
+            android:layout_toEndOf="@+id/watch_select_label_start"
+            android:layout_toStartOf="@+id/watch_select_label_end" />
+    </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_select_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:shrinkWidth="0.15" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_select_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:shrinkWidth="0.15" />
 
         <Button
             android:id="@+id/watch_select_dashboard"
             style="@style/button_main"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
-            android:layout_weight="1"
+            android:layout_toEndOf="@+id/watch_select_start"
+            android:layout_toStartOf="@+id/watch_select_end"
+            android:enabled="false"
             android:text="Go to Dashboard" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+    </RelativeLayout>
 
 </LinearLayout>

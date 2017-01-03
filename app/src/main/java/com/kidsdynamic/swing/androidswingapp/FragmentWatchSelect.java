@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by 03543 on 2016/12/31.
@@ -18,6 +19,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private Button mButtonDashboard;
     private ViewContactLabel mViewContactLabel1;
     private ViewContactLabel mViewContactLabel2;
+    private ImageView mViewBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,9 @@ public class FragmentWatchSelect extends ViewFragment {
         mViewContactLabel2 = (ViewContactLabel) mViewMain.findViewById(R.id.watch_select_contact2);
         mViewContactLabel2.setOnClickListener(mOnContactListener);
 
+        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
+        mViewBack.setOnClickListener(mBackOnClickListener);
+
         mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
@@ -46,6 +51,18 @@ public class FragmentWatchSelect extends ViewFragment {
         return new ViewFragmentConfig("Watch", false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
+
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.popFragment();
+    }
+
+    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onToolbarAction1();
+        }
+    };
 
     private View.OnClickListener mOnContactListener = new View.OnClickListener() {
         @Override
