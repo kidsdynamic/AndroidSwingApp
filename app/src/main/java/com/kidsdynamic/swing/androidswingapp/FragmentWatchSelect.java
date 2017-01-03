@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,8 @@ public class FragmentWatchSelect extends ViewFragment {
     private View mViewMain;
 
     private Button mButtonDashboard;
-    private ViewContactLabel mViewContactLabel1;
-    private ViewContactLabel mViewContactLabel2;
+    private ViewContact mViewContact1;
+    private ViewContact mViewContact2;
     private ImageView mViewBack;
 
     @Override
@@ -31,11 +30,11 @@ public class FragmentWatchSelect extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
-        mViewContactLabel1 = (ViewContactLabel) mViewMain.findViewById(R.id.watch_select_contact1);
-        mViewContactLabel1.setOnClickListener(mOnContactListener);
+        mViewContact1 = (ViewContact) mViewMain.findViewById(R.id.watch_select_contact1);
+        mViewContact1.setOnClickListener(mOnContactListener);
 
-        mViewContactLabel2 = (ViewContactLabel) mViewMain.findViewById(R.id.watch_select_contact2);
-        mViewContactLabel2.setOnClickListener(mOnContactListener);
+        mViewContact2 = (ViewContact) mViewMain.findViewById(R.id.watch_select_contact2);
+        mViewContact2.setOnClickListener(mOnContactListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -67,7 +66,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private View.OnClickListener mOnContactListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view == mViewContactLabel1)
+            if (view == mViewContact1)
                 mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
             else
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);

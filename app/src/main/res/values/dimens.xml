@@ -6,4 +6,6 @@
     <integer name="console_height_denominator">12</integer>
     <integer name="toolbar_height_denominator">12</integer>
     <integer name="icon_size_denominator">12</integer>
+
+    <integer name="contact_label_denominator">12</integer>
 </resources>

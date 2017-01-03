@@ -6,39 +6,46 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Created by 03543 on 2016/12/30.
  */
 
-public class ViewContactLabel extends View {
+public class ViewContact extends RelativeLayout {
     private int mDesiredWidth;
     private int mDesiredHeight;
 
-    private Bitmap mBackgroundBitmap;
-    private int mBackgroundWidth = 0, mBackgroundHeight = 0;
+    private TextView mViewPhoto;
+    private TextView mViewLabel;
+    private ImageView mViewBackground;
 
-    public ViewContactLabel(Context context) {
-        super(context);
-        init();
-    }
-
-    public ViewContactLabel(Context context, AttributeSet attrs) {
+    public ViewContact(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ViewContactLabel(Context context, AttributeSet attrs, int defStyle) {
+    public ViewContact(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
 
     private void init() {
-        mDesiredWidth = 100;
-        mDesiredHeight = 40;
-    }
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        mDesiredHeight = metrics.heightPixels / getResources().getInteger(R.integer.contact_label_denominator);
+        mDesiredWidth = mDesiredHeight * 4;
 
+        inflate(getContext(), R.layout.view_contact, this);
+
+        mViewBackground = (ImageView) findViewById(R.id.view_contact_background);
+        mViewPhoto = (TextView) findViewById(R.id.view_contact_photo);
+        mViewLabel = (TextView) findViewById(R.id.view_contact_label);
+    }
+/*
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -68,31 +75,5 @@ public class ViewContactLabel extends View {
 
         setMeasuredDimension(width, height);
     }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        if (getMeasuredWidth() != mBackgroundWidth || getMeasuredHeight() != mBackgroundHeight)
-            makeBackground(getMeasuredWidth(), getMeasuredHeight());
-
-        canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
-    }
-
-    private void updateRects() {
-    }
-
-    private void makeBackground(int width, int height) {
-        mBackgroundWidth = width;
-        mBackgroundHeight = height;
-
-        updateRects();
-
-        mBackgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(mBackgroundBitmap);
-
-        final Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(Color.WHITE);
-
-        canvas.drawRect(0, 0, mBackgroundWidth, mBackgroundHeight, paint);
-    }
+    */
 }
