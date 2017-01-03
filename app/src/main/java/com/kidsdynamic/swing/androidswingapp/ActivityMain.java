@@ -77,15 +77,8 @@ public class ActivityMain extends AppCompatActivity
         mViewConsole = findViewById(R.id.main_console);
         mViewToolbar = findViewById(R.id.main_toolbar);
 
-        // Put the first fragment.
-        String fragmentName;
-        if (mConfig.getString(Config.KEY_LANGUAGE).equals(""))
-            fragmentName = FragmentSignupLanguage.class.getName();
-        else
-            fragmentName = FragmentSignupLogin.class.getName();
-
+        String fragmentName = FragmentBoot.class.getName();
         Fragment fragment = Fragment.instantiate(this, fragmentName, null);
-
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, fragmentName)
