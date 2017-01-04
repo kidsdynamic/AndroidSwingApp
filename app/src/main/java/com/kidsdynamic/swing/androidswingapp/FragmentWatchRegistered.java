@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 /**
  * Created by 03543 on 2016/12/31.
@@ -16,8 +17,8 @@ public class FragmentWatchRegistered extends ViewFragment {
     private View mViewMain;
 
     private Button mButtonRequest;
-    private Button mButtonGuest;
     private Button mButtonContact;
+    private ImageView mViewBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,11 +33,11 @@ public class FragmentWatchRegistered extends ViewFragment {
         mButtonRequest = (Button) mViewMain.findViewById(R.id.watch_registered_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
 
-        mButtonGuest = (Button) mViewMain.findViewById(R.id.watch_registered_guest);
-        mButtonGuest.setOnClickListener(mOnGuestListener);
-
         mButtonContact = (Button) mViewMain.findViewById(R.id.watch_registered_contact);
         mButtonContact.setOnClickListener(mOnContactListener);
+
+        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
+        mViewBack.setOnClickListener(mBackOnClickListener);
 
         return mViewMain;
     }
@@ -47,17 +48,22 @@ public class FragmentWatchRegistered extends ViewFragment {
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.popFragment();
+    }
+
+    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            onToolbarAction1();
+        }
+    };
+
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
-        }
-    };
-
-    private Button.OnClickListener mOnGuestListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-//            mActivityMain.selectFragment(FragmentWatchPurchase.class.getName(), null);
         }
     };
 

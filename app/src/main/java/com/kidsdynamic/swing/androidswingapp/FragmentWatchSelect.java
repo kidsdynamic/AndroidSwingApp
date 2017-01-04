@@ -80,7 +80,9 @@ public class FragmentWatchSelect extends ViewFragment {
 
             Log.d("xxx", "Position:" + position + " Button:" + button);
 
-            if (button == 0)
+            ContactItem.BindItem item = (ContactItem.BindItem)contact.getItem();
+
+            if (!item.mBound)
                 mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
             else
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);

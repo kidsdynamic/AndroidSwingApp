@@ -120,9 +120,9 @@ public class ViewContact extends RelativeLayout {
         setChileWidth(mViewButton2, 0);
 
         if (item.mBound)
-            mViewButton1.setText("R+");
+            mViewButton1.setText("B");
         else
-            mViewButton1.setText("R-");
+            mViewButton1.setText("F");
     }
 
     public void loadAddItem() {
@@ -145,5 +145,9 @@ public class ViewContact extends RelativeLayout {
             loadItem(item);
 
         }
+    }
+
+    public ContactItem getItem() {
+        return mContactItem;
     }
 }
