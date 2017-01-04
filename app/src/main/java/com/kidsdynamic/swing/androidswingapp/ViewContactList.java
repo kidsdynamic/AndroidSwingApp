@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import java.util.List;
 public class ViewContactList extends ListView {
     Context mContext = null;
     Adapter mAdapter = null;
+
+    private OnButtonClickListener mButtonClickListener = null;
 
     public ViewContactList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -65,6 +68,10 @@ public class ViewContactList extends ListView {
                 convertView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 viewContact = (ViewContact) convertView.findViewById(R.id.view_contact_row_body);
+
+                viewContact.findViewById(R.id.view_contact_button1).setOnClickListener(mItemButton1ClickListener);
+                viewContact.findViewById(R.id.view_contact_button2).setOnClickListener(mItemButton2ClickListener);
+
                 convertView.setTag(viewContact);
             } else {
                 viewContact = (ViewContact) convertView.getTag();
@@ -74,5 +81,35 @@ public class ViewContactList extends ListView {
 
             return convertView;
         }
+    }
+
+    private View.OnClickListener mItemButton1ClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ViewContact parent = ((ViewContact) view.getParent().getParent());
+            int position = getPositionForView(parent);
+
+            if(mButtonClickListener != null)
+                mButtonClickListener.onClick(parent, position, 0);
+        }
+    };
+
+    private View.OnClickListener mItemButton2ClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ViewContact parent = ((ViewContact) view.getParent().getParent());
+            int position = getPositionForView(parent);
+
+            if(mButtonClickListener != null)
+                mButtonClickListener.onClick(parent, position, 1);
+        }
+    };
+
+    public interface OnButtonClickListener {
+        void onClick(ViewContact contact, int position, int button);
+    }
+
+    public void setOnButtonClickListener(OnButtonClickListener listener) {
+        mButtonClickListener = listener;
     }
 }

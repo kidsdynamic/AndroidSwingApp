@@ -26,10 +26,12 @@ public class ViewContact extends RelativeLayout {
     private int mDesiredWidth;
     private int mDesiredHeight;
 
-    private View mViewPhoto;
+    private ViewPhoto mViewPhoto;
     private TextView mViewLabel;
     private Button mViewButton1;
     private Button mViewButton2;
+
+    private ContactItem mContactItem = null;
 
     public ViewContact(Context context) {
         super(context);
@@ -111,7 +113,9 @@ public class ViewContact extends RelativeLayout {
         setChileWidth(mViewButton2, 0);
     }
 
-    public void loadBindItem(ContactItem.BindItem item) {
+    public void loadBindItem() {
+        ContactItem.BindItem item = (ContactItem.BindItem)mContactItem;
+
         setChileWidth(mViewButton1, LayoutParams.WRAP_CONTENT);
         setChileWidth(mViewButton2, 0);
 
@@ -121,19 +125,21 @@ public class ViewContact extends RelativeLayout {
             mViewButton1.setText("R-");
     }
 
-    public void loadAddItem(ContactItem.AddItem item) {
+    public void loadAddItem() {
         setChileWidth(mViewButton1, LayoutParams.WRAP_CONTENT);
         setChileWidth(mViewButton2, 0);
     }
 
     public void load(ContactItem item) {
+        mContactItem = item;
+
         mViewLabel.setText(item.mLabel);
 
         if (item instanceof ContactItem.BindItem) {
-            loadBindItem((ContactItem.BindItem)item);
+            loadBindItem();
 
         } else if (item instanceof ContactItem.AddItem) {
-            loadAddItem((ContactItem.AddItem)item);
+            loadAddItem();
 
         } else {
             loadItem(item);

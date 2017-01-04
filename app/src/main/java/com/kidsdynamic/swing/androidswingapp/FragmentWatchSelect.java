@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class FragmentWatchSelect extends ViewFragment {
         mViewContactList.addItem(new ContactItem.BindItem(null, "Label2", true));
         mViewContactList.addItem(new ContactItem.BindItem(null, "Label3", false));
         mViewContactList.addItem(new ContactItem.AddItem(null, "Label4"));
-        mViewContactList.setOnItemClickListener(mItemClickListener);
+        mViewContactList.setOnButtonClickListener(mButtonClickListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -66,21 +67,23 @@ public class FragmentWatchSelect extends ViewFragment {
         }
     };
 
-    private ListView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if (position == 0)
-                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
-            else
-                mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
-
-        }
-    };
-
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 //            mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
+        }
+    };
+
+    private ViewContactList.OnButtonClickListener mButtonClickListener = new ViewContactList.OnButtonClickListener() {
+        @Override
+        public void onClick(ViewContact contact, int position, int button) {
+
+            Log.d("xxx", "Position:" + position + " Button:" + button);
+
+            if (button == 0)
+                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
+            else
+                mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
         }
     };
 }
