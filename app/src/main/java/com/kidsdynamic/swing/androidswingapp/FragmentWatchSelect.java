@@ -34,7 +34,9 @@ public class FragmentWatchSelect extends ViewFragment {
 
         mViewContactList = (ViewContactList) mViewMain.findViewById(R.id.watch_select_list);
         mViewContactList.addItem(new ContactItem(null, "Label1"));
-        mViewContactList.addItem(new ContactItem(null, "Label2"));
+        mViewContactList.addItem(new ContactItem.BindItem(null, "Label2", true));
+        mViewContactList.addItem(new ContactItem.BindItem(null, "Label3", false));
+        mViewContactList.addItem(new ContactItem.AddItem(null, "Label4"));
         mViewContactList.setOnItemClickListener(mItemClickListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);

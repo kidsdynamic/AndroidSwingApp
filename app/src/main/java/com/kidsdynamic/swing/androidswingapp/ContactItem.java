@@ -7,10 +7,12 @@ import android.graphics.Bitmap;
  */
 
 public class ContactItem {
-    private Bitmap mPhoto;
-    private String mLabel;
+    public Bitmap mPhoto;
+    public String mLabel;
 
     public ContactItem() {
+        mPhoto = null;
+        mLabel = "";
     }
 
     public ContactItem(Bitmap photo, String label) {
@@ -18,26 +20,18 @@ public class ContactItem {
         mLabel = label;
     }
 
-    public Bitmap getPhoto() {
-        return mPhoto;
+    public static class BindItem extends ContactItem {
+        public boolean mBound;
+
+        public BindItem(Bitmap photo, String label, boolean bound) {
+            super(photo, label);
+            mBound = bound;
+        }
     }
 
-    public void setPhoto(Bitmap photo) {
-        mPhoto = photo;
-    }
-
-    public String getLabel() {
-        return mLabel;
-    }
-
-    public void setLabel(String label) {
-        mLabel = label;
-    }
-
-    public class Request extends ContactItem {
-    }
-
-    public class Kid extends ContactItem {
-
+    public static class AddItem extends ContactItem {
+        public AddItem(Bitmap photo, String label) {
+            super(photo, label);
+        }
     }
 }
