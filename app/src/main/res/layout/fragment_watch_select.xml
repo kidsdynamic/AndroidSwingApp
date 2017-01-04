@@ -47,7 +47,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
             android:layout_toEndOf="@+id/watch_select_label_start"
-            android:layout_toStartOf="@+id/watch_select_label_end" />
+            android:layout_toStartOf="@+id/watch_select_label_end"
+            android:background="@drawable/contact_background" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewContact
             android:id="@+id/watch_select_contact2"
@@ -55,7 +56,8 @@
             android:layout_height="100dp"
             android:layout_below="@+id/watch_select_contact1"
             android:layout_toEndOf="@+id/watch_select_label_start"
-            android:layout_toStartOf="@+id/watch_select_label_end" />
+            android:layout_toStartOf="@+id/watch_select_label_end"
+            android:background="@drawable/contact_background" />
     </RelativeLayout>
 
     <RelativeLayout

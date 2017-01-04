@@ -1,13 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,7 +17,6 @@ public class ViewContact extends RelativeLayout {
 
     private TextView mViewPhoto;
     private TextView mViewLabel;
-    private ImageView mViewBackground;
 
     public ViewContact(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,11 +35,10 @@ public class ViewContact extends RelativeLayout {
 
         inflate(getContext(), R.layout.view_contact, this);
 
-        mViewBackground = (ImageView) findViewById(R.id.view_contact_background);
         mViewPhoto = (TextView) findViewById(R.id.view_contact_photo);
         mViewLabel = (TextView) findViewById(R.id.view_contact_label);
     }
-/*
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -73,7 +66,12 @@ public class ViewContact extends RelativeLayout {
             height = mDesiredHeight;
         }
 
-        setMeasuredDimension(width, height);
+        widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, widthMode);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode);
+
+        getLayoutParams().width = width;
+        getLayoutParams().height = height;
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
-    */
 }
