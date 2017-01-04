@@ -3,6 +3,8 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,8 +17,10 @@ public class ViewContact extends RelativeLayout {
     private int mDesiredWidth;
     private int mDesiredHeight;
 
-    private TextView mViewPhoto;
+    private View mViewPhoto;
     private TextView mViewLabel;
+    private Button mViewButton1;
+    private Button mViewButton2;
 
     public ViewContact(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -35,8 +39,10 @@ public class ViewContact extends RelativeLayout {
 
         inflate(getContext(), R.layout.view_contact, this);
 
-        mViewPhoto = (TextView) findViewById(R.id.view_contact_photo);
+        mViewPhoto = (ViewPhoto) findViewById(R.id.view_contact_photo);
         mViewLabel = (TextView) findViewById(R.id.view_contact_label);
+        mViewButton1 = (Button) findViewById(R.id.view_contact_button1);
+        mViewButton2 = (Button) findViewById(R.id.view_contact_button2);
     }
 
     @Override

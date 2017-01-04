@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants">
 
-    <TextView
+    <com.kidsdynamic.swing.androidswingapp.ViewPhoto
         android:id="@+id/view_contact_photo"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:text="Photo" />
+        android:layout_centerVertical="true" />
 
     <TextView
         android:id="@+id/view_contact_label"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
         android:layout_toEndOf="@+id/view_contact_photo"
+        android:layout_toStartOf="@+id/view_contact_button1"
+        android:gravity="center"
         android:text="Label" />
 
+    <Button
+        android:id="@+id/view_contact_button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/view_contact_button2" />
+
+    <Button
+        android:id="@+id/view_contact_button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true" />
 </RelativeLayout>

@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 /**
  * Created by 03543 on 2016/12/31.
@@ -17,8 +19,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private View mViewMain;
 
     private Button mButtonDashboard;
-    private ViewContact mViewContact1;
-    private ViewContact mViewContact2;
+    private ViewContactList mViewContactList;
     private ImageView mViewBack;
 
     @Override
@@ -31,11 +32,10 @@ public class FragmentWatchSelect extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
-        mViewContact1 = (ViewContact) mViewMain.findViewById(R.id.watch_select_contact1);
-        mViewContact1.setOnClickListener(mOnContactListener);
-
-        mViewContact2 = (ViewContact) mViewMain.findViewById(R.id.watch_select_contact2);
-        mViewContact2.setOnClickListener(mOnContactListener);
+        mViewContactList = (ViewContactList) mViewMain.findViewById(R.id.watch_select_list);
+        mViewContactList.addItem(new ContactItem(null, "Label1"));
+        mViewContactList.addItem(new ContactItem(null, "Label2"));
+        mViewContactList.setOnItemClickListener(mItemClickListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -64,13 +64,14 @@ public class FragmentWatchSelect extends ViewFragment {
         }
     };
 
-    private View.OnClickListener mOnContactListener = new View.OnClickListener() {
+    private ListView.OnItemClickListener mItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
-        public void onClick(View view) {
-            if (view == mViewContact1)
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            if (position == 0)
                 mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
             else
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
+
         }
     };
 

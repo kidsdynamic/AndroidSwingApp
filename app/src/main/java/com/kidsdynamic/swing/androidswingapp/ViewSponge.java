@@ -79,8 +79,5 @@ public class ViewSponge extends View {
         }
 
         setMeasuredDimension(width, height);
-
-        Log.d("xxx", "P:" + parentWidth + "," + parentHeight + " D:" + desiredWidth + "," + desiredHeight + " M:" + width + "," + height);
     }
-
 }
