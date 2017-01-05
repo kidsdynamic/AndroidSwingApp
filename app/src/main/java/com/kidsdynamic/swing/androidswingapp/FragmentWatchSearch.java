@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by 03543 on 2016/12/31.
@@ -76,7 +76,21 @@ public class FragmentWatchSearch extends ViewFragment {
             dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), null);
+                    ArrayList<WatchContact> list = new ArrayList<WatchContact>();
+                    WatchContact.Device device;
+
+                    device = new WatchContact.Device(null, "Tobias Martin", ViewWatchContact.MODE_BIND);
+                    device.mBound = true;
+                    list.add(device);
+
+                    device = new WatchContact.Device(null, "SwingWatch568DANG5E", ViewWatchContact.MODE_BIND);
+                    device.mBound = false;
+                    list.add(device);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST, list);
+
+                    mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
                 }
             });
 

@@ -4,9 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +12,7 @@ import android.widget.TextView;
  * Created by 03543 on 2016/12/30.
  */
 
-public class ViewContact extends RelativeLayout {
+public class ViewWatchContact extends RelativeLayout {
     final static int MODE_NONE = 0;
     final static int MODE_BIND = 1;
     final static int MODE_ADD = 2;
@@ -31,18 +29,19 @@ public class ViewContact extends RelativeLayout {
     private Button mViewButton1;
     private Button mViewButton2;
 
-    private ContactItem mContactItem = null;
+    private WatchContact mContactItem = null;
 
-    public ViewContact(Context context) {
+    public ViewWatchContact(Context context) {
         super(context);
+        init();
     }
 
-    public ViewContact(Context context, AttributeSet attrs) {
+    public ViewWatchContact(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public ViewContact(Context context, AttributeSet attrs, int defStyle) {
+    public ViewWatchContact(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init();
     }
@@ -108,46 +107,28 @@ public class ViewContact extends RelativeLayout {
         view.setLayoutParams(layoutParams);
     }
 
-    public void loadItem(ContactItem item) {
-        setChileWidth(mViewButton1, 0);
-        setChileWidth(mViewButton2, 0);
-    }
-
-    public void loadBindItem() {
-        ContactItem.BindItem item = (ContactItem.BindItem)mContactItem;
-
-        setChileWidth(mViewButton1, LayoutParams.WRAP_CONTENT);
-        setChileWidth(mViewButton2, 0);
-
-        if (item.mBound)
-            mViewButton1.setText("B");
-        else
-            mViewButton1.setText("F");
-    }
-
-    public void loadAddItem() {
-        setChileWidth(mViewButton1, LayoutParams.WRAP_CONTENT);
-        setChileWidth(mViewButton2, 0);
-    }
-
-    public void load(ContactItem item) {
+    public void load(WatchContact item) {
         mContactItem = item;
 
         mViewLabel.setText(item.mLabel);
 
-        if (item instanceof ContactItem.BindItem) {
-            loadBindItem();
+        if (item.mViewMode == MODE_NONE) {
+            setChileWidth(mViewButton1, 0);
+            setChileWidth(mViewButton2, 0);
 
-        } else if (item instanceof ContactItem.AddItem) {
-            loadAddItem();
+        } else if (item.mViewMode == MODE_BIND) {
+            setChileWidth(mViewButton1, LayoutParams.WRAP_CONTENT);
+            setChileWidth(mViewButton2, 0);
 
-        } else {
-            loadItem(item);
+            WatchContact.Device device = (WatchContact.Device) item;
 
+            mViewButton1.setText(device.mBound ? "B" : "F");
         }
+
+        mContactItem = item;
     }
 
-    public ContactItem getItem() {
+    public WatchContact getItem() {
         return mContactItem;
     }
 }

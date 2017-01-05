@@ -40,7 +40,7 @@
             android:layout_alignParentEnd="true"
             app:shrinkWidth="0.1" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewContactList
+        <com.kidsdynamic.swing.androidswingapp.ViewWatchContactList
             android:id="@+id/watch_select_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,26 +48,6 @@
             android:layout_toStartOf="@+id/watch_select_label_end"
             android:divider="@null"
             android:dividerHeight="0dp" />
-        <!--
-        <com.kidsdynamic.swing.androidswingapp.ViewContact
-            android:id="@+id/watch_select_contact1"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/watch_select_label_start"
-            android:layout_toStartOf="@+id/watch_select_label_end"
-            android:background="@drawable/contact_background" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewContact
-            android:id="@+id/watch_select_contact2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_below="@+id/watch_select_contact1"
-            android:layout_toEndOf="@+id/watch_select_label_start"
-            android:layout_toStartOf="@+id/watch_select_label_end"
-            android:background="@drawable/contact_background" />
-            -->
     </RelativeLayout>
 
     <RelativeLayout
@@ -98,7 +78,6 @@
             android:layout_marginBottom="10dp"
             android:layout_toEndOf="@+id/watch_select_start"
             android:layout_toStartOf="@+id/watch_select_end"
-            android:enabled="false"
             android:text="Go to Dashboard" />
 
     </RelativeLayout>

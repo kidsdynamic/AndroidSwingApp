@@ -9,6 +9,8 @@ import android.view.View;
 
 abstract public class ViewFragment extends Fragment {
 
+    final static String BUNDLE_KEY_DEVICE_LIST = "BUNDLE_KEY_DEVICE_LIST";
+
     @Override
     public void onResume() {
         super.onResume();

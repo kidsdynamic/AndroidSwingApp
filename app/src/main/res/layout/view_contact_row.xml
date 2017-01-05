@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.kidsdynamic.swing.androidswingapp.ViewContact
+    <com.kidsdynamic.swing.androidswingapp.ViewWatchContact
         android:id="@+id/view_contact_row_body"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
