@@ -87,7 +87,7 @@ public class FragmentWatchSelect extends ViewFragment {
             if (device.mBound)
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
             else
-                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchKid.class.getName(), null);
         }
     };
 }

@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,16 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * Created by 03543 on 2016/12/30.
+ * Created by 03543 on 2017/1/6.
  */
 
-public class FragmentSignupProfile extends ViewFragment {
+public class FragmentWatchKid extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private EditText mViewFirstName;
-    private EditText mViewLastName;
-    private EditText mViewPhone;
+    private EditText mViewName;
     private EditText mViewZip;
     private ImageView mViewBack;
 
@@ -33,18 +30,12 @@ public class FragmentSignupProfile extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_signup_profile, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_kid, container, false);
 
-        mViewFirstName = (EditText) mViewMain.findViewById(R.id.signup_profile_first);
-        mViewFirstName.setOnEditorActionListener(mEdittextActionListener);
+        mViewName = (EditText) mViewMain.findViewById(R.id.watch_kid_name);
+        mViewName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewLastName = (EditText) mViewMain.findViewById(R.id.signup_profile_last);
-        mViewLastName.setOnEditorActionListener(mEdittextActionListener);
-
-        mViewPhone = (EditText) mViewMain.findViewById(R.id.signup_profile_phone);
-        mViewPhone.setOnEditorActionListener(mEdittextActionListener);
-
-        mViewZip = (EditText) mViewMain.findViewById(R.id.signup_profile_zip);
+        mViewZip = (EditText) mViewMain.findViewById(R.id.watch_kid_zip);
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
@@ -55,7 +46,7 @@ public class FragmentSignupProfile extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sign up", false, false,
+        return new ViewFragmentConfig("Watch", false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -75,12 +66,8 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
-                mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mViewFirstName.getText().toString());
-                mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mViewLastName.getText().toString());
-                mActivityMain.mConfig.setString(Config.KEY_PHONE, mViewPhone.getText().toString());
-                mActivityMain.mConfig.setString(Config.KEY_ZIP, mViewZip.getText().toString());
 
-                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
             }
 
             return false;

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/fragment_back"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitStart"
+        android:src="@mipmap/icon_left" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_kid_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:shrinkWidth="0.15" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_kid_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:shrinkWidth="0.15" />
+
+        <EditText
+            android:id="@+id/watch_kid_name"
+            style="@style/edittext_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/watch_kid_start"
+            android:layout_toStartOf="@+id/watch_kid_end"
+            android:gravity="center"
+            android:hint="Kid's Name"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:nextFocusForward="@+id/registration_info_last" />
+
+        <EditText
+            android:id="@+id/watch_kid_zip"
+            style="@style/edittext_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/watch_kid_name"
+            android:layout_marginBottom="10dp"
+            android:layout_toEndOf="@+id/watch_kid_start"
+            android:layout_toStartOf="@+id/watch_kid_end"
+            android:gravity="center"
+            android:hint="Zip Code"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:nextFocusForward="@+id/registration_info_phone" />
+
+    </RelativeLayout>
+
+</LinearLayout>
