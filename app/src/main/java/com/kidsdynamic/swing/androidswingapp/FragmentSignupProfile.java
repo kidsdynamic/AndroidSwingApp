@@ -19,6 +19,7 @@ public class FragmentSignupProfile extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
+    private ViewPhoto mViewPhoto;
     private EditText mViewFirstName;
     private EditText mViewLastName;
     private EditText mViewPhone;
@@ -34,6 +35,9 @@ public class FragmentSignupProfile extends ViewFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_signup_profile, container, false);
+
+        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.signup_profile_photo);
+        mViewPhoto.setOnClickListener(mPhotoClickListener);
 
         mViewFirstName = (EditText) mViewMain.findViewById(R.id.signup_profile_first);
         mViewFirstName.setOnEditorActionListener(mEdittextActionListener);
@@ -84,6 +88,13 @@ public class FragmentSignupProfile extends ViewFragment {
             }
 
             return false;
+        }
+    };
+
+    private View.OnClickListener mPhotoClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mViewPhoto.setShowCross(!mViewPhoto.getShowCross());
         }
     };
 }

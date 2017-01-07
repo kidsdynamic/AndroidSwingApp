@@ -9,4 +9,16 @@
     <declare-styleable name="ViewProgressCircle">
         <attr name="dotRadius" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ViewPhoto">
+        <attr name="android:src" />
+        <attr name="borderStroke" format="dimension" />
+        <attr name="borderSelectColor" format="color" />
+        <attr name="borderNormalColor" format="color" />
+        <attr name="selected" format="boolean" />
+        <attr name="showCross" format="boolean" />
+        <attr name="showBorder" format="boolean" />
+        <attr name="showDarker" format="boolean" />
+    </declare-styleable>
+
 </resources>
