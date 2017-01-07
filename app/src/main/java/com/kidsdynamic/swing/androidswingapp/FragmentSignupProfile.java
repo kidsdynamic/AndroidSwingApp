@@ -94,7 +94,8 @@ public class FragmentSignupProfile extends ViewFragment {
     private View.OnClickListener mPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mViewPhoto.setShowCross(!mViewPhoto.getShowCross());
+            //mViewPhoto.setShowCross(!mViewPhoto.getShowCross());
+            mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), null);
         }
     };
 }
