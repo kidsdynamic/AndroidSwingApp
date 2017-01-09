@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.BroadcastReceiver;
@@ -16,13 +17,10 @@ import android.os.Build;
 import android.util.Log;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-/**
- * Created by 03542 on 2016/12/29.
- */
 
 public class BleControl {
     private BluetoothAdapter mBluetoothAdapter;
@@ -173,6 +171,85 @@ public class BleControl {
         return true;
     }
 
+    public synchronized boolean Disconnect() {
+        if(mBluetoothGatt == null)
+            return false;
+        mConnecting = false;
+        mBluetoothGatt.disconnect();
+        mDeviceAddress = null;
+        return true;
+    }
+
+    public boolean Read(String service, String characteristic) {
+        if(service == null || characteristic == null || !IsConnected())
+            return false;
+
+        BluetoothGattService lBleService;
+        BluetoothGattCharacteristic lBleCharacteristic;
+
+        lBleService = mBluetoothGatt.getService(UUID.fromString(service));
+        if (lBleService != null) {
+            lBleCharacteristic = lBleService.getCharacteristic(UUID.fromString(characteristic));
+            if (lBleCharacteristic != null) {
+                mTaskQueue.push(new DeviceAccessQueueItem(lBleCharacteristic, false));
+            }
+        }
+        return false;
+    }
+
+    public boolean Write(String service, String characteristic, byte[] value) {
+        if (service == null || characteristic == null || value == null || !IsConnected())
+            return false;
+
+        BluetoothGattService lBleService;
+        BluetoothGattCharacteristic lBleCharacteristic;
+
+        lBleService = mBluetoothGatt.getService(UUID.fromString(service));
+        if (lBleService != null) {
+
+            lBleCharacteristic = lBleService.getCharacteristic(UUID.fromString(characteristic));
+            if (lBleCharacteristic != null) {
+                lBleCharacteristic.setValue(value);
+                mTaskQueue.push(new DeviceAccessQueueItem(lBleCharacteristic, true));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean SetNotification(String service, String characteristic, boolean enable) {
+        if (service == null || characteristic == null || !IsConnected())
+            return false;
+
+        BluetoothGattService lBleService;
+        BluetoothGattCharacteristic lBleCharacteristic;
+        BluetoothGattDescriptor lBleDescriptor;
+
+        lBleService = mBluetoothGatt.getService(UUID.fromString(service));
+        if (lBleService != null) {
+
+            lBleCharacteristic = lBleService.getCharacteristic(UUID.fromString(characteristic));
+            if (lBleCharacteristic != null) {
+                lBleDescriptor = lBleCharacteristic.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"));
+                if (lBleDescriptor != null ) {
+                    // https://developer.bluetooth.org/gatt/descriptors/Pages/DescriptorsHomePage.aspx
+                    lBleDescriptor.setValue(new byte[]{(byte) (enable ? 0x01 : 0x00), (byte) 0x00});
+                    mTaskQueue.push(new DeviceAccessQueueItem(lBleDescriptor, true));
+                }
+
+                mBluetoothGatt.setCharacteristicNotification(lBleCharacteristic, enable);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean IsConnected() {
+        return (mBluetoothGatt != null && mConnectionState == BluetoothProfile.STATE_CONNECTED && !mDiscovering);
+    }
+
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -196,6 +273,18 @@ public class BleControl {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            List<BluetoothGattService> services = gatt.getServices();
+            for (BluetoothGattService service : services) {
+                Log("Service - " + service.getUuid().toString());
+                List<BluetoothGattCharacteristic> characteristics = service.getCharacteristics();
+                for(BluetoothGattCharacteristic characteristic : characteristics) {
+                    Log("   Characteristic - " + characteristic.getUuid().toString());
+                    List<BluetoothGattDescriptor> descriptors = characteristic.getDescriptors();
+                    for(BluetoothGattDescriptor descriptor : descriptors) {
+                        Log("       Descriptor - " + descriptor.getUuid().toString());
+                    }
+                }
+            }
             mDiscovering = false;
             if (mEventListener != null)
                 mEventListener.onServiceDiscovered();
