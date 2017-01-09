@@ -17,12 +17,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     public final static int BLUETOOTH_PERMISSION = 0x1000;
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
 
     public Config mConfig;
+    public RequestQueue mRequestQueue;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -49,6 +53,7 @@ public class ActivityMain extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         mConfig = new Config(this, null);
+        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
