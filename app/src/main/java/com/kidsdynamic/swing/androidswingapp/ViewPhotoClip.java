@@ -2,10 +2,28 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.Xfermode;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 /**
@@ -15,29 +33,85 @@ import android.view.View;
 public class ViewPhotoClip extends View {
     private int mDesiredWidth;
     private int mDesiredHeight;
-    private int mMeasureWidth;
-    private int mMeasureHeight;
 
-    private Bitmap mBackground;
+    private RectF mRectClipSource;
+    private RectF mRectClip;
+    private Bitmap mBitmapPhoto;
+
+    private GestureDetector mGestures;
+    private ScaleGestureDetector mScaleGesture;
+
+    private Matrix mMatrixPhoto;
+    private Matrix mMatrixClip;
+    private Matrix mMatrixSelect;
+
+    private int mBackgroundWidth, mBackgroundHeight;
+    private Bitmap mBitmapBackground[];
+    private Canvas mCanvasBackground[];
+    private Paint mPaint;
+    private Xfermode mXfermodeSrcOut;
+    private Xfermode mXfermodeSrcIn;
+    private ColorFilter mColorFilterDarker;
 
     public ViewPhotoClip(Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
     public ViewPhotoClip(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
     }
 
     public ViewPhotoClip(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(context, attrs);
     }
 
-    private void init() {
-        mDesiredWidth = 100;
-        mDesiredHeight = 100;
+    private void init(Context context, AttributeSet attrs) {
+        mDesiredWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+        mDesiredHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+
+        mBackgroundWidth = getResources().getDisplayMetrics().widthPixels;
+        mBackgroundHeight = getResources().getDisplayMetrics().heightPixels;
+
+        mBitmapBackground = new Bitmap[2];
+        mBitmapBackground[0] = Bitmap.createBitmap(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
+        mBitmapBackground[1] = Bitmap.createBitmap(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
+
+        mCanvasBackground = new Canvas[2];
+        mCanvasBackground[0] = new Canvas(mBitmapBackground[0]);
+        mCanvasBackground[1] = new Canvas(mBitmapBackground[1]);
+
+        mXfermodeSrcOut = new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT);
+        mXfermodeSrcIn = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+
+        mColorFilterDarker = FactoryColorFilter.adjustColor(-64, 0, 0, 0);
+
+        mBitmapPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.city_california);
+
+        mRectClipSource = new RectF();
+        mRectClip = new RectF();
+
+        mPaint = new Paint();
+
+        mScaleGesture = new ScaleGestureDetector(getContext(), new ScaleListener());
+        mGestures = new GestureDetector(getContext(), new GestureListener());
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (mRectClip.contains(event.getX(), event.getY()))
+                mMatrixSelect = mMatrixClip;
+            else
+                mMatrixSelect = mMatrixPhoto;
+        }
+
+        mScaleGesture.onTouchEvent(event);
+        mGestures.onTouchEvent(event);
+        return true;
     }
 
     @Override
@@ -74,41 +148,218 @@ public class ViewPhotoClip extends View {
         getLayoutParams().height = height;
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        rectReset();
+        matrixReset();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mMeasureWidth != getMeasuredWidth() || mMeasureHeight != getMeasuredHeight()) {
-            makeBackground(getMeasuredWidth(), getMeasuredHeight());
-            updateRects();
+        if (mBackgroundWidth != getMeasuredWidth() || mBackgroundHeight != getMeasuredHeight()) {
+
+            mBackgroundWidth = getMeasuredWidth();
+            mBackgroundHeight = getMeasuredHeight();
+
+            mBitmapBackground[0].reconfigure(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
+            mBitmapBackground[1].reconfigure(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
         }
 
-        paintBackground(canvas);
+        // mBitmapBackground[0]: original color in clip
+        mCanvasBackground[0].drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+        mPaint.reset();
+        mPaint.setColor(Color.WHITE);
+        mCanvasBackground[0].drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
+
+        mPaint.setXfermode(mXfermodeSrcIn);
+        mCanvasBackground[0].drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
+
+        // mBitmapBackground[1]: darker color in out of clip
+        mCanvasBackground[1].drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+
+        mPaint.reset();
+        mPaint.setColor(Color.WHITE);
+        mCanvasBackground[1].drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
+
+        mPaint.setColorFilter(mColorFilterDarker);
+        mPaint.setXfermode(mXfermodeSrcOut);
+
+        mCanvasBackground[1].drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
+
+        // Merge all backgrounds
+        canvas.drawColor(Color.LTGRAY);
+        canvas.drawBitmap(mBitmapBackground[0], 0, 0, null);
+        canvas.drawBitmap(mBitmapBackground[1], 0, 0, null);
+
+        // Paint border
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(10);
+        mPaint.setColor(Color.WHITE);
+        canvas.drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
     }
 
-    private void paintBackground(Canvas canvas) {
-        canvas.drawBitmap(mBackground,
-                new Rect(0, 0, mBackground.getWidth(), mBackground.getHeight()),
-                new Rect(0, 0, mMeasureWidth, mMeasureHeight), null);
+    private void rectReset() {
+        int size = (Math.min(getMeasuredWidth(), getMeasuredHeight())) * 2 / 3;
+        mRectClipSource = new RectF(0, 0, size, size);
     }
 
-    private void updateRects() {
+    private void matrixReset() {
+        float transX, transY;
 
+        mMatrixPhoto = new Matrix();
+        transX = (getMeasuredWidth() - mBitmapPhoto.getWidth()) / 2;
+        transY = (getMeasuredHeight() - mBitmapPhoto.getHeight()) / 2;
+        mMatrixPhoto.postTranslate(transX, transY);
+
+        mMatrixClip = new Matrix();
+        transX = (getMeasuredWidth() - mRectClipSource.width()) / 2;
+        transY = (getMeasuredHeight() - mRectClipSource.height()) / 2;
+        mMatrixClip.postTranslate(transX, transY);
+
+        mMatrixClip.mapRect(mRectClip, mRectClipSource);
     }
 
-    private void makeBackground(int width, int height) {
-        mMeasureWidth = width;
-        mMeasureHeight = height;
+    private boolean matrixContains(Matrix matrix, RectF rect) {
+        RectF rectMeasure = new RectF(0, 0, getMeasuredWidth(), getMeasuredHeight());
+        RectF rectObject = new RectF(rect);
+        matrix.mapRect(rectObject);
 
-        if (mBackground != null && mBackground.isRecycled())
-            mBackground.recycle();
+        return rectMeasure.contains(rectObject);
+    }
 
-        mBackground = Bitmap.createBitmap(mMeasureWidth, mMeasureHeight, Bitmap.Config.ARGB_8888);
+    private boolean matrixContains(Matrix matrix, Bitmap photo) {
+        int border = Math.min(getMeasuredWidth(), getMeasuredHeight()) / 2;
 
-        final Canvas canvas = new Canvas(mBackground);
-        canvas.drawARGB(0, 0, 0, 0);
+        RectF rectMeasure = new RectF(border, border, getMeasuredWidth() - border, getMeasuredHeight() - border); // Avoid photo move out of view
+        RectF rectObject = new RectF(0, 0, photo.getWidth(), photo.getHeight());
+        matrix.mapRect(rectObject);
 
-        canvas.drawColor(Color.YELLOW);
+        return rectMeasure.intersect(rectObject);
+    }
+
+    private class ScaleListener implements ScaleGestureDetector.OnScaleGestureListener {
+        float mLastFocusX;
+        float mLastFocusY;
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            Matrix saveMatrix = new Matrix(mMatrixSelect);
+            Matrix transformationMatrix = new Matrix();
+            float focusX = detector.getFocusX();
+            float focusY = detector.getFocusY();
+
+            //Zoom focus is where the fingers are centered,
+            transformationMatrix.postTranslate(-focusX, -focusY);
+            transformationMatrix.postScale(detector.getScaleFactor(), detector.getScaleFactor());
+
+            // Adding focus shift to allow for scrolling with two pointers down.
+            // Remove it to skip this functionality.
+            // This could be done in fewer lines, but for clarity I do it this way here
+            float focusShiftX = focusX - mLastFocusX;
+            float focusShiftY = focusY - mLastFocusY;
+            transformationMatrix.postTranslate(focusX + focusShiftX, focusY + focusShiftY);
+
+            saveMatrix.postConcat(transformationMatrix);
+
+            // Adding allow for target inside measure border
+            boolean contains = mMatrixSelect == mMatrixClip ?
+                    matrixContains(saveMatrix, mRectClipSource) :
+                    matrixContains(saveMatrix, mBitmapPhoto);
+
+            if (contains) {
+                mMatrixSelect.set(saveMatrix);
+                if(mMatrixSelect == mMatrixClip)
+                    mMatrixClip.mapRect(mRectClip, mRectClipSource);
+
+                mLastFocusX = focusX;
+                mLastFocusY = focusY;
+
+                invalidate();
+            }
+
+            return true;
+        }
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            mLastFocusX = detector.getFocusX();
+            mLastFocusY = detector.getFocusY();
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+
+        }
+    }
+
+    public class GestureListener implements
+            GestureDetector.OnGestureListener,
+            GestureDetector.OnDoubleTapListener {
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            matrixReset();
+            invalidate();
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            Matrix saveMatrix = new Matrix(mMatrixSelect);
+
+            saveMatrix.postTranslate(-distanceX, -distanceY);
+
+            // Adding allow for target inside measure border
+            boolean contains = mMatrixSelect == mMatrixClip ?
+                    matrixContains(saveMatrix, mRectClipSource) : matrixContains(saveMatrix, mBitmapPhoto);
+            if (contains) {
+                mMatrixSelect.set(saveMatrix);
+                if(mMatrixSelect == mMatrixClip)
+                    mMatrixClip.mapRect(mRectClip, mRectClipSource);
+
+                invalidate();
+            }
+
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return false;
+        }
     }
 }
 
