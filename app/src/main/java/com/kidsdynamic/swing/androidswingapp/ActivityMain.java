@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -17,12 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     public final static int BLUETOOTH_PERMISSION = 0x1000;
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
 
     public Config mConfig;
+    public BitmapCache mBitmapCache;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -49,6 +53,7 @@ public class ActivityMain extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         mConfig = new Config(this, null);
+        mBitmapCache = new BitmapCache();
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);

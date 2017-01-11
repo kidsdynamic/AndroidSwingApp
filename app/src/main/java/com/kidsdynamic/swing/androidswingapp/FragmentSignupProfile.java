@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import android.widget.TextView;
  */
 
 public class FragmentSignupProfile extends ViewFragment {
+    private String mPhotoStoreKey = "FragmentSignupProfile.Photo";
+
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -68,6 +71,18 @@ public class FragmentSignupProfile extends ViewFragment {
         mActivityMain.popFragment();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Bitmap photo = mActivityMain.mBitmapCache.get(mPhotoStoreKey);
+        if(photo != null) {
+        // If we find photo bitmap in the cache, load it to be photo
+            mViewPhoto.setPhoto(photo);
+            mActivityMain.mBitmapCache.clear();
+        }
+    }
+
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -94,8 +109,11 @@ public class FragmentSignupProfile extends ViewFragment {
     private View.OnClickListener mPhotoClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            //mViewPhoto.setShowCross(!mViewPhoto.getShowCross());
-            mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), null);
+            // todo: show dialog
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FragmentPhotoClip.KEY_CACHE_ID, mPhotoStoreKey);
+            mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), bundle);
         }
     };
 }

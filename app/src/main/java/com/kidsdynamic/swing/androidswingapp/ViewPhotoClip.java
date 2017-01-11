@@ -31,6 +31,7 @@ import android.view.View;
  */
 
 public class ViewPhotoClip extends View {
+
     private int mDesiredWidth;
     private int mDesiredHeight;
 
@@ -200,6 +201,20 @@ public class ViewPhotoClip extends View {
         canvas.drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
     }
 
+    public void drawClip(Canvas canvas) {
+        Bitmap bitmapSrc = Bitmap.createBitmap(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
+        Canvas canvasSrc = new Canvas(bitmapSrc);
+
+        canvasSrc.drawARGB(0, 0, 0, 0);
+        canvasSrc.drawBitmap(mBitmapPhoto, mMatrixPhoto, null);
+
+        canvas.drawBitmap(bitmapSrc,
+                new Rect((int) mRectClip.left, (int) mRectClip.top, (int) mRectClip.right, (int) mRectClip.bottom),
+                new Rect(0, 0, canvas.getWidth(), canvas.getHeight()), null);
+
+        bitmapSrc.recycle();
+    }
+
     private void rectReset() {
         int size = (Math.min(getMeasuredWidth(), getMeasuredHeight())) * 2 / 3;
         mRectClipSource = new RectF(0, 0, size, size);
@@ -270,7 +285,7 @@ public class ViewPhotoClip extends View {
 
             if (contains) {
                 mMatrixSelect.set(saveMatrix);
-                if(mMatrixSelect == mMatrixClip)
+                if (mMatrixSelect == mMatrixClip)
                     mMatrixClip.mapRect(mRectClip, mRectClipSource);
 
                 mLastFocusX = focusX;
@@ -342,7 +357,7 @@ public class ViewPhotoClip extends View {
                     matrixContains(saveMatrix, mRectClipSource) : matrixContains(saveMatrix, mBitmapPhoto);
             if (contains) {
                 mMatrixSelect.set(saveMatrix);
-                if(mMatrixSelect == mMatrixClip)
+                if (mMatrixSelect == mMatrixClip)
                     mMatrixClip.mapRect(mRectClip, mRectClipSource);
 
                 invalidate();

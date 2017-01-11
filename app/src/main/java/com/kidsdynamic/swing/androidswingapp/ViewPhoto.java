@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -24,8 +25,6 @@ import android.view.View;
 public class ViewPhoto extends View {
     private int mDesiredWidth;
     private int mDesiredHeight;
-    private int mMeasureWidth = 0;
-    private int mMeasureHeight = 0;
 
     private float mStrokeWidthDp = 4;
 
@@ -33,8 +32,7 @@ public class ViewPhoto extends View {
     private Rect mRectBorder;
     private int mStrokeWidth;
 
-    private Bitmap mPhotoSource = null;
-    private Bitmap mPhotoCircle = null;
+    private Bitmap mPhoto = null;
 
     private int mColorSelect = 0xFF000000;
     private int mColorNormal = 0xFF888888;
@@ -60,6 +58,8 @@ public class ViewPhoto extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        setPhoto(null);
+
         mColorSelect = ContextCompat.getColor(context, R.color.color_orange);
         mColorNormal = ContextCompat.getColor(context, R.color.color_gray_deep);
 
@@ -73,7 +73,7 @@ public class ViewPhoto extends View {
 
                 if (attr == R.styleable.ViewPhoto_android_src) {
                     Drawable drawable = typedArray.getDrawable(R.styleable.ViewPhoto_android_src);
-                    mPhotoSource = ((BitmapDrawable) drawable).getBitmap();
+                    setPhoto(((BitmapDrawable) drawable).getBitmap());
                 } else if (attr == R.styleable.ViewPhoto_borderStroke) {
                     mStrokeWidthDp = typedArray.getDimension(R.styleable.ViewPhoto_borderStroke, mStrokeWidthDp);
                 } else if (attr == R.styleable.ViewPhoto_borderSelectColor) {
@@ -94,14 +94,12 @@ public class ViewPhoto extends View {
             typedArray.recycle();
         }
 
-        mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, context.getResources().
-
-                getDisplayMetrics()
-
-        );
+        mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, context.getResources().getDisplayMetrics());
 
         mDesiredWidth = 100;
         mDesiredHeight = 100;
+
+        updateRects(mDesiredWidth, mDesiredHeight);
     }
 
     @Override
@@ -132,19 +130,14 @@ public class ViewPhoto extends View {
         }
 
         setMeasuredDimension(width, height);
+
+        updateRects(getMeasuredWidth(), getMeasuredHeight());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mMeasureWidth != getMeasuredWidth() || mMeasureHeight != getMeasuredHeight()) {
-            updateRects();
+        canvas.drawARGB(0, 0, 0, 0);
 
-            if (mPhotoCircle != null && !mPhotoCircle.isRecycled())
-                mPhotoCircle.recycle();
-            mPhotoCircle = makePhoto(mPhotoSource);
-        }
-
-        paintBackground(canvas);
         paintPhoto(canvas, mRectPhoto, mShowDarker);
 
         if (mShowBorder)
@@ -152,10 +145,6 @@ public class ViewPhoto extends View {
 
         if (mShowCross)
             paintCross(canvas, mRectBorder, mSelected ? mColorSelect : mColorNormal);
-    }
-
-    private void paintBackground(Canvas canvas) {
-        canvas.drawARGB(0, 0, 0, 0);
     }
 
     private void paintBorder(Canvas canvas, Rect rect, int color) {
@@ -170,9 +159,14 @@ public class ViewPhoto extends View {
     }
 
     private void paintPhoto(Canvas canvas, Rect rect, boolean darker) {
-        canvas.drawBitmap(mPhotoCircle,
-                new Rect(0, 0, mPhotoCircle.getWidth(), mPhotoCircle.getHeight()),
-                mRectPhoto, null);
+        Paint paint = new Paint();
+
+        if (darker) {
+            paint.setColorFilter(FactoryColorFilter.adjustColor(-64, 0, 0, 0));
+        }
+
+        canvas.drawBitmap(mPhoto,
+                new Rect(0, 0, mPhoto.getWidth(), mPhoto.getHeight()), rect, paint);
     }
 
     private void paintCross(Canvas canvas, Rect rect, int color) {
@@ -188,12 +182,9 @@ public class ViewPhoto extends View {
         canvas.drawLine(rect.centerX() - length, rect.centerY(), rect.centerX() + length, rect.centerY(), paint);
     }
 
-    private void updateRects() {
-        mMeasureWidth = getMeasuredWidth();
-        mMeasureHeight = getMeasuredHeight();
-
-        Rect rect = new Rect(0, 0, mMeasureWidth, mMeasureHeight);
-        int radius = Math.min(mMeasureWidth, mMeasureHeight) / 2;
+    private void updateRects(int width, int height) {
+        Rect rect = new Rect(0, 0, width, height);
+        int radius = Math.min(width, height) / 2;
         int strokeWidth = mStrokeWidth / 2;
 
         mRectPhoto = new Rect(
@@ -209,39 +200,8 @@ public class ViewPhoto extends View {
                 rect.centerY() + radius - strokeWidth);
     }
 
-    private Bitmap makePhoto(Bitmap srcBitmap) {
-        Bitmap tarBitmap = Bitmap.createBitmap(mRectPhoto.width(), mRectPhoto.height(), Bitmap.Config.ARGB_8888);
-        int radius = mRectPhoto.width() / 2;
-        int centerX = mRectPhoto.width() / 2;
-        int centerY = mRectPhoto.width() / 2;
-
-        final Canvas canvas = new Canvas(tarBitmap);
-        canvas.drawARGB(0, 255, 0, 0);
-
-        final Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setStrokeWidth(0);
-        paint.setStyle(Paint.Style.FILL);
-
-        if (srcBitmap != null && !srcBitmap.isRecycled()) {
-            paint.setColor(0xFFFFFFFF);
-            canvas.drawCircle(centerX, centerY, radius, paint);
-
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-            canvas.drawBitmap(srcBitmap,
-                    new Rect(0, 0, srcBitmap.getWidth(), srcBitmap.getHeight()),
-                    new Rect(0, 0, tarBitmap.getWidth(), tarBitmap.getHeight()), paint);
-        }
-
-        return tarBitmap;
-    }
-
     public void setShowBorder(boolean show) {
-        if (show == mShowBorder)
-            return;
-
         mShowBorder = show;
-        postInvalidate();
     }
 
     public boolean getShowBorder() {
@@ -249,11 +209,7 @@ public class ViewPhoto extends View {
     }
 
     public void setShowCross(boolean show) {
-        if (show == mShowCross)
-            return;
-
         mShowCross = show;
-        postInvalidate();
     }
 
     public boolean getShowCross() {
@@ -261,26 +217,42 @@ public class ViewPhoto extends View {
     }
 
     public void setShowDarker(boolean show) {
-        if (show == mShowDarker)
-            return;
-
         mShowDarker = show;
-        postInvalidate();
     }
 
     public boolean getShowDarker() {
         return mShowDarker;
     }
 
-    public void setPhotoResource(int source) {
-        postInvalidate();
+    public void setPhoto(int source) {
+        setPhoto(BitmapFactory.decodeResource(getResources(), source));
     }
 
-    public void setPhotoBitmap(Bitmap source) {
-        postInvalidate();
-    }
+    public void setPhoto(Bitmap photo) {
+        int width, height;
 
-    public void clearPhoto() {
-        postInvalidate();
+        width = photo == null ? 200 : photo.getWidth();
+        height = photo == null ? 200 : photo.getHeight();
+
+        int size = Math.min(width, height);
+        Rect rectDst = new Rect(0, 0, size, size);
+        Rect rectSrc = new Rect((width - size) / 2, (height - size) / 2, (width + size) / 2, (height + size) / 2);
+
+        if (mPhoto != null && !mPhoto.isRecycled())
+            mPhoto.recycle();
+        mPhoto = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(mPhoto);
+        canvas.drawARGB(0, 0, 0, 0);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+
+        canvas.drawCircle(rectDst.centerX(), rectDst.centerY(), rectDst.width() / 2, paint);
+
+        if (photo != null) {
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            canvas.drawBitmap(photo, rectDst, rectSrc, paint);
+        }
     }
 }
