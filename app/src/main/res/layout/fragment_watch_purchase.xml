@@ -62,16 +62,6 @@
             android:layout_toStartOf="@+id/watch_purchase_end"
             android:text="Request Access to Others" />
 
-        <Button
-            android:id="@+id/watch_purchase_guest"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/watch_purchase_request"
-            android:layout_toEndOf="@+id/watch_purchase_start"
-            android:layout_toStartOf="@+id/watch_purchase_end"
-            android:text="Continue as a Guest" />
-
     </RelativeLayout>
 
 </LinearLayout>

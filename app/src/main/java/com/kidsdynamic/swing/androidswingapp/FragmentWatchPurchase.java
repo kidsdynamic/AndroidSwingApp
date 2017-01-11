@@ -18,7 +18,6 @@ public class FragmentWatchPurchase extends ViewFragment {
 
     private Button mButtonYes;
     private Button mButtonRequest;
-    private Button mButtonGuest;
     private ImageView mViewBack;
 
     @Override
@@ -36,9 +35,6 @@ public class FragmentWatchPurchase extends ViewFragment {
 
         mButtonRequest = (Button) mViewMain.findViewById(R.id.watch_purchase_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
-
-        mButtonGuest = (Button) mViewMain.findViewById(R.id.watch_purchase_guest);
-        mButtonGuest.setOnClickListener(mOnGuestListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -75,13 +71,6 @@ public class FragmentWatchPurchase extends ViewFragment {
         @Override
         public void onClick(View view) {
             mActivityMain.selectFragment(FragmentWatchOwner.class.getName(), null);
-        }
-    };
-
-    private Button.OnClickListener mOnGuestListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-//            mActivityMain.selectFragment(FragmentSignupWatchBind.class.getName(), null);
         }
     };
 
