@@ -60,6 +60,42 @@ public class BleControl {
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
     }
 
+    protected BleControl(Context context) {
+        mContext = context;
+
+        mBluetoothAdapter = ((BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+        while (!mBluetoothAdapter.isEnabled()) {
+            mBluetoothAdapter.enable();
+            try {
+                Thread.sleep(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void Init(OnEventListener listener) {
+        mEventListener = listener;
+        //mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+    }
+
+    protected void Deinit() {
+        mEventListener = null;
+        //mContext.unregisterReceiver(mBroadcastReceiver);
+    }
+
+    boolean mBondStateReceiverEnabled = false;
+    protected synchronized void EnableBondStateReceiver(boolean enable) {
+        if (mBondStateReceiverEnabled == enable)
+            return;
+
+        mBondStateReceiverEnabled = enable;
+        if (enable)
+            mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+        else
+            mContext.unregisterReceiver(mBroadcastReceiver);
+    }
+
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -114,6 +150,15 @@ public class BleControl {
         mScanning = enable;
 
         return true;
+    }
+
+    public boolean GetBondState(String address) {
+        if (mBluetoothAdapter == null)
+            return false;
+
+        BluetoothDevice dev = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
+
+        return dev.getBondState() == BluetoothDevice.BOND_BONDED;
     }
 
     public synchronized boolean Connect() {
@@ -191,7 +236,7 @@ public class BleControl {
         if (lBleService != null) {
             lBleCharacteristic = lBleService.getCharacteristic(UUID.fromString(characteristic));
             if (lBleCharacteristic != null) {
-                mTaskQueue.push(new DeviceAccessQueueItem(lBleCharacteristic, false));
+                mTaskQueue.push(new TaskItem(lBleCharacteristic, false));
             }
         }
         return false;
@@ -210,7 +255,7 @@ public class BleControl {
             lBleCharacteristic = lBleService.getCharacteristic(UUID.fromString(characteristic));
             if (lBleCharacteristic != null) {
                 lBleCharacteristic.setValue(value);
-                mTaskQueue.push(new DeviceAccessQueueItem(lBleCharacteristic, true));
+                mTaskQueue.push(new TaskItem(lBleCharacteristic, true));
                 return true;
             }
         }
@@ -235,7 +280,7 @@ public class BleControl {
                 if (lBleDescriptor != null ) {
                     // https://developer.bluetooth.org/gatt/descriptors/Pages/DescriptorsHomePage.aspx
                     lBleDescriptor.setValue(new byte[]{(byte) (enable ? 0x01 : 0x00), (byte) 0x00});
-                    mTaskQueue.push(new DeviceAccessQueueItem(lBleDescriptor, true));
+                    mTaskQueue.push(new TaskItem(lBleDescriptor, true));
                 }
 
                 mBluetoothGatt.setCharacteristicNotification(lBleCharacteristic, enable);
@@ -329,7 +374,7 @@ public class BleControl {
 
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            mTaskQueue.push(new DeviceAccessQueueItem(descriptor, false));
+            mTaskQueue.push(new TaskItem(descriptor, false));
             mTaskQueue.pop(true);
         }
 
@@ -360,11 +405,11 @@ public class BleControl {
         void onRssiUpdate(int rssi);
     }
 
-    private class DeviceAccessQueueItem {
+    private class TaskItem {
         Object mObject;
         boolean mWrite;
 
-        DeviceAccessQueueItem(Object o, boolean write) {
+        TaskItem(Object o, boolean write) {
             mObject = o;
             mWrite = write;
         }
@@ -372,7 +417,7 @@ public class BleControl {
 
     private class TaskQueue {
         boolean mDeviceAccess = false;
-        Queue<DeviceAccessQueueItem> mDeviceAccessQueue = new ConcurrentLinkedQueue<>();
+        Queue<TaskItem> mDeviceAccessQueue = new ConcurrentLinkedQueue<>();
         long mDeviceAccessTick = 0;
 
         void reset() {
@@ -381,7 +426,7 @@ public class BleControl {
             mDeviceAccessTick = 0;
         }
 
-        synchronized void push(DeviceAccessQueueItem item) {
+        synchronized void push(TaskItem item) {
             mDeviceAccessQueue.add(item);
             pop(false);
         }
@@ -402,7 +447,7 @@ public class BleControl {
             }
         }
 
-        synchronized boolean access(DeviceAccessQueueItem item) {
+        synchronized boolean access(TaskItem item) {
             if (item.mObject instanceof BluetoothGattCharacteristic) {
 
                 if (item.mWrite) {
