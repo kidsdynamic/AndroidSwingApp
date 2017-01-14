@@ -1,23 +1,37 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.net.Uri;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by 03543 on 2016/12/30.
  */
 
 public class FragmentSignupProfile extends ViewFragment {
-    private String mPhotoStoreKey = "FragmentSignupProfile.Photo";
 
     private ActivityMain mActivityMain;
     private View mViewMain;
@@ -28,6 +42,13 @@ public class FragmentSignupProfile extends ViewFragment {
     private EditText mViewPhone;
     private EditText mViewZip;
     private ImageView mViewBack;
+
+    AlertDialog mDialog;
+
+    private Uri mPhotoUri;
+
+    public final static int ACTIVITY_RESULT_CAMERA_REQUEST = 1888;
+    public final static int ACTIVITY_RESULT_PHOTO_PICK = 9111;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,17 +96,37 @@ public class FragmentSignupProfile extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        Bitmap photo = mActivityMain.mBitmapCache.get(mPhotoStoreKey);
-        if(photo != null) {
-        // If we find photo bitmap in the cache, load it to be photo
-            mViewPhoto.setPhoto(photo);
-            mActivityMain.mBitmapCache.clear();
+        if (!mActivityMain.mBitmapStack.isEmpty()) {
+            Bitmap bitmap = mActivityMain.mBitmapStack.pop();
+            mViewPhoto.setPhoto(bitmap);
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        Bitmap bitmap;
+
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        mActivityMain.getContentResolver().notifyChange(mPhotoUri, null);
+        ContentResolver cr = mActivityMain.getContentResolver();
+
+        try {
+            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mPhotoUri);
+            mActivityMain.mBitmapStack.push(bitmap);
+            mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), null);
+
+        } catch (IOException e) {
+            Log.d("swing", "get photo onActivityResult failed");
+        }
+
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
             onToolbarAction1();
         }
     };
@@ -108,12 +149,66 @@ public class FragmentSignupProfile extends ViewFragment {
 
     private View.OnClickListener mPhotoClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
-            // todo: show dialog
+        public void onClick(View view) {
+            mDialog = new AlertDialog.Builder(mActivityMain).create();
 
-            Bundle bundle = new Bundle();
-            bundle.putString(FragmentPhotoClip.KEY_CACHE_ID, mPhotoStoreKey);
-            mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), bundle);
+            LayoutInflater myLayout = LayoutInflater.from(mActivityMain);
+            View dialogView = myLayout.inflate(R.layout.dialog_photo, null);
+            mDialog.setView(dialogView);
+
+            (dialogView.findViewById(R.id.dialog_photo_take)).setOnClickListener(mDialogTakeClickListener);
+            (dialogView.findViewById(R.id.dialog_photo_library)).setOnClickListener(mDialogLibraryClickListener);
+            (dialogView.findViewById(R.id.dialog_photo_cancel)).setOnClickListener(mDialogCancelClickListener);
+
+            mDialog.setCancelable(false);
+            mDialog.show();
         }
     };
+
+    private View.OnClickListener mDialogTakeClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mDialog.dismiss();
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            if (intent.resolveActivity(mActivityMain.getPackageManager()) != null) {
+                File photoFile = null;
+                File storageDir;
+                try {
+                    storageDir = mActivityMain.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    photoFile = File.createTempFile("photo", ".jpg", storageDir);
+                    boolean detr = photoFile.delete();
+                } catch (IOException e) {
+                    Log.d("Swing", "Capture camera photo failed!");
+                }
+
+                if (photoFile != null) {
+                    mPhotoUri = Uri.fromFile(photoFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
+                    startActivityForResult(intent, ACTIVITY_RESULT_CAMERA_REQUEST);
+                }
+            }
+        }
+    };
+
+    private View.OnClickListener mDialogLibraryClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mDialog.dismiss();
+
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), ACTIVITY_RESULT_PHOTO_PICK);
+            Log.d("xxx", "mDialogLibraryClickListener");
+        }
+    };
+
+    private View.OnClickListener mDialogCancelClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mDialog.dismiss();
+        }
+    };
+
 }

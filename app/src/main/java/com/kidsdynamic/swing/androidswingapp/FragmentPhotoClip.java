@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +17,19 @@ import android.widget.TextView;
  */
 
 public class FragmentPhotoClip extends ViewFragment {
-    final static public String KEY_CACHE_ID = "KEY_CACHE_ID";
-
     private ActivityMain mActivityMain;
     private View mViewMain;
 
     private TextView mViewCancel;
     private ViewPhotoClip mViewEditor;
     private Button mViewAction;
-
-    private String mCacheKey = "";
+    private ImageView mViewRotateLeft;
+    private ImageView mViewRotateRight;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        mCacheKey = getArguments().getString(KEY_CACHE_ID);
     }
 
     @Override
@@ -47,6 +44,12 @@ public class FragmentPhotoClip extends ViewFragment {
         mViewAction = (Button) mViewMain.findViewById(R.id.photo_clip_action);
         mViewAction.setOnClickListener(mActionClickListener);
 
+        mViewRotateLeft = (ImageView)mViewMain.findViewById(R.id.photo_clip_left);
+        mViewRotateLeft.setOnClickListener(mRotateClickListener);
+
+        mViewRotateRight = (ImageView)mViewMain.findViewById(R.id.photo_clip_right);
+        mViewRotateRight.setOnClickListener(mRotateClickListener);
+
         return mViewMain;
     }
 
@@ -59,6 +62,16 @@ public class FragmentPhotoClip extends ViewFragment {
     @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if(!mActivityMain.mBitmapStack.isEmpty()) {
+            Bitmap photo = mActivityMain.mBitmapStack.pop();
+            mViewEditor.setPhoto(photo);
+        }
     }
 
     private View.OnClickListener mCancelClickListener = new View.OnClickListener() {
@@ -75,11 +88,18 @@ public class FragmentPhotoClip extends ViewFragment {
             Canvas canvas = new Canvas(bitmap);
 
             mViewEditor.drawClip(canvas);
-
-            if(mCacheKey!=null && !mCacheKey.isEmpty())
-                mActivityMain.mBitmapCache.put(mCacheKey, bitmap);
-
+            mActivityMain.mBitmapStack.push(bitmap);
             mActivityMain.popFragment();
+        }
+    };
+
+    private View.OnClickListener mRotateClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if(view == mViewRotateLeft)
+                mViewEditor.rotatePhoto(-90);
+            else
+                mViewEditor.rotatePhoto(90);
         }
     };
 }

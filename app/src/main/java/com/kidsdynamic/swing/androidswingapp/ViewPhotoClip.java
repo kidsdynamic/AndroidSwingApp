@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -37,7 +38,9 @@ public class ViewPhotoClip extends View {
 
     private RectF mRectClipSource;
     private RectF mRectClip;
-    private Bitmap mBitmapPhoto;
+    private Bitmap mBitmapPhoto = null;
+
+    private int mRotate;
 
     private GestureDetector mGestures;
     private ScaleGestureDetector mScaleGesture;
@@ -46,12 +49,10 @@ public class ViewPhotoClip extends View {
     private Matrix mMatrixClip;
     private Matrix mMatrixSelect;
 
-    private int mBackgroundWidth, mBackgroundHeight;
-    private Bitmap mBitmapBackground[];
-    private Canvas mCanvasBackground[];
     private Paint mPaint;
     private Xfermode mXfermodeSrcOut;
     private Xfermode mXfermodeSrcIn;
+    private Xfermode mXfermodeDstOver;
     private ColorFilter mColorFilterDarker;
 
     public ViewPhotoClip(Context context) {
@@ -70,26 +71,42 @@ public class ViewPhotoClip extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        mDesiredWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-        mDesiredHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+        if (attrs != null) {
+            TypedArray typedArray = context.obtainStyledAttributes(
+                    attrs, R.styleable.ViewPhotoClip);
 
-        mBackgroundWidth = getResources().getDisplayMetrics().widthPixels;
-        mBackgroundHeight = getResources().getDisplayMetrics().heightPixels;
+            final int count = typedArray.getIndexCount();
+            for (int idx = 0; idx < count; idx++) {
+                final int attr = typedArray.getIndex(idx);
 
-        mBitmapBackground = new Bitmap[2];
-        mBitmapBackground[0] = Bitmap.createBitmap(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
-        mBitmapBackground[1] = Bitmap.createBitmap(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
+                if (attr == R.styleable.ViewPhotoClip_android_src) {
+                    Drawable drawable = typedArray.getDrawable(R.styleable.ViewPhotoClip_android_src);
+                    try {
+                        mBitmapPhoto = ((BitmapDrawable) drawable).getBitmap().copy(Bitmap.Config.ARGB_8888, true);
+                    } catch (NullPointerException e) {
+                        mBitmapPhoto = null;
+                    }
+                }
+            }
 
-        mCanvasBackground = new Canvas[2];
-        mCanvasBackground[0] = new Canvas(mBitmapBackground[0]);
-        mCanvasBackground[1] = new Canvas(mBitmapBackground[1]);
+            typedArray.recycle();
+        }
+
+        mDesiredWidth = getResources().getDisplayMetrics().widthPixels;
+        mDesiredHeight = getResources().getDisplayMetrics().heightPixels;
+
+        if (mBitmapPhoto == null) {
+            mBitmapPhoto = Bitmap.createBitmap(mDesiredWidth, mDesiredHeight, Bitmap.Config.ARGB_8888);
+            mBitmapPhoto.eraseColor(Color.WHITE);
+        }
+
+        mRotate = 0;
 
         mXfermodeSrcOut = new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT);
         mXfermodeSrcIn = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+        mXfermodeDstOver = new PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
 
         mColorFilterDarker = FactoryColorFilter.adjustColor(-64, 0, 0, 0);
-
-        mBitmapPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.city_california);
 
         mRectClipSource = new RectF();
         mRectClip = new RectF();
@@ -143,54 +160,16 @@ public class ViewPhotoClip extends View {
         }
 
         widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, widthMode);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode);
-
-        getLayoutParams().width = width;
-        getLayoutParams().height = height;
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, heightMode);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
-        rectReset();
-        matrixReset();
+        reset();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mBackgroundWidth != getMeasuredWidth() || mBackgroundHeight != getMeasuredHeight()) {
-
-            mBackgroundWidth = getMeasuredWidth();
-            mBackgroundHeight = getMeasuredHeight();
-
-            mBitmapBackground[0].reconfigure(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
-            mBitmapBackground[1].reconfigure(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
-        }
-
-        // mBitmapBackground[0]: original color in clip
-        mCanvasBackground[0].drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-
-        mPaint.reset();
-        mPaint.setColor(Color.WHITE);
-        mCanvasBackground[0].drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
-
-        mPaint.setXfermode(mXfermodeSrcIn);
-        mCanvasBackground[0].drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
-
-        // mBitmapBackground[1]: darker color in out of clip
-        mCanvasBackground[1].drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-
-        mPaint.reset();
-        mPaint.setColor(Color.WHITE);
-        mCanvasBackground[1].drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
-
-        mPaint.setColorFilter(mColorFilterDarker);
-        mPaint.setXfermode(mXfermodeSrcOut);
-
-        mCanvasBackground[1].drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
-
-        // Merge all backgrounds
-        canvas.drawColor(Color.LTGRAY);
-        canvas.drawBitmap(mBitmapBackground[0], 0, 0, null);
-        canvas.drawBitmap(mBitmapBackground[1], 0, 0, null);
+        paintPhoto(canvas);
 
         // Paint border
         mPaint.reset();
@@ -201,32 +180,71 @@ public class ViewPhotoClip extends View {
         canvas.drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
     }
 
+    private void paintPhoto(Canvas canvas) {
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
+
+        mPaint.reset();
+        mPaint.setColor(Color.WHITE);
+        canvas.drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
+
+        mPaint.reset();
+        mPaint.setColorFilter(mColorFilterDarker);
+        mPaint.setXfermode(mXfermodeSrcOut);
+        canvas.drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
+
+        mPaint.reset();
+        mPaint.setXfermode(mXfermodeDstOver);
+        canvas.drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
+
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.DST_OVER);
+    }
+
+    public void setPhoto(Bitmap photo) {
+        if (mBitmapPhoto != null && !mBitmapPhoto.isRecycled())
+            mBitmapPhoto.recycle();
+
+        mBitmapPhoto = photo.createBitmap(photo);
+        reset();
+    }
+
+    public void rotatePhoto(int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+
+        Bitmap bitmap = Bitmap.createBitmap(mBitmapPhoto, 0, 0, mBitmapPhoto.getWidth(), mBitmapPhoto.getHeight(), matrix, true);
+        setPhoto(bitmap);
+
+        bitmap.recycle();
+    }
+
     public void drawClip(Canvas canvas) {
-        Bitmap bitmapSrc = Bitmap.createBitmap(mBackgroundWidth, mBackgroundHeight, Bitmap.Config.ARGB_8888);
-        Canvas canvasSrc = new Canvas(bitmapSrc);
+        if (mBitmapPhoto == null)
+            return;
 
-        canvasSrc.drawARGB(0, 0, 0, 0);
-        canvasSrc.drawBitmap(mBitmapPhoto, mMatrixPhoto, null);
+        Bitmap tmpBitmap = Bitmap.createBitmap(getMeasuredWidth(), getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas tmpCanvas = new Canvas(tmpBitmap);
 
-        canvas.drawBitmap(bitmapSrc,
+        paintPhoto(tmpCanvas);
+
+        canvas.drawBitmap(tmpBitmap,
                 new Rect((int) mRectClip.left, (int) mRectClip.top, (int) mRectClip.right, (int) mRectClip.bottom),
                 new Rect(0, 0, canvas.getWidth(), canvas.getHeight()), null);
 
-        bitmapSrc.recycle();
+        tmpBitmap.recycle();
     }
 
-    private void rectReset() {
-        int size = (Math.min(getMeasuredWidth(), getMeasuredHeight())) * 2 / 3;
-        mRectClipSource = new RectF(0, 0, size, size);
-    }
-
-    private void matrixReset() {
+    private void reset() {
         float transX, transY;
 
+        int size = (Math.min(getMeasuredWidth(), getMeasuredHeight())) * 2 / 3;
+        mRectClipSource = new RectF(0, 0, size, size);
+
         mMatrixPhoto = new Matrix();
-        transX = (getMeasuredWidth() - mBitmapPhoto.getWidth()) / 2;
-        transY = (getMeasuredHeight() - mBitmapPhoto.getHeight()) / 2;
-        mMatrixPhoto.postTranslate(transX, transY);
+        if (mBitmapPhoto != null) {
+            transX = (getMeasuredWidth() - mBitmapPhoto.getWidth()) / 2;
+            transY = (getMeasuredHeight() - mBitmapPhoto.getHeight()) / 2;
+            mMatrixPhoto.postTranslate(transX, transY);
+        }
 
         mMatrixClip = new Matrix();
         transX = (getMeasuredWidth() - mRectClipSource.width()) / 2;
@@ -234,6 +252,8 @@ public class ViewPhotoClip extends View {
         mMatrixClip.postTranslate(transX, transY);
 
         mMatrixClip.mapRect(mRectClip, mRectClipSource);
+
+        invalidate();
     }
 
     private boolean matrixContains(Matrix matrix, RectF rect) {
@@ -321,8 +341,7 @@ public class ViewPhotoClip extends View {
 
         @Override
         public boolean onDoubleTap(MotionEvent e) {
-            matrixReset();
-            invalidate();
+            reset();
             return true;
         }
 

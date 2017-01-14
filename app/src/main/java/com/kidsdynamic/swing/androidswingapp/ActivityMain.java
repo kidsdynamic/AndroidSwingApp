@@ -2,8 +2,11 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,13 +24,15 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import java.util.Stack;
+
 public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     public final static int BLUETOOTH_PERMISSION = 0x1000;
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
 
     public Config mConfig;
-    public BitmapCache mBitmapCache;
+    public Stack<Bitmap> mBitmapStack;
     public RequestQueue mRequestQueue;
 
     private View mViewDevice;
@@ -51,10 +57,11 @@ public class ActivityMain extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         mConfig = new Config(this, null);
-        mBitmapCache = new BitmapCache();
+        mBitmapStack = new Stack<>();
         mRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -90,6 +97,7 @@ public class ActivityMain extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, fragmentName)
                 .commit();
+
     }
 
     @Override
@@ -195,7 +203,7 @@ public class ActivityMain extends AppCompatActivity
         if (resource == RESOURCE_HIDE) {
             // todo: hide action1 in toolbar
         } else {
-            if( mIconRes1 == RESOURCE_HIDE) {
+            if (mIconRes1 == RESOURCE_HIDE) {
                 // todo: show action1 in toolbar
             }
 
@@ -212,7 +220,7 @@ public class ActivityMain extends AppCompatActivity
         if (resource == RESOURCE_HIDE) {
             // todo: hide action2 in toolbar
         } else {
-            if( mIconRes2 == RESOURCE_HIDE) {
+            if (mIconRes2 == RESOURCE_HIDE) {
                 // todo: show action2 in toolbar
             }
 

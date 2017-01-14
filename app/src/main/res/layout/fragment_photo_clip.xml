@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,47 +9,50 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.kidsdynamic.swing.androidswingapp.ViewSponge
+        android:id="@+id/photo_clip_sponge_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:shrinkHeight="0.1" />
+
     <TextView
         android:id="@+id/photo_clip_cancel"
         style="@style/textview_photo_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
+        android:layout_margin="20sp"
         android:text="Cancel" />
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/photo_clip_sponge_bottom"
+        android:orientation="horizontal">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/photo_clip_sponge_bottom"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/photo_clip_right"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            app:shrinkHeight="0.1" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/photo_clip_sponge_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/photo_clip_sponge_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_weight="0.15"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_rotate_right" />
 
         <Button
             android:id="@+id/photo_clip_action"
             style="@style/button_main"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/photo_clip_sponge_bottom"
-            android:layout_toEndOf="@+id/photo_clip_sponge_start"
-            android:layout_toStartOf="@+id/photo_clip_sponge_end"
+            android:layout_weight="0.7"
             android:text="Take a Photo" />
-    </RelativeLayout>
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/photo_clip_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_rotate_left" />
+    </LinearLayout>
+
+</RelativeLayout>
