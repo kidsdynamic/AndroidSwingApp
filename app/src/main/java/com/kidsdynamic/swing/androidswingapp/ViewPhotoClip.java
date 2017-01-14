@@ -85,6 +85,7 @@ public class ViewPhotoClip extends View {
                         mBitmapPhoto = ((BitmapDrawable) drawable).getBitmap().copy(Bitmap.Config.ARGB_8888, true);
                     } catch (NullPointerException e) {
                         mBitmapPhoto = null;
+                        Log.d("swing", "ViewPhotoClip(init):" + Log.getStackTraceString(e));
                     }
                 }
             }
@@ -203,7 +204,20 @@ public class ViewPhotoClip extends View {
         if (mBitmapPhoto != null && !mBitmapPhoto.isRecycled())
             mBitmapPhoto.recycle();
 
-        mBitmapPhoto = photo.createBitmap(photo);
+        // Scale down photo. the maximum size is screen size
+        int maxImageSize = Math.max(
+                getResources().getDisplayMetrics().widthPixels,
+                getResources().getDisplayMetrics().heightPixels);
+
+        float ratio = Math.min(
+                (float) maxImageSize / photo.getWidth(),
+                (float) maxImageSize / photo.getHeight());
+
+        int width = Math.round(ratio * photo.getWidth());
+        int height = Math.round(ratio * photo.getHeight());
+
+        mBitmapPhoto = Bitmap.createScaledBitmap(photo, width, height, true);
+
         reset();
     }
 

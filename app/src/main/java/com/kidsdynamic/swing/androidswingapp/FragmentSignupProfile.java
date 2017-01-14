@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -104,21 +105,39 @@ public class FragmentSignupProfile extends ViewFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        Bitmap bitmap;
-
         if (resultCode != Activity.RESULT_OK)
             return;
 
-        mActivityMain.getContentResolver().notifyChange(mPhotoUri, null);
-        ContentResolver cr = mActivityMain.getContentResolver();
+        Bitmap bitmap;
+        Uri uri;
 
-        try {
-            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, mPhotoUri);
-            mActivityMain.mBitmapStack.push(bitmap);
-            mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), null);
+        if (requestCode == ACTIVITY_RESULT_CAMERA_REQUEST) {
+            uri = mPhotoUri;
 
-        } catch (IOException e) {
-            Log.d("swing", "get photo onActivityResult failed");
+            mActivityMain.getContentResolver().notifyChange(uri, null);
+            ContentResolver cr = mActivityMain.getContentResolver();
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
+                mActivityMain.mBitmapStack.push(bitmap);
+                mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), null);
+            } catch (IOException e) {
+                Log.d("swing", "FragmentSignupProfile(Camera):" + Log.getStackTraceString(e));
+            }
+
+        } else if (requestCode == ACTIVITY_RESULT_PHOTO_PICK) {
+            uri = intent.getData();
+
+            mActivityMain.getContentResolver().notifyChange(uri, null);
+            ContentResolver cr = mActivityMain.getContentResolver();
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(cr, uri);
+                mActivityMain.mBitmapStack.push(bitmap);
+                mActivityMain.selectFragment(FragmentPhotoClip.class.getName(), null);
+            } catch (IOException e) {
+                Log.d("swing", "FragmentSignupProfile(Pick):" + Log.getStackTraceString(e));
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, intent);
@@ -180,7 +199,7 @@ public class FragmentSignupProfile extends ViewFragment {
                     photoFile = File.createTempFile("photo", ".jpg", storageDir);
                     boolean detr = photoFile.delete();
                 } catch (IOException e) {
-                    Log.d("Swing", "Capture camera photo failed!");
+                    Log.d("swing", "mDialogTakeClickListener Exception: " + Log.getStackTraceString(e));
                 }
 
                 if (photoFile != null) {
@@ -197,10 +216,8 @@ public class FragmentSignupProfile extends ViewFragment {
         public void onClick(View view) {
             mDialog.dismiss();
 
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("image/*");
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), ACTIVITY_RESULT_PHOTO_PICK);
-            Log.d("xxx", "mDialogLibraryClickListener");
         }
     };
 
