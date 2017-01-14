@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,8 +27,8 @@ public class ViewWatchContact extends RelativeLayout {
 
     private ViewPhoto mViewPhoto;
     private TextView mViewLabel;
-    private Button mViewButton1;
-    private Button mViewButton2;
+    private ImageView mViewButton1;
+    private ImageView mViewButton2;
 
     private WatchContact mContactItem = null;
 
@@ -55,8 +56,8 @@ public class ViewWatchContact extends RelativeLayout {
 
         mViewPhoto = (ViewPhoto) findViewById(R.id.view_contact_photo);
         mViewLabel = (TextView) findViewById(R.id.view_contact_label);
-        mViewButton1 = (Button) findViewById(R.id.view_contact_button1);
-        mViewButton2 = (Button) findViewById(R.id.view_contact_button2);
+        mViewButton1 = (ImageView) findViewById(R.id.view_contact_button1);
+        mViewButton2 = (ImageView) findViewById(R.id.view_contact_button2);
     }
 
     @Override
@@ -87,10 +88,7 @@ public class ViewWatchContact extends RelativeLayout {
         }
 
         widthMeasureSpec = MeasureSpec.makeMeasureSpec(width, widthMode);
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, heightMode);
-
-        getLayoutParams().width = width;
-        getLayoutParams().height = height;
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, heightMode);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
@@ -122,7 +120,7 @@ public class ViewWatchContact extends RelativeLayout {
 
             WatchContact.Device device = (WatchContact.Device) item;
 
-            mViewButton1.setText(device.mBound ? "B" : "F");
+            mViewButton1.setImageResource(device.mBound ? R.mipmap.iconbutton_bind : R.mipmap.iconbutton_add);
         }
 
         mContactItem = item;

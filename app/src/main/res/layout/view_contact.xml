@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
     android:descendantFocusability="blocksDescendants">
 
     <com.kidsdynamic.swing.androidswingapp.ViewPhoto
         android:id="@+id/view_contact_photo"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        app:borderStroke="1dp"
+        app:showCross="false" />
 
     <TextView
         android:id="@+id/view_contact_label"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/view_contact_photo"
         android:layout_toStartOf="@+id/view_contact_button1"
         android:gravity="start|center_vertical"
         android:text="Label" />
 
-    <Button
+    <ImageView
         android:id="@+id/view_contact_button1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/view_contact_button2" />
+        android:layout_toStartOf="@+id/view_contact_button2"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/iconbutton_yes" />
 
-    <Button
+    <ImageView
         android:id="@+id/view_contact_button2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/iconbutton_yes"
+        android:visibility="visible" />
 </RelativeLayout>
