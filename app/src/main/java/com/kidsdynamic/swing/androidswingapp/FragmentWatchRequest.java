@@ -53,7 +53,7 @@ public class FragmentWatchRequest extends ViewFragment {
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
         }
     };
 }

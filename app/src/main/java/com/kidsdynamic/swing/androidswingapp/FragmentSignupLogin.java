@@ -74,16 +74,14 @@ public class FragmentSignupLogin extends ViewFragment {
     private Button.OnClickListener mOnFacebookListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(mActivityMain, "Login failed!", Toast.LENGTH_SHORT).show();
-            mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
+            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnGoogleListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Toast.makeText(mActivityMain, "Login failed!", Toast.LENGTH_SHORT).show();
-            mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
+            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
         }
     };
 
