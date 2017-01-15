@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Created by weichigio on 2017/1/11.
  */
 
-public class WatchStateMachine extends BleControl {
+public class BLEMachine extends BLEControl {
 
     private Handler mHandler = new Handler();
 
@@ -22,7 +22,7 @@ public class WatchStateMachine extends BleControl {
         Log.i("LeControl", msg);
     }
 
-    public WatchStateMachine(Context context) {
+    public BLEMachine(Context context) {
         super(context);
     }
 
@@ -44,6 +44,12 @@ public class WatchStateMachine extends BleControl {
         mRelationDevice.resetFlag();
         EnableBondStateReceiver(false);
         mScanResult = new ArrayList<>();
+        synchronized (mVoiceAlerts) {
+            mVoiceAlerts.clear();
+        }
+        synchronized (mInOurDoors) {
+            mInOurDoors.clear();
+        }
         return true;
     }
 
@@ -110,15 +116,15 @@ public class WatchStateMachine extends BleControl {
                         int currentTime = (int) (System.currentTimeMillis() / 1000);
                         byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
                         mState = STATE_SET_TIME;
-                        Write(GattAttributes.WATCH_SERVICE, GattAttributes.ACCEL_ENABLE, new byte[]{1});
-                        Write(GattAttributes.WATCH_SERVICE, GattAttributes.TIME, timeInByte);
+                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
+                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
                     }
                     break;
 
                 case STATE_SET_TIME:
                     mRelationDevice.mState.mAddress = null;
                     mState = STATE_GET_ADDRESS;
-                    Read(GattAttributes.WATCH_SERVICE, GattAttributes.ADDRESS);
+                    Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ADDRESS);
                     break;
 
                 case STATE_GET_ADDRESS:
@@ -128,28 +134,28 @@ public class WatchStateMachine extends BleControl {
                     break;
 
                 case STATE_SEND_ALERT:
-                    synchronized (mRelationDevice.mAction.mVoiceAlerts) {
-                        if (mRelationDevice.mAction.mVoiceAlerts.isEmpty()) {
-                            Write(GattAttributes.WATCH_SERVICE, GattAttributes.VOICE_ALERT, new byte[]{0});
-                            Write(GattAttributes.WATCH_SERVICE, GattAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
+                    synchronized (mVoiceAlerts) {
+                        if (mVoiceAlerts.isEmpty()) {
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
 
                             mRelationDevice.mState.mHeader = null;
-                            Read(GattAttributes.WATCH_SERVICE, GattAttributes.HEADER);
+                            Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
                             mState = STATE_GET_HEADER;
                         } else {
-                            VoiceAlert alert = mRelationDevice.mAction.mVoiceAlerts.poll();
+                            VoiceAlert alert = mVoiceAlerts.poll();
                             byte[] timeInByte = new byte[]{(byte) (alert.mCountdown), (byte) (alert.mCountdown >> 8), (byte) (alert.mCountdown >> 16), (byte) (alert.mCountdown >> 24)};
-                            Write(GattAttributes.WATCH_SERVICE, GattAttributes.VOICE_ALERT, new byte[]{alert.mNumber});
-                            Write(GattAttributes.WATCH_SERVICE, GattAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mNumber});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
                         }
                     }
                     break;
 
                 case STATE_GET_HEADER:
                     if (mRelationDevice.mState.mHeader != null) {
-                        if (mRelationDevice.mState.mHeader[0] == 1 && mRelationDevice.mState.mHeader[0] == 0) {
+                        if (mRelationDevice.mState.mHeader[0] == 1 && mRelationDevice.mState.mHeader[1] == 0) {
                             mRelationDevice.mState.mTime = null;
-                            Read(GattAttributes.WATCH_SERVICE, GattAttributes.TIME);
+                            Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME);
                             mState = STATE_GET_TIME;
 
                         } else {
@@ -163,7 +169,7 @@ public class WatchStateMachine extends BleControl {
                 case STATE_GET_TIME:
                     if (mRelationDevice.mState.mTime != null) {
                         mRelationDevice.mState.mData1 = null;
-                        Read(GattAttributes.WATCH_SERVICE, GattAttributes.DATA);
+                        Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.DATA);
                         mState = STATE_GET_DATA1;
                     }
                     break;
@@ -171,19 +177,19 @@ public class WatchStateMachine extends BleControl {
                 case STATE_GET_DATA1:
                     if (mRelationDevice.mState.mData1 != null) {
                         mRelationDevice.mState.mData2 = null;
-                        Read(GattAttributes.WATCH_SERVICE, GattAttributes.DATA);
+                        Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.DATA);
                         mState = STATE_GET_DATA2;
                     }
                     break;
 
                 case STATE_GET_DATA2:
                     if (mRelationDevice.mState.mData2 != null) {
-                        synchronized (mRelationDevice.mState.mInOurDoors) {
-                            mRelationDevice.mState.mInOurDoors.add(new InOutDoor(mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
+                        synchronized (mInOurDoors) {
+                            mInOurDoors.add(new InOutDoor(mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
                         }
 
-                        Write(GattAttributes.WATCH_SERVICE, GattAttributes.CHECKSUM, new byte[]{1});
-                        Read(GattAttributes.WATCH_SERVICE, GattAttributes.HEADER);
+                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
+                        Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
 
                         mState = STATE_GET_HEADER;
                     }
@@ -206,10 +212,10 @@ public class WatchStateMachine extends BleControl {
     }
 
     public int AddVoiceAlert(byte number, int countdown) {
-        synchronized (mRelationDevice.mAction.mVoiceAlerts) {
-            mRelationDevice.mAction.mVoiceAlerts.add(new VoiceAlert(number, countdown));
+        synchronized (mVoiceAlerts) {
+            mVoiceAlerts.add(new VoiceAlert(number, countdown));
         }
-        return mRelationDevice.mAction.mVoiceAlerts.size();
+        return mVoiceAlerts.size();
     }
 
     public class VoiceAlert {
@@ -221,6 +227,7 @@ public class WatchStateMachine extends BleControl {
             mCountdown = countdown;
         }
     }
+    final Queue<VoiceAlert> mVoiceAlerts = new ConcurrentLinkedQueue<>();
 
     public class InOutDoor {
         byte[] mTime;
@@ -233,6 +240,7 @@ public class WatchStateMachine extends BleControl {
             mData2 = data2;
         }
     }
+    final Queue<InOutDoor> mInOurDoors = new ConcurrentLinkedQueue<>();
 
     class Device {
         String mName;
@@ -243,7 +251,6 @@ public class WatchStateMachine extends BleControl {
         class Action {
             int mScanTime;
             boolean mSync;
-            final Queue<VoiceAlert> mVoiceAlerts = new ConcurrentLinkedQueue<>();
         }
 
         class State {
@@ -255,18 +262,11 @@ public class WatchStateMachine extends BleControl {
             byte[] mTime;
             byte[] mData1;
             byte[] mData2;
-            final Queue<InOutDoor> mInOurDoors = new ConcurrentLinkedQueue<>();
         }
 
         void resetFlag() {
             mAction.mScanTime = 0;
             mAction.mSync = false;
-            synchronized (mAction.mVoiceAlerts) {
-                mAction.mVoiceAlerts.clear();
-            }
-            synchronized (mState.mInOurDoors) {
-                mState.mInOurDoors.clear();
-            }
             mState.mBonded = false;
             mState.mConnected = false;
             mState.mDiscovered = false;
@@ -321,27 +321,27 @@ public class WatchStateMachine extends BleControl {
 
         @Override
         public void onCharacteristicRead(UUID service, UUID characteristic, byte[] value) {
-            if (service.toString().equals(GattAttributes.WATCH_SERVICE)) {
+            if (service.toString().equals(BLECustomAttributes.WATCH_SERVICE)) {
                 switch (characteristic.toString()) {
-                    case GattAttributes.ADDRESS:
+                    case BLECustomAttributes.ADDRESS:
                         if (value != null) {
                             mRelationDevice.mState.mAddress = value;
                             Log("Address " + bytesToHex(value));
                         }
                         break;
-                    case GattAttributes.HEADER:
+                    case BLECustomAttributes.HEADER:
                         if (value != null) {
                             mRelationDevice.mState.mHeader = value;
                             Log("Header " + bytesToHex(value));
                         }
                         break;
-                    case GattAttributes.TIME:
+                    case BLECustomAttributes.TIME:
                         if (value != null) {
                             mRelationDevice.mState.mTime = value;
                             Log("Time " + bytesToHex(value));
                         }
                         break;
-                    case GattAttributes.DATA:
+                    case BLECustomAttributes.DATA:
                         if (value != null) {
                             if (mRelationDevice.mState.mData1 == null) {
                                 mRelationDevice.mState.mData1 = value;
