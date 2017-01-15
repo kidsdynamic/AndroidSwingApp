@@ -18,13 +18,13 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
-public class NormalRequest extends Request<NetworkResponse> {
+public class VolleyRequest extends Request<NetworkResponse> {
     private ActivityMain mActivity;
     private String mUrl;
     private Map<String, String> mMap;
     private Response.Listener<NetworkResponse> mListener;
 
-    public NormalRequest(ActivityMain activity, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener, Map<String, String> map) {
+    public VolleyRequest(ActivityMain activity, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener, Map<String, String> map) {
         super(method, url, errorListener);
 
         mActivity = activity;

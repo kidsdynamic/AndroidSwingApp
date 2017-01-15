@@ -1,13 +1,10 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -91,7 +88,7 @@ public class FragmentSignupLogin extends ViewFragment {
         map.put("username", username);
         map.put("password", password);
 
-        Request<NetworkResponse> request = new NormalRequest(
+        Request<NetworkResponse> request = new VolleyRequest(
                 mActivityMain,
                 Request.Method.POST,
                 "https://childrenlab.com:8111/v1/user/login",
