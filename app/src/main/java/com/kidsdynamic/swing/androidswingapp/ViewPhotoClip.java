@@ -53,7 +53,7 @@ public class ViewPhotoClip extends View {
     private Xfermode mXfermodeSrcOut;
     private Xfermode mXfermodeSrcIn;
     private Xfermode mXfermodeDstOver;
-    private ColorFilter mColorFilterDarker;
+    private ColorFilter mColorFilter;
 
     public ViewPhotoClip(Context context) {
         super(context);
@@ -107,7 +107,7 @@ public class ViewPhotoClip extends View {
         mXfermodeSrcIn = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
         mXfermodeDstOver = new PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
 
-        mColorFilterDarker = FactoryColorFilter.adjustColor(-64, 0, 0, 0);
+        mColorFilter = FactoryColorFilter.adjustColor(32, 0, 0, 0);
 
         mRectClipSource = new RectF();
         mRectClip = new RectF();
@@ -189,7 +189,7 @@ public class ViewPhotoClip extends View {
         canvas.drawCircle(mRectClip.centerX(), mRectClip.centerY(), mRectClip.width() / 2, mPaint);
 
         mPaint.reset();
-        mPaint.setColorFilter(mColorFilterDarker);
+        mPaint.setColorFilter(mColorFilter);
         mPaint.setXfermode(mXfermodeSrcOut);
         canvas.drawBitmap(mBitmapPhoto, mMatrixPhoto, mPaint);
 
