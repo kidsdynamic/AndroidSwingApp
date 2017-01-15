@@ -20,7 +20,11 @@ public class ViewWatchContactList extends ListView {
     Context mContext = null;
     Adapter mAdapter = null;
 
-    private OnButtonClickListener mButtonClickListener = null;
+    final static int ON_ITEM = 0x00;
+    final static int ON_BUTTON1 = 0x01;
+    final static int ON_BUTTON2 = 0x02;
+
+    private OnContactClickListener mButtonClickListener = null;
 
     public ViewWatchContactList(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -57,6 +61,7 @@ public class ViewWatchContactList extends ListView {
                 convertView = new ViewWatchContact(getContext());
                 convertView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
+                convertView.setOnClickListener(mItemClickListener);
                 convertView.findViewById(R.id.view_contact_button1).setOnClickListener(mItemButton1ClickListener);
                 convertView.findViewById(R.id.view_contact_button2).setOnClickListener(mItemButton1ClickListener);
             }
@@ -93,6 +98,16 @@ public class ViewWatchContactList extends ListView {
         */
     }
 
+    private View.OnClickListener mItemClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            int position = getPositionForView(view);
+
+            if (mButtonClickListener != null)
+                mButtonClickListener.onClick((ViewWatchContact) view, position, ON_ITEM);
+        }
+    };
+
     private View.OnClickListener mItemButton1ClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -100,7 +115,7 @@ public class ViewWatchContactList extends ListView {
             int position = getPositionForView(parent);
 
             if (mButtonClickListener != null)
-                mButtonClickListener.onClick(parent, position, 0);
+                mButtonClickListener.onClick(parent, position, ON_ITEM | ON_BUTTON1);
         }
     };
 
@@ -111,15 +126,15 @@ public class ViewWatchContactList extends ListView {
             int position = getPositionForView(parent);
 
             if (mButtonClickListener != null)
-                mButtonClickListener.onClick(parent, position, 1);
+                mButtonClickListener.onClick(parent, position, ON_ITEM | ON_BUTTON2);
         }
     };
 
-    public interface OnButtonClickListener {
+    public interface OnContactClickListener {
         void onClick(ViewWatchContact contact, int position, int button);
     }
 
-    public void setOnButtonClickListener(OnButtonClickListener listener) {
+    public void setOnButtonClickListener(OnContactClickListener listener) {
         mButtonClickListener = listener;
     }
 }

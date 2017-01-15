@@ -59,7 +59,7 @@ public class FragmentWatchAdded extends ViewFragment {
     private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mActivityMain.selectFragment(FragmentWatchOwner.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchKid.class.getName(), null);
         }
     };
 

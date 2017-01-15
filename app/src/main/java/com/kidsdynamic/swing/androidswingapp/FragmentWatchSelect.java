@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ public class FragmentWatchSelect extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
         mViewWatchContactList = (ViewWatchContactList) mViewMain.findViewById(R.id.watch_select_list);
-        mViewWatchContactList.setOnButtonClickListener(mButtonClickListener);
+        mViewWatchContactList.setOnButtonClickListener(mContactClickListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -79,15 +78,14 @@ public class FragmentWatchSelect extends ViewFragment {
         }
     };
 
-    private ViewWatchContactList.OnButtonClickListener mButtonClickListener = new ViewWatchContactList.OnButtonClickListener() {
+    private ViewWatchContactList.OnContactClickListener mContactClickListener = new ViewWatchContactList.OnContactClickListener() {
         @Override
         public void onClick(ViewWatchContact contact, int position, int button) {
-
             WatchContact.Device device = (WatchContact.Device) contact.getItem();
             if (device.mBound)
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
             else
-                mActivityMain.selectFragment(FragmentWatchKid.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
         }
     };
 }
