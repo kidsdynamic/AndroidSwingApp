@@ -5,17 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 /**
- * Created by 03543 on 2016/12/31.
+ * Created by 03543 on 2017/1/15.
  */
 
-public class FragmentWatchAdded extends ViewFragment {
+public class FragmentWatchFinish extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private Button mButtonProfile;
+    private ViewPhoto mViewPhoto;
+    private Button mViewDashboard;
+    private Button mViewAnother;
     private ImageView mViewBack;
 
     @Override
@@ -26,13 +29,16 @@ public class FragmentWatchAdded extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_watch_added, container, false);
-
-        mButtonProfile = (Button) mViewMain.findViewById(R.id.watch_added_profile);
-        mButtonProfile.setOnClickListener(mOnProfileListener);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_finish, container, false);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
+
+        mViewDashboard = (Button)mViewMain.findViewById(R.id.watch_finish_dashboard);
+        mViewDashboard.setOnClickListener(mDashboardOnClickListener);
+
+        mViewAnother = (Button)mViewMain.findViewById(R.id.watch_finish_another);
+        mViewAnother.setOnClickListener(mAnotherOnClickListener);
 
         return mViewMain;
     }
@@ -55,11 +61,15 @@ public class FragmentWatchAdded extends ViewFragment {
         }
     };
 
-    private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
+    private View.OnClickListener mDashboardOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentWatchProfile.class.getName(), null);
+        public void onClick(View v) {
         }
     };
 
+    private View.OnClickListener mAnotherOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+        }
+    };
 }

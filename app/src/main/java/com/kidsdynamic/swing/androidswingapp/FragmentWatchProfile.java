@@ -26,7 +26,7 @@ import java.io.IOException;
  * Created by 03543 on 2017/1/6.
  */
 
-public class FragmentWatchKid extends ViewFragment {
+public class FragmentWatchProfile extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -50,15 +50,15 @@ public class FragmentWatchKid extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_watch_kid, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_watch_profile, container, false);
 
-        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.watch_kid_photo);
+        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.watch_profile_photo);
         mViewPhoto.setOnClickListener(mPhotoClickListener);
 
-        mViewName = (EditText) mViewMain.findViewById(R.id.watch_kid_name);
+        mViewName = (EditText) mViewMain.findViewById(R.id.watch_profile_name);
         mViewName.setOnEditorActionListener(mEdittextActionListener);
 
-        mViewZip = (EditText) mViewMain.findViewById(R.id.watch_kid_zip);
+        mViewZip = (EditText) mViewMain.findViewById(R.id.watch_profile_zip);
         mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
@@ -158,7 +158,7 @@ public class FragmentWatchKid extends ViewFragment {
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
 
-                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
+                mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
             }
 
             return false;

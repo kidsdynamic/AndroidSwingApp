@@ -19,29 +19,31 @@
         android:layout_weight="2.5">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_kid_photo_start"
+            android:id="@+id/watch_finish_photo_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             app:shrinkWidth="0.15" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_kid_photo_end"
+            android:id="@+id/watch_finish_photo_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             app:shrinkWidth="0.15" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewPhoto
-            android:id="@+id/watch_kid_photo"
+            android:id="@+id/watch_finish_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_toEndOf="@+id/watch_kid_photo_start"
-            android:layout_toStartOf="@+id/watch_kid_photo_end" />
+            android:layout_toEndOf="@+id/watch_finish_photo_start"
+            android:layout_toStartOf="@+id/watch_finish_photo_end" />
     </RelativeLayout>
 
-    <View
+    <TextView
+        style="@style/textview_photo_name"
+        android:id="@+id/watch_finish_name"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.5" />
@@ -52,48 +54,40 @@
         android:layout_weight="7">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_kid_start"
+            android:id="@+id/watch_finish_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             app:shrinkWidth="0.15" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_kid_end"
+            android:id="@+id/watch_finish_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             app:shrinkWidth="0.15" />
 
-        <EditText
-            android:id="@+id/watch_kid_name"
-            style="@style/edittext_main"
+        <Button
+            android:id="@+id/watch_finish_dashboard"
+            style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/watch_kid_start"
-            android:layout_toStartOf="@+id/watch_kid_end"
-            android:gravity="center"
-            android:hint="Kid's Name"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:nextFocusForward="@+id/registration_info_last" />
+            android:layout_toEndOf="@+id/watch_finish_start"
+            android:layout_toStartOf="@+id/watch_finish_end"
+            android:text="Go to Dashboard" />
 
-        <EditText
-            android:id="@+id/watch_kid_zip"
-            style="@style/edittext_main"
+        <Button
+            android:id="@+id/watch_finish_another"
+            style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/watch_kid_name"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/watch_kid_start"
-            android:layout_toStartOf="@+id/watch_kid_end"
-            android:gravity="center"
-            android:hint="Zip Code"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:nextFocusForward="@+id/registration_info_phone" />
+            android:layout_toEndOf="@+id/watch_finish_start"
+            android:layout_toStartOf="@+id/watch_finish_end"
+            android:layout_below="@+id/watch_finish_dashboard"
+            android:text="Add Another Watch" />
 
     </RelativeLayout>
 
