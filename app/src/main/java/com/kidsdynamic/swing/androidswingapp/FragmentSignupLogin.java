@@ -92,7 +92,7 @@ public class FragmentSignupLogin extends ViewFragment {
                 mActivityMain,
                 Request.Method.POST,
                 "https://childrenlab.com:8111/v1/user/login",
-                mLoginRequestListener, mLoginRequestErrorListener, map);
+                mLoginRequestListener, mLoginRequestErrorListener, map, null);
         mActivityMain.mRequestQueue.add(request);
     }
 

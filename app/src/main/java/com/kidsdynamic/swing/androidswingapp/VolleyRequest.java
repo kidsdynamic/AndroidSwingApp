@@ -4,6 +4,7 @@ package com.kidsdynamic.swing.androidswingapp;
  * Created by weichigio on 2017/1/10.
  */
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
@@ -13,29 +14,92 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 public class VolleyRequest extends Request<NetworkResponse> {
-    private ActivityMain mActivity;
+    private Context mContext;
     private String mUrl;
     private Map<String, String> mMap;
     private Response.Listener<NetworkResponse> mListener;
+    private HttpEntity mHttpEntity = null;
 
-    public VolleyRequest(ActivityMain activity, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener, Map<String, String> map) {
+    public VolleyRequest(Context context, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener, Map<String, String> map, String filePath) {
         super(method, url, errorListener);
 
-        mActivity = activity;
+        mContext = context;
         mUrl = url;
         mListener = listener;
         mMap = map;
+
+        if (filePath != null && !filePath.equals("")) {
+            File file = new File(filePath);
+            if (file!=null) {
+                if (method != Method.POST) {
+                    Log.d("VolleyRequest", "Upload file must use POST method.");
+                }
+                buildMultipartEntity(file, map);
+            }
+        }
+    }
+
+    private void buildMultipartEntity(File file, Map<String, String> map) {
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+        for (Map.Entry entry : map.entrySet()) {
+            builder.addTextBody(entry.getKey().toString(), entry.getValue().toString());
+        }
+
+        if (file != null)
+            builder.addPart("file1", new FileBody(file));
+        mHttpEntity = builder.build();
     }
 
     @Override
-    protected Map<String, String> getParams() throws AuthFailureError {
-        return mMap;
+    public String getBodyContentType() {
+        if (mHttpEntity == null)
+            return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+        return mHttpEntity.getContentType().getValue();
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        if (mHttpEntity == null) {
+            StringBuilder encodedParams = new StringBuilder();
+            try {
+                for (Map.Entry<String, String> entry : mMap.entrySet()) {
+                    encodedParams.append(URLEncoder.encode(entry.getKey(), getParamsEncoding()));
+                    encodedParams.append('=');
+                    encodedParams.append(URLEncoder.encode(entry.getValue(), getParamsEncoding()));
+                    encodedParams.append('&');
+                }
+                return encodedParams.toString().getBytes(getParamsEncoding());
+            } catch (UnsupportedEncodingException uee) {
+                throw new RuntimeException("Encoding not supported: " + getParamsEncoding(), uee);
+            }
+        } else {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            try {
+                mHttpEntity.writeTo(bos);
+            } catch (IOException e) {
+                VolleyLog.e("IOException writing to ByteArrayOutputStream");
+            }
+            return bos.toByteArray();
+        }
     }
 
     @Override
