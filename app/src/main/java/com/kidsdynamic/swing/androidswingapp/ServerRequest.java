@@ -65,7 +65,7 @@ public class ServerRequest extends Request<NetworkResponse> {
         }
 
         if (file != null)
-            builder.addPart("file1", new FileBody(file));
+            builder.addPart("upload", new FileBody(file));
         mHttpEntity = builder.build();
     }
 

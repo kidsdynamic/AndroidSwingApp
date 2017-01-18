@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -82,7 +81,7 @@ public class FragmentSignupAccount extends ViewFragment {
                 if (mail.equals("") || password.equals("")) {
                     mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
-                    mActivityMain.mServiceMachine.Login(mLoginListener, mail, password);
+                    mActivityMain.mServiceMachine.userLogin(mLoginListener, mail, password);
                     //mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
                 }
             }
@@ -93,8 +92,8 @@ public class FragmentSignupAccount extends ViewFragment {
 
     ServerMachine.ResponseListener mLoginListener = new ServerMachine.ResponseListener() {
         @Override
-        public void onResponse(boolean success, int command, int resultCode, String result) {
-            Log.d("onResponse", "" + success + " command " + command + " resultCode " + resultCode + " result " + result);
+        public void onResponse(boolean success, int resultCode, String result) {
+            Log.d("onResponse", "" + success + " resultCode " + resultCode + " result " + result);
             mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
         }
     };

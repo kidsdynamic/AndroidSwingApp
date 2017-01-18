@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.android.volley.NetworkResponse;
@@ -23,10 +22,34 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class ServerMachine {
-    private final static String SERVER_ADDRESS = "https://childrenlab.com:8111";
+    private final static String SERVER_ADDRESS = "https://childrenlab.com:8111/v1";
 
-    public final static int MSG_LOGIN = 0x20000001;
-    public final static int MSG_REGISTER = 0x20000002;
+    private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
+    private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
+    private final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
+    private final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
+    private final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
+
+    private final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
+    private final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
+
+    private final static String CMD_KIDS_ADD = SERVER_ADDRESS + "/kids/add";
+    private final static String CMD_KIDS_UPDATE = SERVER_ADDRESS + "/kids/update";
+    private final static String CMD_KIDS_WHO_REGISTERED_MAC_ID = SERVER_ADDRESS + "/kids/whoRegisteredMacID";
+
+    private final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
+    private final static String CMD_ACTIVITY_RETRIEVE_DATA = SERVER_ADDRESS + "/activity/retrieveData";
+
+    private final static String CMD_EVENT_ADD = SERVER_ADDRESS + "/event/add";
+    private final static String CMD_EVENT_UPDATE = SERVER_ADDRESS + "/event/update";
+    private final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
+    private final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
+    private final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
+
+    private final static String CMD_SUBHOST_ADD = SERVER_ADDRESS + "subHost/add";
+    private final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "subHost/accept";
+    private final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "subHost/deny";
+    private final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "subHost/list";
 
     public RequestQueue mRequestQueue;
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
@@ -55,7 +78,7 @@ public class ServerMachine {
     }
 
     public interface ResponseListener {
-        void onResponse(boolean success, int command, int resultCode, String result);
+        void onResponse(boolean success, int resultCode, String result);
     }
 
     private int mState;
@@ -83,19 +106,18 @@ public class ServerMachine {
         }
     };
 
-    public void Login(ResponseListener response, String username, String password) {
-        Map<String, String> map = new HashMap<>();
-        map.put("username", username);
-        map.put("password", password);
-        Request<NetworkResponse> request = new ServerRequest(
-                mContext,
-                Request.Method.POST,
-                SERVER_ADDRESS + "/v1/user/login",
-                mSuccessListener, mErrorListener, map, null);
-        mTaskQueue.add(new TaskItem(MSG_LOGIN, request, response));
+    private Request<NetworkResponse> NewRequest(int method, String address, Map<String, String> map, String filename) {
+        return new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename);
     }
 
-    public void Register(ResponseListener response, String email, String password, String firstName, String lastName, String phoneNumber, String zipCode) {
+    public void userLogin(ResponseListener response, String email, String password) {
+        Map<String, String> map = new HashMap<>();
+        map.put("email", email);
+        map.put("password", password);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_LOGIN, map, null), response));
+    }
+
+    public void userRegister(ResponseListener response, String email, String password, String firstName, String lastName, String phoneNumber, String zipCode) {
         Map<String, String> map = new HashMap<>();
         map.put("email", email);
         map.put("password", password);
@@ -103,13 +125,41 @@ public class ServerMachine {
         map.put("lastName", lastName);
         map.put("phoneNumber", phoneNumber);
         map.put("zipCode", zipCode);
-        Request<NetworkResponse> request = new ServerRequest(
-                mContext,
-                Request.Method.POST,
-                SERVER_ADDRESS + "/v1/user/register",
-                mSuccessListener, mErrorListener, map, null);
-        mTaskQueue.add(new TaskItem(MSG_REGISTER, request, response));
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_REGISTER, map, null), response));
     }
+
+    public void userIsTokenValid(ResponseListener response, String email, String token) {
+        Map<String, String> map = new HashMap<>();
+        map.put("email", email);
+        map.put("token", token);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_IS_TOKEN_VALID, map, null), response));
+    }
+
+    public void userUpdateProfile(ResponseListener response, String firstName, String lastName, String phoneNumber, String zipCode) {
+        Map<String, String> map = new HashMap<>();
+        map.put("firstName", firstName);
+        map.put("lastName", lastName);
+        map.put("phoneNumber", phoneNumber);
+        map.put("zipCode", zipCode);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_USER_UPDATE_PROFILE, map, null), response));
+    }
+
+    public void userRetrieveUserProfile(ResponseListener response) {
+        Map<String, String> map = new HashMap<>();
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_USER_RETRIEVE_USER_PROFILE, map, null), response));
+    }
+
+    public void userAvatarUpload(ResponseListener response, String filePath) {
+        Map<String, String> map = new HashMap<>();
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_AVATAR_UPLOAD, map, filePath), response));
+    }
+
+    public void userAvatarUploadKid(ResponseListener response, String kidId, String filePath) {
+        Map<String, String> map = new HashMap<>();
+        map.put("kidId", kidId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_AVATAR_UPLOAD_KID, map, filePath), response));
+    }
+
 
     Response.Listener<NetworkResponse> mSuccessListener = new Response.Listener<NetworkResponse>() {
         @Override
@@ -130,7 +180,7 @@ public class ServerMachine {
             }
 
             if (mCurrentTask.mResponseListener != null)
-                mCurrentTask.mResponseListener.onResponse(true, mCurrentTask.mCommand, responseCode, responseString);
+                mCurrentTask.mResponseListener.onResponse(true, responseCode, responseString);
 
             mCurrentTask = null;
         }
@@ -143,19 +193,17 @@ public class ServerMachine {
             if (error.networkResponse!=null)
                 result = error.networkResponse.statusCode;
             if (mCurrentTask.mResponseListener != null)
-                mCurrentTask.mResponseListener.onResponse(false, mCurrentTask.mCommand, result, error.getMessage());
+                mCurrentTask.mResponseListener.onResponse(false, result, error.getMessage());
 
             mCurrentTask = null;
         }
     };
 
     private class TaskItem {
-        int mCommand;
         Request<NetworkResponse> mRequest;
         ResponseListener mResponseListener;
 
-        TaskItem(int command, Request<NetworkResponse> request, ResponseListener response) {
-            mCommand = command;
+        TaskItem(Request<NetworkResponse> request, ResponseListener response) {
             mRequest = request;
             mResponseListener = response;
         }
