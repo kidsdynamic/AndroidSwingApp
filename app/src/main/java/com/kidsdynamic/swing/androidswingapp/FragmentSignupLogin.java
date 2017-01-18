@@ -6,15 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Created by 03543 on 2016/12/30.
  */
@@ -81,43 +72,4 @@ public class FragmentSignupLogin extends ViewFragment {
             mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
         }
     };
-
-    private void requestLogin(String username, String password) {
-        Map<String, String> map = new HashMap<String, String>();
-
-        map.put("username", username);
-        map.put("password", password);
-
-        Request<NetworkResponse> request = new VolleyRequest(
-                mActivityMain,
-                Request.Method.POST,
-                "https://childrenlab.com:8111/v1/user/login",
-                mLoginRequestListener, mLoginRequestErrorListener, map, null);
-        mActivityMain.mRequestQueue.add(request);
-    }
-
-    Response.Listener<NetworkResponse> mLoginRequestListener = new Response.Listener<NetworkResponse>() {
-        @Override
-        public void onResponse(NetworkResponse response) {
-            try {
-                String responseString = new String(
-                        new String(
-                                response.data,
-                                HttpHeaderParser.parseCharset(response.headers)
-                        ).getBytes("ISO-8859-1"),
-                        "utf-8"
-                );
-                int responseCode = response.statusCode;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    };
-
-    Response.ErrorListener mLoginRequestErrorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-        }
-    };
-
 }

@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -15,15 +16,21 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class BLEMachine extends BLEControl {
+    public final static int MSG_SCAN_DONE = 0x10000001;
+    public final static int MSG_BOND = 0x10000002;
+    public final static int MSG_CONNECT = 0x10000003;
+    public final static int MSG_DISCOVERY = 0x10000004;
+    public final static int MSG_SYNC_DONE = 0x10000005;
 
-    private Handler mHandler = new Handler();
+    private Handler mHandler = null;
 
     private void Log(String msg) {
-        Log.i("LeControl", msg);
+        Log.i("BLEMachine", msg);
     }
 
-    public BLEMachine(Context context) {
+    public BLEMachine(Context context, Handler handler) {
         super(context);
+        mHandler = handler;
     }
 
     public boolean Start() {
@@ -98,21 +105,36 @@ public class BLEMachine extends BLEControl {
                     if (--mRelationDevice.mAction.mScanTime == 0) {
                         mState = STATE_INIT;
                         Scan(false);
+                        Message message = new Message();
+                        message.what = MSG_SCAN_DONE;
+                        mHandler.sendMessage(message);
                     }
                     break;
 
                 case STATE_BONDING:
-                    if (mRelationDevice.mState.mBonded)
+                    if (mRelationDevice.mState.mBonded) {
                         mState = STATE_INIT;
+                        Message message = new Message();
+                        message.what = MSG_BOND;
+                        mHandler.sendMessage(message);
+                    }
                     break;
 
                 case STATE_CONNECTING:
-                    if (mRelationDevice.mState.mConnected)
+                    if (mRelationDevice.mState.mConnected) {
                         mState = STATE_DISCOVERY;
+                        Message message = new Message();
+                        message.what = MSG_CONNECT;
+                        mHandler.sendMessage(message);
+                    }
                     break;
 
                 case STATE_DISCOVERY:
                     if (mRelationDevice.mState.mDiscovered) {
+                        Message message = new Message();
+                        message.what = MSG_DISCOVERY;
+                        mHandler.sendMessage(message);
+
                         int currentTime = (int) (System.currentTimeMillis() / 1000);
                         byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
                         mState = STATE_SET_TIME;
@@ -161,6 +183,11 @@ public class BLEMachine extends BLEControl {
                         } else {
                             mRelationDevice.mAction.mSync = false;
                             Disconnect();
+
+                            Message message = new Message();
+                            message.what = MSG_SYNC_DONE;
+                            mHandler.sendMessage(message);
+
                             mState = STATE_INIT;
                         }
                     }
@@ -196,7 +223,8 @@ public class BLEMachine extends BLEControl {
                     break;
             }
 
-            mHandler.postDelayed(this, TRANSITION_GAP);
+            if (mHandler != null)
+                mHandler.postDelayed(this, TRANSITION_GAP);
         }
     };
 
@@ -275,6 +303,8 @@ public class BLEMachine extends BLEControl {
         Device() {
             mName = "";
             mAddress = "";
+            mAction = new Action();
+            mState = new State();
             resetFlag();
         }
 

@@ -2,15 +2,13 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,10 +19,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 
-import java.util.Locale;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 public class ActivityMain extends AppCompatActivity
@@ -33,8 +38,10 @@ public class ActivityMain extends AppCompatActivity
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
 
     public Config mConfig;
+    public Handler mHandler = new InnerHandler(this);
     public Stack<Bitmap> mBitmapStack;
-    public RequestQueue mRequestQueue;
+    public BLEMachine mBLEMachine;
+    public ServerMachine mServiceMachine;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -63,7 +70,9 @@ public class ActivityMain extends AppCompatActivity
 
         mConfig = new Config(this, null);
         mBitmapStack = new Stack<>();
-        mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+
+        mBLEMachine = new BLEMachine(this, mHandler);
+        mServiceMachine = new ServerMachine(this);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
@@ -111,6 +120,15 @@ public class ActivityMain extends AppCompatActivity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH_ADMIN}, BLUETOOTH_ADMIN_PERMISSION);
         }
+        mBLEMachine.Start();
+        mServiceMachine.Start();
+    }
+
+    @Override
+    public void onPause() {
+        mBLEMachine.Stop();
+        mServiceMachine.Stop();
+        super.onPause();
     }
 
     public void popFragment() {
@@ -267,6 +285,35 @@ public class ActivityMain extends AppCompatActivity
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    static class InnerHandler extends Handler {
+        WeakReference<ActivityMain> mActivity;
+
+        InnerHandler(ActivityMain activity) {
+            mActivity = new WeakReference<>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message message) {
+            ActivityMain activity = mActivity.get();
+            activity.handleMessage(message);
+        }
+    }
+
+    public void handleMessage(Message message) {
+        switch(message.what) {
+            case BLEMachine.MSG_SCAN_DONE:
+                break;
+            case BLEMachine.MSG_BOND:
+                break;
+            case BLEMachine.MSG_CONNECT:
+                break;
+            case BLEMachine.MSG_DISCOVERY:
+                break;
+            case BLEMachine.MSG_SYNC_DONE:
+                break;
+        }
     }
 
 }

@@ -79,13 +79,24 @@ public class FragmentSignupAccount extends ViewFragment {
                 mActivityMain.mConfig.setString(Config.KEY_MAIL, mail);
                 mActivityMain.mConfig.setString(Config.KEY_PASSWORD, password);
 
-                if (mail.equals("") || password.equals(""))
+                if (mail.equals("") || password.equals("")) {
                     mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
-                else
-                    mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+                } else {
+                    mActivityMain.mServiceMachine.Login(mLoginListener, mail, password);
+                    //mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+                }
             }
 
             return false;
         }
     };
+
+    ServerMachine.ResponseListener mLoginListener = new ServerMachine.ResponseListener() {
+        @Override
+        public void onResponse(boolean success, int command, int resultCode, String result) {
+            Log.d("onResponse", "" + success + " command " + command + " resultCode " + resultCode + " result " + result);
+            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+        }
+    };
+
 }
