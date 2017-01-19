@@ -22,7 +22,7 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class BleControl {
+public class BLEControl {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt = null;
     private String mDeviceAddress = null;
@@ -42,7 +42,7 @@ public class BleControl {
     }
 
 
-    public BleControl(Context context, OnEventListener listener) {
+    public BLEControl(Context context, OnEventListener listener) {
         mContext = context;
 
         mBluetoothAdapter = ((BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
@@ -60,7 +60,7 @@ public class BleControl {
         mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
     }
 
-    protected BleControl(Context context) {
+    protected BLEControl(Context context) {
         mContext = context;
 
         mBluetoothAdapter = ((BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
@@ -166,7 +166,7 @@ public class BleControl {
             Log("mBluetoothAdapter == null or address == null");
             return false;
         }
-        Log("Connect()");
+        Log("Connect()+");
 
         mBonding = true;
         mTaskQueue.reset();
