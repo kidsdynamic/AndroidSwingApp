@@ -160,6 +160,124 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_AVATAR_UPLOAD_KID, map, filePath), response));
     }
 
+    public void kidsAdd(ResponseListener response, String firstName, String lastName, String macId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("firstName", firstName);
+        map.put("lastName", lastName);
+        map.put("macId", macId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_KIDS_ADD, map, null), response));
+    }
+
+    public void kidsUpdate(ResponseListener response, String kidId, String firstName, String lastName) {
+        Map<String, String> map = new HashMap<>();
+        map.put("kidId", kidId);
+        map.put("firstName", firstName);
+        map.put("lastName", lastName);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_KIDS_UPDATE, map, null), response));
+    }
+
+    public void kidsWhoRegisteredMacID(ResponseListener response, String macId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("macId", macId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_KIDS_WHO_REGISTERED_MAC_ID, map, null), response));
+    }
+
+    public void activityUploadRawData(ResponseListener response, String indoorActivity, String outdoorActivity, String time, String macId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("indoorActivity", indoorActivity);
+        map.put("outdoorActivity", outdoorActivity);
+        map.put("time", time);
+        map.put("macId", macId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_ACTIVITY_UPLOAD_RAW_DATA, map, null), response));
+    }
+
+    public void activityRetrieveData(ResponseListener response, String kidId, String period) {
+        Map<String, String> map = new HashMap<>();
+        map.put("kidId", kidId);
+        map.put("period", period);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_ACTIVITY_RETRIEVE_DATA, map, null), response));
+    }
+
+    public void eventAdd(ResponseListener response, String kidId, String name, String startDate, String endDate,
+                         String color, String description, String alert, String city, String state, String repeat,
+                         String timezoneOffset, String todo) {
+        Map<String, String> map = new HashMap<>();
+        map.put("kidId", kidId);
+        map.put("name", name);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("color", color);
+        map.put("description", description);
+        map.put("alert", alert);
+        map.put("city", city);
+        map.put("state", state);
+        map.put("repeat", repeat);
+        map.put("timezoneOffset", timezoneOffset);
+        map.put("todo", todo);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_EVENT_ADD, map, null), response));
+    }
+
+    public void eventUpdate(ResponseListener response, String eventId, String name, String startDate, String endDate,
+                            String color, String description, String alert, String city, String state, String repeat,
+                            String timezoneOffset, String todo) {
+        Map<String, String> map = new HashMap<>();
+        map.put("eventId", eventId);
+        map.put("name", name);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("color", color);
+        map.put("description", description);
+        map.put("alert", alert);
+        map.put("city", city);
+        map.put("state", state);
+        map.put("repeat", repeat);
+        map.put("timezoneOffset", timezoneOffset);
+        map.put("todo", todo);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_EVENT_UPDATE, map, null), response));
+    }
+
+    public void eventDelete(ResponseListener response, String eventId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("eventId", eventId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.DELETE, CMD_EVENT_DELETE, map, null), response));
+    }
+
+    public void eventRetrieveEvents(ResponseListener response, String period, String date) {
+        Map<String, String> map = new HashMap<>();
+        map.put("period", period);
+        map.put("date", date);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_EVENT_RETRIEVE_EVENTS, map, null), response));
+    }
+
+    public void eventRetrieveAllEventsWithTodo(ResponseListener response) {
+        Map<String, String> map = new HashMap<>();
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO, map, null), response));
+    }
+
+    public void subhostAdd(ResponseListener response, String hostId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("hostId", hostId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_SUBHOST_ADD, map, null), response));
+    }
+
+    public void subhostAccept(ResponseListener response, String subHostId, String KidId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("subHostId", subHostId);
+        map.put("KidId", KidId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_ACCEPT, map, null), response));
+    }
+
+    public void subhostDeny(ResponseListener response, String subHostId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("subHostId", subHostId);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_DENY, map, null), response));
+    }
+
+    public void subhostList(ResponseListener response, String status) {
+        Map<String, String> map = new HashMap<>();
+        map.put("status", status);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_SUBHOST_LIST, map, null), response));
+    }
 
     Response.Listener<NetworkResponse> mSuccessListener = new Response.Listener<NetworkResponse>() {
         @Override
