@@ -44,7 +44,7 @@ public class FragmentSyncNow extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Sync", true, true,
-                R.mipmap.city_overall, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
+                R.mipmap.city_overall, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
@@ -67,7 +67,7 @@ public class FragmentSyncNow extends ViewFragment {
     private Button.OnClickListener mOnAnotherListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mActivityMain.selectFragment(FragmentWatchPurchase.class.getName(), null);
+            mActivityMain.selectFragment(FragmentSyncSelect.class.getName(), null);
         }
     };
 }

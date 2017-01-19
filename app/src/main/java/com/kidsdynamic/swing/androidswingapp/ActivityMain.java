@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,8 +41,8 @@ public class ActivityMain extends AppCompatActivity
     private View mViewCalendar;
     private View mViewDashboard;
     private View mViewProfile;
-    private View mViewAction1;
-    private View mViewAction2;
+    private ImageView mViewAction1;
+    private ImageView mViewAction2;
     private TextView mViewTitle;
     private View mViewConsole;
     private View mViewToolbar;
@@ -83,10 +84,10 @@ public class ActivityMain extends AppCompatActivity
 
         mViewTitle = (TextView) findViewById(R.id.main_toolbar_title);
 
-        mViewAction1 = findViewById(R.id.main_toolbar_action1);
+        mViewAction1 = (ImageView) findViewById(R.id.main_toolbar_action1);
         mViewAction1.setOnClickListener(mToolbarClickListener);
 
-        mViewAction2 = findViewById(R.id.main_toolbar_action2);
+        mViewAction2 = (ImageView) findViewById(R.id.main_toolbar_action2);
         mViewAction2.setOnClickListener(mToolbarClickListener);
 
         mViewConsole = findViewById(R.id.main_console);
@@ -202,13 +203,9 @@ public class ActivityMain extends AppCompatActivity
             return;
 
         if (resource == RESOURCE_HIDE) {
-            // todo: hide action1 in toolbar
+            mViewAction1.setImageDrawable(null);
         } else {
-            if (mIconRes1 == RESOURCE_HIDE) {
-                // todo: show action1 in toolbar
-            }
-
-            // todo: change action1 image
+            mViewAction1.setImageResource(resource);
         }
 
         mIconRes1 = resource;
@@ -219,13 +216,9 @@ public class ActivityMain extends AppCompatActivity
             return;
 
         if (resource == RESOURCE_HIDE) {
-            // todo: hide action2 in toolbar
+            mViewAction2.setImageDrawable(null);
         } else {
-            if (mIconRes2 == RESOURCE_HIDE) {
-                // todo: show action2 in toolbar
-            }
-
-            // todo: change action2 image
+            mViewAction2.setImageResource(resource);
         }
 
         mIconRes2 = resource;
@@ -247,6 +240,11 @@ public class ActivityMain extends AppCompatActivity
     private View.OnClickListener mToolbarClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if(view == mViewAction1) {
+                getTopViewFragment().onToolbarAction1();
+            } else if(view == mViewAction2) {
+                getTopViewFragment().onToolbarAction2();
+            }
         }
     };
 

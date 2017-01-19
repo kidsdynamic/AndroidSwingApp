@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,12 +51,12 @@ public class ViewWatchContact extends RelativeLayout {
         mDesiredHeight = metrics.heightPixels / getResources().getInteger(R.integer.contact_label_denominator);
         mDesiredWidth = mDesiredHeight * 4;
 
-        inflate(getContext(), R.layout.view_contact, this);
+        inflate(getContext(), R.layout.view_watch_contact, this);
 
-        mViewPhoto = (ViewPhoto) findViewById(R.id.view_contact_photo);
-        mViewLabel = (TextView) findViewById(R.id.view_contact_label);
-        mViewButton1 = (ImageView) findViewById(R.id.view_contact_button1);
-        mViewButton2 = (ImageView) findViewById(R.id.view_contact_button2);
+        mViewPhoto = (ViewPhoto) findViewById(R.id.view_watch_contact_photo);
+        mViewLabel = (TextView) findViewById(R.id.view_watch_contact_label);
+        mViewButton1 = (ImageView) findViewById(R.id.view_watch_contact_button1);
+        mViewButton2 = (ImageView) findViewById(R.id.view_watch_contact_button2);
     }
 
     @Override

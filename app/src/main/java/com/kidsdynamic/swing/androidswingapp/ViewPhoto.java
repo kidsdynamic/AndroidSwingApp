@@ -23,8 +23,7 @@ import android.view.View;
  */
 
 public class ViewPhoto extends View {
-    private int mDesiredWidth;
-    private int mDesiredHeight;
+    private int mDesiredSize;
 
     private float mStrokeWidthDp = 4;
 
@@ -34,8 +33,8 @@ public class ViewPhoto extends View {
 
     private Bitmap mPhoto = null;
 
-    private int mColorSelect = 0xFF000000;
-    private int mColorNormal = 0xFF888888;
+    private int mColorSelect;
+    private int mColorNormal;
 
     private boolean mSelected = true;
     private boolean mShowCross = true;
@@ -61,7 +60,7 @@ public class ViewPhoto extends View {
         setPhoto(null);
 
         mColorSelect = ContextCompat.getColor(context, R.color.color_orange);
-        mColorNormal = ContextCompat.getColor(context, R.color.color_gray_deep);
+        mColorNormal = ContextCompat.getColor(context, R.color.color_white);
 
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(
@@ -96,10 +95,9 @@ public class ViewPhoto extends View {
 
         mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, context.getResources().getDisplayMetrics());
 
-        mDesiredWidth = 100;
-        mDesiredHeight = 100;
+        mDesiredSize = 100;
 
-        updateRects(mDesiredWidth, mDesiredHeight);
+        updateRects(mDesiredSize, mDesiredSize);
     }
 
     @Override
@@ -116,17 +114,17 @@ public class ViewPhoto extends View {
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize;
         } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(mDesiredWidth, widthSize);
+            width = Math.min(mDesiredSize, widthSize);
         } else {
-            width = mDesiredWidth;
+            width = mDesiredSize;
         }
 
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = Math.min(mDesiredHeight, heightSize);
+            height = Math.min(mDesiredSize, heightSize);
         } else {
-            height = mDesiredHeight;
+            height = mDesiredSize;
         }
 
         setMeasuredDimension(width, height);
@@ -200,8 +198,18 @@ public class ViewPhoto extends View {
                 rect.centerY() + radius - strokeWidth);
     }
 
+    public void setSelected(boolean selected) {
+        mSelected = selected;
+        invalidate();
+    }
+
+    public boolean getSelected() {
+        return mSelected;
+    }
+
     public void setShowBorder(boolean show) {
         mShowBorder = show;
+        invalidate();
     }
 
     public boolean getShowBorder() {
@@ -210,6 +218,7 @@ public class ViewPhoto extends View {
 
     public void setShowCross(boolean show) {
         mShowCross = show;
+        invalidate();
     }
 
     public boolean getShowCross() {
@@ -218,6 +227,7 @@ public class ViewPhoto extends View {
 
     public void setShowDarker(boolean show) {
         mShowDarker = show;
+        invalidate();
     }
 
     public boolean getShowDarker() {
@@ -231,8 +241,8 @@ public class ViewPhoto extends View {
     public void setPhoto(Bitmap photo) {
         int width, height;
 
-        width = photo == null ? 200 : photo.getWidth();
-        height = photo == null ? 200 : photo.getHeight();
+        width = Math.max(1, photo == null ? getMeasuredWidth() : photo.getWidth());
+        height = Math.max(1, photo == null ? getMeasuredHeight() : photo.getHeight());
 
         int size = Math.min(width, height);
         Rect rectDst = new Rect(0, 0, size, size);
@@ -251,8 +261,10 @@ public class ViewPhoto extends View {
         canvas.drawCircle(rectDst.centerX(), rectDst.centerY(), rectDst.width() / 2, paint);
 
         if (photo != null) {
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
             canvas.drawBitmap(photo, rectDst, rectSrc, paint);
         }
+
+        invalidate();
     }
 }

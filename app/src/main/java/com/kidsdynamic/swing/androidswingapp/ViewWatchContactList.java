@@ -53,7 +53,7 @@ public class ViewWatchContactList extends ListView {
     public class Adapter extends ArrayAdapter<WatchContact> {
 
         public Adapter(Context context, List<WatchContact> array) {
-            super(context, R.layout.view_contact_row, R.id.view_contact_label, array);
+            super(context, R.layout.view_watch_contact_row, R.id.view_watch_contact_label, array);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -62,8 +62,8 @@ public class ViewWatchContactList extends ListView {
                 convertView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
                 convertView.setOnClickListener(mItemClickListener);
-                convertView.findViewById(R.id.view_contact_button1).setOnClickListener(mItemButton1ClickListener);
-                convertView.findViewById(R.id.view_contact_button2).setOnClickListener(mItemButton1ClickListener);
+                convertView.findViewById(R.id.view_watch_contact_button1).setOnClickListener(mItemButton1ClickListener);
+                convertView.findViewById(R.id.view_watch_contact_button2).setOnClickListener(mItemButton1ClickListener);
             }
 
             ((ViewWatchContact) convertView).load(getItem(position));
@@ -77,7 +77,7 @@ public class ViewWatchContactList extends ListView {
 
             if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(mContext);
-                convertView = inflater.inflate(R.layout.view_contact_row, null);
+                convertView = inflater.inflate(R.layout.view_watch_contact_row, null);
 
                 convertView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
