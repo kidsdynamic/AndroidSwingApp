@@ -14,6 +14,11 @@ public class ViewSponge extends View {
     private float mShrinkWidth = 0f;
     private float mShrinkHeight = 0f;
 
+    public ViewSponge(Context context) {
+        super(context);
+        init(context, null);
+    }
+
     public ViewSponge(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);

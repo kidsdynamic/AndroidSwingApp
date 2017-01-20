@@ -22,15 +22,14 @@ import android.view.View;
  * Created by 03543 on 2017/1/2.
  */
 
-public class ViewPhoto extends View {
-    private int mDesiredSize;
-
+public class ViewPhoto extends ViewSponge {
     private float mStrokeWidthDp = 4;
 
     private Rect mRectPhoto;
     private Rect mRectBorder;
     private int mStrokeWidth;
 
+    private Bitmap mSource = null;
     private Bitmap mPhoto = null;
 
     private int mColorSelect;
@@ -57,8 +56,6 @@ public class ViewPhoto extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        setPhoto(null);
-
         mColorSelect = ContextCompat.getColor(context, R.color.color_orange);
         mColorNormal = ContextCompat.getColor(context, R.color.color_white);
 
@@ -78,7 +75,7 @@ public class ViewPhoto extends View {
                 } else if (attr == R.styleable.ViewPhoto_borderSelectColor) {
                     mColorSelect = typedArray.getColor(R.styleable.ViewPhoto_borderSelectColor, mColorSelect);
                 } else if (attr == R.styleable.ViewPhoto_borderNormalColor) {
-                    mColorSelect = typedArray.getColor(R.styleable.ViewPhoto_borderNormalColor, mColorSelect);
+                    mColorNormal = typedArray.getColor(R.styleable.ViewPhoto_borderNormalColor, mColorNormal);
                 } else if (attr == R.styleable.ViewPhoto_selected) {
                     mSelected = typedArray.getBoolean(R.styleable.ViewPhoto_selected, mSelected);
                 } else if (attr == R.styleable.ViewPhoto_showCross) {
@@ -94,49 +91,22 @@ public class ViewPhoto extends View {
         }
 
         mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, context.getResources().getDisplayMetrics());
-
-        mDesiredSize = 100;
-
-        updateRects(mDesiredSize, mDesiredSize);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        int width, height;
-
-        if (widthMode == MeasureSpec.EXACTLY) {
-            width = widthSize;
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(mDesiredSize, widthSize);
-        } else {
-            width = mDesiredSize;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY) {
-            height = heightSize;
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = Math.min(mDesiredSize, heightSize);
-        } else {
-            height = mDesiredSize;
-        }
-
-        setMeasuredDimension(width, height);
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
         updateRects(getMeasuredWidth(), getMeasuredHeight());
+        makePhoto(mSource);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawARGB(0, 0, 0, 0);
 
-        paintPhoto(canvas, mRectPhoto, mShowDarker);
+        if (mPhoto != null)
+            paintPhoto(canvas, mRectPhoto, mShowDarker);
 
         if (mShowBorder)
             paintBorder(canvas, mRectBorder, mSelected ? mColorSelect : mColorNormal);
@@ -239,32 +209,47 @@ public class ViewPhoto extends View {
     }
 
     public void setPhoto(Bitmap photo) {
-        int width, height;
+        if (mSource != null && !mSource.isRecycled())
+            mSource.recycle();
+        mSource = null;
 
-        width = Math.max(1, photo == null ? getMeasuredWidth() : photo.getWidth());
-        height = Math.max(1, photo == null ? getMeasuredHeight() : photo.getHeight());
+        if (photo == null)
+            return;
+
+        mSource = Bitmap.createBitmap(photo, 0, 0, photo.getWidth(), photo.getHeight());
+        makePhoto(mSource);
+    }
+
+    public void makePhoto(Bitmap photo) {
+
+        if (mPhoto != null && !mPhoto.isRecycled())
+            mPhoto.recycle();
+        mPhoto = null;
+
+        if (photo == null)
+            return;
+
+        int width = photo.getWidth();
+        int height = photo.getHeight();
+
+        if (width == 0 || height == 0)
+            return;
 
         int size = Math.min(width, height);
         Rect rectDst = new Rect(0, 0, size, size);
         Rect rectSrc = new Rect((width - size) / 2, (height - size) / 2, (width + size) / 2, (height + size) / 2);
 
-        if (mPhoto != null && !mPhoto.isRecycled())
-            mPhoto.recycle();
         mPhoto = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(mPhoto);
-        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
 
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
 
+        paint.setColor(Color.WHITE);
         canvas.drawCircle(rectDst.centerX(), rectDst.centerY(), rectDst.width() / 2, paint);
 
-        if (photo != null) {
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
-            canvas.drawBitmap(photo, rectDst, rectSrc, paint);
-        }
-
-        invalidate();
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(photo, rectDst, rectSrc, paint);
     }
 }
