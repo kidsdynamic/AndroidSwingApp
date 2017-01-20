@@ -25,6 +25,8 @@ import android.view.View;
 public class ViewPhoto extends ViewSponge {
     private float mStrokeWidthDp = 4;
 
+    private int mDesiredSize = 100;
+
     private Rect mRectPhoto;
     private Rect mRectBorder;
     private int mStrokeWidth;
@@ -95,7 +97,31 @@ public class ViewPhoto extends ViewSponge {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int width, height;
+
+        if (widthMode == MeasureSpec.EXACTLY) {
+            width = widthSize;
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            width = Math.min(mDesiredSize, widthSize);
+        } else {
+            width = mDesiredSize;
+        }
+
+        if (heightMode == MeasureSpec.EXACTLY) {
+            height = heightSize;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            height = Math.min(mDesiredSize, heightSize);
+        } else {
+            height = mDesiredSize;
+        }
+
+        setMeasuredDimension(width, height);
 
         updateRects(getMeasuredWidth(), getMeasuredHeight());
         makePhoto(mSource);
