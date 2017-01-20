@@ -11,8 +11,8 @@ import android.view.View;
  */
 
 public class ViewSponge extends View {
-    private float mShrinkWidth = 0f;
-    private float mShrinkHeight = 0f;
+    private float mShrinkWidth = 1.0f;
+    private float mShrinkHeight = 1.0f;
 
     public ViewSponge(Context context) {
         super(context);
@@ -40,9 +40,9 @@ public class ViewSponge extends View {
                 final int attr = typedArray.getIndex(idx);
 
                 if (attr == R.styleable.ViewSponge_shrinkWidth) {
-                    mShrinkWidth = typedArray.getFloat(R.styleable.ViewSponge_shrinkWidth, 0f);
+                    mShrinkWidth = typedArray.getFloat(R.styleable.ViewSponge_shrinkWidth, mShrinkWidth);
                 } else if (attr == R.styleable.ViewSponge_shrinkHeight) {
-                    mShrinkHeight = typedArray.getFloat(R.styleable.ViewSponge_shrinkHeight, 0f);
+                    mShrinkHeight = typedArray.getFloat(R.styleable.ViewSponge_shrinkHeight, mShrinkHeight);
                 }
             }
 
