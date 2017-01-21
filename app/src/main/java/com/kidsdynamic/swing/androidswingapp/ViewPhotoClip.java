@@ -80,7 +80,7 @@ public class ViewPhotoClip extends View {
                 final int attr = typedArray.getIndex(idx);
 
                 if (attr == R.styleable.ViewPhotoClip_android_src) {
-                    Drawable drawable = typedArray.getDrawable(R.styleable.ViewPhotoClip_android_src);
+                    Drawable drawable = typedArray.getDrawable(attr);
                     try {
                         mBitmapPhoto = ((BitmapDrawable) drawable).getBitmap().copy(Bitmap.Config.ARGB_8888, true);
                     } catch (NullPointerException e) {

@@ -40,9 +40,9 @@ public class ViewSponge extends View {
                 final int attr = typedArray.getIndex(idx);
 
                 if (attr == R.styleable.ViewSponge_shrinkWidth) {
-                    mShrinkWidth = typedArray.getFloat(R.styleable.ViewSponge_shrinkWidth, mShrinkWidth);
+                    mShrinkWidth = typedArray.getFloat(attr, mShrinkWidth);
                 } else if (attr == R.styleable.ViewSponge_shrinkHeight) {
-                    mShrinkHeight = typedArray.getFloat(R.styleable.ViewSponge_shrinkHeight, mShrinkHeight);
+                    mShrinkHeight = typedArray.getFloat(attr, mShrinkHeight);
                 }
             }
 

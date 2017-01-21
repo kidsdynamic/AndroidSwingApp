@@ -2,12 +2,11 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -18,19 +17,38 @@ import android.view.View;
  */
 
 public class ViewProgressCircle extends View {
-    private int mDesiredWidth;
-    private int mDesiredHeight;
+    public final int STROKE_TYPE_DOT = 0;
+    public final int STROKE_TYPE_ARC = 1;
 
-    private float mAttDotRadius = 2;
+    private int mDesiredSize;
 
-    private int mDotRadius;
+    private float mStrokeWidthDp = 4;
+    private int mStrokeWidth;
+    private int mStrokeType;
 
-    private Rect mDotRect[];
-    private Bitmap mBackgroundBitmap;
-    private int mBackgroundWidth = 0, mBackgroundHeight = 0;
+    private int mColorActive;
+    private int mColorNormal;
+
+    private int mDuration = 15000;  // ms
+    private int mTick;
+
+    private int mTotal = 12;
+    private int mProgress = 0;
+    private boolean mRepeat = false;
 
     private Handler mAnimateHandler;
-    private int mAnimateDot;
+
+    private float mDegree[] = null;
+    private float mRadius;
+    private int mCenterX;
+    private int mCenterY;
+
+    private OnProgressListener mOnProgressListener = null;
+
+    public ViewProgressCircle(Context context) {
+        super(context);
+        init(context, null);
+    }
 
     public ViewProgressCircle(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -43,6 +61,9 @@ public class ViewProgressCircle extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        mColorActive = ContextCompat.getColor(context, R.color.color_orange);
+        mColorNormal = ContextCompat.getColor(context, R.color.color_white);
+
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(
                     attrs, R.styleable.ViewProgressCircle);
@@ -51,23 +72,29 @@ public class ViewProgressCircle extends View {
             for (int idx = 0; idx < count; idx++) {
                 final int attr = typedArray.getIndex(idx);
 
-                if (attr == R.styleable.ViewProgressCircle_dotRadius)
-                    mAttDotRadius = typedArray.getDimension(R.styleable.ViewProgressCircle_dotRadius, mAttDotRadius);
+                if (attr == R.styleable.ViewProgressCircle_strokeWidth) {
+                    mStrokeWidthDp = typedArray.getDimension(attr, mStrokeWidthDp);
+                    mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, getResources().getDisplayMetrics());
+                } else if (attr == R.styleable.ViewProgressCircle_strokeActiveColor) {
+                    mColorActive = typedArray.getColor(attr, mColorActive);
+                } else if (attr == R.styleable.ViewProgressCircle_strokeNormalColor) {
+                    mColorNormal = typedArray.getColor(attr, mColorNormal);
+                } else if (attr == R.styleable.ViewProgressCircle_strokeType) {
+                    mStrokeType = typedArray.getInteger(attr, mStrokeType);
+                } else if (attr == R.styleable.ViewProgressCircle_duration) {
+                    mDuration = typedArray.getInteger(attr, mDuration);
+                } else if (attr == R.styleable.ViewProgressCircle_total) {
+                    mTotal = typedArray.getInteger(attr, mTotal);
+                } else if (attr == R.styleable.ViewProgressCircle_repeat) {
+                    mRepeat = typedArray.getBoolean(attr, mRepeat);
+                }
             }
-
-            mDotRadius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mAttDotRadius, getResources().getDisplayMetrics());
 
             typedArray.recycle();
         }
 
-        mDesiredWidth = (int) (mDotRadius * 14.0);
-        mDesiredHeight = (int) (mDotRadius * 14.0);
-
-        mDotRect = new Rect[12];
-
+        mDesiredSize = (int) (mStrokeWidth * 14.0);
         mAnimateHandler = new Handler();
-        mAnimateDot = 0;
-        mAnimateHandler.post(mAnimateRunnable);
     }
 
     @Override
@@ -84,80 +111,181 @@ public class ViewProgressCircle extends View {
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize;
         } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(mDesiredWidth, widthSize);
+            width = Math.min(mDesiredSize, widthSize);
         } else {
-            width = mDesiredWidth;
+            width = mDesiredSize;
         }
 
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = Math.min(mDesiredHeight, heightSize);
+            height = Math.min(mDesiredSize, heightSize);
         } else {
-            height = mDesiredHeight;
+            height = mDesiredSize;
         }
 
         setMeasuredDimension(width, height);
+
+        updateVector();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (getMeasuredWidth() != mBackgroundWidth || getMeasuredHeight() != mBackgroundHeight)
-            makeBackground(getMeasuredWidth(), getMeasuredHeight());
+        int progress = mProgress % mTotal;
 
-        canvas.drawBitmap(mBackgroundBitmap, 0, 0, null);
+        if (mStrokeType == STROKE_TYPE_DOT) {
+            drawDot(canvas, progress, mRepeat);
 
-        for (int idx = 0; idx < mDotRect.length; idx++)
-            paintDot(canvas, mDotRect[idx], idx == mAnimateDot);
-    }
-
-    private void paintDot(Canvas canvas, Rect rect, boolean focus) {
-        final Paint paint = new Paint();
-        paint.setAntiAlias(true);
-        if (focus)
-            paint.setColor(Color.WHITE);
-        else
-            paint.setColor(Color.LTGRAY);
-
-        canvas.drawCircle(rect.centerX(), rect.centerY(), mDotRadius, paint);
-    }
-
-    private void updateRects() {
-        int centerX = mBackgroundWidth / 2;
-        int centerY = mBackgroundHeight / 2;
-        int radius = Math.min(mBackgroundWidth, mBackgroundHeight) / 2 - mDotRadius;
-
-        for (int idx = 0; idx < mDotRect.length; idx++) {
-            int x = (int) (centerX + (radius * Math.cos(idx * 30 * 3.1415 / 180)));
-            int y = (int) (centerY + (radius * Math.sin(idx * 30 * 3.1415 / 180)));
-
-            mDotRect[idx] = new Rect(x - mDotRadius, y - mDotRadius, x + mDotRadius, y + mDotRadius);
+        } else if (mStrokeType == STROKE_TYPE_ARC) {
+            drawArc(canvas, progress, mRepeat);
         }
     }
 
-    private void makeBackground(int width, int height) {
-        mBackgroundWidth = width;
-        mBackgroundHeight = height;
-
-        updateRects();
-
-        mBackgroundBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(mBackgroundBitmap);
-
+    private void drawDot(Canvas canvas, int progress, boolean repeat) {
         final Paint paint = new Paint();
         paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
+
+        for (int idx = 0; idx < mTotal; idx++) {
+            boolean reach = repeat ? idx <= mProgress : idx == progress;
+
+            int dotCenterX = (int) (mCenterX + (mRadius * Math.cos(mDegree[idx] * 3.1415 / 180)));
+            int dotCenterY = (int) (mCenterY + (mRadius * Math.sin(mDegree[idx] * 3.1415 / 180)));
+
+            paint.setColor(reach ? mColorActive : mColorNormal);
+            canvas.drawCircle(dotCenterX, dotCenterY, mStrokeWidth / 2, paint);
+        }
     }
 
+    private void drawArc(Canvas canvas, int progress, boolean repeat) {
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(mStrokeWidth);
+        paint.setStyle(Paint.Style.STROKE);
+
+        RectF rect = new RectF(
+                mCenterX - mRadius, mCenterY - mRadius,
+                mCenterX + mRadius, mCenterY + mRadius);
+
+        float degreeActive, degreeNormal, sweep;
+
+        if (repeat) {
+            degreeNormal = mDegree[progress];
+            sweep = (360 / mTotal);
+            degreeActive = mDegree[progress] - sweep;
+        } else {
+            degreeNormal = mDegree[progress];
+            degreeActive = 270;
+            if (degreeActive < degreeNormal)
+                sweep = degreeNormal - degreeActive;
+            else
+                sweep = 90 + degreeNormal;
+        }
+
+        paint.setColor(mColorActive);
+        canvas.drawArc(rect, (float) Math.floor(degreeActive), (float) Math.ceil(sweep), false, paint);
+
+        paint.setColor(mColorNormal);
+        canvas.drawArc(rect, (float) Math.floor(degreeNormal), (float) Math.ceil(360 - sweep), false, paint);
+    }
+
+    private void updateVector() {
+        mDegree = new float[mTotal];
+
+        float degree = 270;
+        float step = 360 / mTotal;
+        for (int idx = 0; idx < mTotal; idx++) {
+            mDegree[idx] = degree;
+
+            degree += step;
+            if (degree < 0)
+                degree += 360;
+        }
+
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
+
+        mRadius = (Math.min(width, height) - mStrokeWidth) / 2;
+        mCenterX = width / 2;
+        mCenterY = height / 2;
+
+        mTick = mDuration / mTotal;
+    }
+
+    private ViewProgressCircle mThis = this;
     private Runnable mAnimateRunnable = new Runnable() {
         @Override
         public void run() {
-            mAnimateDot++;
-            if (mAnimateDot >= mDotRect.length)
-                mAnimateDot = 0;
+            if (mOnProgressListener != null) {
+                mOnProgressListener.onProgress(mThis, mProgress);
 
-            postInvalidate();
-            mAnimateHandler.postDelayed(mAnimateRunnable, 300);
+                if (!mRepeat) {
+                    if (!mRepeat && mProgress == 0)
+                        mOnProgressListener.onStart(mThis);
+                    if (mProgress >= (mTotal - 1))
+                        mOnProgressListener.onFinish(mThis);
+                }
+            }
+
+            mProgress++;
+
+            if (mRepeat && mProgress >= mTotal)
+                mProgress = 0;
+
+            if (mProgress <= mTotal)
+                postInvalidate();
+
+            if (mProgress < mTotal)
+                mAnimateHandler.postDelayed(mAnimateRunnable, mTick);
         }
     };
+
+    public void setOnProgressListener(OnProgressListener listener) {
+        mOnProgressListener = listener;
+    }
+
+    public void reset() {
+
+    }
+
+    public void start() {
+        mAnimateHandler.post(mAnimateRunnable);
+    }
+
+    public void pause() {
+
+    }
+
+    public void setTotal(int total) {
+        mTotal = total;
+        updateVector();
+    }
+
+    public int getTotal() {
+        return mTotal;
+    }
+
+    public void setProgress(int progress) {
+        mProgress = progress;
+    }
+
+    public int getProgress() {
+        return mProgress;
+    }
+
+    public void setDuration(int duration) {
+
+    }
+
+    public int getDuration() {
+        return mDuration;
+    }
+
+    public interface OnProgressListener {
+        void onStart(ViewProgressCircle view);
+
+        void onProgress(ViewProgressCircle view, int progress);
+
+        void onFinish(ViewProgressCircle view);
+    }
+
 }

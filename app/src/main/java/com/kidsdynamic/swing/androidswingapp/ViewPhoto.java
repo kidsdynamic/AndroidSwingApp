@@ -14,9 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.View;
 
 /**
  * Created by 03543 on 2017/1/2.
@@ -34,7 +32,7 @@ public class ViewPhoto extends ViewSponge {
     private Bitmap mSource = null;
     private Bitmap mPhoto = null;
 
-    private int mColorSelect;
+    private int mColorActive;
     private int mColorNormal;
 
     private boolean mSelected = true;
@@ -58,7 +56,7 @@ public class ViewPhoto extends ViewSponge {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        mColorSelect = ContextCompat.getColor(context, R.color.color_orange);
+        mColorActive = ContextCompat.getColor(context, R.color.color_orange);
         mColorNormal = ContextCompat.getColor(context, R.color.color_white);
 
         if (attrs != null) {
@@ -70,22 +68,22 @@ public class ViewPhoto extends ViewSponge {
                 final int attr = typedArray.getIndex(idx);
 
                 if (attr == R.styleable.ViewPhoto_android_src) {
-                    Drawable drawable = typedArray.getDrawable(R.styleable.ViewPhoto_android_src);
+                    Drawable drawable = typedArray.getDrawable(attr);
                     setPhoto(((BitmapDrawable) drawable).getBitmap());
-                } else if (attr == R.styleable.ViewPhoto_borderStroke) {
-                    mStrokeWidthDp = typedArray.getDimension(R.styleable.ViewPhoto_borderStroke, mStrokeWidthDp);
-                } else if (attr == R.styleable.ViewPhoto_borderSelectColor) {
-                    mColorSelect = typedArray.getColor(R.styleable.ViewPhoto_borderSelectColor, mColorSelect);
-                } else if (attr == R.styleable.ViewPhoto_borderNormalColor) {
-                    mColorNormal = typedArray.getColor(R.styleable.ViewPhoto_borderNormalColor, mColorNormal);
+                } else if (attr == R.styleable.ViewPhoto_strokeWidth) {
+                    mStrokeWidthDp = typedArray.getDimension(attr, mStrokeWidthDp);
+                } else if (attr == R.styleable.ViewPhoto_strokeActiveColor) {
+                    mColorActive = typedArray.getColor(attr, mColorActive);
+                } else if (attr == R.styleable.ViewPhoto_strokeNormalColor) {
+                    mColorNormal = typedArray.getColor(attr, mColorNormal);
                 } else if (attr == R.styleable.ViewPhoto_selected) {
-                    mSelected = typedArray.getBoolean(R.styleable.ViewPhoto_selected, mSelected);
+                    mSelected = typedArray.getBoolean(attr, mSelected);
                 } else if (attr == R.styleable.ViewPhoto_showCross) {
-                    mShowCross = typedArray.getBoolean(R.styleable.ViewPhoto_showCross, mShowCross);
+                    mShowCross = typedArray.getBoolean(attr, mShowCross);
                 } else if (attr == R.styleable.ViewPhoto_showBorder) {
-                    mShowBorder = typedArray.getBoolean(R.styleable.ViewPhoto_showBorder, mShowBorder);
+                    mShowBorder = typedArray.getBoolean(attr, mShowBorder);
                 } else if (attr == R.styleable.ViewPhoto_showDarker) {
-                    mShowDarker = typedArray.getBoolean(R.styleable.ViewPhoto_showDarker, mShowDarker);
+                    mShowDarker = typedArray.getBoolean(attr, mShowDarker);
                 }
             }
 
@@ -135,10 +133,10 @@ public class ViewPhoto extends ViewSponge {
             paintPhoto(canvas, mRectPhoto, mShowDarker);
 
         if (mShowBorder)
-            paintBorder(canvas, mRectBorder, mSelected ? mColorSelect : mColorNormal);
+            paintBorder(canvas, mRectBorder, mSelected ? mColorActive : mColorNormal);
 
         if (mShowCross)
-            paintCross(canvas, mRectBorder, mSelected ? mColorSelect : mColorNormal);
+            paintCross(canvas, mRectBorder, mSelected ? mColorActive : mColorNormal);
     }
 
     private void paintBorder(Canvas canvas, Rect rect, int color) {

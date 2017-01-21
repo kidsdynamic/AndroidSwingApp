@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <attr name="strokeWidth" format="dimension" />
+    <attr name="strokeActiveColor" format="color" />
+    <attr name="strokeNormalColor" format="color" />
+
     <declare-styleable name="ViewSponge">
         <attr name="shrinkWidth" format="float" />
         <attr name="shrinkHeight" format="float" />
     </declare-styleable>
 
     <declare-styleable name="ViewProgressCircle">
-        <attr name="dotRadius" format="dimension" />
+        <attr name="strokeWidth" />
+        <attr name="strokeActiveColor" />
+        <attr name="strokeNormalColor" />
+        <attr name="duration" format="integer" />
+        <attr name="total" format="integer" />
+        <attr name="repeat" format="boolean" />
+        <attr name="strokeType" format="enum">
+            <enum name="dot" value="0" />
+            <enum name="arc" value="1" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="ViewPhoto">
         <attr name="android:src" />
-        <attr name="borderStroke" format="dimension" />
-        <attr name="borderSelectColor" format="color" />
-        <attr name="borderNormalColor" format="color" />
+        <attr name="strokeWidth" />
+        <attr name="strokeActiveColor" />
+        <attr name="strokeNormalColor" />
         <attr name="selected" format="boolean" />
         <attr name="showCross" format="boolean" />
         <attr name="showBorder" format="boolean" />

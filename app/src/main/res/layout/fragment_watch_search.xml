@@ -19,7 +19,6 @@
         android:layout_weight="11">
 
         <TextView
-            android:id="@+id/watch_searching"
             style="@style/textview_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -27,10 +26,16 @@
             android:text="Searching" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewProgressCircle
+            android:id="@+id/watch_search_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="60dp"
-            app:dotRadius="2dp" />
+            app:strokeWidth="4dp"
+            app:strokeActiveColor="@color/color_white_snow"
+            app:strokeNormalColor="@color/color_gray_light"
+            app:duration="15000"
+            app:strokeType="dot"
+            app:repeat="false"/>
     </RelativeLayout>
 
 </LinearLayout>
