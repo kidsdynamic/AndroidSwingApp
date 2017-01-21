@@ -44,10 +44,16 @@ public class FragmentBoot extends ViewFragment {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            String name =
-                    (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals("")) ?
-                            FragmentSignupLanguage.class.getName() :
-                            FragmentSignupLogin.class.getName();
+            String name;
+            if (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals("")) {
+                name = FragmentSignupLanguage.class.getName();
+            } else {
+                if (mActivityMain.mConfig.getString(Config.KEY_MAIL).equals("") || mActivityMain.mConfig.getString(Config.KEY_PASSWORD).equals("")) {
+                    name = FragmentSignupLogin.class.getName();
+                } else {
+                    name = FragmentSyncNow.class.getName();
+                }
+            }
 
             Fragment fragment = Fragment.instantiate(mActivityMain, name, null);
             getFragmentManager()

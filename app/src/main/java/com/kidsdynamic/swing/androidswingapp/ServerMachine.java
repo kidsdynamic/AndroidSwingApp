@@ -27,6 +27,7 @@ public class ServerMachine {
     private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
     private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
     private final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
+    private final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
     private final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
     private final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
 
@@ -55,6 +56,7 @@ public class ServerMachine {
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
     private Handler mHandler = new Handler();
     private Context mContext;
+    private String mAuthToken = null;
 
     private void Log(String msg) {
         Log.i("ServerMachine", msg);
@@ -107,7 +109,15 @@ public class ServerMachine {
     };
 
     private Request<NetworkResponse> NewRequest(int method, String address, Map<String, String> map, String filename) {
-        return new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename);
+        return new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename, mAuthToken);
+    }
+
+    public void setAuthToken(String token) {
+        mAuthToken = token;
+    }
+
+    public String getAuthToken() {
+        return mAuthToken;
     }
 
     public void userLogin(ResponseListener response, String email, String password) {
@@ -133,6 +143,13 @@ public class ServerMachine {
         map.put("email", email);
         map.put("token", token);
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_IS_TOKEN_VALID, map, null), response));
+    }
+
+    public void userIsMailAvailableToRegister(ResponseListener response, String email) {
+        Map<String, String> map = new HashMap<>();
+        map.put("email", email);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER, map, null), response));
+
     }
 
     public void userUpdateProfile(ResponseListener response, String firstName, String lastName, String phoneNumber, String zipCode) {
@@ -320,6 +337,7 @@ public class ServerMachine {
     private class TaskItem {
         Request<NetworkResponse> mRequest;
         ResponseListener mResponseListener;
+        String mAuthToken;
 
         TaskItem(Request<NetworkResponse> request, ResponseListener response) {
             mRequest = request;

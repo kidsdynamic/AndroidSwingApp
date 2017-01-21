@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ServerRequest extends Request<NetworkResponse> {
@@ -35,14 +36,16 @@ public class ServerRequest extends Request<NetworkResponse> {
     private Map<String, String> mMap;
     private Response.Listener<NetworkResponse> mListener;
     private HttpEntity mHttpEntity = null;
+    protected String mAuthToken = null;
 
-    public ServerRequest(Context context, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener, Map<String, String> map, String filePath) {
+    public ServerRequest(Context context, int method, String url, Response.Listener<NetworkResponse> listener, Response.ErrorListener errorListener, Map<String, String> map, String filePath, String token) {
         super(method, url, errorListener);
 
         mContext = context;
         mUrl = url;
         mListener = listener;
         mMap = map;
+        mAuthToken = token;
 
         if (filePath != null && !filePath.equals("")) {
             File file = new File(filePath);
@@ -99,6 +102,18 @@ public class ServerRequest extends Request<NetworkResponse> {
                 VolleyLog.e("IOException writing to ByteArrayOutputStream");
             }
             return bos.toByteArray();
+        }
+    }
+
+    @Override
+    public Map<String, String> getHeaders() throws AuthFailureError {
+
+        if (mAuthToken!=null && !mAuthToken.equals("")) {
+            Map<String,String> map = new HashMap<>();
+            map.put("x-auth-token", mAuthToken);
+            return map;
+        } else {
+            return super.getHeaders();
         }
     }
 
