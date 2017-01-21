@@ -17,6 +17,8 @@ import android.view.View;
  */
 
 public class ViewProgressCircle extends View {
+    private final float START_DEGREE = 270;
+
     public final int STROKE_TYPE_DOT = 0;
     public final int STROKE_TYPE_ARC = 1;
 
@@ -35,8 +37,9 @@ public class ViewProgressCircle extends View {
     private int mTotal = 12;
     private int mProgress = 0;
     private boolean mRepeat = false;
+    private boolean mPause;
 
-    private Handler mAnimateHandler;
+    private Handler mHandler;
 
     private float mDegree[] = null;
     private float mRadius;
@@ -62,7 +65,7 @@ public class ViewProgressCircle extends View {
 
     private void init(Context context, AttributeSet attrs) {
         mColorActive = ContextCompat.getColor(context, R.color.color_orange);
-        mColorNormal = ContextCompat.getColor(context, R.color.color_white);
+        mColorNormal = ContextCompat.getColor(context, R.color.color_white_snow);
 
         if (attrs != null) {
             TypedArray typedArray = context.obtainStyledAttributes(
@@ -94,7 +97,7 @@ public class ViewProgressCircle extends View {
         }
 
         mDesiredSize = (int) (mStrokeWidth * 14.0);
-        mAnimateHandler = new Handler();
+        mHandler = new Handler();
     }
 
     @Override
@@ -131,13 +134,10 @@ public class ViewProgressCircle extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int progress = mProgress % mTotal;
-
         if (mStrokeType == STROKE_TYPE_DOT) {
-            drawDot(canvas, progress, mRepeat);
-
+            drawDot(canvas, mProgress, mRepeat);
         } else if (mStrokeType == STROKE_TYPE_ARC) {
-            drawArc(canvas, progress, mRepeat);
+            drawArc(canvas, mProgress, mRepeat);
         }
     }
 
@@ -147,9 +147,10 @@ public class ViewProgressCircle extends View {
 
         for (int idx = 0; idx < mTotal; idx++) {
             boolean reach = repeat ? idx == mProgress : idx <= progress;
+            float degree = (START_DEGREE + mDegree[idx]) % 360;
 
-            int dotCenterX = (int) (mCenterX + (mRadius * Math.cos(mDegree[idx] * 3.1415 / 180)));
-            int dotCenterY = (int) (mCenterY + (mRadius * Math.sin(mDegree[idx] * 3.1415 / 180)));
+            int dotCenterX = (int) (mCenterX + (mRadius * Math.cos(degree * 3.1415 / 180)));
+            int dotCenterY = (int) (mCenterY + (mRadius * Math.sin(degree * 3.1415 / 180)));
 
             paint.setColor(reach ? mColorActive : mColorNormal);
             canvas.drawCircle(dotCenterX, dotCenterY, mStrokeWidth / 2, paint);
@@ -166,37 +167,33 @@ public class ViewProgressCircle extends View {
                 mCenterX - mRadius, mCenterY - mRadius,
                 mCenterX + mRadius, mCenterY + mRadius);
 
-        float degreeActive, degreeNormal, sweep;
+        float degree, sweep;
 
-        if (repeat) {
-            degreeNormal = mDegree[progress];
-            sweep = (360 / mTotal);
-            degreeActive = mDegree[progress] - sweep;
-        } else {
-            degreeNormal = mDegree[progress];
-            degreeActive = 270;
-            sweep = degreeActive <= degreeNormal ? (degreeNormal + 90) : (degreeNormal - degreeActive);
+        if (progress < 0) {
+            degree = START_DEGREE;
+            sweep = 0;
+        } else if (repeat) {
+            degree = (START_DEGREE + mDegree[progress]) % 360;
+            sweep = 360 / mTotal;
+        } else{
+            degree = START_DEGREE;
+            sweep = progress >= mTotal ? 360 : mDegree[progress];
         }
 
         paint.setColor(mColorActive);
-        canvas.drawArc(rect, (float) Math.floor(degreeActive), (float) Math.ceil(sweep), false, paint);
+        canvas.drawArc(rect, degree, sweep, false, paint);
 
         paint.setColor(mColorNormal);
-        canvas.drawArc(rect, (float) Math.floor(degreeNormal), (float) Math.ceil(360 - sweep), false, paint);
+        canvas.drawArc(rect, (degree + sweep) % 360, 360 - sweep, false, paint);
     }
 
     private void updateVector() {
         mDegree = new float[mTotal];
 
-        float degree = 270;
+        float degree = 0;
         float step = 360 / mTotal;
-        for (int idx = 0; idx < mTotal; idx++) {
+        for (int idx = 0; idx < mTotal; idx++, degree += step)
             mDegree[idx] = degree;
-
-            degree += step;
-            if (degree < 0)
-                degree += 360;
-        }
 
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
@@ -209,30 +206,24 @@ public class ViewProgressCircle extends View {
     }
 
     private ViewProgressCircle mThis = this;
-    private Runnable mAnimateRunnable = new Runnable() {
+    private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mOnProgressListener != null) {
-                mOnProgressListener.onProgress(mThis, mProgress);
-
-                if (!mRepeat) {
-                    if (!mRepeat && mProgress == 0)
-                        mOnProgressListener.onStart(mThis);
-                    if (mProgress >= (mTotal - 1))
-                        mOnProgressListener.onFinish(mThis);
-                }
-            }
+            if (mPause)
+                return;
 
             mProgress++;
+            postInvalidate();
+
+            if (mOnProgressListener != null) {
+                mOnProgressListener.onProgress(mThis, mProgress, mTotal);
+            }
 
             if (mRepeat && mProgress >= mTotal)
                 mProgress = 0;
 
-            if (mProgress <= mTotal)
-                postInvalidate();
-
             if (mProgress < mTotal)
-                mAnimateHandler.postDelayed(mAnimateRunnable, mTick);
+                mHandler.postDelayed(mRunnable, mTick);
         }
     };
 
@@ -240,21 +231,24 @@ public class ViewProgressCircle extends View {
         mOnProgressListener = listener;
     }
 
-    public void reset() {
-
-    }
-
     public void start() {
-        mAnimateHandler.post(mAnimateRunnable);
+        mPause = false;
+        if (mOnProgressListener != null)
+            mOnProgressListener.onProgress(mThis, mProgress, mTotal);
+
+        mHandler.postDelayed(mRunnable, mTick);
     }
 
     public void pause() {
-
+        mPause = true;
+        mHandler.removeCallbacks(mRunnable);
     }
 
     public void setTotal(int total) {
+        pause();
         mTotal = total;
         updateVector();
+        postInvalidate();
     }
 
     public int getTotal() {
@@ -262,7 +256,10 @@ public class ViewProgressCircle extends View {
     }
 
     public void setProgress(int progress) {
+        pause();
         mProgress = progress;
+        updateVector();
+        postInvalidate();
     }
 
     public int getProgress() {
@@ -270,19 +267,25 @@ public class ViewProgressCircle extends View {
     }
 
     public void setDuration(int duration) {
-
+        pause();
+        mDuration = duration;
+        updateVector();
+        postInvalidate();
     }
 
     public int getDuration() {
         return mDuration;
     }
 
+    public void setRepeat(boolean repeat) {
+        pause();
+        mRepeat = repeat;
+        updateVector();
+        postInvalidate();
+    }
+
     public interface OnProgressListener {
-        void onStart(ViewProgressCircle view);
-
-        void onProgress(ViewProgressCircle view, int progress);
-
-        void onFinish(ViewProgressCircle view);
+        void onProgress(ViewProgressCircle view, int progress, int total);
     }
 
 }

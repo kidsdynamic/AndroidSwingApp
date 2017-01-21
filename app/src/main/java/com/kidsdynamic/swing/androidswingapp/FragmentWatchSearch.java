@@ -63,19 +63,13 @@ public class FragmentWatchSearch extends ViewFragment {
 
     private ViewProgressCircle.OnProgressListener mProgressListener = new ViewProgressCircle.OnProgressListener() {
         @Override
-        public void onStart(ViewProgressCircle view) {
-            searchStart();
-        }
-
-        @Override
-        public void onProgress(ViewProgressCircle view, int progress) {
-            Log.d("xxx", "onProgress:" + progress);
-        }
-
-        @Override
-        public void onFinish(ViewProgressCircle view) {
-            searchStop();
-            showSimulateDialog();
+        public void onProgress(ViewProgressCircle view, int progress, int total) {
+            if (progress == 0) {
+                searchStart();
+            } else if (progress == total) {
+                searchStop();
+                showSimulateDialog();
+            }
         }
     };
 

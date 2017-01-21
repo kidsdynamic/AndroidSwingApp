@@ -41,7 +41,7 @@ public class FragmentSyncSelect extends ViewFragment {
         // todo: load binded devices from server
         mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Kid 001", 0));
         mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", 0));
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid 003", 0));
+        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid XX3", 0));
 
         for (WatchContact.Device device : mDeviceList)
             addDevice(device);
@@ -90,7 +90,11 @@ public class FragmentSyncSelect extends ViewFragment {
 
             setSelected(mDeviceList.indexOf(device));
 
-            // todo: start to search device
+            // todo: attach device context to FragmentSyncSearch
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
+
+            mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
         }
     };
 }

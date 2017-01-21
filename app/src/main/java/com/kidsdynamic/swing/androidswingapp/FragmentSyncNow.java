@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Fragment;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,12 @@ public class FragmentSyncNow extends ViewFragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mActivityMain.selectFragment(FragmentWatchOwner.class.getName(), null);
+            WatchContact.Device device =
+                    new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", 0);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BUNDLE_KEY_DEVICE, device);
+            mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
         }
     };
 
