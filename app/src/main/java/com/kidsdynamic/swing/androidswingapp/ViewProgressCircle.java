@@ -24,7 +24,7 @@ public class ViewProgressCircle extends View {
 
     private float mStrokeWidthDp = 4;
     private int mStrokeWidth;
-    private int mStrokeType;
+    private int mStrokeType = STROKE_TYPE_DOT;
 
     private int mColorActive;
     private int mColorNormal;
@@ -146,7 +146,7 @@ public class ViewProgressCircle extends View {
         paint.setAntiAlias(true);
 
         for (int idx = 0; idx < mTotal; idx++) {
-            boolean reach = repeat ? idx <= mProgress : idx == progress;
+            boolean reach = repeat ? idx == mProgress : idx <= progress;
 
             int dotCenterX = (int) (mCenterX + (mRadius * Math.cos(mDegree[idx] * 3.1415 / 180)));
             int dotCenterY = (int) (mCenterY + (mRadius * Math.sin(mDegree[idx] * 3.1415 / 180)));
@@ -175,10 +175,7 @@ public class ViewProgressCircle extends View {
         } else {
             degreeNormal = mDegree[progress];
             degreeActive = 270;
-            if (degreeActive < degreeNormal)
-                sweep = degreeNormal - degreeActive;
-            else
-                sweep = 90 + degreeNormal;
+            sweep = degreeActive <= degreeNormal ? (degreeNormal + 90) : (degreeNormal - degreeActive);
         }
 
         paint.setColor(mColorActive);
