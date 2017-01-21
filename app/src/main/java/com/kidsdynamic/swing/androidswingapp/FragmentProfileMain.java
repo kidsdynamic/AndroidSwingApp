@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,7 @@ public class FragmentProfileMain extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_profile, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_profile_main, container, false);
 
         return mViewMain;
     }
