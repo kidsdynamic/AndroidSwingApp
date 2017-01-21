@@ -16,12 +16,28 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="11">
+        android:layout_weight="7">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_search_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:shrinkWidth="0.15" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_search_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:shrinkWidth="0.15" />
 
         <TextView
             style="@style/textview_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/watch_search_start"
+            android:layout_toStartOf="@+id/watch_search_end"
             android:gravity="center"
             android:text="Searching" />
 
@@ -29,13 +45,20 @@
             android:id="@+id/watch_search_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="60dp"
-            app:strokeWidth="4dp"
+            android:layout_toEndOf="@+id/watch_search_start"
+            android:layout_toStartOf="@+id/watch_search_end"
+            app:duration="15000"
+            app:repeat="false"
             app:strokeActiveColor="@color/color_white_snow"
             app:strokeNormalColor="@color/color_gray_light"
-            app:duration="15000"
             app:strokeType="dot"
-            app:repeat="false"/>
+            app:strokeWidth="4dp"
+            app:total="12" />
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"/>
 
 </LinearLayout>

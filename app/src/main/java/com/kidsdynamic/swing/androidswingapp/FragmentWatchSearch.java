@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 
 public class FragmentWatchSearch extends ViewFragment {
+
     private ActivityMain mActivityMain;
     private View mViewMain;
     private ImageView mViewBack;
@@ -37,7 +38,15 @@ public class FragmentWatchSearch extends ViewFragment {
 
         mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.watch_search_progress);
         mViewProgress.setOnProgressListener(mProgressListener);
-        mViewProgress.start();
+
+        Handler handle = new Handler();
+        handle.post(new Runnable() {
+            @Override
+            public void run() {
+                mViewProgress.start();
+                searchStart();
+            }
+        });
 
         return mViewMain;
     }
@@ -64,9 +73,8 @@ public class FragmentWatchSearch extends ViewFragment {
     private ViewProgressCircle.OnProgressListener mProgressListener = new ViewProgressCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewProgressCircle view, int progress, int total) {
-            if (progress == 0) {
-                searchStart();
-            } else if (progress == total) {
+
+            if(progress >= total) {
                 searchStop();
                 showSimulateDialog();
             }
