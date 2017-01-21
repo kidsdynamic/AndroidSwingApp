@@ -30,6 +30,7 @@ public class Config {
     public final static String KEY_LAST_NAME = "KEY_LAST_NAME";
     public final static String KEY_PHONE = "KEY_PHONE";
     public final static String KEY_ZIP = "KEY_ZIP";
+    public final static String KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN";
 
     private void LOG(String message) {
         Log.d("Config", message);

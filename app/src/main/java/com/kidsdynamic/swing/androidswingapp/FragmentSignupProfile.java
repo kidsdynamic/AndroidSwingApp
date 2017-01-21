@@ -48,6 +48,9 @@ public class FragmentSignupProfile extends ViewFragment {
 
     private Uri mPhotoUri;
 
+    private String mRegisterMail = null;
+    private String mRegisterPassword = null;
+
     public final static int ACTIVITY_RESULT_CAMERA_REQUEST = 1888;
     public final static int ACTIVITY_RESULT_PHOTO_PICK = 9111;
 
@@ -60,6 +63,13 @@ public class FragmentSignupProfile extends ViewFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_signup_profile, container, false);
+
+        Bundle bundle = getArguments();
+        if (bundle!=null) {
+            mRegisterMail = bundle.getString("MAIL");
+            mRegisterPassword = bundle.getString("PASSWORD");
+            // GioChen Todo : If mail and password are not null, register below.
+        }
 
         mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.signup_profile_photo);
         mViewPhoto.setOnClickListener(mPhotoClickListener);

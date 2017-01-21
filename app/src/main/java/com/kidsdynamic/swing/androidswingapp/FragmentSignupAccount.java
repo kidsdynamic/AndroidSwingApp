@@ -10,6 +10,12 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 /**
  * Created by 03543 on 2016/12/30.
@@ -72,17 +78,13 @@ public class FragmentSignupAccount extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewPassword && actionId == EditorInfo.IME_ACTION_DONE) {
-                String mail = mViewEmail.getText().toString();
-                String password = mViewPassword.getText().toString();
+                mMail = mViewEmail.getText().toString();
+                mPassword = mViewPassword.getText().toString();
 
-                mActivityMain.mConfig.setString(Config.KEY_MAIL, mail);
-                mActivityMain.mConfig.setString(Config.KEY_PASSWORD, password);
-
-                if (mail.equals("") || password.equals("")) {
+                if (mMail.equals("") || mPassword.equals("")) {
                     mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
-                    mActivityMain.mServiceMachine.userLogin(mLoginListener, mail, password);
-                    //mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+                    mActivityMain.mServiceMachine.userLogin(mLoginListener, mMail, mPassword);
                 }
             }
 
@@ -90,11 +92,82 @@ public class FragmentSignupAccount extends ViewFragment {
         }
     };
 
+    private String mMail = "";
+    private String mPassword = "";
+
     ServerMachine.ResponseListener mLoginListener = new ServerMachine.ResponseListener() {
         @Override
         public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "" + success + " resultCode " + resultCode + " result " + result);
-            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+
+            if (resultCode==200) {
+                String auth_token = "";
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    auth_token = jsonObject.getString("access_token");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, auth_token);
+                mActivityMain.mServiceMachine.setAuthToken(auth_token);
+                mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+
+            } else if (resultCode==400) {
+                mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
+            } else {
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    ServerMachine.ResponseListener mRetrieveUserProfileListener = new ServerMachine.ResponseListener() {
+        @Override
+        public void onResponse(boolean success, int resultCode, String result) {
+            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+            if (resultCode==200) {
+                mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
+                mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject user = new JSONObject(jsonObject.getString("user"));
+
+                    mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, user.getString("firstName"));
+                    mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, user.getString("lastName"));
+                    mActivityMain.mConfig.setString(Config.KEY_PHONE, user.getString("phoneNumber"));
+                    mActivityMain.mConfig.setString(Config.KEY_ZIP, user.getString("zipCode"));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            } else if (resultCode==400) {
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            } else if (resultCode==500) {
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            } else {
+
+            }
+        }
+    };
+
+    ServerMachine.ResponseListener mMailCheckListener = new ServerMachine.ResponseListener() {
+        @Override
+        public void onResponse(boolean success, int resultCode, String result) {
+            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+            if (resultCode==200) {
+                //mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
+                //mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
+                Bundle bundle = new Bundle();
+                bundle.putString("MAIL", mMail);
+                bundle.putString("PASSWORD", mPassword);
+
+                mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), bundle);
+            } else if (resultCode==409) {
+                Toast.makeText(mActivityMain,"Login failed or the email is already registered.",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
