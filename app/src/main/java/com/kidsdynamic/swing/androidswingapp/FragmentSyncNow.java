@@ -44,7 +44,7 @@ public class FragmentSyncNow extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sync", true, true,
+        return new ViewFragmentConfig("Sync", true, true, false,
                 R.mipmap.city_overall, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 

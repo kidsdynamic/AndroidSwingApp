@@ -61,7 +61,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sync", true, true,
+        return new ViewFragmentConfig("Sync", true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 

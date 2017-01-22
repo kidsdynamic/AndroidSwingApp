@@ -55,7 +55,7 @@ public class FragmentPhotoClip extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Photo", false, false,
+        return new ViewFragmentConfig("Photo", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
