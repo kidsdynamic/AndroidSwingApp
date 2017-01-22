@@ -24,8 +24,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ServerMachine {
     private final static String SERVER_ADDRESS = "https://childrenlab.com:8111/v1";
 
-    private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
-    private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
+    private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/userLogin";
+    private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/userRegister";
     private final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
     private final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
     private final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
@@ -122,27 +122,19 @@ public class ServerMachine {
 
     public void userLogin(ResponseListener response, String email, String password) {
         Map<String, String> map = new HashMap<>();
-        map.put("email", email);
-        map.put("password", password);
+        map.put("json", ServerGson.getUserLogin(email, password));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_LOGIN, map, null), response));
     }
 
     public void userRegister(ResponseListener response, String email, String password, String firstName, String lastName, String phoneNumber, String zipCode) {
         Map<String, String> map = new HashMap<>();
-        map.put("email", email);
-        map.put("password", password);
-        map.put("firstName", firstName);
-        map.put("lastName", lastName);
-        map.put("phoneNumber", phoneNumber);
-        map.put("zipCode", zipCode);
+        map.put("json", ServerGson.getUserRegister(email, password, firstName, lastName, phoneNumber, zipCode));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_REGISTER, map, null), response));
-        //mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, "http://posttestserver.com/post.php", map, null), response));
     }
 
     public void userIsTokenValid(ResponseListener response, String email, String token) {
         Map<String, String> map = new HashMap<>();
-        map.put("email", email);
-        map.put("token", token);
+        map.put("json", ServerGson.getUserIsTokenValid(email, token));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_IS_TOKEN_VALID, map, null), response));
     }
 
@@ -155,10 +147,7 @@ public class ServerMachine {
 
     public void userUpdateProfile(ResponseListener response, String firstName, String lastName, String phoneNumber, String zipCode) {
         Map<String, String> map = new HashMap<>();
-        map.put("firstName", firstName);
-        map.put("lastName", lastName);
-        map.put("phoneNumber", phoneNumber);
-        map.put("zipCode", zipCode);
+        map.put("json", ServerGson.getUserUpdateProfile(firstName, lastName, phoneNumber, zipCode));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_USER_UPDATE_PROFILE, map, null), response));
     }
 

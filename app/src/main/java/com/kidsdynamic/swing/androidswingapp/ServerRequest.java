@@ -29,6 +29,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Exchanger;
 
 public class ServerRequest extends Request<NetworkResponse> {
     private Context mContext;
@@ -95,19 +96,43 @@ public class ServerRequest extends Request<NetworkResponse> {
 
     @Override
     public byte[] getBody() throws AuthFailureError {
+        StringBuilder encodedParams = new StringBuilder();
+        byte[] rtn = null;
+
         if (mHttpEntity == null) {
-            StringBuilder encodedParams = new StringBuilder();
-            try {
-                for (Map.Entry<String, String> entry : mMap.entrySet()) {
-                    encodedParams.append(URLEncoder.encode(entry.getKey(), getParamsEncoding()));
-                    encodedParams.append('=');
-                    encodedParams.append(URLEncoder.encode(entry.getValue(), getParamsEncoding()));
-                    encodedParams.append('&');
-                }
-                return encodedParams.toString().getBytes(getParamsEncoding());
-            } catch (UnsupportedEncodingException uee) {
-                throw new RuntimeException("Encoding not supported: " + getParamsEncoding(), uee);
+            switch(mMethod) {
+                case Method.PUT:
+                case Method.POST: {
+                    try {
+                        for (Map.Entry<String, String> entry : mMap.entrySet()) {
+                            if (entry.getKey().equals("json")) {
+                                encodedParams.append(entry.getValue());
+                                break;
+                            }
+                        }
+                        rtn = encodedParams.toString().getBytes(getParamsEncoding());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } break;
+
+                case Method.GET:
+                case Method.DELETE:
+                default: {
+                    try {
+                        for (Map.Entry<String, String> entry : mMap.entrySet()) {
+                            encodedParams.append(URLEncoder.encode(entry.getKey(), getParamsEncoding()));
+                            encodedParams.append('=');
+                            encodedParams.append(URLEncoder.encode(entry.getValue(), getParamsEncoding()));
+                            encodedParams.append('&');
+                        }
+                        rtn = encodedParams.toString().getBytes(getParamsEncoding());
+                    } catch (UnsupportedEncodingException uee) {
+                        throw new RuntimeException("Encoding not supported: " + getParamsEncoding(), uee);
+                    }
+                } break;
             }
+            return rtn;
         } else {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             try {

@@ -77,7 +77,7 @@ public class FragmentSignupProfile extends ViewFragment {
         if (bundle!=null) {
             mRegisterMail = bundle.getString("MAIL");
             mRegisterPassword = bundle.getString("PASSWORD");
-            // GioChen Todo : If mail and password are not null, register below.
+            // GioChen Todo : If mail and password are not null, userRegister below.
             Log.d("TEST", "mail " + mRegisterMail + " password "+ mRegisterPassword);
         }
 
