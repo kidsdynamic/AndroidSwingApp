@@ -33,7 +33,7 @@ public class FragmentDashboard extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Dashboard", true, true,
+        return new ViewFragmentConfig("Dashboard", true, true, false,
                 mBackgroundRes, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 }

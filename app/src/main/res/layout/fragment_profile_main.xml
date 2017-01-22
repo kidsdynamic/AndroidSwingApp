@@ -54,7 +54,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
-                android:id="@+id/profile_main_hosting_container"
+                android:id="@+id/profile_main_device_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -62,7 +62,7 @@
                 android:orientation="horizontal">
 
                 <com.kidsdynamic.swing.androidswingapp.ViewPhoto
-                    android:id="@+id/profile_main_hosting_add"
+                    android:id="@+id/profile_main_device_add"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     app:selected="false"
@@ -133,6 +133,7 @@
 
         <Button
             style="@style/button_main"
+            android:id="@+id/profile_main_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

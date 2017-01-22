@@ -33,7 +33,7 @@ public class FragmentSignupLanguage extends ViewFragment {
 
     @Override
     public ViewFragment.ViewFragmentConfig getConfig() {
-        return new ViewFragment.ViewFragmentConfig("Sign up", false, false,
+        return new ViewFragment.ViewFragmentConfig("Sign up", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 

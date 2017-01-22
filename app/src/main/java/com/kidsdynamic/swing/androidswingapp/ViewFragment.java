@@ -20,7 +20,7 @@ abstract public class ViewFragment extends Fragment {
 
         ActivityMain activity = (ActivityMain) getActivity();
 
-        activity.toolbarSetTitle(config.mTitle);
+        activity.toolbarSetTitle(config.mTitle, config.mEnableTitleClick);
         activity.toolbarShow(config.mShowToolbar);
         activity.consoleShow(config.mShowConsole);
         activity.backgroundSet(config.mBackgound);
@@ -34,24 +34,30 @@ abstract public class ViewFragment extends Fragment {
     public void onToolbarAction2() {
     }
 
+    public void onToolbarTitle() {
+
+    }
+
     class ViewFragmentConfig {
         public String mTitle;
         public boolean mShowToolbar;
         public boolean mShowConsole;
+        public boolean mEnableTitleClick;
         public int mBackgound;
         public int mIcon1;
         public int mIcon2;
 
-        public ViewFragmentConfig(String title, boolean showToolbar, boolean showConsole,
+        public ViewFragmentConfig(String title, boolean showToolbar, boolean showConsole, boolean enableTitleClick,
                                   int background, int icon1, int icon2) {
-            init(title, showToolbar, showConsole, background, icon1, icon2);
+            init(title, showToolbar, showConsole, enableTitleClick, background, icon1, icon2);
         }
 
-        private void init(String title, boolean showToolbar, boolean showConsole,
+        private void init(String title, boolean showToolbar, boolean showConsole, boolean enableTitleClick,
                           int background, int icon1, int icon2) {
             mTitle = title;
             mShowConsole = showConsole;
             mShowToolbar = showToolbar;
+            mEnableTitleClick = enableTitleClick;
             mBackgound = background;
             mIcon1 = icon1;
             mIcon2 = icon2;

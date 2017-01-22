@@ -221,8 +221,14 @@ public class ActivityMain extends AppCompatActivity
         anim.start();
     }
 
-    public void toolbarSetTitle(String title) {
-        mViewTitle.setText(title);
+    public void toolbarSetTitle(String title, boolean enableClick) {
+        if(enableClick) {
+            mViewTitle.setText(title + " ▼");        // &#x25BC;
+            mViewTitle.setOnClickListener(mToolbarClickListener);
+        } else {
+            mViewTitle.setText(title);
+            mViewTitle.setOnClickListener(null);
+        }
     }
 
     public void toolbarSetIcon1(int resource) {
@@ -271,6 +277,8 @@ public class ActivityMain extends AppCompatActivity
                 getTopViewFragment().onToolbarAction1();
             } else if (view == mViewAction2) {
                 getTopViewFragment().onToolbarAction2();
+            } else if (view == mViewTitle) {
+                getTopViewFragment().onToolbarTitle();
             }
         }
     };
