@@ -33,6 +33,7 @@ import java.util.Map;
 public class ServerRequest extends Request<NetworkResponse> {
     private Context mContext;
     private String mUrl;
+    private int mMethod;
     private Map<String, String> mMap;
     private Response.Listener<NetworkResponse> mListener;
     private HttpEntity mHttpEntity = null;
@@ -42,6 +43,7 @@ public class ServerRequest extends Request<NetworkResponse> {
         super(method, url, errorListener);
 
         mContext = context;
+        mMethod = method;
         mUrl = url;
         mListener = listener;
         mMap = map;
@@ -74,8 +76,20 @@ public class ServerRequest extends Request<NetworkResponse> {
 
     @Override
     public String getBodyContentType() {
-        if (mHttpEntity == null)
-            return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+        if (mHttpEntity == null) {
+            switch(mMethod) {
+                case Method.POST:
+                    return "application/json";
+                case Method.GET:
+                    return "";
+                case Method.PUT:
+                    return "application/json";
+                case Method.DELETE:
+                    return "";
+                default:
+                    return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+            }
+        }
         return mHttpEntity.getContentType().getValue();
     }
 

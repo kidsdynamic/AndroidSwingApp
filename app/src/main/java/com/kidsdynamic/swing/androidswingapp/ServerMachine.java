@@ -133,8 +133,8 @@ public class ServerMachine {
         map.put("password", password);
         map.put("firstName", firstName);
         map.put("lastName", lastName);
-        //map.put("phoneNumber", phoneNumber);
-        //map.put("zipCode", zipCode);
+        map.put("phoneNumber", phoneNumber);
+        map.put("zipCode", zipCode);
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_REGISTER, map, null), response));
         //mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, "http://posttestserver.com/post.php", map, null), response));
     }
