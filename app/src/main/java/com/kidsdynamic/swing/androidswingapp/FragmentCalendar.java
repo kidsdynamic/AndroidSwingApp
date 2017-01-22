@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +29,6 @@ public class FragmentCalendar extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Calendar", true, true,
-                R.mipmap.city_florida, R.mipmap.icon_calendar, R.mipmap.icon_add);
+                R.mipmap.city_florida, R.mipmap.icon_pen, R.mipmap.icon_add);
     }
 }

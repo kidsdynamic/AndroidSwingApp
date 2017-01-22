@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 
 /**
@@ -21,13 +22,11 @@ import android.util.TypedValue;
  */
 
 public class ViewPhoto extends ViewSponge {
-    private float mStrokeWidthDp = 4;
-
-    private int mDesiredSize = 100;
+    private int mDesiredSize = 200;
 
     private Rect mRectPhoto;
     private Rect mRectBorder;
-    private int mStrokeWidth;
+    private float mStrokeWidth;
 
     private Bitmap mSource = null;
     private Bitmap mPhoto = null;
@@ -56,6 +55,7 @@ public class ViewPhoto extends ViewSponge {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, context.getResources().getDisplayMetrics());
         mColorActive = ContextCompat.getColor(context, R.color.color_orange);
         mColorNormal = ContextCompat.getColor(context, R.color.color_white);
 
@@ -71,7 +71,7 @@ public class ViewPhoto extends ViewSponge {
                     Drawable drawable = typedArray.getDrawable(attr);
                     setPhoto(((BitmapDrawable) drawable).getBitmap());
                 } else if (attr == R.styleable.ViewPhoto_strokeWidth) {
-                    mStrokeWidthDp = typedArray.getDimension(attr, mStrokeWidthDp);
+                    mStrokeWidth = typedArray.getDimension(attr, mStrokeWidth);
                 } else if (attr == R.styleable.ViewPhoto_strokeActiveColor) {
                     mColorActive = typedArray.getColor(attr, mColorActive);
                 } else if (attr == R.styleable.ViewPhoto_strokeNormalColor) {
@@ -90,7 +90,7 @@ public class ViewPhoto extends ViewSponge {
             typedArray.recycle();
         }
 
-        mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, context.getResources().getDisplayMetrics());
+        Log.d("xxx", "sorokeWidth:" + mStrokeWidth);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class ViewPhoto extends ViewSponge {
     private void updateRects(int width, int height) {
         Rect rect = new Rect(0, 0, width, height);
         int radius = Math.min(width, height) / 2;
-        int strokeWidth = mStrokeWidth / 2;
+        int strokeWidth = Math.round(mStrokeWidth / 2);
 
         mRectPhoto = new Rect(
                 rect.centerX() - radius,

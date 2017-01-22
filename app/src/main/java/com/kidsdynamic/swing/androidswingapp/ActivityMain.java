@@ -187,6 +187,15 @@ public class ActivityMain extends AppCompatActivity
         @Override
         public void onClick(View view) {
             consoleSelect(view);
+
+            if (view == mViewDevice)
+                selectFragment(FragmentDevice.class.getName(), null);
+            else if (view == mViewCalendar)
+                selectFragment(FragmentCalendar.class.getName(), null);
+            else if (view == mViewDashboard)
+                selectFragment(FragmentDashboard.class.getName(), null);
+            else if (view == mViewProfile)
+                selectFragment(FragmentProfileMain.class.getName(), null);
         }
     };
 
@@ -258,9 +267,9 @@ public class ActivityMain extends AppCompatActivity
     private View.OnClickListener mToolbarClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(view == mViewAction1) {
+            if (view == mViewAction1) {
                 getTopViewFragment().onToolbarAction1();
-            } else if(view == mViewAction2) {
+            } else if (view == mViewAction2) {
                 getTopViewFragment().onToolbarAction2();
             }
         }
@@ -300,7 +309,7 @@ public class ActivityMain extends AppCompatActivity
     }
 
     public void handleMessage(Message message) {
-        switch(message.what) {
+        switch (message.what) {
             case BLEMachine.MSG_SCAN_DONE:
                 break;
             case BLEMachine.MSG_BOND:

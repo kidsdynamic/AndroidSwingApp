@@ -31,6 +31,7 @@
 
     <color name="color_yellow">#FFFF00</color>
     <color name="color_yellow_light">#FFFFE0</color>
+    <color name="color_yellow_dust">#FAD13E</color>
 
     <color name="color_orange">#FFA500</color>
     <color name="color_orange_light">#FFE4C4</color>
