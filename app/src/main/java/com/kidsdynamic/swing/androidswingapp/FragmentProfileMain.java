@@ -1,9 +1,11 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,19 +35,25 @@ public class FragmentProfileMain extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_main, container, false);
 
-        mViewPhoto = (ViewPhoto)mViewMain.findViewById(R.id.profile_main_photo);
-        mViewName = (TextView)mViewMain.findViewById(R.id.profile_main_name);
+        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_photo);
+        mViewName = (TextView) mViewMain.findViewById(R.id.profile_main_name);
 
-        mViewLogout = (Button)mViewMain.findViewById(R.id.profile_main_logout);
+        mViewLogout = (Button) mViewMain.findViewById(R.id.profile_main_logout);
         mViewLogout.setOnClickListener(mLogoutListener);
 
-        mViewDeviceContainer = (LinearLayout)mViewMain.findViewById(R.id.profile_main_device_container);
-        mViewDeviceAdd = (ViewPhoto)mViewMain.findViewById(R.id.profile_main_device_add);
+        mViewDeviceContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_device_container);
+        mViewDeviceAdd = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_device_add);
         mViewDeviceAdd.setOnClickListener(mAddDeviceListener);
 
-        mViewSharedContainer = (LinearLayout)mViewMain.findViewById(R.id.profile_main_shared_container);
-        mViewDeviceAdd = (ViewPhoto)mViewMain.findViewById(R.id.profile_main_shared_add);
+        mViewSharedContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_shared_container);
+        mViewDeviceAdd = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_shared_add);
         mViewDeviceAdd.setOnClickListener(mAddSharedListener);
+
+        for (WatchContact device : mActivityMain.mListDevice)
+            addContact(mViewDeviceContainer, (WatchContact.Device) device);
+
+        for (WatchContact device : mActivityMain.mListShared)
+            addContact(mViewSharedContainer, (WatchContact.Device) device);
 
         return mViewMain;
     }
@@ -71,14 +79,14 @@ public class FragmentProfileMain extends ViewFragment {
     private View.OnClickListener mAddDeviceListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            addContact(mViewDeviceContainer, null);
         }
     };
 
     private View.OnClickListener mAddSharedListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            addContact(mViewSharedContainer, null);
         }
     };
 
@@ -88,4 +96,20 @@ public class FragmentProfileMain extends ViewFragment {
 
         }
     };
+
+    private void addContact(LinearLayout layout, WatchContact.Device device) {
+
+        ViewPhoto photo = new ViewPhoto(mActivityMain);
+        photo.setShowBorder(true);
+        photo.setSelected(false);
+        photo.setShowCross(false);
+        photo.setShowDarker(false);
+
+        int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        layoutParams.setMargins(margin, 0, margin, 0);
+
+        layout.addView(photo, 0, layoutParams);
+    }
 }

@@ -32,39 +32,39 @@
 
     </RelativeLayout>
 
-    <TextView
-        style="@style/textview_profile_group"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:background="@color/color_yellow_dust"
-        android:gravity="center"
-        android:text="My Hosting Device" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="2.8"
         android:background="@color/color_yellow_dust"
         android:gravity="center"
         android:orientation="vertical">
 
+        <TextView
+            style="@style/textview_profile_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="My Hosting Device" />
+
         <HorizontalScrollView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
 
             <LinearLayout
                 android:id="@+id/profile_main_device_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginBottom="2dp"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <com.kidsdynamic.swing.androidswingapp.ViewPhoto
                     android:id="@+id/profile_main_device_add"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
                     app:selected="false"
                     app:showCross="true" />
 
@@ -72,39 +72,38 @@
         </HorizontalScrollView>
     </LinearLayout>
 
-    <TextView
-        style="@style/textview_profile_group"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:background="@color/color_blue_green"
-        android:gravity="center"
-        android:text="Device Shared with Me" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="2.8"
         android:background="@color/color_blue_green"
-        android:gravity="center"
         android:orientation="vertical">
+
+        <TextView
+            style="@style/textview_profile_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Device Shared with Me" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
 
             <LinearLayout
                 android:id="@+id/profile_main_shared_container"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginBottom="2dp"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <com.kidsdynamic.swing.androidswingapp.ViewPhoto
                     android:id="@+id/profile_main_shared_add"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
                     app:selected="false"
                     app:showCross="true" />
 
@@ -132,8 +131,8 @@
             app:shrinkWidth="0.15" />
 
         <Button
-            style="@style/button_main"
             android:id="@+id/profile_main_logout"
+            style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

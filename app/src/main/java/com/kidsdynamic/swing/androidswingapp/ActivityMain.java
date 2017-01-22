@@ -29,6 +29,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -63,6 +64,9 @@ public class ActivityMain extends AppCompatActivity
     final static int RESOURCE_HIDE = -1;
     private int mBackgroundRes, mIconRes1, mIconRes2;
 
+    public ArrayList<WatchContact> mListDevice;
+    public ArrayList<WatchContact> mListShared;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +78,9 @@ public class ActivityMain extends AppCompatActivity
 
         mBLEMachine = new BLEMachine(this, mHandler);
         mServiceMachine = new ServerMachine(this);
+
+        mListDevice = new ArrayList<>();
+        mListShared = new ArrayList<>();
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);

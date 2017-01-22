@@ -163,7 +163,7 @@ public class ViewPhoto extends ViewSponge {
 
     private void paintCross(Canvas canvas, Rect rect, int color) {
         final Paint paint = new Paint();
-        final int length = rect.width() / 20;
+        final int length = rect.width() / 10;
 
         paint.setAntiAlias(true);
         paint.setColor(color);
