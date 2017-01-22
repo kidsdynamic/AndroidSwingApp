@@ -133,9 +133,10 @@ public class ServerMachine {
         map.put("password", password);
         map.put("firstName", firstName);
         map.put("lastName", lastName);
-        map.put("phoneNumber", phoneNumber);
-        map.put("zipCode", zipCode);
+        //map.put("phoneNumber", phoneNumber);
+        //map.put("zipCode", zipCode);
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_REGISTER, map, null), response));
+        //mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, "http://posttestserver.com/post.php", map, null), response));
     }
 
     public void userIsTokenValid(ResponseListener response, String email, String token) {
@@ -147,9 +148,9 @@ public class ServerMachine {
 
     public void userIsMailAvailableToRegister(ResponseListener response, String email) {
         Map<String, String> map = new HashMap<>();
-        map.put("email", email);
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER, map, null), response));
-
+        String addressForGet = CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER + "?";
+        addressForGet += "email=" + email;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
     public void userUpdateProfile(ResponseListener response, String firstName, String lastName, String phoneNumber, String zipCode) {
@@ -195,8 +196,9 @@ public class ServerMachine {
 
     public void kidsWhoRegisteredMacID(ResponseListener response, String macId) {
         Map<String, String> map = new HashMap<>();
-        map.put("macId", macId);
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_KIDS_WHO_REGISTERED_MAC_ID, map, null), response));
+        String addressForGet = CMD_KIDS_WHO_REGISTERED_MAC_ID + "?";
+        addressForGet += "macId=" + macId;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
     public void activityUploadRawData(ResponseListener response, String indoorActivity, String outdoorActivity, String time, String macId) {
@@ -210,9 +212,10 @@ public class ServerMachine {
 
     public void activityRetrieveData(ResponseListener response, String kidId, String period) {
         Map<String, String> map = new HashMap<>();
-        map.put("kidId", kidId);
-        map.put("period", period);
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_ACTIVITY_RETRIEVE_DATA, map, null), response));
+        String addressForGet = CMD_ACTIVITY_RETRIEVE_DATA + "?";
+        addressForGet += "kidId=" + kidId;
+        addressForGet += "&period=" + period;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
     public void eventAdd(ResponseListener response, String kidId, String name, String startDate, String endDate,
@@ -261,9 +264,10 @@ public class ServerMachine {
 
     public void eventRetrieveEvents(ResponseListener response, String period, String date) {
         Map<String, String> map = new HashMap<>();
-        map.put("period", period);
-        map.put("date", date);
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_EVENT_RETRIEVE_EVENTS, map, null), response));
+        String addressForGet = CMD_EVENT_RETRIEVE_EVENTS + "?";
+        addressForGet += "period=" + period;
+        addressForGet += "&date=" + date;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
     public void eventRetrieveAllEventsWithTodo(ResponseListener response) {
@@ -292,8 +296,9 @@ public class ServerMachine {
 
     public void subhostList(ResponseListener response, String status) {
         Map<String, String> map = new HashMap<>();
-        map.put("status", status);
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_SUBHOST_LIST, map, null), response));
+        String addressForGet = CMD_SUBHOST_LIST + "?";
+        addressForGet += "status=" + status;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
     Response.Listener<NetworkResponse> mSuccessListener = new Response.Listener<NetworkResponse>() {

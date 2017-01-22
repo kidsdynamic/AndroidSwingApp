@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,6 +31,8 @@ public class FragmentSignupAccount extends ViewFragment {
     private EditText mViewPassword;
     private ImageView mViewBack;
 
+    private Dialog processDialog = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +58,15 @@ public class FragmentSignupAccount extends ViewFragment {
         mViewBack.setOnClickListener(mBackOnClickListener);
 
         return mViewMain;
+    }
+
+    @Override
+    public void onPause() {
+        if (processDialog != null) {
+            processDialog.dismiss();
+            processDialog = null;
+        }
+        super.onPause();
     }
 
     @Override
@@ -84,7 +97,8 @@ public class FragmentSignupAccount extends ViewFragment {
                 if (mMail.equals("") || mPassword.equals("")) {
                     mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
-                    mActivityMain.mServiceMachine.userLogin(mLoginListener, mMail, mPassword);
+                    processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+                    mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
                 }
             }
 
@@ -113,8 +127,10 @@ public class FragmentSignupAccount extends ViewFragment {
                 mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
 
             } else if (resultCode==400) {
-                mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
             } else {
+                processDialog.dismiss();
                 Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
             }
         }
@@ -142,11 +158,14 @@ public class FragmentSignupAccount extends ViewFragment {
 
                 mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
             } else if (resultCode==400) {
+                processDialog.dismiss();
                 Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
             } else if (resultCode==500) {
+                processDialog.dismiss();
                 Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
             } else {
-
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -156,16 +175,15 @@ public class FragmentSignupAccount extends ViewFragment {
         public void onResponse(boolean success, int resultCode, String result) {
             Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
             if (resultCode==200) {
-                //mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
-                //mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
                 Bundle bundle = new Bundle();
                 bundle.putString("MAIL", mMail);
                 bundle.putString("PASSWORD", mPassword);
 
                 mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), bundle);
             } else if (resultCode==409) {
-                Toast.makeText(mActivityMain,"Login failed or the email is already registered.",Toast.LENGTH_SHORT).show();
+                mActivityMain.mServiceMachine.userLogin(mLoginListener, mMail, mPassword);
             } else {
+                processDialog.dismiss();
                 Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
             }
         }

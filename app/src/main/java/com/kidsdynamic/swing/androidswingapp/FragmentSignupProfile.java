@@ -2,7 +2,9 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.net.Uri;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,6 +53,12 @@ public class FragmentSignupProfile extends ViewFragment {
 
     private String mRegisterMail = null;
     private String mRegisterPassword = null;
+    private String mFirstName;
+    private String mLastName;
+    private String mPhoneNumber;
+    private String mZipCode;
+
+    private Dialog processDialog = null;
 
     public final static int ACTIVITY_RESULT_CAMERA_REQUEST = 1888;
     public final static int ACTIVITY_RESULT_PHOTO_PICK = 9111;
@@ -69,6 +78,7 @@ public class FragmentSignupProfile extends ViewFragment {
             mRegisterMail = bundle.getString("MAIL");
             mRegisterPassword = bundle.getString("PASSWORD");
             // GioChen Todo : If mail and password are not null, register below.
+            Log.d("TEST", "mail " + mRegisterMail + " password "+ mRegisterPassword);
         }
 
         mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.signup_profile_photo);
@@ -90,6 +100,15 @@ public class FragmentSignupProfile extends ViewFragment {
         mViewBack.setOnClickListener(mBackOnClickListener);
 
         return mViewMain;
+    }
+
+    @Override
+    public void onPause() {
+        if (processDialog != null) {
+            processDialog.dismiss();
+            processDialog = null;
+        }
+        super.onPause();
     }
 
     @Override
@@ -164,15 +183,72 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
-                mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mViewFirstName.getText().toString());
-                mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mViewLastName.getText().toString());
-                mActivityMain.mConfig.setString(Config.KEY_PHONE, mViewPhone.getText().toString());
-                mActivityMain.mConfig.setString(Config.KEY_ZIP, mViewZip.getText().toString());
+                mFirstName = mViewFirstName.getText().toString();
+                mLastName = mViewLastName.getText().toString();
+                mPhoneNumber = mViewPhone.getText().toString();
+                mZipCode = mViewZip.getText().toString();
 
-                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+                processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+
+                if (mRegisterMail!=null && mRegisterPassword!=null) {
+                    mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
+                } else {
+                    mActivityMain.mServiceMachine.userUpdateProfile(mUpdateUserProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
+                }
             }
 
             return false;
+        }
+    };
+
+    ServerMachine.ResponseListener mRegisterListener = new ServerMachine.ResponseListener() {
+        @Override
+        public void onResponse(boolean success, int resultCode, String result) {
+            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+
+            if (resultCode==200) {
+                Toast.makeText(mActivityMain,"Register successfully.",Toast.LENGTH_SHORT).show();
+                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+            } else if (resultCode==400) {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Bad request.",Toast.LENGTH_SHORT).show();
+            } else if (resultCode==409) {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Conflict.",Toast.LENGTH_SHORT).show();
+            } else if (resultCode==500) {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Internal error.",Toast.LENGTH_SHORT).show();
+            } else {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+
+    ServerMachine.ResponseListener mUpdateUserProfileListener = new ServerMachine.ResponseListener() {
+        @Override
+        public void onResponse(boolean success, int resultCode, String result) {
+            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+
+            if (resultCode==200) {
+                Toast.makeText(mActivityMain,"Update successfully.",Toast.LENGTH_SHORT).show();
+                mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mFirstName);
+                mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mLastName);
+                mActivityMain.mConfig.setString(Config.KEY_PHONE, mPhoneNumber);
+                mActivityMain.mConfig.setString(Config.KEY_ZIP, mZipCode);
+
+                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+            } else if (resultCode==400) {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Bad request.",Toast.LENGTH_SHORT).show();
+            } else if (resultCode==500) {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Internal error.",Toast.LENGTH_SHORT).show();
+            } else {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            }
         }
     };
 
