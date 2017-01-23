@@ -89,8 +89,6 @@ public class ViewPhoto extends ViewSponge {
 
             typedArray.recycle();
         }
-
-        Log.d("xxx", "sorokeWidth:" + mStrokeWidth);
     }
 
     @Override
