@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -16,21 +15,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class BLEMachine extends BLEControl {
-    public final static int MSG_SCAN_DONE = 0x10000001;
-    public final static int MSG_BOND = 0x10000002;
-    public final static int MSG_CONNECT = 0x10000003;
-    public final static int MSG_DISCOVERY = 0x10000004;
-    public final static int MSG_SYNC_DONE = 0x10000005;
-
-    private Handler mHandler = null;
+    private Handler mHandler = new Handler();
+    private onFinishListener mOnFinishListener = null;
 
     private void Log(String msg) {
         Log.i("BLEMachine", msg);
     }
 
-    public BLEMachine(Context context, Handler handler) {
+    public BLEMachine(Context context) {
         super(context);
-        mHandler = handler;
     }
 
     public boolean Start() {
@@ -50,12 +43,8 @@ public class BLEMachine extends BLEControl {
         mState = STATE_INIT;
         mRelationDevice.resetFlag();
         EnableBondStateReceiver(false);
-        mScanResult = new ArrayList<>();
         synchronized (mVoiceAlerts) {
             mVoiceAlerts.clear();
-        }
-        synchronized (mInOurDoors) {
-            mInOurDoors.clear();
         }
         return true;
     }
@@ -87,8 +76,10 @@ public class BLEMachine extends BLEControl {
                 case STATE_INIT:
                     if (mRelationDevice.mAction.mScanTime != 0) {
                         mState = STATE_SCAN;
+                        mScanResult = new ArrayList<>();
                         Scan(true);
                     } else if (mRelationDevice.mAction.mSync && !mRelationDevice.mAddress.equals("")) {
+                        mInOurDoors = new ArrayList<>();
                         if (GetBondState(mRelationDevice.mAddress)) {
                             EnableBondStateReceiver(false);
                             mState = STATE_CONNECTING;
@@ -105,41 +96,32 @@ public class BLEMachine extends BLEControl {
                     if (--mRelationDevice.mAction.mScanTime == 0) {
                         mState = STATE_INIT;
                         Scan(false);
-                        Message message = new Message();
-                        message.what = MSG_SCAN_DONE;
-                        mHandler.sendMessage(message);
+                        if (mOnFinishListener != null)
+                            mOnFinishListener.onScan(mScanResult);
                     }
                     break;
 
                 case STATE_BONDING:
                     if (mRelationDevice.mState.mBonded) {
                         mState = STATE_INIT;
-                        Message message = new Message();
-                        message.what = MSG_BOND;
-                        mHandler.sendMessage(message);
                     }
                     break;
 
                 case STATE_CONNECTING:
                     if (mRelationDevice.mState.mConnected) {
                         mState = STATE_DISCOVERY;
-                        Message message = new Message();
-                        message.what = MSG_CONNECT;
-                        mHandler.sendMessage(message);
                     }
                     break;
 
                 case STATE_DISCOVERY:
                     if (mRelationDevice.mState.mDiscovered) {
-                        Message message = new Message();
-                        message.what = MSG_DISCOVERY;
-                        mHandler.sendMessage(message);
-
                         int currentTime = (int) (System.currentTimeMillis() / 1000);
                         byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
                         mState = STATE_SET_TIME;
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        mState = STATE_INIT;
                     }
                     break;
 
@@ -152,12 +134,17 @@ public class BLEMachine extends BLEControl {
                 case STATE_GET_ADDRESS:
                     if (mRelationDevice.mState.mAddress != null) {
                         mState = STATE_SEND_ALERT;
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        mState = STATE_INIT;
                     }
+
                     break;
 
                 case STATE_SEND_ALERT:
                     synchronized (mVoiceAlerts) {
-                        if (mVoiceAlerts.isEmpty()) {
+                        if (!mRelationDevice.mState.mConnected) {
+                            mState = STATE_INIT;
+                        } else if (mVoiceAlerts.isEmpty()) {
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
 
@@ -184,13 +171,16 @@ public class BLEMachine extends BLEControl {
                             mRelationDevice.mAction.mSync = false;
                             Disconnect();
 
-                            Message message = new Message();
-                            message.what = MSG_SYNC_DONE;
-                            mHandler.sendMessage(message);
+                            if (mOnFinishListener != null) {
+                                mOnFinishListener.onSync(mInOurDoors);
+                            }
 
                             mState = STATE_INIT;
                         }
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        mState = STATE_INIT;
                     }
+
                     break;
 
                 case STATE_GET_TIME:
@@ -198,7 +188,10 @@ public class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mData1 = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.DATA);
                         mState = STATE_GET_DATA1;
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        mState = STATE_INIT;
                     }
+
                     break;
 
                 case STATE_GET_DATA1:
@@ -206,20 +199,24 @@ public class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mData2 = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.DATA);
                         mState = STATE_GET_DATA2;
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        mState = STATE_INIT;
                     }
+
                     break;
 
                 case STATE_GET_DATA2:
                     if (mRelationDevice.mState.mData2 != null) {
-                        synchronized (mInOurDoors) {
-                            mInOurDoors.add(new InOutDoor(mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
-                        }
-
+                        mInOurDoors.add(new InOutDoor(mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
+                        mRelationDevice.mState.mHeader = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
 
                         mState = STATE_GET_HEADER;
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        mState = STATE_INIT;
                     }
+
                     break;
             }
 
@@ -228,12 +225,20 @@ public class BLEMachine extends BLEControl {
         }
     };
 
-    public int SetScan(int second) {
+    public interface onFinishListener {
+        void onScan(ArrayList<Device> result);
+        void onSync(ArrayList<InOutDoor> result);
+    }
+
+
+    public int SetScan(onFinishListener listener, int second) {
+        mOnFinishListener = listener;
         mRelationDevice.mAction.mScanTime = second * 1000 / TRANSITION_GAP;
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Sync(Device device) {
+    public int Sync(onFinishListener listener, Device device) {
+        mOnFinishListener = listener;
         mRelationDevice.mAction.mSync = true;
         mRelationDevice.Copy(device);
         return 0;
@@ -268,11 +273,12 @@ public class BLEMachine extends BLEControl {
             mData2 = data2;
         }
     }
-    final Queue<InOutDoor> mInOurDoors = new ConcurrentLinkedQueue<>();
+    private ArrayList<InOutDoor> mInOurDoors;
 
     class Device {
         String mName;
         String mAddress;
+        int mRssi;
         Action mAction;
         State mState;
 
@@ -303,14 +309,18 @@ public class BLEMachine extends BLEControl {
         Device() {
             mName = "";
             mAddress = "";
+            mRssi = 0;
             mAction = new Action();
             mState = new State();
             resetFlag();
         }
 
-        Device(String name, String address) {
+        Device(String name, String address, int rssi) {
             mName = name;
             mAddress = address;
+            mRssi = rssi;
+            mAction = new Action();
+            mState = new State();
             resetFlag();
         }
 
@@ -331,16 +341,29 @@ public class BLEMachine extends BLEControl {
 
         @Override
         public void onScanResult(String name, String address, boolean bonded, int rssi) {
-            mScanResult.add(new Device(name, address));
+            if (!name.contains("SWING"))
+                return;
+
+            for (Device dev : mScanResult) {
+                if (dev.mName.equals(name)) {
+                    dev.mRssi = rssi;
+                    return;
+                }
+            }
+            mScanResult.add(new Device(name, address, rssi));
         }
 
         @Override
         public void onConnectionStateChange(String name, String address, boolean bonded, boolean connected) {
             if (address.equals(mRelationDevice.mAddress)) {
-                if (connected)
-                    mRelationDevice.mState.mConnected = connected;
-                else
+                mRelationDevice.mState.mConnected = connected;
+
+                if (!connected) {
+                    if (mRelationDevice.mAction.mSync) {
+                        Log("Retry? " + mState);
+                    }
                     Log("Disconnected");
+                }
             }
         }
 

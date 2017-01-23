@@ -44,7 +44,6 @@ public class ActivityMain extends AppCompatActivity
 
     public Config mConfig;
     public WatchOperator mOperator;
-    public Handler mHandler = new InnerHandler(this);
     public Stack<Bitmap> mBitmapStack;
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
@@ -69,6 +68,9 @@ public class ActivityMain extends AppCompatActivity
     final static int RESOURCE_HIDE = -1;
     private int mBackgroundRes, mIconRes1, mIconRes2;
 
+    public ArrayList<WatchContact> mListDevice;
+    public ArrayList<WatchContact> mListShared;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,11 +78,13 @@ public class ActivityMain extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         mConfig = new Config(this, null);
-        mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
 
         //mBLEMachine = new BLEMachine(this, mHandler);
         //mServiceMachine = new ServerMachine(this);
+
+        mListDevice = new ArrayList<>();
+        mListShared = new ArrayList<>();
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
@@ -149,17 +153,34 @@ public class ActivityMain extends AppCompatActivity
         }
 
         if (activeBLE && mBLEMachine == null)
-            mBLEMachine = new BLEMachine(this, mHandler);
+            mBLEMachine = new BLEMachine(this);
 
         if (activeService && mServiceMachine == null)
             mServiceMachine = new ServerMachine(this);
 
-        if (mBLEMachine != null)
+        if (mBLEMachine != null) {
             mBLEMachine.Start();
+            //mBLEMachine.SetScan(mOnFinishListener, 10);
+        }
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
     }
+
+    BLEMachine.onFinishListener mOnFinishListener = new BLEMachine.onFinishListener() {
+        @Override
+        public void onScan(ArrayList<BLEMachine.Device> result) {
+            for(BLEMachine.Device dev : result) {
+                mBLEMachine.Sync(this, dev);
+                break;
+            }
+        }
+
+        @Override
+        public void onSync(ArrayList<BLEMachine.InOutDoor> result) {
+
+        }
+    };
 
     @Override
     public void onPause() {
@@ -350,34 +371,4 @@ public class ActivityMain extends AppCompatActivity
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
-
-    static class InnerHandler extends Handler {
-        WeakReference<ActivityMain> mActivity;
-
-        InnerHandler(ActivityMain activity) {
-            mActivity = new WeakReference<>(activity);
-        }
-
-        @Override
-        public void handleMessage(Message message) {
-            ActivityMain activity = mActivity.get();
-            activity.handleMessage(message);
-        }
-    }
-
-    public void handleMessage(Message message) {
-        switch (message.what) {
-            case BLEMachine.MSG_SCAN_DONE:
-                break;
-            case BLEMachine.MSG_BOND:
-                break;
-            case BLEMachine.MSG_CONNECT:
-                break;
-            case BLEMachine.MSG_DISCOVERY:
-                break;
-            case BLEMachine.MSG_SYNC_DONE:
-                break;
-        }
-    }
-
 }
