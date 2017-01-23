@@ -49,10 +49,10 @@ public class FragmentProfileMain extends ViewFragment {
         mViewDeviceAdd = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_shared_add);
         mViewDeviceAdd.setOnClickListener(mAddSharedListener);
 
-        for (WatchContact device : mActivityMain.mListDevice)
+        for (WatchContact device : mActivityMain.mOperator.getDeviceList())
             addContact(mViewDeviceContainer, (WatchContact.Device) device);
 
-        for (WatchContact device : mActivityMain.mListShared)
+        for (WatchContact device : mActivityMain.mOperator.getSharedList())
             addContact(mViewSharedContainer, (WatchContact.Device) device);
 
         return mViewMain;
