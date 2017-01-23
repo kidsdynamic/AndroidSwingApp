@@ -12,7 +12,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -54,7 +56,7 @@ public class ServerMachine {
 
     public RequestQueue mRequestQueue;
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
-    private Handler mHandler = new Handler();
+    protected Handler mHandler = new Handler();
     private Context mContext;
     private String mAuthToken = null;
 
@@ -169,17 +171,13 @@ public class ServerMachine {
 
     public void kidsAdd(ResponseListener response, String firstName, String lastName, String macId) {
         Map<String, String> map = new HashMap<>();
-        map.put("firstName", firstName);
-        map.put("lastName", lastName);
-        map.put("macId", macId);
+        map.put("json", ServerGson.getKidsAdd(firstName, lastName, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_KIDS_ADD, map, null), response));
     }
 
     public void kidsUpdate(ResponseListener response, String kidId, String firstName, String lastName) {
         Map<String, String> map = new HashMap<>();
-        map.put("kidId", kidId);
-        map.put("firstName", firstName);
-        map.put("lastName", lastName);
+        map.put("json", ServerGson.getKidsUpdate(kidId, firstName, lastName));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_KIDS_UPDATE, map, null), response));
     }
 
@@ -192,10 +190,7 @@ public class ServerMachine {
 
     public void activityUploadRawData(ResponseListener response, String indoorActivity, String outdoorActivity, String time, String macId) {
         Map<String, String> map = new HashMap<>();
-        map.put("indoorActivity", indoorActivity);
-        map.put("outdoorActivity", outdoorActivity);
-        map.put("time", time);
-        map.put("macId", macId);
+        map.put("json", ServerGson.getActivityUploadRawData(indoorActivity, outdoorActivity, time, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_ACTIVITY_UPLOAD_RAW_DATA, map, null), response));
     }
 
@@ -207,41 +202,19 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
-    public void eventAdd(ResponseListener response, String kidId, String name, String startDate, String endDate,
-                         String color, String description, String alert, String city, String state, String repeat,
-                         String timezoneOffset, String todo) {
+    public void eventAdd(ResponseListener response, int kidId, String name, String startDate, String endDate,
+                         String color, String description, int alert, String city, String state, String repeat,
+                         int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        map.put("kidId", kidId);
-        map.put("name", name);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
-        map.put("color", color);
-        map.put("description", description);
-        map.put("alert", alert);
-        map.put("city", city);
-        map.put("state", state);
-        map.put("repeat", repeat);
-        map.put("timezoneOffset", timezoneOffset);
-        map.put("todo", todo);
+        map.put("json", ServerGson.getEventAdd(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_EVENT_ADD, map, null), response));
     }
 
-    public void eventUpdate(ResponseListener response, String eventId, String name, String startDate, String endDate,
-                            String color, String description, String alert, String city, String state, String repeat,
-                            String timezoneOffset, String todo) {
+    public void eventUpdate(ResponseListener response, int eventId, String name, String startDate, String endDate,
+                            String color, String description, int alert, String city, String state, String repeat,
+                            int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        map.put("eventId", eventId);
-        map.put("name", name);
-        map.put("startDate", startDate);
-        map.put("endDate", endDate);
-        map.put("color", color);
-        map.put("description", description);
-        map.put("alert", alert);
-        map.put("city", city);
-        map.put("state", state);
-        map.put("repeat", repeat);
-        map.put("timezoneOffset", timezoneOffset);
-        map.put("todo", todo);
+        map.put("json", ServerGson.getEventUpdate(eventId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_EVENT_UPDATE, map, null), response));
     }
 
@@ -264,22 +237,21 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO, map, null), response));
     }
 
-    public void subhostAdd(ResponseListener response, String hostId) {
+    public void subhostAdd(ResponseListener response, int hostId) {
         Map<String, String> map = new HashMap<>();
-        map.put("hostId", hostId);
+        map.put("json", ServerGson.getSubHostAdd(hostId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_SUBHOST_ADD, map, null), response));
     }
 
-    public void subhostAccept(ResponseListener response, String subHostId, String KidId) {
+    public void subhostAccept(ResponseListener response, int subHostId, List<Integer> KidId) {
         Map<String, String> map = new HashMap<>();
-        map.put("subHostId", subHostId);
-        map.put("KidId", KidId);
+        map.put("json", ServerGson.getSubHostAccept(subHostId, KidId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_ACCEPT, map, null), response));
     }
 
-    public void subhostDeny(ResponseListener response, String subHostId) {
+    public void subhostDeny(ResponseListener response, int subHostId) {
         Map<String, String> map = new HashMap<>();
-        map.put("subHostId", subHostId);
+        map.put("json", ServerGson.getSubHostDeny(subHostId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_DENY, map, null), response));
     }
 
