@@ -71,6 +71,7 @@ public class FragmentProfileMain extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
+        mActivityMain.selectFragment(FragmentProfileOption.class.getName(), null);
     }
 
     @Override
