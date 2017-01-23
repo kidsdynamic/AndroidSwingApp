@@ -5,6 +5,7 @@ import android.content.Context;
 import com.android.volley.Request;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,16 +81,16 @@ public class ServerMachineCore extends ServerMachine {
     public void activityRetrieveData(ResponseListener response, String kidId, String period) {
     }
 
-    //@Override
-    //public void eventAdd(ResponseListener response, int kidId, String name, String startDate, String endDate,
-    //                     String color, String description, String alert, String city, String state, String repeat,
-    //                     int timezoneOffset, String todo) {
-    //}
+    @Override
+    public void eventAdd(ResponseListener response, int kidId, String name, String startDate, String endDate,
+                         String color, String description, int alert, String city, String state, String repeat,
+                         int timezoneOffset, List<String> todo) {
+    }
 
     @Override
-    public void eventUpdate(ResponseListener response, String eventId, String name, String startDate, String endDate,
-                            String color, String description, String alert, String city, String state, String repeat,
-                            String timezoneOffset, String todo) {
+    public void eventUpdate(ResponseListener response, int eventId, String name, String startDate, String endDate,
+                            String color, String description, int alert, String city, String state, String repeat,
+                            int timezoneOffset, List<String> todo) {
     }
 
     @Override
@@ -105,15 +106,15 @@ public class ServerMachineCore extends ServerMachine {
     }
 
     @Override
-    public void subhostAdd(ResponseListener response, String hostId) {
+    public void subhostAdd(ResponseListener response, int hostId) {
     }
 
     @Override
-    public void subhostAccept(ResponseListener response, String subHostId, String KidId) {
+    public void subhostAccept(ResponseListener response, int subHostId, List<Integer> KidId) {
     }
 
     @Override
-    public void subhostDeny(ResponseListener response, String subHostId) {
+    public void subhostDeny(ResponseListener response, int subHostId) {
     }
 
     @Override
