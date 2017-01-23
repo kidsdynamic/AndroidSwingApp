@@ -66,6 +66,7 @@ public class FragmentProfileMain extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
+        mActivityMain.selectFragment(FragmentProfileEditor.class.getName(), null);
     }
 
     @Override
