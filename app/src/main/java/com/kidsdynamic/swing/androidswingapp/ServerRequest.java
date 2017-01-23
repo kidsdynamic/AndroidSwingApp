@@ -29,10 +29,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Exchanger;
 
 public class ServerRequest extends Request<NetworkResponse> {
     private Context mContext;
     private String mUrl;
+    private int mMethod;
     private Map<String, String> mMap;
     private Response.Listener<NetworkResponse> mListener;
     private HttpEntity mHttpEntity = null;
@@ -42,6 +44,7 @@ public class ServerRequest extends Request<NetworkResponse> {
         super(method, url, errorListener);
 
         mContext = context;
+        mMethod = method;
         mUrl = url;
         mListener = listener;
         mMap = map;
@@ -74,26 +77,62 @@ public class ServerRequest extends Request<NetworkResponse> {
 
     @Override
     public String getBodyContentType() {
-        if (mHttpEntity == null)
-            return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+        if (mHttpEntity == null) {
+            switch(mMethod) {
+                case Method.POST:
+                    return "application/json";
+                case Method.GET:
+                    return "";
+                case Method.PUT:
+                    return "application/json";
+                case Method.DELETE:
+                    return "";
+                default:
+                    return "application/x-www-form-urlencoded; charset=" + getParamsEncoding();
+            }
+        }
         return mHttpEntity.getContentType().getValue();
     }
 
     @Override
     public byte[] getBody() throws AuthFailureError {
+        StringBuilder encodedParams = new StringBuilder();
+        byte[] rtn = null;
+
         if (mHttpEntity == null) {
-            StringBuilder encodedParams = new StringBuilder();
-            try {
-                for (Map.Entry<String, String> entry : mMap.entrySet()) {
-                    encodedParams.append(URLEncoder.encode(entry.getKey(), getParamsEncoding()));
-                    encodedParams.append('=');
-                    encodedParams.append(URLEncoder.encode(entry.getValue(), getParamsEncoding()));
-                    encodedParams.append('&');
-                }
-                return encodedParams.toString().getBytes(getParamsEncoding());
-            } catch (UnsupportedEncodingException uee) {
-                throw new RuntimeException("Encoding not supported: " + getParamsEncoding(), uee);
+            switch(mMethod) {
+                case Method.PUT:
+                case Method.POST: {
+                    try {
+                        for (Map.Entry<String, String> entry : mMap.entrySet()) {
+                            if (entry.getKey().equals("json")) {
+                                encodedParams.append(entry.getValue());
+                                break;
+                            }
+                        }
+                        rtn = encodedParams.toString().getBytes(getParamsEncoding());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } break;
+
+                case Method.GET:
+                case Method.DELETE:
+                default: {
+                    try {
+                        for (Map.Entry<String, String> entry : mMap.entrySet()) {
+                            encodedParams.append(URLEncoder.encode(entry.getKey(), getParamsEncoding()));
+                            encodedParams.append('=');
+                            encodedParams.append(URLEncoder.encode(entry.getValue(), getParamsEncoding()));
+                            encodedParams.append('&');
+                        }
+                        rtn = encodedParams.toString().getBytes(getParamsEncoding());
+                    } catch (UnsupportedEncodingException uee) {
+                        throw new RuntimeException("Encoding not supported: " + getParamsEncoding(), uee);
+                    }
+                } break;
             }
+            return rtn;
         } else {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             try {

@@ -38,13 +38,17 @@ public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
     public final static int BLUETOOTH_PERMISSION = 0x1000;
     public final static int BLUETOOTH_ADMIN_PERMISSION = 0x1001;
+    public final static int INTERNET_PERMISSION = 0x1002;
+    public final static int WRITE_STORAGE_PERMISSION = 0x1003;
+    public final static int READ_STORAGE_PERMISSION = 0x1004;
 
     public Config mConfig;
     public WatchOperator mOperator;
     public Handler mHandler = new InnerHandler(this);
     public Stack<Bitmap> mBitmapStack;
-    public BLEMachine mBLEMachine;
-    public ServerMachine mServiceMachine;
+    public BLEMachine mBLEMachine = null;
+    public ServerMachine mServiceMachine = null;
+    public int mRequestingPermission = 0;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -75,8 +79,8 @@ public class ActivityMain extends AppCompatActivity
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
 
-        mBLEMachine = new BLEMachine(this, mHandler);
-        mServiceMachine = new ServerMachine(this);
+        //mBLEMachine = new BLEMachine(this, mHandler);
+        //mServiceMachine = new ServerMachine(this);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
@@ -117,21 +121,52 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        boolean activeBLE = true;
+        boolean activeService = true;
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH}, BLUETOOTH_PERMISSION);
+            mRequestingPermission++;
+            activeBLE = false;
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH_ADMIN}, BLUETOOTH_ADMIN_PERMISSION);
+            mRequestingPermission++;
+            activeBLE = false;
         }
-        mBLEMachine.Start();
-        mServiceMachine.Start();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.INTERNET}, INTERNET_PERMISSION);
+            mRequestingPermission++;
+            activeService = false;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_PERMISSION);
+            mRequestingPermission++;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
+            mRequestingPermission++;
+        }
+
+        if (activeBLE && mBLEMachine == null)
+            mBLEMachine = new BLEMachine(this, mHandler);
+
+        if (activeService && mServiceMachine == null)
+            mServiceMachine = new ServerMachine(this);
+
+        if (mBLEMachine != null)
+            mBLEMachine.Start();
+
+        if (mServiceMachine != null)
+            mServiceMachine.Start();
     }
 
     @Override
     public void onPause() {
-        mBLEMachine.Stop();
-        mServiceMachine.Stop();
+        if (mBLEMachine != null)
+            mBLEMachine.Stop();
+        if (mServiceMachine != null)
+            mServiceMachine.Stop();
         super.onPause();
     }
 
@@ -291,14 +326,25 @@ public class ActivityMain extends AppCompatActivity
 
         switch (requestCode) {
             case BLUETOOTH_PERMISSION:
+                mRequestingPermission--;
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(ActivityMain.this, "Bluetooth permission denied", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case BLUETOOTH_ADMIN_PERMISSION:
+                mRequestingPermission--;
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(ActivityMain.this, "Bluetooth admin permission denied", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case INTERNET_PERMISSION:
+                mRequestingPermission--;
+                break;
+            case READ_STORAGE_PERMISSION:
+                mRequestingPermission--;
+                break;
+            case WRITE_STORAGE_PERMISSION:
+                mRequestingPermission--;
                 break;
         }
 

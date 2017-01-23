@@ -44,6 +44,12 @@ public class FragmentBoot extends ViewFragment {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
+
+            if (mActivityMain.mRequestingPermission != 0) {
+                mHandler.postDelayed(this, 2000);
+                return;
+            }
+
             String name;
             if (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals("")) {
                 name = FragmentSignupLanguage.class.getName();
