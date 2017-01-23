@@ -38,4 +38,9 @@
         <attr name="android:src" />
     </declare-styleable>
 
+    <declare-styleable name="ViewTextEditor">
+        <attr name="android:src" />
+        <attr name="android:textSize" />
+    </declare-styleable>
+
 </resources>
