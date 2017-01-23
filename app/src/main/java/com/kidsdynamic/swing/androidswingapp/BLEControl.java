@@ -156,7 +156,7 @@ public class BLEControl {
         if (mBluetoothAdapter == null)
             return false;
 
-        BluetoothDevice dev = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
+        BluetoothDevice dev = mBluetoothAdapter.getRemoteDevice(address);
 
         return dev.getBondState() == BluetoothDevice.BOND_BONDED;
     }
