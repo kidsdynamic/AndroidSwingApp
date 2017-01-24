@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 /**
  * Created by 03543 on 2017/1/24.
@@ -13,6 +14,7 @@ public class FragmentProfileOption extends ViewFragment {
 
     private ActivityMain mActivityMain;
     private View mViewMain;
+    private View mViewPassword;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class FragmentProfileOption extends ViewFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_option, container, false);
+
+        mViewPassword = mViewMain.findViewById(R.id.profile_option_password);
+        mViewPassword.setOnClickListener(mPasswordListener);
 
         return mViewMain;
     }
@@ -37,4 +42,11 @@ public class FragmentProfileOption extends ViewFragment {
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
+
+    private View.OnClickListener mPasswordListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentProfilePassword.class.getName(), null);
+        }
+    };
 }
