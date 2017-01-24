@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_blue_sky"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="4">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/profile_kid_photo_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:shrinkWidth="0.15" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/profile_kid_photo_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:shrinkWidth="0.15" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewPhoto
+            android:id="@+id/profile_kid_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/profile_kid_photo_start"
+            android:layout_toStartOf="@+id/profile_kid_photo_end"
+            app:showCross="true"
+            app:showBorder="true"
+            app:showDarker="false"
+            app:selected="false"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/contact_background">
+
+        <EditText
+            android:id="@+id/profile_kid_name"
+            style="@style/edittext_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:hint="Name" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_weight="1"
+        android:background="@drawable/contact_background">
+
+        <EditText
+            android:id="@+id/profile_kid_zip"
+            style="@style/edittext_profile"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:hint="Zip" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginBottom="40dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/profile_kid_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            app:shrinkWidth="0.15" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/profile_kid_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            app:shrinkWidth="0.15" />
+
+        <Button
+            android:id="@+id/profile_kid_delete"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/profile_kid_start"
+            android:layout_toStartOf="@+id/profile_kid_end"
+            android:text="Delete" />
+
+    </RelativeLayout>
+</LinearLayout>

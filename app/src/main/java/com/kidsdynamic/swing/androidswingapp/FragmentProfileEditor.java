@@ -40,7 +40,7 @@ public class FragmentProfileEditor extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Profile", true, true, true,
+        return new ViewFragmentConfig("Profile", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
