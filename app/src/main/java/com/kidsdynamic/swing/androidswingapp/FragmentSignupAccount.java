@@ -112,15 +112,9 @@ public class FragmentSignupAccount extends ViewFragment {
             Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
 
             if (resultCode==200) {
-                String auth_token = "";
-                try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    auth_token = jsonObject.getString("access_token");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, auth_token);
-                mActivityMain.mServiceMachine.setAuthToken(auth_token);
+                ServerGson.FromJson.loginResponse res = ServerGson.FromJson.LoginResponse(result);
+                mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, res.access_token);
+                mActivityMain.mServiceMachine.setAuthToken(res.access_token);
                 mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
 
             } else if (resultCode==400) {
