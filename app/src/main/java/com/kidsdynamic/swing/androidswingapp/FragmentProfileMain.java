@@ -81,7 +81,8 @@ public class FragmentProfileMain extends ViewFragment {
     private View.OnClickListener mAddDeviceListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            addContact(mViewDeviceContainer, null);
+            //addContact(mViewDeviceContainer, null);
+            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
         }
     };
 
