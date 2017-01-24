@@ -193,6 +193,7 @@ public class FragmentSignupProfile extends ViewFragment {
                 if (mRegisterMail!=null && mRegisterPassword!=null) {
                     mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
                 } else {
+                    // GioChen Todo : wrong path
                     mActivityMain.mServiceMachine.userUpdateProfile(mUpdateUserProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
                 }
             }
@@ -208,7 +209,8 @@ public class FragmentSignupProfile extends ViewFragment {
 
             if (resultCode==200) {
                 Toast.makeText(mActivityMain,"Register successfully.",Toast.LENGTH_SHORT).show();
-                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+                mActivityMain.mServiceMachine.userLogin(mLoginListener, mRegisterMail, mRegisterPassword);
+                //mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
             } else if (resultCode==400) {
                 processDialog.dismiss();
                 Toast.makeText(mActivityMain,"Bad request.",Toast.LENGTH_SHORT).show();
@@ -225,6 +227,27 @@ public class FragmentSignupProfile extends ViewFragment {
         }
     };
 
+    ServerMachine.ResponseListener mLoginListener = new ServerMachine.ResponseListener() {
+        @Override
+        public void onResponse(boolean success, int resultCode, String result) {
+            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+
+            if (resultCode==200) {
+                ServerGson.user.login.r res = ServerGson.user.login.fromJson(result);
+                mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, res.access_token);
+                mActivityMain.mServiceMachine.setAuthToken(res.access_token);
+                mActivityMain.mServiceMachine.userUpdateProfile(mUpdateUserProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
+
+            } else if (resultCode==400) {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
+            } else {
+                processDialog.dismiss();
+                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
 
     ServerMachine.ResponseListener mUpdateUserProfileListener = new ServerMachine.ResponseListener() {
         @Override
@@ -233,6 +256,7 @@ public class FragmentSignupProfile extends ViewFragment {
 
             if (resultCode==200) {
                 Toast.makeText(mActivityMain,"Update successfully.",Toast.LENGTH_SHORT).show();
+                ServerGson.user.updateProfile.r res = ServerGson.user.updateProfile.fromJson(result);
                 mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mFirstName);
                 mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mLastName);
                 mActivityMain.mConfig.setString(Config.KEY_PHONE, mPhoneNumber);

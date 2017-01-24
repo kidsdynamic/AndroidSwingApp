@@ -14,8 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 /**
  * Created by 03543 on 2016/12/30.
  */
@@ -112,7 +110,7 @@ public class FragmentSignupAccount extends ViewFragment {
             Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
 
             if (resultCode==200) {
-                ServerGson.FromJson.loginResponse res = ServerGson.FromJson.LoginResponse(result);
+                ServerGson.user.login.r res = ServerGson.user.login.fromJson(result);
                 mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, res.access_token);
                 mActivityMain.mServiceMachine.setAuthToken(res.access_token);
                 mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
@@ -135,13 +133,12 @@ public class FragmentSignupAccount extends ViewFragment {
                 mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
                 mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
                 try {
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject user = new JSONObject(jsonObject.getString("user"));
+                    ServerGson.user.retrieveUserProfile.r res = ServerGson.user.retrieveUserProfile.fromJson(result);
 
-                    mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, user.getString("firstName"));
-                    mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, user.getString("lastName"));
-                    mActivityMain.mConfig.setString(Config.KEY_PHONE, user.getString("phoneNumber"));
-                    mActivityMain.mConfig.setString(Config.KEY_ZIP, user.getString("zipCode"));
+                    mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, res.user.firstName);
+                    mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, res.user.lastName);
+                    mActivityMain.mConfig.setString(Config.KEY_PHONE, res.user.phoneNumber);
+                    mActivityMain.mConfig.setString(Config.KEY_ZIP, res.user.zipCode);
 
                 } catch (Exception e) {
                     e.printStackTrace();
