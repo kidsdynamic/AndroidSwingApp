@@ -172,7 +172,7 @@ public class ActivityMain extends AppCompatActivity
         }
 
         @Override
-        public void onSync(ArrayList<BLEMachine.InOutDoor> result) {
+        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
 
         }
     };

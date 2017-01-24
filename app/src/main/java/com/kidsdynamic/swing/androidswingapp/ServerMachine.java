@@ -12,7 +12,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +25,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ServerMachine {
     private final static String SERVER_ADDRESS = "https://childrenlab.com:8111/v1";
 
-    private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/userLogin";
-    private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/userRegister";
+    private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
+    private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
     private final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
     private final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
     private final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
@@ -42,12 +41,15 @@ public class ServerMachine {
 
     private final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
     private final static String CMD_ACTIVITY_RETRIEVE_DATA = SERVER_ADDRESS + "/activity/retrieveData";
+    private final static String CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME = SERVER_ADDRESS + "/activity/retrieveDataByTime";
 
     private final static String CMD_EVENT_ADD = SERVER_ADDRESS + "/event/add";
     private final static String CMD_EVENT_UPDATE = SERVER_ADDRESS + "/event/update";
     private final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
     private final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
     private final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
+
+    private final static String CMD_EVENT_TODO_DONE = SERVER_ADDRESS + "/event/todo/done";
 
     private final static String CMD_SUBHOST_ADD = SERVER_ADDRESS + "subHost/add";
     private final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "subHost/accept";
@@ -124,19 +126,19 @@ public class ServerMachine {
 
     public void userLogin(ResponseListener response, String email, String password) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getUserLogin(email, password));
+        map.put("json", ServerGson.ToJson.UserLogin(email, password));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_LOGIN, map, null), response));
     }
 
     public void userRegister(ResponseListener response, String email, String password, String firstName, String lastName, String phoneNumber, String zipCode) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getUserRegister(email, password, firstName, lastName, phoneNumber, zipCode));
+        map.put("json", ServerGson.ToJson.UserRegister(email, password, firstName, lastName, phoneNumber, zipCode));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_REGISTER, map, null), response));
     }
 
     public void userIsTokenValid(ResponseListener response, String email, String token) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getUserIsTokenValid(email, token));
+        map.put("json", ServerGson.ToJson.UserIsTokenValid(email, token));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_IS_TOKEN_VALID, map, null), response));
     }
 
@@ -149,7 +151,7 @@ public class ServerMachine {
 
     public void userUpdateProfile(ResponseListener response, String firstName, String lastName, String phoneNumber, String zipCode) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getUserUpdateProfile(firstName, lastName, phoneNumber, zipCode));
+        map.put("json", ServerGson.ToJson.UserUpdateProfile(firstName, lastName, phoneNumber, zipCode));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_USER_UPDATE_PROFILE, map, null), response));
     }
 
@@ -171,13 +173,13 @@ public class ServerMachine {
 
     public void kidsAdd(ResponseListener response, String firstName, String lastName, String macId) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getKidsAdd(firstName, lastName, macId));
+        map.put("json", ServerGson.ToJson.KidsAdd(firstName, lastName, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_KIDS_ADD, map, null), response));
     }
 
     public void kidsUpdate(ResponseListener response, String kidId, String firstName, String lastName) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getKidsUpdate(kidId, firstName, lastName));
+        map.put("json", ServerGson.ToJson.KidsUpdate(kidId, firstName, lastName));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_KIDS_UPDATE, map, null), response));
     }
 
@@ -190,7 +192,7 @@ public class ServerMachine {
 
     public void activityUploadRawData(ResponseListener response, String indoorActivity, String outdoorActivity, String time, String macId) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getActivityUploadRawData(indoorActivity, outdoorActivity, time, macId));
+        map.put("json", ServerGson.ToJson.ActivityUploadRawData(indoorActivity, outdoorActivity, time, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_ACTIVITY_UPLOAD_RAW_DATA, map, null), response));
     }
 
@@ -202,11 +204,20 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
     }
 
+    public void activityRetrieveDataByTime(ResponseListener response, long start, long end, int kidId) {
+        Map<String, String> map = new HashMap<>();
+        String addressForGet = CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME + "?";
+        addressForGet += "start=" + start;
+        addressForGet += "&end=" + end;
+        addressForGet += "&kidId=" + kidId;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), response));
+    }
+
     public void eventAdd(ResponseListener response, int kidId, String name, String startDate, String endDate,
                          String color, String description, int alert, String city, String state, String repeat,
                          int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getEventAdd(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
+        map.put("json", ServerGson.ToJson.EventAdd(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_EVENT_ADD, map, null), response));
     }
 
@@ -214,7 +225,7 @@ public class ServerMachine {
                             String color, String description, int alert, String city, String state, String repeat,
                             int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getEventUpdate(eventId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
+        map.put("json", ServerGson.ToJson.EventUpdate(eventId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_EVENT_UPDATE, map, null), response));
     }
 
@@ -237,21 +248,27 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO, map, null), response));
     }
 
+    public void eventTodoDone(ResponseListener response, int eventId, int todoId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("json", ServerGson.ToJson.EventTodoDone(eventId, todoId));
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_EVENT_TODO_DONE, map, null), response));
+    }
+
     public void subhostAdd(ResponseListener response, int hostId) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getSubHostAdd(hostId));
+        map.put("json", ServerGson.ToJson.SubHostAdd(hostId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_SUBHOST_ADD, map, null), response));
     }
 
     public void subhostAccept(ResponseListener response, int subHostId, List<Integer> KidId) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getSubHostAccept(subHostId, KidId));
+        map.put("json", ServerGson.ToJson.SubHostAccept(subHostId, KidId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_ACCEPT, map, null), response));
     }
 
     public void subhostDeny(ResponseListener response, int subHostId) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.getSubHostDeny(subHostId));
+        map.put("json", ServerGson.ToJson.SubHostDeny(subHostId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_DENY, map, null), response));
     }
 
