@@ -28,7 +28,11 @@ public class BLEMachine extends BLEControl {
 
     public boolean Start() {
         Init(mEventListener);
-        Reset();
+
+        mState = STATE_INIT;
+        EnableBondStateReceiver(false);
+        mRelationDevice.resetFlag();
+
         mHandler.postDelayed(stateTransition, TRANSITION_GAP);
         return true;
     }
@@ -39,30 +43,20 @@ public class BLEMachine extends BLEControl {
         return true;
     }
 
-    public boolean Reset() {
-        mState = STATE_INIT;
-        mRelationDevice.resetFlag();
-        EnableBondStateReceiver(false);
-        synchronized (mVoiceAlerts) {
-            mVoiceAlerts.clear();
-        }
-        return true;
-    }
-
     private static final int TRANSITION_GAP = 100;
 
-    private static final int STATE_INIT = 0;
-    private static final int STATE_SCAN = 1;
-    private static final int STATE_BONDING = 2;
-    private static final int STATE_CONNECTING = 3;
-    private static final int STATE_DISCOVERY = 4;
-    private static final int STATE_SET_TIME = 5;
-    private static final int STATE_GET_ADDRESS = 6;
-    private static final int STATE_SEND_ALERT = 7;
-    private static final int STATE_GET_HEADER = 8;
-    private static final int STATE_GET_TIME = 9;
-    private static final int STATE_GET_DATA1 = 10;
-    private static final int STATE_GET_DATA2 = 11;
+    public static final int STATE_INIT = 0;
+    public static final int STATE_SCAN = 1;
+    public static final int STATE_BONDING = 2;
+    public static final int STATE_CONNECTING = 3;
+    public static final int STATE_DISCOVERY = 4;
+    public static final int STATE_SET_TIME = 5;
+    public static final int STATE_GET_ADDRESS = 6;
+    public static final int STATE_SEND_ALERT = 7;
+    public static final int STATE_GET_HEADER = 8;
+    public static final int STATE_GET_TIME = 9;
+    public static final int STATE_GET_DATA1 = 10;
+    public static final int STATE_GET_DATA2 = 11;
 
     private Device mRelationDevice = new Device();
     private int mState;
@@ -80,6 +74,7 @@ public class BLEMachine extends BLEControl {
                         Scan(true);
                     } else if (mRelationDevice.mAction.mSync && !mRelationDevice.mAddress.equals("")) {
                         mInOurDoors = new ArrayList<>();
+                        mRelationDevice.mState.mTick = 150;
                         if (GetBondState(mRelationDevice.mAddress)) {
                             EnableBondStateReceiver(false);
                             mState = STATE_CONNECTING;
@@ -102,14 +97,20 @@ public class BLEMachine extends BLEControl {
                     break;
 
                 case STATE_BONDING:
+                    mRelationDevice.mState.mTick--;
                     if (mRelationDevice.mState.mBonded) {
                         mState = STATE_INIT;
+                    } else if (mRelationDevice.mState.mTick == 0) {
+                        syncFailProcess();
                     }
                     break;
 
                 case STATE_CONNECTING:
+                    mRelationDevice.mState.mTick--;
                     if (mRelationDevice.mState.mConnected) {
                         mState = STATE_DISCOVERY;
+                    } else if (mRelationDevice.mState.mTick == 0) {
+                        syncFailProcess();
                     }
                     break;
 
@@ -121,7 +122,7 @@ public class BLEMachine extends BLEControl {
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
                     } else if (!mRelationDevice.mState.mConnected) {
-                        mState = STATE_INIT;
+                        syncFailProcess();
                     }
                     break;
 
@@ -135,7 +136,7 @@ public class BLEMachine extends BLEControl {
                     if (mRelationDevice.mState.mAddress != null) {
                         mState = STATE_SEND_ALERT;
                     } else if (!mRelationDevice.mState.mConnected) {
-                        mState = STATE_INIT;
+                        syncFailProcess();
                     }
 
                     break;
@@ -143,7 +144,7 @@ public class BLEMachine extends BLEControl {
                 case STATE_SEND_ALERT:
                     synchronized (mVoiceAlerts) {
                         if (!mRelationDevice.mState.mConnected) {
-                            mState = STATE_INIT;
+                            syncFailProcess();
                         } else if (mVoiceAlerts.isEmpty()) {
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
@@ -172,13 +173,13 @@ public class BLEMachine extends BLEControl {
                             Disconnect();
 
                             if (mOnFinishListener != null) {
-                                mOnFinishListener.onSync(mInOurDoors);
+                                mOnFinishListener.onSync(SYNC_RESULT_SUCCESS, mInOurDoors);
                             }
 
                             mState = STATE_INIT;
                         }
                     } else if (!mRelationDevice.mState.mConnected) {
-                        mState = STATE_INIT;
+                        syncFailProcess();
                     }
 
                     break;
@@ -189,7 +190,7 @@ public class BLEMachine extends BLEControl {
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.DATA);
                         mState = STATE_GET_DATA1;
                     } else if (!mRelationDevice.mState.mConnected) {
-                        mState = STATE_INIT;
+                        syncFailProcess();
                     }
 
                     break;
@@ -200,7 +201,7 @@ public class BLEMachine extends BLEControl {
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.DATA);
                         mState = STATE_GET_DATA2;
                     } else if (!mRelationDevice.mState.mConnected) {
-                        mState = STATE_INIT;
+                        syncFailProcess();
                     }
 
                     break;
@@ -214,7 +215,7 @@ public class BLEMachine extends BLEControl {
 
                         mState = STATE_GET_HEADER;
                     } else if (!mRelationDevice.mState.mConnected) {
-                        mState = STATE_INIT;
+                        syncFailProcess();
                     }
 
                     break;
@@ -225,11 +226,18 @@ public class BLEMachine extends BLEControl {
         }
     };
 
-    public interface onFinishListener {
-        void onScan(ArrayList<Device> result);
-        void onSync(ArrayList<InOutDoor> result);
+    private void syncFailProcess() {
+        mRelationDevice.resetFlag();
+        if (mOnFinishListener != null)
+            mOnFinishListener.onSync(mState, mInOurDoors);
+        mState = STATE_INIT;
     }
 
+    public final static int SYNC_RESULT_SUCCESS = 0xFFFFFFFF;
+    public interface onFinishListener {
+        void onScan(ArrayList<Device> result);
+        void onSync(int resultCode, ArrayList<InOutDoor> result);
+    }
 
     public int SetScan(onFinishListener listener, int second) {
         mOnFinishListener = listener;
@@ -288,6 +296,7 @@ public class BLEMachine extends BLEControl {
         }
 
         class State {
+            int mTick;
             boolean mBonded;
             boolean mConnected;
             boolean mDiscovered;
