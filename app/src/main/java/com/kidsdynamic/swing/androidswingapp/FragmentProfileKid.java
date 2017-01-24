@@ -30,7 +30,7 @@ public class FragmentProfileKid extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Profile", true, true, false,
-                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
+                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_ok);
     }
 
     @Override
@@ -38,10 +38,8 @@ public class FragmentProfileKid extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private View.OnClickListener mPasswordListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentProfilePassword.class.getName(), null);
-        }
-    };
+    @Override
+    public void onToolbarAction2() {
+        mActivityMain.popFragment();
+    }
 }
