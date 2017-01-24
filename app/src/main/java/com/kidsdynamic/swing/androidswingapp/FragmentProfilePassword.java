@@ -29,7 +29,7 @@ public class FragmentProfilePassword extends ViewFragment {
 
     @Override
     public ViewFragment.ViewFragmentConfig getConfig() {
-        return new ViewFragment.ViewFragmentConfig("Profile", true, true, false,
+        return new ViewFragment.ViewFragmentConfig("Password", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_ok);
     }
 
