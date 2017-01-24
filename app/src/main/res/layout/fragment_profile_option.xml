@@ -195,7 +195,6 @@
         android:background="@color/color_gray_light" />
 
     <RelativeLayout
-        android:id="@+id/profile_option_version"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -210,10 +209,11 @@
             android:text="Version" />
 
         <TextView
+            android:id="@+id/profile_option_version"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical|end"
-            android:text="1.11" />
+            android:paddingEnd="20dp" />
     </RelativeLayout>
 
     <View

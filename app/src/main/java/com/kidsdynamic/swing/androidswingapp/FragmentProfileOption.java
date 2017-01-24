@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /**
  * Created by 03543 on 2017/1/24.
@@ -32,6 +33,9 @@ public class FragmentProfileOption extends ViewFragment {
 
         mViewPassword = mViewMain.findViewById(R.id.profile_option_password);
         mViewPassword.setOnClickListener(mPasswordListener);
+
+        TextView view = (TextView) mViewMain.findViewById(R.id.profile_option_version);
+        view.setText(BuildConfig.VERSION_NAME);
 
         return mViewMain;
     }
