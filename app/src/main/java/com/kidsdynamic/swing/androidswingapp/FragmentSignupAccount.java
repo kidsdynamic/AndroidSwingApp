@@ -27,6 +27,8 @@ public class FragmentSignupAccount extends ViewFragment {
     private ImageView mViewBack;
 
     private Dialog processDialog = null;
+    private String mMail = "";
+    private String mPassword = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,7 +92,8 @@ public class FragmentSignupAccount extends ViewFragment {
                 mPassword = mViewPassword.getText().toString();
 
                 if (mMail.equals("") || mPassword.equals("")) {
-                    mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
+                    Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
+                    //mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
                     processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
                     mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
@@ -101,80 +104,57 @@ public class FragmentSignupAccount extends ViewFragment {
         }
     };
 
-    private String mMail = "";
-    private String mPassword = "";
-
-    ServerMachine.ResponseListener mLoginListener = new ServerMachine.ResponseListener() {
+    ServerMachine.userIsMailAvailableToRegisterListener mMailCheckListener = new ServerMachine.userIsMailAvailableToRegisterListener() {
         @Override
-        public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
-
-            if (resultCode==200) {
-                ServerGson.user.login.r res = ServerGson.user.login.fromJson(result);
-                mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, res.access_token);
-                mActivityMain.mServiceMachine.setAuthToken(res.access_token);
-                mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
-
-            } else if (resultCode==400) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
-            } else {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    ServerMachine.ResponseListener mRetrieveUserProfileListener = new ServerMachine.ResponseListener() {
-        @Override
-        public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
-            if (resultCode==200) {
-                mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
-                mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
-                try {
-                    ServerGson.user.retrieveUserProfile.r res = ServerGson.user.retrieveUserProfile.fromJson(result);
-
-                    mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, res.user.firstName);
-                    mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, res.user.lastName);
-                    mActivityMain.mConfig.setString(Config.KEY_PHONE, res.user.phoneNumber);
-                    mActivityMain.mConfig.setString(Config.KEY_ZIP, res.user.zipCode);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
-            } else if (resultCode==400) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
-            } else if (resultCode==500) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
-            } else {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
-    ServerMachine.ResponseListener mMailCheckListener = new ServerMachine.ResponseListener() {
-        @Override
-        public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
-            if (resultCode==200) {
+        public void onValidState(boolean valid) {
+            if (valid) {
                 Bundle bundle = new Bundle();
                 bundle.putString("MAIL", mMail);
                 bundle.putString("PASSWORD", mPassword);
 
                 mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), bundle);
-            } else if (resultCode==409) {
-                mActivityMain.mServiceMachine.userLogin(mLoginListener, mMail, mPassword);
             } else {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+                mActivityMain.mServiceMachine.userLogin(mLoginListener, mMail, mPassword);
             }
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain,""+statusCode,Toast.LENGTH_SHORT).show();
         }
     };
 
+    ServerMachine.userLoginListener mLoginListener = new ServerMachine.userLoginListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+            mActivityMain.mServiceMachine.setAuthToken(result.access_token);
+            mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain,"Login failed("+statusCode+").",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
+            mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
+            mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
+            mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, response.user.firstName);
+            mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, response.user.lastName);
+            mActivityMain.mConfig.setString(Config.KEY_PHONE, response.user.phoneNumber);
+            mActivityMain.mConfig.setString(Config.KEY_ZIP, response.user.zipCode);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain,""+statusCode,Toast.LENGTH_SHORT).show();
+        }
+    };
 }

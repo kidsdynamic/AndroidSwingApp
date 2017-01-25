@@ -3,29 +3,23 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.net.Uri;
 import android.widget.Toast;
 
 import java.io.File;
@@ -78,7 +72,6 @@ public class FragmentSignupProfile extends ViewFragment {
             mRegisterMail = bundle.getString("MAIL");
             mRegisterPassword = bundle.getString("PASSWORD");
             // GioChen Todo : If mail and password are not null, userRegister below.
-            Log.d("TEST", "mail " + mRegisterMail + " password "+ mRegisterPassword);
         }
 
         mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.signup_profile_photo);
@@ -194,7 +187,7 @@ public class FragmentSignupProfile extends ViewFragment {
                     mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
                 } else {
                     // GioChen Todo : wrong path
-                    mActivityMain.mServiceMachine.userUpdateProfile(mUpdateUserProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
+                    //mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
                 }
             }
 
@@ -202,77 +195,60 @@ public class FragmentSignupProfile extends ViewFragment {
         }
     };
 
-    ServerMachine.ResponseListener mRegisterListener = new ServerMachine.ResponseListener() {
+    ServerMachine.userRegisterListener mRegisterListener = new ServerMachine.userRegisterListener() {
         @Override
-        public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+        public void onSuccess(int statusCode) {
+            mActivityMain.mServiceMachine.userLogin(mLoginListener, mRegisterMail, mRegisterPassword);
+        }
 
-            if (resultCode==200) {
-                Toast.makeText(mActivityMain,"Register successfully.",Toast.LENGTH_SHORT).show();
-                mActivityMain.mServiceMachine.userLogin(mLoginListener, mRegisterMail, mRegisterPassword);
-                //mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
-            } else if (resultCode==400) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Bad request.",Toast.LENGTH_SHORT).show();
-            } else if (resultCode==409) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Conflict.",Toast.LENGTH_SHORT).show();
-            } else if (resultCode==500) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Internal error.",Toast.LENGTH_SHORT).show();
-            } else {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
+        @Override
+        public void onFail(int statusCode, ServerGson.error.e1 error) {
+            String msg = "" + statusCode;
+            if (error != null) {
+                if (error.message != null)
+                    msg += " Msg[" + error.message + "]";
+                if (error.error != null)
+                    msg += " Err[" + error.error + "]";
             }
+
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain,msg,Toast.LENGTH_SHORT).show();
         }
     };
 
-    ServerMachine.ResponseListener mLoginListener = new ServerMachine.ResponseListener() {
+    ServerMachine.userLoginListener mLoginListener = new ServerMachine.userLoginListener() {
         @Override
-        public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+            mActivityMain.mServiceMachine.setAuthToken(result.access_token);
+            // Todo : must replace by user/avatar/upload
+            mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
+        }
 
-            if (resultCode==200) {
-                ServerGson.user.login.r res = ServerGson.user.login.fromJson(result);
-                mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, res.access_token);
-                mActivityMain.mServiceMachine.setAuthToken(res.access_token);
-                mActivityMain.mServiceMachine.userUpdateProfile(mUpdateUserProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
-
-            } else if (resultCode==400) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
-            } else {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
-            }
+        @Override
+        public void onFail(int statusCode) {
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain,"Login failed("+statusCode+").",Toast.LENGTH_SHORT).show();
         }
     };
 
 
-    ServerMachine.ResponseListener mUpdateUserProfileListener = new ServerMachine.ResponseListener() {
+    ServerMachine.userUpdateProfileListener mUpdateProfileListener = new ServerMachine.userUpdateProfileListener() {
         @Override
-        public void onResponse(boolean success, int resultCode, String result) {
-            Log.d("onResponse", "[" + success + "](" + resultCode + ")" + result);
+        public void onSuccess(int statusCode, ServerGson.userData response) {
+            mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mFirstName);
+            mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mLastName);
+            mActivityMain.mConfig.setString(Config.KEY_PHONE, mPhoneNumber);
+            mActivityMain.mConfig.setString(Config.KEY_ZIP, mZipCode);
 
-            if (resultCode==200) {
-                Toast.makeText(mActivityMain,"Update successfully.",Toast.LENGTH_SHORT).show();
-                ServerGson.user.updateProfile.r res = ServerGson.user.updateProfile.fromJson(result);
-                mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mFirstName);
-                mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mLastName);
-                mActivityMain.mConfig.setString(Config.KEY_PHONE, mPhoneNumber);
-                mActivityMain.mConfig.setString(Config.KEY_ZIP, mZipCode);
+            mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+        }
 
-                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
-            } else if (resultCode==400) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Bad request.",Toast.LENGTH_SHORT).show();
-            } else if (resultCode==500) {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"Internal error.",Toast.LENGTH_SHORT).show();
-            } else {
-                processDialog.dismiss();
-                Toast.makeText(mActivityMain,"result",Toast.LENGTH_SHORT).show();
-            }
+        @Override
+        public void onFail(int statusCode, ServerGson.error.e1 error) {
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain,"Update failed("+statusCode+").",Toast.LENGTH_SHORT).show();
+
         }
     };
 

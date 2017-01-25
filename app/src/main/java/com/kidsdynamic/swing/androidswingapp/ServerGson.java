@@ -114,7 +114,7 @@ public class ServerGson {
                 }
             }
 
-            static final class r {
+            static final class response {
                 String access_token;
                 String username;
             }
@@ -123,8 +123,8 @@ public class ServerGson {
                 return new Gson().toJson(new c(pMail, pPassword));
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
@@ -150,7 +150,6 @@ public class ServerGson {
             public static String toJson(String pMail, String pPassword, String pFirstName, String pLastName, String pPhoneNumber, String pZipcode) {
                 return new Gson().toJson(new c(pMail, pPassword, pFirstName, pLastName, pPhoneNumber, pZipcode));
             }
-
         }
 
         public static class isTokenValid {
@@ -184,49 +183,36 @@ public class ServerGson {
                 }
             }
 
-
-            static final class r {
-                userData user;
-            }
-
             public static String toJson(String pFirstName, String pLastName, String pPhoneNumber, String pZipcode) {
                 return new Gson().toJson(new c(pFirstName, pLastName, pPhoneNumber, pZipcode));
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static userData fromJson(String json) {
+                return new Gson().fromJson(json, userData.class);
             }
         }
 
         public static class retrieveUserProfile {
-            static final class r {
+            static final class response {
                 List<kidData> kids;
                 userData user;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
         public static class avatar {
             public static class upload {
-                static final class r {
-                    userData user;
-                }
-
-                public static r fromJson(String json) {
-                    return new Gson().fromJson(json, r.class);
+                public static userData fromJson(String json) {
+                    return new Gson().fromJson(json, userData.class);
                 }
             }
 
             public static class uploadKid {
-                static final class r {
-                    kidData kid;
-                }
-
-                public static r fromJson(String json) {
-                    return new Gson().fromJson(json, r.class);
+                public static kidData fromJson(String json) {
+                    return new Gson().fromJson(json, kidData.class);
                 }
             }
         }
@@ -250,12 +236,12 @@ public class ServerGson {
                 return new Gson().toJson(new c(pFirstName, pLastName, pMacId));
             }
 
-            static final class r {
+            static final class response {
                 List<kidData> kids;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
@@ -276,23 +262,23 @@ public class ServerGson {
                 return new Gson().toJson(new c(pKidId, pFirstName, pLastName));
             }
 
-            static final class r {
+            static final class response {
                 kidData kid;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
         public static class whoRegisteredMacID {
-            static final class r {
+            static final class response {
                 kidData kid;
                 userData user;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
     }
@@ -319,22 +305,22 @@ public class ServerGson {
         }
 
         public static class retrieveData {
-            static final class r {
+            static final class response {
                 List<activityData> activities;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
         public static class retrieveDataByTime {
-            static final class r {
+            static final class response {
                 List<activityData> activities;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
     }
@@ -380,12 +366,12 @@ public class ServerGson {
                         pDescription, pAlert, pCity, pState, pRepeat, pTimezoneOffset, pTodo));
             }
 
-            static final class r {
+            static final class response {
                 eventData event;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
@@ -429,32 +415,32 @@ public class ServerGson {
                         pDescription, pAlert, pCity, pState, pRepeat, pTimezoneOffset, pTodo));
             }
 
-            static final class r {
+            static final class response {
                 eventData event;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
         public static class retrieveEvents {
-            static final class r {
+            static final class response {
                 List<eventData> events;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
         public static class retrieveEventsWithTodo {
-            static final class r {
+            static final class response {
                 List<eventData> events;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
 
@@ -536,12 +522,12 @@ public class ServerGson {
         }
 
         public static class list {
-            static final class r {
+            static final class response {
                 List<hostData> hosts;
             }
 
-            public static r fromJson(String json) {
-                return new Gson().fromJson(json, r.class);
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
     }

@@ -49,13 +49,7 @@ public class FragmentSignupLogin extends ViewFragment {
     private Button.OnClickListener mOnLoginListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            String mail = mActivityMain.mConfig.getString(Config.KEY_MAIL);
-            String password = mActivityMain.mConfig.getString(Config.KEY_PASSWORD);
-
-            if (mail.equals("") || password.equals(""))
-                mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
-            else
-                mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            mActivityMain.selectFragment(FragmentSignupAccount.class.getName(), null);
         }
     };
 

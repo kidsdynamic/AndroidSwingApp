@@ -54,7 +54,7 @@ public class FragmentBoot extends ViewFragment {
             if (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals("")) {
                 name = FragmentSignupLanguage.class.getName();
             } else {
-                if (mActivityMain.mConfig.getString(Config.KEY_MAIL).equals("") || mActivityMain.mConfig.getString(Config.KEY_PASSWORD).equals("")) {
+                if (mActivityMain.mConfig.getString(Config.KEY_AUTH_TOKEN).equals("")) {
                     name = FragmentSignupLogin.class.getName();
                 } else {
                     name = FragmentSyncNow.class.getName();
