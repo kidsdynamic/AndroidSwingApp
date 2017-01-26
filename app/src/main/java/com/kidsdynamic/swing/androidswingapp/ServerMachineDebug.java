@@ -9,7 +9,7 @@ import java.util.List;
  * Created by weichigio on 2017/1/24.
  */
 
-public class ServerMachineCore extends ServerMachine {
+public class ServerMachineDebug extends ServerMachine {
     private Handler mHandler = new Handler();
     private int mExpectResponseCode = 200;
     private String mCurrentCommand;
@@ -17,7 +17,7 @@ public class ServerMachineCore extends ServerMachine {
     private String mResponseString = "";
 
 
-    public ServerMachineCore(Context context) {
+    public ServerMachineDebug(Context context) {
         super(context);
     }
 
