@@ -35,7 +35,7 @@ public class FragmentProfileOption extends ViewFragment {
         mViewPassword.setOnClickListener(mPasswordListener);
 
         TextView view = (TextView) mViewMain.findViewById(R.id.profile_option_version);
-        view.setText(BuildConfig.VERSION_NAME);
+        view.setText(BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE);
 
         return mViewMain;
     }
