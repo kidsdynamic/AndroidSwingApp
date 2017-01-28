@@ -58,6 +58,14 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="button_anit_orange">
+        <item name="android:textColor">@color/color_orange_main</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:background">@drawable/main_button_anti_orange</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="edittext_main" parent="@android:style/Widget.EditText">
         <item name="android:background">@drawable/main_edittext_background</item>
         <item name="android:textColorHint">@color/color_gray_light</item>

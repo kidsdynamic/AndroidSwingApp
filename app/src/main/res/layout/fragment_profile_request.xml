@@ -23,8 +23,8 @@
             style="@style/edittext_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:hint="Search User Email" />
     </LinearLayout>
 
@@ -37,15 +37,17 @@
         android:gravity="center"
         android:text="You Have 1 Request" />
 
-    <LinearLayout
-        android:id="@+id/profile_request_requester"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        android:orientation="vertical">
+        android:layout_weight="3">
 
-
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/profile_request_request_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <TextView
         style="@style/textview_toolbar"
@@ -55,13 +57,16 @@
         android:gravity="center"
         android:text="You've Requested Others" />
 
-    <LinearLayout
-        android:id="@+id/profile_request_watch"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
-        android:orientation="vertical">
+        android:layout_weight="4">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/profile_request_watch_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
 </LinearLayout>

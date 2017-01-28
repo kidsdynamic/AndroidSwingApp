@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/watch_contact"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="8" />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/watch_contact_requester_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkHeight="0.7" />
+
+        <ImageView
+            android:id="@+id/watch_contact_requester_allow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/watch_contact_requester_sponge"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/watch_contact_requester_sponge"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/iconbutton_yes" />
+
+        <ImageView
+            android:id="@+id/watch_contact_requester_deny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/watch_contact_requester_sponge"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/watch_contact_requester_sponge"
+            android:layout_centerVertical="true"
+            android:adjustViewBounds="true"
+            android:src="@mipmap/iconbutton_no" />
+    </RelativeLayout>
+</LinearLayout>

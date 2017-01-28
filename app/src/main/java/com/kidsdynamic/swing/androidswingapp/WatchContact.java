@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.LayoutRes;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,18 +46,15 @@ public class WatchContact implements Serializable {
         }
     }
 
-    public static View inflateBind(Context context, WatchContact.Device device) {
+    static View inflate(Context context, @LayoutRes int layout, WatchContact contact) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.view_watch_contact_bind, null);
+        View view = inflater.inflate(layout, null);
 
-        ViewPhoto viewPhoto = (ViewPhoto) view.findViewById(R.id.view_watch_contact_photo);
-        viewPhoto.setPhoto(device.mPhoto);
+        ViewPhoto viewPhoto = (ViewPhoto) view.findViewById(R.id.watch_contact_photo);
+        viewPhoto.setPhoto(contact.mPhoto);
 
-        TextView viewLabel = (TextView) view.findViewById(R.id.view_watch_contact_label);
-        viewLabel.setText(device.mLabel);
-
-        ImageView viewIcon = (ImageView) view.findViewById(R.id.view_watch_contact_button);
-        viewIcon.setImageResource(device.mBound ? R.mipmap.iconbutton_bind : R.mipmap.iconbutton_add);
+        TextView viewLabel = (TextView) view.findViewById(R.id.watch_contact_label);
+        viewLabel.setText(contact.mLabel);
 
         int height = context.getResources().getDisplayMetrics().heightPixels / 12;
         LinearLayout.LayoutParams layoutParams =
@@ -64,7 +62,28 @@ public class WatchContact implements Serializable {
         layoutParams.gravity = Gravity.CENTER;
         view.setLayoutParams(layoutParams);
 
-        view.setTag(device);
+        view.setTag(contact);
+
+        return view;
+    }
+
+    static View inflateBind(Context context, WatchContact.Device device) {
+        View view = inflate(context, R.layout.watch_contact_bind, device);
+
+        ImageView viewIcon = (ImageView) view.findViewById(R.id.watch_contact_bind_icon);
+        viewIcon.setImageResource(device.mBound ? R.mipmap.iconbutton_bind : R.mipmap.iconbutton_add);
+
+        return view;
+    }
+
+    static View inflateRequester(Context context, WatchContact.Person person) {
+        View view = inflate(context, R.layout.watch_contact_requester, person);
+
+        return view;
+    }
+
+    static View inflatePending(Context context, WatchContact.Device device) {
+        View view = inflate(context, R.layout.watch_contact_pending, device);
 
         return view;
     }
