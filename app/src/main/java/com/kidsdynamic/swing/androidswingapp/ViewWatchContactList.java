@@ -70,32 +70,6 @@ public class ViewWatchContactList extends ListView {
 
             return convertView;
         }
-
-        /*
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewContact viewContact;
-
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(mContext);
-                convertView = inflater.inflate(R.layout.view_watch_contact_row, null);
-
-                convertView.setLayoutParams(new AbsListView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                viewContact = (ViewContact) convertView.findViewById(R.id.view_contact_row_body);
-
-                viewContact.findViewById(R.id.view_contact_button1).setOnClickListener(mItemButton1ClickListener);
-                viewContact.findViewById(R.id.view_contact_button2).setOnClickListener(mItemButton2ClickListener);
-
-                convertView.setTag(viewContact);
-            } else {
-                viewContact = (ViewContact) convertView.getTag();
-            }
-
-            viewContact.load(getItem(position));
-
-            return convertView;
-        }
-        */
     }
 
     private View.OnClickListener mItemClickListener = new OnClickListener() {
