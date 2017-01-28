@@ -122,6 +122,7 @@ public class ServerMachine {
 
     public interface userLoginListener {
         void onSuccess(int statusCode, ServerGson.user.login.response result);
+
         void onFail(int statusCode);
     }
 
@@ -133,6 +134,7 @@ public class ServerMachine {
 
     public interface userRegisterListener {
         void onSuccess(int statusCode);
+
         void onFail(int statusCode, ServerGson.error.e1 error);
     }
 
@@ -144,6 +146,7 @@ public class ServerMachine {
 
     public interface userIsTokenValidListener {
         void onValidState(boolean valid);
+
         void onFail(int statusCode);
     }
 
@@ -155,6 +158,7 @@ public class ServerMachine {
 
     public interface userIsMailAvailableToRegisterListener {
         void onValidState(boolean valid);
+
         void onFail(int statusCode);
     }
 
@@ -167,6 +171,7 @@ public class ServerMachine {
 
     public interface userUpdateProfileListener {
         void onSuccess(int statusCode, ServerGson.userData response);
+
         void onFail(int statusCode, ServerGson.error.e1 error);
     }
 
@@ -178,6 +183,7 @@ public class ServerMachine {
 
     public interface userRetrieveUserProfileListener {
         void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response);
+
         void onFail(int statusCode);
     }
 
@@ -188,6 +194,7 @@ public class ServerMachine {
 
     public interface userAvatarUploadListener {
         void onSuccess(int statusCode, ServerGson.userData response);
+
         void onFail(int statusCode);
     }
 
@@ -198,6 +205,7 @@ public class ServerMachine {
 
     public interface userAvatarUploadKidListener {
         void onSuccess(int statusCode, ServerGson.kidData response);
+
         void onFail(int statusCode);
     }
 
@@ -209,7 +217,9 @@ public class ServerMachine {
 
     public interface kidsAddListener {
         void onSuccess(int statusCode, ServerGson.kids.add.response response);
+
         void onConflict(int statusCode);
+
         void onFail(int statusCode);
     }
 
@@ -221,6 +231,7 @@ public class ServerMachine {
 
     public interface kidsUpdateListener {
         void onSuccess(int statusCode, ServerGson.kids.update.response response);
+
         void onFail(int statusCode);
     }
 
@@ -232,7 +243,9 @@ public class ServerMachine {
 
     public interface kidsWhoRegisteredMacIDListener {
         void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response);
+
         void onNotRegistered(int statusCode);
+
         void onFail(int statusCode);
     }
 
@@ -245,7 +258,9 @@ public class ServerMachine {
 
     public interface activityUploadRawDataListener {
         void onSuccess(int statusCode);
+
         void onConflict(int statusCode);
+
         void onFail(int statusCode);
     }
 
@@ -257,6 +272,7 @@ public class ServerMachine {
 
     public interface activityRetrieveDataListener {
         void onSuccess(int statusCode, ServerGson.activity.retrieveData.response response);
+
         void onFail(int statusCode);
     }
 
@@ -270,6 +286,7 @@ public class ServerMachine {
 
     public interface activityRetrieveDataByTimeListener {
         void onSuccess(int statusCode, ServerGson.activity.retrieveDataByTime.response response);
+
         void onFail(int statusCode);
     }
 
@@ -284,6 +301,7 @@ public class ServerMachine {
 
     public interface eventAddListener {
         void onSuccess(int statusCode, ServerGson.event.add.response response);
+
         void onFail(int statusCode);
     }
 
@@ -297,6 +315,7 @@ public class ServerMachine {
 
     public interface eventUpdateListener {
         void onSuccess(int statusCode, ServerGson.event.update.response response);
+
         void onFail(int statusCode);
     }
 
@@ -310,6 +329,7 @@ public class ServerMachine {
 
     public interface eventDeleteListener {
         void onSuccess(int statusCode);
+
         void onFail(int statusCode);
     }
 
@@ -321,6 +341,7 @@ public class ServerMachine {
 
     public interface eventRetrieveEventsListener {
         void onSuccess(int statusCode, ServerGson.event.retrieveEvents.response response);
+
         void onFail(int statusCode);
     }
 
@@ -334,6 +355,7 @@ public class ServerMachine {
 
     public interface eventRetrieveAllEventsWithTodoListener {
         void onSuccess(int statusCode, ServerGson.event.retrieveEventsWithTodo.response response);
+
         void onFail(int statusCode);
     }
 
@@ -344,6 +366,7 @@ public class ServerMachine {
 
     public interface eventTodoDoneListener {
         void onSuccess(int statusCode);
+
         void onFail(int statusCode);
     }
 
@@ -355,7 +378,9 @@ public class ServerMachine {
 
     public interface subHostAddListener {
         void onSuccess(int statusCode, ServerGson.hostData response);
+
         void onConflict(int statusCode);
+
         void onFail(int statusCode);
     }
 
@@ -367,6 +392,7 @@ public class ServerMachine {
 
     public interface subHostAcceptListener {
         void onSuccess(int statusCode, ServerGson.hostData response);
+
         void onFail(int statusCode);
     }
 
@@ -378,6 +404,7 @@ public class ServerMachine {
 
     public interface subHostDenyListener {
         void onSuccess(int statusCode, ServerGson.hostData response);
+
         void onFail(int statusCode);
     }
 
@@ -389,6 +416,7 @@ public class ServerMachine {
 
     public interface subHostListListener {
         void onSuccess(int statusCode, ServerGson.subHost.list.response response);
+
         void onFail(int statusCode);
     }
 
@@ -418,7 +446,7 @@ public class ServerMachine {
             }
 
             if (mCurrentTask.mResponseListener != null) {
-                switch(mCurrentTask.mCommand) {
+                switch (mCurrentTask.mCommand) {
                     case CMD_USER_LOGIN:
                         if (responseCode == 200)
                             ((userLoginListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.user.login.fromJson(responseString));
@@ -513,8 +541,6 @@ public class ServerMachine {
                             ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.whoRegisteredMacID.fromJson(responseString));
                         else if (responseCode == 400)
                             ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
-                        else if (responseCode == 404)
-                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onNotRegistered(responseCode);
                         else
                             ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
@@ -646,11 +672,11 @@ public class ServerMachine {
         @Override
         public void onErrorResponse(VolleyError error) {
             int responseCode = 0;
-            if (error.networkResponse!=null)
+            if (error.networkResponse != null)
                 responseCode = error.networkResponse.statusCode;
 
             if (mCurrentTask.mResponseListener != null) {
-                switch(mCurrentTask.mCommand) {
+                switch (mCurrentTask.mCommand) {
                     case CMD_USER_LOGIN:
                         ((userLoginListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
@@ -692,7 +718,10 @@ public class ServerMachine {
                         break;
 
                     case CMD_KIDS_WHO_REGISTERED_MAC_ID:
-                        ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        if (responseCode == 404)
+                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onNotRegistered(responseCode);
+                        else
+                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_ACTIVITY_UPLOAD_RAW_DATA:
