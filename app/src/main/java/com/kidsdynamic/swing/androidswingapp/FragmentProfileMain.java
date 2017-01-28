@@ -89,7 +89,7 @@ public class FragmentProfileMain extends ViewFragment {
     private View.OnClickListener mAddSharedListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            addContact(mViewSharedContainer, null);
+            mActivityMain.selectFragment(FragmentProfileRequest.class.getName(), null);
         }
     };
 
