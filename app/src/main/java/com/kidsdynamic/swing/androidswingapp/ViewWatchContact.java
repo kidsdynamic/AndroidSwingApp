@@ -51,12 +51,10 @@ public class ViewWatchContact extends RelativeLayout {
         mDesiredHeight = metrics.heightPixels / getResources().getInteger(R.integer.contact_label_denominator);
         mDesiredWidth = mDesiredHeight * 4;
 
-        inflate(getContext(), R.layout.view_watch_contact, this);
+        inflate(getContext(), R.layout.view_watch_contact_select, this);
 
         mViewPhoto = (ViewPhoto) findViewById(R.id.view_watch_contact_photo);
         mViewLabel = (TextView) findViewById(R.id.view_watch_contact_label);
-        mViewButton1 = (ImageView) findViewById(R.id.view_watch_contact_button1);
-        mViewButton2 = (ImageView) findViewById(R.id.view_watch_contact_button2);
     }
 
     @Override

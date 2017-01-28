@@ -151,7 +151,7 @@ public class ActivityMain extends AppCompatActivity
             mBLEMachine = new BLEMachine(this);
 
         if (activeService && mServiceMachine == null)
-            mServiceMachine = new ServerMachine(this);
+            mServiceMachine = new ServerMachineDebug(this);
 
         if (mBLEMachine != null) {
             mBLEMachine.Start();

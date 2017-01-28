@@ -37,13 +37,15 @@
         android:gravity="center"
         android:text="You Have 1 Request" />
 
-    <com.kidsdynamic.swing.androidswingapp.ViewWatchContactList
+    <LinearLayout
         android:id="@+id/profile_request_requester"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3">
+        android:layout_weight="3"
+        android:orientation="vertical">
 
-    </com.kidsdynamic.swing.androidswingapp.ViewWatchContactList>
+
+    </LinearLayout>
 
     <TextView
         style="@style/textview_toolbar"
@@ -53,12 +55,13 @@
         android:gravity="center"
         android:text="You've Requested Others" />
 
-    <com.kidsdynamic.swing.androidswingapp.ViewWatchContactList
+    <LinearLayout
         android:id="@+id/profile_request_watch"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4">
+        android:layout_weight="4"
+        android:orientation="vertical">
 
-    </com.kidsdynamic.swing.androidswingapp.ViewWatchContactList>
+    </LinearLayout>
 
 </LinearLayout>

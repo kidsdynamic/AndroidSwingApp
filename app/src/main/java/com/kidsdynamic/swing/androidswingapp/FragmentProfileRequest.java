@@ -18,8 +18,6 @@ public class FragmentProfileRequest extends ViewFragment {
 
     private EditText mViewMail;
     private TextView mViewCount;
-    private ViewWatchContactList mViewRequester;
-    private ViewWatchContactList mViewWatch;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +32,6 @@ public class FragmentProfileRequest extends ViewFragment {
         mViewMail = (EditText) mViewMain.findViewById(R.id.profile_request_mail);
 
         mViewCount = (TextView) mViewMain.findViewById(R.id.profile_request_count);
-
-        mViewRequester = (ViewWatchContactList) mViewMain.findViewById(R.id.profile_request_requester);
-
-        mViewWatch = (ViewWatchContactList) mViewMain.findViewById(R.id.profile_request_watch);
 
         return mViewMain;
     }

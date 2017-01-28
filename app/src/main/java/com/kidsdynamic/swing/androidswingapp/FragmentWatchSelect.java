@@ -1,11 +1,14 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -18,7 +21,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private View mViewMain;
 
     private Button mButtonDashboard;
-    private ViewWatchContactList mViewWatchContactList;
+    private LinearLayout mViewContainer;
     private ImageView mViewBack;
 
     private ArrayList<WatchContact.Device> mDeviceList;
@@ -37,8 +40,7 @@ public class FragmentWatchSelect extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_select, container, false);
 
-        mViewWatchContactList = (ViewWatchContactList) mViewMain.findViewById(R.id.watch_select_list);
-        mViewWatchContactList.setOnButtonClickListener(mContactClickListener);
+        mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.watch_select_container);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -47,7 +49,7 @@ public class FragmentWatchSelect extends ViewFragment {
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
         for (WatchContact.Device device : mDeviceList) {
-            mViewWatchContactList.addItem(device);
+            addWatch(device);
         }
 
         return mViewMain;
@@ -78,6 +80,28 @@ public class FragmentWatchSelect extends ViewFragment {
         }
     };
 
+    private void addWatch(WatchContact.Device device) {
+        LayoutInflater inflater = LayoutInflater.from(mActivityMain);
+        View view = inflater.inflate(R.layout.view_watch_contact_select, null);
+
+        ((ViewPhoto) view.findViewById(R.id.view_watch_contact_photo)).setPhoto(device.mPhoto);
+        ((TextView) view.findViewById(R.id.view_watch_contact_label)).setText(device.mLabel);
+
+        view.setTag(device);
+        view.setOnClickListener(mDeviceClickListener);
+
+        mViewContainer.addView(view);
+    }
+
+    private View.OnClickListener mDeviceClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            WatchContact.Device device = (WatchContact.Device) view.getTag();
+
+            Log.d("xxx", "name:" + device.mLabel);
+        }
+    };
+/*
     private ViewWatchContactList.OnContactClickListener mContactClickListener = new ViewWatchContactList.OnContactClickListener() {
         @Override
         public void onClick(ViewWatchContact contact, int position, int button) {
@@ -88,4 +112,5 @@ public class FragmentWatchSelect extends ViewFragment {
                 mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), null);
         }
     };
+*/
 }

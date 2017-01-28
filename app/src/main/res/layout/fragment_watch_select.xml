@@ -40,14 +40,20 @@
             android:layout_alignParentEnd="true"
             app:shrinkWidth="0.1" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewWatchContactList
-            android:id="@+id/watch_select_list"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toEndOf="@+id/watch_select_label_start"
-            android:layout_toStartOf="@+id/watch_select_label_end"
-            android:divider="@null"
-            android:dividerHeight="0dp" />
+            android:layout_toStartOf="@+id/watch_select_label_end">
+
+            <LinearLayout
+                android:id="@+id/watch_select_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
     <RelativeLayout
