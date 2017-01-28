@@ -22,7 +22,7 @@ import android.util.TypedValue;
  */
 
 public class ViewPhoto extends ViewSponge {
-    private int mDesiredSize = 0;
+    private int mDesiredSize = 200;
 
     private Rect mRectPhoto;
     private Rect mRectBorder;
@@ -70,7 +70,6 @@ public class ViewPhoto extends ViewSponge {
                 if (attr == R.styleable.ViewPhoto_android_src) {
                     Drawable drawable = typedArray.getDrawable(attr);
                     setPhoto(((BitmapDrawable) drawable).getBitmap());
-                    mDesiredSize = Math.max(mPhoto.getWidth(), mPhoto.getHeight());
                 } else if (attr == R.styleable.ViewPhoto_strokeWidth) {
                     mStrokeWidth = typedArray.getDimension(attr, mStrokeWidth);
                 } else if (attr == R.styleable.ViewPhoto_strokeActiveColor) {

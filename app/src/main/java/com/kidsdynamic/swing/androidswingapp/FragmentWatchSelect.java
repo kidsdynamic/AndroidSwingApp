@@ -1,7 +1,10 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,13 +84,7 @@ public class FragmentWatchSelect extends ViewFragment {
     };
 
     private void addWatch(WatchContact.Device device) {
-        LayoutInflater inflater = LayoutInflater.from(mActivityMain);
-        View view = inflater.inflate(R.layout.view_watch_contact_select, null);
-
-        ((ViewPhoto) view.findViewById(R.id.view_watch_contact_photo)).setPhoto(device.mPhoto);
-        ((TextView) view.findViewById(R.id.view_watch_contact_label)).setText(device.mLabel);
-
-        view.setTag(device);
+        View view = WatchContact.inflateBind(mActivityMain, device);
         view.setOnClickListener(mDeviceClickListener);
 
         mViewContainer.addView(view);

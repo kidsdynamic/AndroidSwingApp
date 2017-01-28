@@ -39,9 +39,9 @@ public class FragmentSyncSelect extends ViewFragment {
         mDeviceList = new ArrayList<>();
 
         // todo: load binded devices from server
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Kid 001", 0));
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", 0));
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid XX3", 0));
+        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Kid 001", true));
+        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", true));
+        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid XX3", true));
 
         for (WatchContact.Device device : mDeviceList)
             addDevice(device);

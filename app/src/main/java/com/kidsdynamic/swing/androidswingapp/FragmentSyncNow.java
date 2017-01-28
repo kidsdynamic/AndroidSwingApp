@@ -52,7 +52,7 @@ public class FragmentSyncNow extends ViewFragment {
         @Override
         public void onClick(View view) {
             WatchContact.Device device =
-                    new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", 0);
+                    new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", true);
 
             Bundle bundle = new Bundle();
             bundle.putSerializable(BUNDLE_KEY_DEVICE, device);

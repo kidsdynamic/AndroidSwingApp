@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -74,7 +75,7 @@ public class FragmentWatchSearch extends ViewFragment {
         @Override
         public void onProgress(ViewProgressCircle view, int progress, int total) {
 
-            if(progress >= total) {
+            if (progress >= total) {
                 searchStop();
                 showSimulateDialog();
             }
@@ -93,12 +94,12 @@ public class FragmentWatchSearch extends ViewFragment {
                 ArrayList<WatchContact> list = new ArrayList<WatchContact>();
                 WatchContact.Device device;
 
-                device = new WatchContact.Device(null, "Tobias Martin", ViewWatchContact.MODE_BIND);
-                device.mBound = true;
+                device = new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Tobias Martin", true);
+                device.mBind = true;
                 list.add(device);
 
-                device = new WatchContact.Device(null, "SwingWatch568DANG5E", ViewWatchContact.MODE_BIND);
-                device.mBound = false;
+                device = new WatchContact.Device(null, "SwingWatch568DANG5E", false);
+                device.mBind = false;
                 list.add(device);
 
                 Bundle bundle = new Bundle();
