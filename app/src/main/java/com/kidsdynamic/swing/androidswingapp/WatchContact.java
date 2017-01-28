@@ -30,12 +30,12 @@ public class WatchContact implements Serializable {
     }
 
     public static class Device extends WatchContact {
-        public boolean mBind = false;
+        public boolean mBound = false;
 
         public Device(Bitmap photo, String label, boolean bind) {
             super(photo, label);
 
-            mBind = bind;
+            mBound = bind;
         }
     }
 
@@ -56,7 +56,7 @@ public class WatchContact implements Serializable {
         viewLabel.setText(device.mLabel);
 
         ImageView viewIcon = (ImageView) view.findViewById(R.id.view_watch_contact_button);
-        viewIcon.setImageResource(device.mBind ? R.mipmap.iconbutton_bind : R.mipmap.iconbutton_add);
+        viewIcon.setImageResource(device.mBound ? R.mipmap.iconbutton_bind : R.mipmap.iconbutton_add);
 
         int height = context.getResources().getDisplayMetrics().heightPixels / 12;
         LinearLayout.LayoutParams layoutParams =

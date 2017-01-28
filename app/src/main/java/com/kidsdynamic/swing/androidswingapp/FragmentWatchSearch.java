@@ -1,7 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -75,10 +73,9 @@ public class FragmentWatchSearch extends ViewFragment {
         @Override
         public void onScan(ArrayList<BLEMachine.Device> result) {
             mSearchResult = new ArrayList<>();
-            for(BLEMachine.Device dev : result) {
+            for (BLEMachine.Device dev : result) {
 
-                WatchContact.Device device = new WatchContact.Device(null, dev.mAddress, ViewWatchContact.MODE_BIND);
-                device.mBound = false;
+                WatchContact.Device device = new WatchContact.Device(null, dev.mAddress, false);
                 mSearchResult.add(device);
             }
 
@@ -118,7 +115,7 @@ public class FragmentWatchSearch extends ViewFragment {
     ServerMachine.kidsWhoRegisteredMacIDListener mKidsWhoRegisteredMacIDListener = new ServerMachine.kidsWhoRegisteredMacIDListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response) {
-            WatchContact.Device device = (WatchContact.Device)mSearchResult.get(mSearchResultIndex);
+            WatchContact.Device device = (WatchContact.Device) mSearchResult.get(mSearchResultIndex);
             device.mLabel = response.user.email;
             device.mBound = true;
             Log.d("swing", "Register user " + device.mLabel);
