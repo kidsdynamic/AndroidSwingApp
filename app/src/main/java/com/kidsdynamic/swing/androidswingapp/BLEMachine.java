@@ -17,6 +17,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class BLEMachine extends BLEControl {
     private Handler mHandler = new Handler();
     private onFinishListener mOnFinishListener = null;
+    private boolean mRunning = false;
 
     private void Log(String msg) {
         Log.i("BLEMachine", msg);
@@ -27,19 +28,29 @@ public class BLEMachine extends BLEControl {
     }
 
     public boolean Start() {
-        Init(mEventListener);
+        synchronized (this) {
+            if (!mRunning) {
+                Init(mEventListener);
 
-        mState = STATE_INIT;
-        EnableBondStateReceiver(false);
-        mRelationDevice.resetFlag();
+                mState = STATE_INIT;
+                EnableBondStateReceiver(false);
+                mRelationDevice.resetFlag();
 
-        mHandler.postDelayed(stateTransition, TRANSITION_GAP);
+                mHandler.postDelayed(stateTransition, TRANSITION_GAP);
+                mRunning = true;
+            }
+        }
         return true;
     }
 
     public boolean Stop() {
-        mHandler.removeCallbacks(stateTransition);
-        Deinit();
+        synchronized (this) {
+            if (mRunning) {
+                mHandler.removeCallbacks(stateTransition);
+                Deinit();
+                mRunning = false;
+            }
+        }
         return true;
     }
 
@@ -239,7 +250,7 @@ public class BLEMachine extends BLEControl {
         void onSync(int resultCode, ArrayList<InOutDoor> result);
     }
 
-    public int SetScan(onFinishListener listener, int second) {
+    public int Search(onFinishListener listener, int second) {
         mOnFinishListener = listener;
         mRelationDevice.mAction.mScanTime = second * 1000 / TRANSITION_GAP;
         return mRelationDevice.mAction.mScanTime;

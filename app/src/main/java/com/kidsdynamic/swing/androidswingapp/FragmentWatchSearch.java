@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +23,9 @@ public class FragmentWatchSearch extends ViewFragment {
     private View mViewMain;
     private ImageView mViewBack;
     private ViewProgressCircle mViewProgress;
+
+    private ArrayList<WatchContact> mSearchResult;
+    private int mSearchResultIndex = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,15 +42,19 @@ public class FragmentWatchSearch extends ViewFragment {
 
         mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.watch_search_progress);
         mViewProgress.setOnProgressListener(mProgressListener);
+        mViewProgress.setRepeat(true);
+        mViewProgress.setDuration(1000);
 
         Handler handle = new Handler();
         handle.post(new Runnable() {
             @Override
             public void run() {
                 mViewProgress.start();
-                searchStart();
+                //searchStart();
             }
         });
+
+        mActivityMain.mBLEMachine.Search(mBleListener, 10);
 
         return mViewMain;
     }
@@ -60,9 +67,75 @@ public class FragmentWatchSearch extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        searchStop();
+        mActivityMain.mBLEMachine.Search(null, 0);
         mActivityMain.popFragment();
     }
+
+    BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
+        @Override
+        public void onScan(ArrayList<BLEMachine.Device> result) {
+            mSearchResult = new ArrayList<>();
+            for(BLEMachine.Device dev : result) {
+
+                WatchContact.Device device = new WatchContact.Device(null, dev.mAddress, ViewWatchContact.MODE_BIND);
+                device.mBound = false;
+                mSearchResult.add(device);
+            }
+
+            if (!mSearchResult.isEmpty()) {
+                searchMac(true);
+            } else {
+                mActivityMain.selectFragment(FragmentWatchSorry.class.getName(), null);
+            }
+        }
+
+        @Override
+        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
+
+        }
+    };
+
+    private void searchMac(boolean searchStart) {
+        if (searchStart)
+            mSearchResultIndex = 0;
+        else
+            mSearchResultIndex++;
+
+        if (mSearchResult.size() <= mSearchResultIndex) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST, mSearchResult);
+
+            mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
+        } else {
+            String[] separated = mSearchResult.get(mSearchResultIndex).mLabel.split(":");
+            String macId = "";
+            for (String s : separated)
+                macId += s;
+            mActivityMain.mServiceMachine.kidsWhoRegisteredMacID(mKidsWhoRegisteredMacIDListener, macId);
+        }
+    }
+
+    ServerMachine.kidsWhoRegisteredMacIDListener mKidsWhoRegisteredMacIDListener = new ServerMachine.kidsWhoRegisteredMacIDListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response) {
+            WatchContact.Device device = (WatchContact.Device)mSearchResult.get(mSearchResultIndex);
+            device.mLabel = response.user.email;
+            device.mBound = true;
+            Log.d("swing", "Register user " + device.mLabel);
+            searchMac(false);
+        }
+
+        @Override
+        public void onNotRegistered(int statusCode) {
+            searchMac(false);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mViewProgress.pause();
+            Toast.makeText(mActivityMain, "Search MAC failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
         @Override
@@ -74,58 +147,6 @@ public class FragmentWatchSearch extends ViewFragment {
     private ViewProgressCircle.OnProgressListener mProgressListener = new ViewProgressCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewProgressCircle view, int progress, int total) {
-
-            if (progress >= total) {
-                searchStop();
-                showSimulateDialog();
-            }
         }
     };
-
-    private void showSimulateDialog() {
-        // todo: simulation action, replace by real BT response
-        AlertDialog.Builder dialog = new AlertDialog.Builder(mActivityMain);
-        dialog.setTitle("It is a Test!");
-        dialog.setMessage("Do you find Swing Watch?");
-
-        dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ArrayList<WatchContact> list = new ArrayList<WatchContact>();
-                WatchContact.Device device;
-
-                device = new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Tobias Martin", true);
-                device.mBind = true;
-                list.add(device);
-
-                device = new WatchContact.Device(null, "SwingWatch568DANG5E", false);
-                device.mBind = false;
-                list.add(device);
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST, list);
-
-                mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
-            }
-        });
-
-        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mActivityMain.selectFragment(FragmentWatchSorry.class.getName(), null);
-            }
-        });
-
-        dialog.show();
-    }
-
-    private void searchStart() {
-        // todo: start search here!
-        Log.d("xxx", "searchStart");
-    }
-
-    private void searchStop() {
-        // todo: pause search here!
-        Log.d("xxx", "searchStop");
-    }
 }

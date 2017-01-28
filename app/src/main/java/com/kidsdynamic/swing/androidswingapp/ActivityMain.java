@@ -5,33 +5,19 @@ import android.animation.ValueAnimator;
 import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.Volley;
-
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 
 public class ActivityMain extends AppCompatActivity
@@ -151,11 +137,11 @@ public class ActivityMain extends AppCompatActivity
             mBLEMachine = new BLEMachine(this);
 
         if (activeService && mServiceMachine == null)
-            mServiceMachine = new ServerMachineDebug(this);
+            mServiceMachine = new ServerMachine(this);
 
         if (mBLEMachine != null) {
             mBLEMachine.Start();
-            //mBLEMachine.SetScan(mOnFinishListener, 10);
+            //mBLEMachine.Search(mOnFinishListener, 10);
         }
 
         if (mServiceMachine != null)
