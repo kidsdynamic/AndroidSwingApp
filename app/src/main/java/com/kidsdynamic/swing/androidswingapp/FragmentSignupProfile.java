@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -47,6 +48,8 @@ public class FragmentSignupProfile extends ViewFragment {
 
     private String mRegisterMail = null;
     private String mRegisterPassword = null;
+    private Bitmap mRegisterAvatar = null;
+    private String mRegisterAvatarFilename = null;
     private String mFirstName;
     private String mLastName;
     private String mPhoneNumber;
@@ -68,10 +71,13 @@ public class FragmentSignupProfile extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_signup_profile, container, false);
 
         Bundle bundle = getArguments();
-        if (bundle!=null) {
+        if (bundle != null) {
             mRegisterMail = bundle.getString("MAIL");
             mRegisterPassword = bundle.getString("PASSWORD");
             // GioChen Todo : If mail and password are not null, userRegister below.
+            Log.d("TEST", "mail " + mRegisterMail);
+        } else {
+            Log.d("TEST", "bundle null");
         }
 
         mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.signup_profile_photo);
@@ -120,8 +126,8 @@ public class FragmentSignupProfile extends ViewFragment {
         super.onResume();
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
-            Bitmap bitmap = mActivityMain.mBitmapStack.pop();
-            mViewPhoto.setPhoto(bitmap);
+            mRegisterAvatar = mActivityMain.mBitmapStack.pop();
+            mViewPhoto.setPhoto(mRegisterAvatar);
         }
     }
 
@@ -181,9 +187,9 @@ public class FragmentSignupProfile extends ViewFragment {
                 mPhoneNumber = mViewPhone.getText().toString();
                 mZipCode = mViewZip.getText().toString();
 
-                processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+                processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
 
-                if (mRegisterMail!=null && mRegisterPassword!=null) {
+                if (mRegisterMail != null && mRegisterPassword != null) {
                     mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
                 } else {
                     // GioChen Todo : wrong path
@@ -212,7 +218,7 @@ public class FragmentSignupProfile extends ViewFragment {
             }
 
             processDialog.dismiss();
-            Toast.makeText(mActivityMain,msg,Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -221,14 +227,13 @@ public class FragmentSignupProfile extends ViewFragment {
         public void onSuccess(int statusCode, ServerGson.user.login.response result) {
             mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
             mActivityMain.mServiceMachine.setAuthToken(result.access_token);
-            // Todo : must replace by user/avatar/upload
             mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
         }
 
         @Override
         public void onFail(int statusCode) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain,"Login failed("+statusCode+").",Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain, "Login failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -241,14 +246,65 @@ public class FragmentSignupProfile extends ViewFragment {
             mActivityMain.mConfig.setString(Config.KEY_PHONE, mPhoneNumber);
             mActivityMain.mConfig.setString(Config.KEY_ZIP, mZipCode);
 
-            mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+            if (mRegisterAvatar != null) {
+                FileOutputStream out = null;
+                try {
+                    File sdCard = Environment.getExternalStorageDirectory();
+                    File dir = new File(sdCard.getAbsolutePath() + "/Swing");
+                    dir.mkdirs();
+                    mRegisterAvatarFilename = dir + "/AvatarUser.png";
+                    out = new FileOutputStream(mRegisterAvatarFilename);
+                    mRegisterAvatar.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+
+                } catch (Exception e) {
+                    mRegisterAvatarFilename = null;
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (out != null) {
+                            out.close();
+                        }
+                    } catch (IOException e) {
+                        mRegisterAvatarFilename = null;
+                        e.printStackTrace();
+                    }
+                }
+
+                if (mRegisterAvatarFilename != null) {
+                    mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mRegisterAvatarFilename);
+                } else {
+                    // GioChen Todo: upload later?
+                    Log.d("swing", "Can't create avatar file!" + mRegisterAvatarFilename);
+                    mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+                }
+
+            } else {
+                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+            }
         }
 
         @Override
         public void onFail(int statusCode, ServerGson.error.e1 error) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain,"Update failed("+statusCode+").",Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain, "Update failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
 
+        }
+    };
+
+    ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.userData response) {
+            mActivityMain.mConfig.setString(Config.KEY_AVATAR_USER, mRegisterAvatarFilename);
+
+            mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            processDialog.dismiss();
+            Toast.makeText(mActivityMain, "Update avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            //mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }
     };
 
