@@ -100,33 +100,33 @@ public class ServerMachineDebug extends ServerMachine {
 
                 case CMD_KIDS_ADD:
                     if (mExpectResponseCode == 200)
-                        ((userKidsAddListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.add.fromJson(mResponseString));
+                        ((kidsAddListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.add.fromJson(mResponseString));
                     else if (mExpectResponseCode == 400)
-                        ((userKidsAddListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                        ((kidsAddListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     else if (mExpectResponseCode == 409)
-                        ((userKidsAddListener) mCurrentResponseListener).onConflict(mExpectResponseCode);
+                        ((kidsAddListener) mCurrentResponseListener).onConflict(mExpectResponseCode);
                     else
-                        ((userKidsAddListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                        ((kidsAddListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     break;
 
                 case CMD_KIDS_UPDATE:
                     if (mExpectResponseCode == 200)
-                        ((userKidsUpdateListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.update.fromJson(mResponseString));
+                        ((kidsUpdateListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.update.fromJson(mResponseString));
                     else if (mExpectResponseCode == 400)
-                        ((userKidsUpdateListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                        ((kidsUpdateListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     else
-                        ((userKidsUpdateListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                        ((kidsUpdateListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     break;
 
                 case CMD_KIDS_WHO_REGISTERED_MAC_ID:
                     if (mExpectResponseCode == 200)
-                        ((userWhoRegisteredMacIDListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.whoRegisteredMacID.fromJson(mResponseString));
+                        ((kidsWhoRegisteredMacIDListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.whoRegisteredMacID.fromJson(mResponseString));
                     else if (mExpectResponseCode == 400)
-                        ((userWhoRegisteredMacIDListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                        ((kidsWhoRegisteredMacIDListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     else if (mExpectResponseCode == 404)
-                        ((userWhoRegisteredMacIDListener) mCurrentResponseListener).onNotRegistered(mExpectResponseCode);
+                        ((kidsWhoRegisteredMacIDListener) mCurrentResponseListener).onNotRegistered(mExpectResponseCode);
                     else
-                        ((userWhoRegisteredMacIDListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                        ((kidsWhoRegisteredMacIDListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     break;
 
                 case CMD_ACTIVITY_UPLOAD_RAW_DATA:
@@ -263,7 +263,7 @@ public class ServerMachineDebug extends ServerMachine {
 
     @Override
     public void userRegister(userRegisterListener listener, String email, String password, String firstName, String lastName, String phoneNumber, String zipCode) {
-        mCurrentCommand = CMD_USER_LOGIN;
+        mCurrentCommand = CMD_USER_REGISTER;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);
     }
@@ -381,7 +381,7 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void kidsAdd(userKidsAddListener listener, String firstName, String lastName, String macId) {
+    public void kidsAdd(kidsAddListener listener, String firstName, String lastName, String macId) {
         mCurrentCommand = CMD_KIDS_ADD;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);
@@ -416,7 +416,7 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void kidsUpdate(userKidsUpdateListener listener, String kidId, String firstName, String lastName) {
+    public void kidsUpdate(kidsUpdateListener listener, String kidId, String firstName, String lastName) {
         mCurrentCommand = CMD_KIDS_UPDATE;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);
@@ -433,7 +433,7 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void kidsWhoRegisteredMacID(userWhoRegisteredMacIDListener listener, String macId) {
+    public void kidsWhoRegisteredMacID(kidsWhoRegisteredMacIDListener listener, String macId) {
         mCurrentCommand = CMD_KIDS_WHO_REGISTERED_MAC_ID;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);

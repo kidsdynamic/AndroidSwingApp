@@ -207,36 +207,36 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_AVATAR_UPLOAD_KID, map, filePath), CMD_AVATAR_UPLOAD_KID, listener));
     }
 
-    public interface userKidsAddListener {
+    public interface kidsAddListener {
         void onSuccess(int statusCode, ServerGson.kids.add.response response);
         void onConflict(int statusCode);
         void onFail(int statusCode);
     }
 
-    public void kidsAdd(userKidsAddListener listener, String firstName, String lastName, String macId) {
+    public void kidsAdd(kidsAddListener listener, String firstName, String lastName, String macId) {
         Map<String, String> map = new HashMap<>();
         map.put("json", ServerGson.kids.add.toJson(firstName, lastName, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_KIDS_ADD, map, null), CMD_KIDS_ADD, listener));
     }
 
-    public interface userKidsUpdateListener {
+    public interface kidsUpdateListener {
         void onSuccess(int statusCode, ServerGson.kids.update.response response);
         void onFail(int statusCode);
     }
 
-    public void kidsUpdate(userKidsUpdateListener listener, String kidId, String firstName, String lastName) {
+    public void kidsUpdate(kidsUpdateListener listener, String kidId, String firstName, String lastName) {
         Map<String, String> map = new HashMap<>();
         map.put("json", ServerGson.kids.update.toJson(kidId, firstName, lastName));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_KIDS_UPDATE, map, null), CMD_KIDS_UPDATE, listener));
     }
 
-    public interface userWhoRegisteredMacIDListener {
+    public interface kidsWhoRegisteredMacIDListener {
         void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response);
         void onNotRegistered(int statusCode);
         void onFail(int statusCode);
     }
 
-    public void kidsWhoRegisteredMacID(userWhoRegisteredMacIDListener listener, String macId) {
+    public void kidsWhoRegisteredMacID(kidsWhoRegisteredMacIDListener listener, String macId) {
         Map<String, String> map = new HashMap<>();
         String addressForGet = CMD_KIDS_WHO_REGISTERED_MAC_ID + "?";
         addressForGet += "macId=" + macId;
@@ -490,33 +490,33 @@ public class ServerMachine {
 
                     case CMD_KIDS_ADD:
                         if (responseCode == 200)
-                            ((userKidsAddListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.add.fromJson(responseString));
+                            ((kidsAddListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.add.fromJson(responseString));
                         else if (responseCode == 400)
-                            ((userKidsAddListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                            ((kidsAddListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         else if (responseCode == 409)
-                            ((userKidsAddListener) mCurrentTask.mResponseListener).onConflict(responseCode);
+                            ((kidsAddListener) mCurrentTask.mResponseListener).onConflict(responseCode);
                         else
-                            ((userKidsAddListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                            ((kidsAddListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_KIDS_UPDATE:
                         if (responseCode == 200)
-                            ((userKidsUpdateListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.update.fromJson(responseString));
+                            ((kidsUpdateListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.update.fromJson(responseString));
                         else if (responseCode == 400)
-                            ((userKidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                            ((kidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         else
-                            ((userKidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                            ((kidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_KIDS_WHO_REGISTERED_MAC_ID:
                         if (responseCode == 200)
-                            ((userWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.whoRegisteredMacID.fromJson(responseString));
+                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.whoRegisteredMacID.fromJson(responseString));
                         else if (responseCode == 400)
-                            ((userWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         else if (responseCode == 404)
-                            ((userWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onNotRegistered(responseCode);
+                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onNotRegistered(responseCode);
                         else
-                            ((userWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                            ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_ACTIVITY_UPLOAD_RAW_DATA:
@@ -684,15 +684,15 @@ public class ServerMachine {
                         break;
 
                     case CMD_KIDS_ADD:
-                        ((userKidsAddListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        ((kidsAddListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_KIDS_UPDATE:
-                        ((userKidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        ((kidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_KIDS_WHO_REGISTERED_MAC_ID:
-                        ((userWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_ACTIVITY_UPLOAD_RAW_DATA:
