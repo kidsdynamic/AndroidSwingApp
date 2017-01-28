@@ -99,7 +99,10 @@ public class FragmentProfileRequest extends ViewFragment {
         public void onClick(View view) {
             WatchContact.Person person = (WatchContact.Person) view.getTag();
 
-            Log.d("xxx", person.mLabel + " Allow");
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(BUNDLE_KEY_REQUESTER, person);
+
+            mActivityMain.selectFragment(FragmentProfileShare.class.getName(), bundle);
         }
     };
 
@@ -107,9 +110,6 @@ public class FragmentProfileRequest extends ViewFragment {
         @Override
         public void onClick(View view) {
             WatchContact.Person person = (WatchContact.Person) view.getTag();
-
-            Log.d("xxx", person.mLabel + " Deny");
-
             delRequester(person);
         }
     };

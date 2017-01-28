@@ -11,6 +11,7 @@ abstract public class ViewFragment extends Fragment {
 
     final static String BUNDLE_KEY_DEVICE = "BUNDLE_KEY_DEVICE";
     final static String BUNDLE_KEY_DEVICE_LIST = "BUNDLE_KEY_DEVICE_LIST";
+    final static String BUNDLE_KEY_REQUESTER = "BUNDLE_KEY_REQUESTER";
 
     @Override
     public void onResume() {

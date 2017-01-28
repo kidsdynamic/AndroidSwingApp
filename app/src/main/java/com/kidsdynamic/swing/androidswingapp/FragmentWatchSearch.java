@@ -48,7 +48,6 @@ public class FragmentWatchSearch extends ViewFragment {
             @Override
             public void run() {
                 mViewProgress.start();
-                //searchStart();
             }
         });
 

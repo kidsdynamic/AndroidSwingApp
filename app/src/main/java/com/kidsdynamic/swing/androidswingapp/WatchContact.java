@@ -87,4 +87,10 @@ public class WatchContact implements Serializable {
 
         return view;
     }
+
+    static View inflateShare(Context context, WatchContact.Device device) {
+        View view = inflate(context, R.layout.watch_contact_share, device);
+
+        return view;
+    }
 }
