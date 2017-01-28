@@ -69,6 +69,15 @@ public class FragmentProfileRequest extends ViewFragment {
         return String.format(Locale.getDefault(), "You Have %d Request", mViewRequestContainer.getChildCount());
     }
 
+    public void delRequester(WatchContact.Person person) {
+        View view = mViewRequestContainer.findViewWithTag(person);
+        if (view != null) {
+            mViewRequestContainer.removeView(view);
+        }
+
+        mViewCount.setText(makeRequesterCount());
+    }
+
     public void addRequester(WatchContact.Person person) {
         View view = WatchContact.inflateRequester(mActivityMain, person);
 
@@ -100,6 +109,8 @@ public class FragmentProfileRequest extends ViewFragment {
             WatchContact.Person person = (WatchContact.Person) view.getTag();
 
             Log.d("xxx", person.mLabel + " Deny");
+
+            delRequester(person);
         }
     };
 
