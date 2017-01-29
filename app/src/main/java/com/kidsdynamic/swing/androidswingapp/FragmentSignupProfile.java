@@ -247,29 +247,7 @@ public class FragmentSignupProfile extends ViewFragment {
             mActivityMain.mConfig.setString(Config.KEY_ZIP, mZipCode);
 
             if (mRegisterAvatar != null) {
-                FileOutputStream out = null;
-                try {
-                    File sdCard = Environment.getExternalStorageDirectory();
-                    File dir = new File(sdCard.getAbsolutePath() + "/Swing");
-                    dir.mkdirs();
-                    mRegisterAvatarFilename = dir + "/AvatarUser.png";
-                    out = new FileOutputStream(mRegisterAvatarFilename);
-                    mRegisterAvatar.compress(Bitmap.CompressFormat.PNG, 100, out);
-
-
-                } catch (Exception e) {
-                    mRegisterAvatarFilename = null;
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (out != null) {
-                            out.close();
-                        }
-                    } catch (IOException e) {
-                        mRegisterAvatarFilename = null;
-                        e.printStackTrace();
-                    }
-                }
+                mRegisterAvatarFilename = ServerMachine.createAvatarFile(mRegisterAvatar, "User");
 
                 if (mRegisterAvatarFilename != null) {
                     mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mRegisterAvatarFilename);
@@ -294,7 +272,7 @@ public class FragmentSignupProfile extends ViewFragment {
 
     ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.userData response) {
+        public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
             mActivityMain.mConfig.setString(Config.KEY_AVATAR_USER, mRegisterAvatarFilename);
 
             mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);

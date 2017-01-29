@@ -18,8 +18,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -38,6 +40,12 @@ public class FragmentWatchProfile extends ViewFragment {
     AlertDialog mDialog;
 
     private Uri mPhotoUri;
+    private WatchContact.Device mDevice;
+    private Bitmap mAvatarBitmap = null;
+    private String mAvatarFilename;
+    private String mFirstName;
+    private String mLastName;
+    private int mKidId;
 
     public final static int ACTIVITY_RESULT_CAMERA_REQUEST = 1888;
     public final static int ACTIVITY_RESULT_PHOTO_PICK = 9111;
@@ -46,6 +54,8 @@ public class FragmentWatchProfile extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+        mDevice = (WatchContact.Device)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        Log.d("swing", "Watch profile " + mDevice.mLabel);
     }
 
     @Override
@@ -83,8 +93,8 @@ public class FragmentWatchProfile extends ViewFragment {
         super.onResume();
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
-            Bitmap bitmap = mActivityMain.mBitmapStack.pop();
-            mViewPhoto.setPhoto(bitmap);
+            mAvatarBitmap = mActivityMain.mBitmapStack.pop();
+            mViewPhoto.setPhoto(mAvatarBitmap);
         }
     }
 
@@ -157,11 +167,63 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
+                mFirstName = mViewName.getText().toString();
+                mLastName = mViewZip.getText().toString();
 
-                mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
+                if (mFirstName != null && mLastName != null) {
+                    String macId = ServerMachine.getMacID(mDevice.mLabel);
+                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mFirstName, mLastName, macId);
+                }
             }
 
             return false;
+        }
+    };
+
+    ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
+            if (mAvatarBitmap != null) {
+                mKidId = response.id;
+                mAvatarFilename = ServerMachine.createAvatarFile(mAvatarBitmap, mFirstName + mLastName);
+
+                if (mAvatarFilename != null) {
+                    mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, mAvatarFilename, ""+mKidId);
+                } else {
+                    // GioChen Todo: upload later?
+                    Log.d("swing", "Can't create avatar file!" + mAvatarFilename);
+                    mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
+                }
+
+            } else {
+                mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
+            }
+        }
+
+        @Override
+        public void onConflict(int statusCode) {
+            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {
+
+        @Override
+        public void onSuccess(int statusCode, ServerGson.kidData response) {
+            Bundle bundle = new Bundle();
+            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mAvatarFilename);
+
+            mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(mActivityMain, "Upload kid avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 

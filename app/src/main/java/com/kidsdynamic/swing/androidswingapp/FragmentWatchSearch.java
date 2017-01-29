@@ -99,10 +99,7 @@ public class FragmentWatchSearch extends ViewFragment {
         if (mSearchResult.size() <= mSearchResultIndex) {
             rtn = false;
         } else {
-            String[] separated = mSearchResult.get(mSearchResultIndex).mLabel.split(":");
-            String macId = "";
-            for (String s : separated)
-                macId += s;
+            String macId = ServerMachine.getMacID(mSearchResult.get(mSearchResultIndex).mLabel);
             mActivityMain.mServiceMachine.kidsWhoRegisteredMacID(mKidsWhoRegisteredMacIDListener, macId);
         }
         return rtn;

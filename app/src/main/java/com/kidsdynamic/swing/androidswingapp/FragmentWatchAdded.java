@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,13 @@ public class FragmentWatchAdded extends ViewFragment {
 
     private Button mButtonProfile;
     private ImageView mViewBack;
+    private WatchContact.Device mDevice;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+        mDevice = (WatchContact.Device)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
     }
 
     @Override
@@ -58,7 +61,10 @@ public class FragmentWatchAdded extends ViewFragment {
     private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentWatchProfile.class.getName(), null);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, mDevice);
+
+            mActivityMain.selectFragment(FragmentWatchProfile.class.getName(), bundle);
         }
     };
 

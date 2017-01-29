@@ -1,6 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
@@ -12,6 +14,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -193,7 +198,7 @@ public class ServerMachine {
     }
 
     public interface userAvatarUploadListener {
-        void onSuccess(int statusCode, ServerGson.userData response);
+        void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response);
 
         void onFail(int statusCode);
     }
@@ -216,7 +221,7 @@ public class ServerMachine {
     }
 
     public interface kidsAddListener {
-        void onSuccess(int statusCode, ServerGson.kids.add.response response);
+        void onSuccess(int statusCode, ServerGson.kidDataWithParent response);
 
         void onConflict(int statusCode);
 
@@ -446,6 +451,8 @@ public class ServerMachine {
             }
 
             if (mCurrentTask.mResponseListener != null) {
+                Log("Request OK. Command:" + mCurrentTask.mCommand + " code:" + responseCode);
+                Log("Content: " + responseString);
                 switch (mCurrentTask.mCommand) {
                     case CMD_USER_LOGIN:
                         if (responseCode == 200)
@@ -676,6 +683,7 @@ public class ServerMachine {
                 responseCode = error.networkResponse.statusCode;
 
             if (mCurrentTask.mResponseListener != null) {
+                Log("Request ERROR. Command:" + mCurrentTask.mCommand + " code:" + responseCode);
                 switch (mCurrentTask.mCommand) {
                     case CMD_USER_LOGIN:
                         ((userLoginListener) mCurrentTask.mResponseListener).onFail(responseCode);
@@ -794,6 +802,42 @@ public class ServerMachine {
             mCommand = command;
             mResponseListener = responseListener;
         }
+    }
+
+    public static String getMacID(String macAddress) {
+        String[] separated = macAddress.split(":");
+        String macId = "";
+        for (String s : separated)
+            macId += s;
+
+        return macId;
+    }
+
+    public static String createAvatarFile(Bitmap bitmap, String filename) {
+        String avatarFilename = null;
+        FileOutputStream out = null;
+        try {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath() + "/Swing");
+            dir.mkdirs();
+            avatarFilename = dir + "/Avatar"+ filename + ".png";
+            out = new FileOutputStream(avatarFilename);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+        } catch (Exception e) {
+            avatarFilename = null;
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                avatarFilename = null;
+                e.printStackTrace();
+            }
+        }
+        return avatarFilename;
     }
 
 }

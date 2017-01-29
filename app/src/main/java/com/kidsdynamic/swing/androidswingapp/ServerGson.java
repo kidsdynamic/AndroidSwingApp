@@ -30,6 +30,16 @@ public class ServerGson {
         String profile;
     }
 
+    static final class kidDataWithParent {
+        int id;
+        String firstName;
+        String lastName;
+        String dateCreated;
+        String macId;
+        String profile;
+        int ParentID;
+    }
+
     static final class userData {
         int id;
         String email;
@@ -205,8 +215,12 @@ public class ServerGson {
 
         public static class avatar {
             public static class upload {
-                public static userData fromJson(String json) {
-                    return new Gson().fromJson(json, userData.class);
+                static final class response {
+                    userData user;
+                }
+
+                public static response fromJson(String json) {
+                    return new Gson().fromJson(json, response.class);
                 }
             }
 
@@ -236,12 +250,8 @@ public class ServerGson {
                 return new Gson().toJson(new c(pFirstName, pLastName, pMacId));
             }
 
-            static final class response {
-                List<kidData> kids;
-            }
-
-            public static response fromJson(String json) {
-                return new Gson().fromJson(json, response.class);
+            public static kidDataWithParent fromJson(String json) {
+                return new Gson().fromJson(json, kidDataWithParent.class);
             }
         }
 

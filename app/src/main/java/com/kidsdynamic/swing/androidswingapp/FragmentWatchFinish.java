@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +22,13 @@ public class FragmentWatchFinish extends ViewFragment {
     private Button mViewDashboard;
     private Button mViewAnother;
     private ImageView mViewBack;
+    private String mAvatarFilename;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+        mAvatarFilename = getArguments().getString(ViewFragment.BUNDLE_KEY_AVATAR, "");
     }
 
     @Override
@@ -40,7 +44,20 @@ public class FragmentWatchFinish extends ViewFragment {
         mViewAnother = (Button)mViewMain.findViewById(R.id.watch_finish_another);
         mViewAnother.setOnClickListener(mAnotherOnClickListener);
 
+        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.watch_finish_photo);
+
         return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mAvatarFilename.equals("")) {
+            Bitmap bitmap = BitmapFactory.decodeFile(mAvatarFilename);
+            if (bitmap != null)
+                mViewPhoto.setPhoto(bitmap);
+        }
     }
 
     @Override

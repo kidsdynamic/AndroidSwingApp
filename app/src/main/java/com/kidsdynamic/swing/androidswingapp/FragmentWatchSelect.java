@@ -95,7 +95,13 @@ public class FragmentWatchSelect extends ViewFragment {
         public void onClick(View view) {
             WatchContact.Device device = (WatchContact.Device) view.getTag();
 
-            Log.d("xxx", "name:" + device.mLabel);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
+
+            if (device.mBound)
+                mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), bundle);
+            else
+                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), bundle);
         }
     };
 /*
