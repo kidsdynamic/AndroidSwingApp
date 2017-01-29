@@ -64,13 +64,13 @@ public class FragmentWatchSearch extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.mBLEMachine.Search(null, 0);
+        mActivityMain.mBLEMachine.Search(null);
         mActivityMain.popFragment();
     }
 
     BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
         @Override
-        public void onScan(ArrayList<BLEMachine.Device> result) {
+        public void onSearch(ArrayList<BLEMachine.Device> result) {
             mSearchResult = new ArrayList<>();
             for (BLEMachine.Device dev : result) {
 

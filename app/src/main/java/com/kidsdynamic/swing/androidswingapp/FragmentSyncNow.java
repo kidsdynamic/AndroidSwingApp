@@ -51,8 +51,9 @@ public class FragmentSyncNow extends ViewFragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            // Todo : get focus device from config
             WatchContact.Device device =
-                    new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", true);
+                    new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "E0:E5:CF:1E:D7:C2", true);
 
             Bundle bundle = new Bundle();
             bundle.putSerializable(BUNDLE_KEY_DEVICE, device);

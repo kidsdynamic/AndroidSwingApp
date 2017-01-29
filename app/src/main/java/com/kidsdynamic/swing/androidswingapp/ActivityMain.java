@@ -139,29 +139,12 @@ public class ActivityMain extends AppCompatActivity
         if (activeService && mServiceMachine == null)
             mServiceMachine = new ServerMachine(this);
 
-        if (mBLEMachine != null) {
+        if (mBLEMachine != null)
             mBLEMachine.Start();
-            //mBLEMachine.Search(mOnFinishListener, 10);
-        }
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
     }
-
-    BLEMachine.onFinishListener mOnFinishListener = new BLEMachine.onFinishListener() {
-        @Override
-        public void onScan(ArrayList<BLEMachine.Device> result) {
-            for(BLEMachine.Device dev : result) {
-                mBLEMachine.Sync(this, dev);
-                break;
-            }
-        }
-
-        @Override
-        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
-
-        }
-    };
 
     @Override
     public void onPause() {

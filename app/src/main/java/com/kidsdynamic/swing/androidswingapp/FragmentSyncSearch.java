@@ -2,11 +2,16 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+
+import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
 
 /**
  * Created by 03543 on 2017/1/21.
@@ -17,7 +22,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private final int SEARCH_TIMEOUT = 15;  // 15 seconds
     private int mSearchTimeout;
 
-    private final int SYNC_TIMEOUT = 8;  // 8 seconds
+    private final int SYNC_TIMEOUT = 60;  // 8 seconds
     private int mSyncTimeout;
 
     private ActivityMain mActivityMain;
@@ -28,6 +33,8 @@ public class FragmentSyncSearch extends ViewFragment {
     private ViewProgressCircle mViewProgress;
 
     private WatchContact.Device mDevice;
+    private BLEMachine.Device mSearchResult = null;
+    private boolean mSyncFinish = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +67,12 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     @Override
+    public void onPause() {
+        bleSearchCancel();
+        super.onPause();
+    }
+
+    @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Sync", true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
@@ -75,8 +88,7 @@ public class FragmentSyncSearch extends ViewFragment {
         public void onProgress(ViewProgressCircle view, int progress, int total) {
             mSearchTimeout--;
 
-            // todo: Below is a simulation. Device has found after progress 7
-            if (mDevice.mLabel.contains("00") && progress == 7) {
+            if (mSearchResult != null && mDevice.mLabel.equals(mSearchResult.mAddress)) {
                 viewFound();
             }
 
@@ -93,7 +105,7 @@ public class FragmentSyncSearch extends ViewFragment {
             mSyncTimeout--;
 
             // todo: Below is a simulation. Device has synced after progress 4
-            if(mDevice.mLabel.contains("002") && progress == 4) {
+            if(mSyncFinish) {
                 viewCompleted();
             }
 
@@ -128,19 +140,22 @@ public class FragmentSyncSearch extends ViewFragment {
     };
 
     private void bleSearchStart() {
-        // todo: kick off BLE searching. the device information stored at mDevice.
+        mActivityMain.mBLEMachine.Search(mBleListener, mDevice.mLabel);
+        mSearchResult = null;
     }
 
     private void bleSearchCancel() {
-        // todo: cancel BLE searching.
+        mActivityMain.mBLEMachine.Search(null);
     }
 
     private void bleSyncStart() {
-        // todo: kick off BLE syncing.
+        if (mSearchResult != null)
+            mActivityMain.mBLEMachine.Sync(mBleListener, mSearchResult);
+        mSyncFinish = false;
     }
 
     private void bleSyncCancel() {
-        // todo: cancel BLE syncing.
+        mActivityMain.mBLEMachine.Disconnect();
     }
 
     private void viewSearching() {
@@ -227,4 +242,30 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewProgress.setProgress(0);
         mViewProgress.setOnProgressListener(null);
     }
+
+    BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
+        @Override
+        public void onSearch(ArrayList<BLEMachine.Device> result) {
+            for (BLEMachine.Device dev : result) {
+                if (dev.mAddress.equals(mDevice.mLabel)) {
+                    mSearchResult = dev;
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
+            if (resultCode == SYNC_RESULT_SUCCESS) {
+                // Todo : upload indoor/outdoor
+                Log.d("TEST", "Sync done!");
+                mSyncFinish = true;
+            } else {
+                // Todo : first connect?
+                Log.d("TEST", "Sync failed!");
+                mSyncFinish = true;
+
+            }
+        }
+    };
 }
