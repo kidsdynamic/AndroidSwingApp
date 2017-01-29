@@ -810,6 +810,7 @@ public class ServerMachine {
         for (String s : separated)
             macId += s;
 
+        macId = "1A2B3C4D5F01";
         return macId;
     }
 

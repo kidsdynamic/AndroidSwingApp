@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,7 @@ public class FragmentSignupAccount extends ViewFragment {
     private EditText mViewPassword;
     private ImageView mViewBack;
 
-    private Dialog processDialog = null;
+    private Dialog mProcessDialog = null;
     private String mMail = "";
     private String mPassword = "";
 
@@ -59,9 +58,9 @@ public class FragmentSignupAccount extends ViewFragment {
 
     @Override
     public void onPause() {
-        if (processDialog != null) {
-            processDialog.dismiss();
-            processDialog = null;
+        if (mProcessDialog != null) {
+            mProcessDialog.dismiss();
+            mProcessDialog = null;
         }
         super.onPause();
     }
@@ -95,7 +94,7 @@ public class FragmentSignupAccount extends ViewFragment {
                     Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
                     //mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
-                    processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+                    mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
                     mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
                 }
             }
@@ -120,7 +119,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
         @Override
         public void onFail(int statusCode) {
-            processDialog.dismiss();
+            mProcessDialog.dismiss();
             Toast.makeText(mActivityMain,""+statusCode,Toast.LENGTH_SHORT).show();
         }
     };
@@ -135,7 +134,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
         @Override
         public void onFail(int statusCode) {
-            processDialog.dismiss();
+            mProcessDialog.dismiss();
             Toast.makeText(mActivityMain,"Login failed("+statusCode+").",Toast.LENGTH_SHORT).show();
         }
     };
@@ -153,7 +152,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
         @Override
         public void onFail(int statusCode) {
-            processDialog.dismiss();
+            mProcessDialog.dismiss();
             Toast.makeText(mActivityMain,""+statusCode,Toast.LENGTH_SHORT).show();
         }
     };

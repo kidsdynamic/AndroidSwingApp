@@ -2,6 +2,8 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -38,6 +39,7 @@ public class FragmentWatchProfile extends ViewFragment {
     private ImageView mViewBack;
 
     AlertDialog mDialog;
+    private Dialog mProcessDialog = null;
 
     private Uri mPhotoUri;
     private WatchContact.Device mDevice;
@@ -96,6 +98,15 @@ public class FragmentWatchProfile extends ViewFragment {
             mAvatarBitmap = mActivityMain.mBitmapStack.pop();
             mViewPhoto.setPhoto(mAvatarBitmap);
         }
+    }
+
+    @Override
+    public void onPause() {
+        if (mProcessDialog != null) {
+            mProcessDialog.dismiss();
+            mProcessDialog = null;
+        }
+        super.onPause();
     }
 
     @Override
@@ -171,6 +182,7 @@ public class FragmentWatchProfile extends ViewFragment {
                 mLastName = mViewZip.getText().toString();
 
                 if (mFirstName != null && mLastName != null) {
+                    mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
                     mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mFirstName, mLastName, macId);
                 }
@@ -188,7 +200,7 @@ public class FragmentWatchProfile extends ViewFragment {
                 mAvatarFilename = ServerMachine.createAvatarFile(mAvatarBitmap, mFirstName + mLastName);
 
                 if (mAvatarFilename != null) {
-                    mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, mAvatarFilename, ""+mKidId);
+                    mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, ""+mKidId, mAvatarFilename);
                 } else {
                     // GioChen Todo: upload later?
                     Log.d("swing", "Can't create avatar file!" + mAvatarFilename);
@@ -202,11 +214,13 @@ public class FragmentWatchProfile extends ViewFragment {
 
         @Override
         public void onConflict(int statusCode) {
+            mProcessDialog.dismiss();
             Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onFail(int statusCode) {
+            mProcessDialog.dismiss();
             Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
@@ -223,6 +237,7 @@ public class FragmentWatchProfile extends ViewFragment {
 
         @Override
         public void onFail(int statusCode) {
+            mProcessDialog.dismiss();
             Toast.makeText(mActivityMain, "Upload kid avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
