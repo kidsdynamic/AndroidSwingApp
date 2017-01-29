@@ -78,11 +78,8 @@ public class FragmentWatchSearch extends ViewFragment {
                 mSearchResult.add(device);
             }
 
-            if (!mSearchResult.isEmpty()) {
-                searchMac(true);
-            } else {
+            if (!enumerateRegisteredMacId(true))
                 mActivityMain.selectFragment(FragmentWatchSorry.class.getName(), null);
-            }
         }
 
         @Override
@@ -91,17 +88,16 @@ public class FragmentWatchSearch extends ViewFragment {
         }
     };
 
-    private void searchMac(boolean searchStart) {
+    private boolean enumerateRegisteredMacId(boolean searchStart) {
+        boolean rtn = true;
+
         if (searchStart)
             mSearchResultIndex = 0;
         else
             mSearchResultIndex++;
 
         if (mSearchResult.size() <= mSearchResultIndex) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST, mSearchResult);
-
-            mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
+            rtn = false;
         } else {
             String[] separated = mSearchResult.get(mSearchResultIndex).mLabel.split(":");
             String macId = "";
@@ -109,6 +105,7 @@ public class FragmentWatchSearch extends ViewFragment {
                 macId += s;
             mActivityMain.mServiceMachine.kidsWhoRegisteredMacID(mKidsWhoRegisteredMacIDListener, macId);
         }
+        return rtn;
     }
 
     ServerMachine.kidsWhoRegisteredMacIDListener mKidsWhoRegisteredMacIDListener = new ServerMachine.kidsWhoRegisteredMacIDListener() {
@@ -117,13 +114,14 @@ public class FragmentWatchSearch extends ViewFragment {
             WatchContact.Device device = (WatchContact.Device) mSearchResult.get(mSearchResultIndex);
             device.mLabel = response.user.email;
             device.mBound = true;
-            Log.d("swing", "Register user " + device.mLabel);
-            searchMac(false);
+            if (!enumerateRegisteredMacId(false))
+                gotoWatchSelect();
         }
 
         @Override
         public void onNotRegistered(int statusCode) {
-            searchMac(false);
+            if (!enumerateRegisteredMacId(false))
+                gotoWatchSelect();
         }
 
         @Override
@@ -132,6 +130,13 @@ public class FragmentWatchSearch extends ViewFragment {
             Toast.makeText(mActivityMain, "Search MAC failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
+
+    private void gotoWatchSelect() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST, mSearchResult);
+
+        mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
+    }
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
         @Override

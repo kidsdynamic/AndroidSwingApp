@@ -251,8 +251,12 @@ public class BLEMachine extends BLEControl {
     }
 
     public int Search(onFinishListener listener, int second) {
-        mOnFinishListener = listener;
-        mRelationDevice.mAction.mScanTime = second * 1000 / TRANSITION_GAP;
+        if (listener == null && second == 0) {
+            mRelationDevice.mAction.mScanTime = 0;
+        } else {
+            mOnFinishListener = listener;
+            mRelationDevice.mAction.mScanTime = second * 1000 / TRANSITION_GAP;
+        }
         return mRelationDevice.mAction.mScanTime;
     }
 
@@ -260,6 +264,13 @@ public class BLEMachine extends BLEControl {
         mOnFinishListener = listener;
         mRelationDevice.mAction.mSync = true;
         mRelationDevice.Copy(device);
+        return 0;
+    }
+
+    public int Sync(onFinishListener listener, String macAddress) {
+        mOnFinishListener = listener;
+        mRelationDevice.mAction.mSync = true;
+        mRelationDevice = new Device("Swing", macAddress, 0);
         return 0;
     }
 
