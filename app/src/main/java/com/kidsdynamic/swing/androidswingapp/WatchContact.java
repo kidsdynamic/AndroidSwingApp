@@ -82,6 +82,12 @@ public class WatchContact implements Serializable {
         return view;
     }
 
+    static View inflateAdd(Context context, WatchContact.Device device) {
+        View view = inflate(context, R.layout.watch_contact_add, device);
+
+        return view;
+    }
+
     static View inflatePending(Context context, WatchContact.Device device) {
         View view = inflate(context, R.layout.watch_contact_pending, device);
 

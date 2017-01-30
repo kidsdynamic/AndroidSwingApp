@@ -18,32 +18,20 @@
         android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_contact_requester_sponge"
+            android:id="@+id/watch_contact_add_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:shrinkHeight="0.7" />
+            app:shrinkHeight="0.8" />
 
-        <ImageView
-            android:id="@+id/watch_contact_requester_allow"
+        <Button
+            android:id="@+id/watch_contact_add_button"
+            style="@style/button_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/watch_contact_requester_sponge"
-            android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/watch_contact_requester_sponge"
+            android:layout_alignBottom="@+id/watch_contact_add_sponge"
+            android:layout_alignTop="@+id/watch_contact_add_sponge"
             android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/iconbutton_yes" />
-
-        <ImageView
-            android:id="@+id/watch_contact_requester_deny"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/watch_contact_requester_sponge"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/watch_contact_requester_sponge"
-            android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/iconbutton_no" />
+            android:text="Add" />
     </RelativeLayout>
 </LinearLayout>

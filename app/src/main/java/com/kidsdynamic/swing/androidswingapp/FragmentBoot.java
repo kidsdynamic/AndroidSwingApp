@@ -40,7 +40,14 @@ public class FragmentBoot extends ViewFragment {
         return new ViewFragmentConfig("Boot", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
-
+/*
+    private Runnable mRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
+        }
+    };
+*/
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
@@ -68,5 +75,4 @@ public class FragmentBoot extends ViewFragment {
                     .commit();
         }
     };
-
 }

@@ -1,11 +1,13 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Fragment;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 /**
  * Created by 03543 on 2016/12/30.
@@ -14,7 +16,7 @@ import android.widget.Button;
 public class FragmentWatchRequest extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
-
+    private LinearLayout mViewContainer;
     private Button mButtonBack;
     private Button mButtonDashboard;
 
@@ -28,11 +30,17 @@ public class FragmentWatchRequest extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_request, container, false);
 
+        mViewContainer = (LinearLayout)mViewMain.findViewById(R.id.watch_request_container);
+
         mButtonBack = (Button) mViewMain.findViewById(R.id.watch_request_back);
         mButtonBack.setOnClickListener(mOnBackListener);
 
         mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_request_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
+
+        // Test
+        addDevice(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster Purple", false));
+        //////////////
 
         return mViewMain;
     }
@@ -54,6 +62,21 @@ public class FragmentWatchRequest extends ViewFragment {
         @Override
         public void onClick(View view) {
             mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+        }
+    };
+
+    private void addDevice(WatchContact.Device device) {
+        View view = WatchContact.inflateAdd(mActivityMain, device);
+        View button = view.findViewById(R.id.watch_contact_add_button);
+        button.setOnClickListener(mDeviceClickListener);
+
+        mViewContainer.addView(view);
+    }
+
+    private View.OnClickListener mDeviceClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            WatchContact.Device device = (WatchContact.Device) view.getTag();
         }
     };
 }
