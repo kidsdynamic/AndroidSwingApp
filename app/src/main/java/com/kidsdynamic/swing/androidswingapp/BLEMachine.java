@@ -298,15 +298,15 @@ public class BLEMachine extends BLEControl {
 
     public int Sync(onFinishListener listener, Device device) {
         mOnFinishListener = listener;
-        mRelationDevice.mAction.mSync = true;
         mRelationDevice.Copy(device);
+        mRelationDevice.mAction.mSync = true;
         return 0;
     }
 
     public int Sync(onFinishListener listener, String macAddress) {
         mOnFinishListener = listener;
-        mRelationDevice.mAction.mSync = true;
         mRelationDevice = new Device("Swing", macAddress, 0);
+        mRelationDevice.mAction.mSync = true;
         return 0;
     }
 

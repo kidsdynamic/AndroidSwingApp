@@ -24,6 +24,9 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
 
 /**
  * Created by 03543 on 2017/1/6.
@@ -44,10 +47,6 @@ public class FragmentWatchProfile extends ViewFragment {
     private Uri mPhotoUri;
     private WatchContact.Kid mDevice;
     private Bitmap mAvatarBitmap = null;
-    private String mAvatarFilename;
-    private String mFirstName;
-    private String mLastName;
-    private int mKidId;
 
     public final static int ACTIVITY_RESULT_CAMERA_REQUEST = 1888;
     public final static int ACTIVITY_RESULT_PHOTO_PICK = 9111;
@@ -178,13 +177,14 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
-                mFirstName = mViewName.getText().toString();
-                mLastName = mViewZip.getText().toString();
+                mDevice.mFirstName = mViewName.getText().toString();
+                mDevice.mLastName = mViewZip.getText().toString();
 
-                if (mFirstName != null && mLastName != null) {
+                if (!mDevice.mFirstName.equals("") && !mDevice.mLastName.equals("")) {
                     mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
-                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mFirstName, mLastName, macId);//"123456654321");
+                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, mDevice.mLastName, macId);
+                    //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, mDevice.mLastName, "123456654325");
                 }
             }
 
@@ -195,28 +195,20 @@ public class FragmentWatchProfile extends ViewFragment {
     ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
+            mDevice.mId = response.id;
             mDevice.mFirstName = response.firstName;
             mDevice.mLastName = response.lastName;
             mDevice.mDateCreated= response.dateCreated;
             mDevice.mMacId = response.macId;
             mDevice.mParentId = response.parent.id;
             mActivityMain.mOperator.KidAdd(mDevice);
+            if (mAvatarBitmap != null)
+                mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mFirstName + mDevice.mLastName);
+            if (mDevice.mProfile == null)
+                mDevice.mProfile = "";
 
-            if (mAvatarBitmap != null) {
-                mKidId = response.id;
-                mAvatarFilename = ServerMachine.createAvatarFile(mAvatarBitmap, mFirstName + mLastName);
-
-                if (mAvatarFilename != null) {
-                    mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, ""+mKidId, mAvatarFilename);
-                } else {
-                    // GioChen Todo: upload later?
-                    Log.d("swing", "Can't create avatar file!" + mAvatarFilename);
-                    mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
-                }
-
-            } else {
-                mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
-            }
+            mActivityMain.mBLEMachine.Sync(mBleListener,ServerMachine.getMacAddress(mDevice.mMacId));
+            //mActivityMain.mBLEMachine.Sync(mBleListener, mDevice.mLabel);
         }
 
         @Override
@@ -232,15 +224,27 @@ public class FragmentWatchProfile extends ViewFragment {
         }
     };
 
+    BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
+        @Override
+        public void onSearch(ArrayList<BLEMachine.Device> result) {
+        }
+
+        @Override
+        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
+            if (!mDevice.mProfile.equals("")) {
+                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, ""+mDevice.mId, mDevice.mProfile);
+            } else {
+                mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
+            }
+        }
+    };
+
     ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {
 
         @Override
         public void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response) {
-            mDevice.mProfile = mAvatarFilename;
-            mActivityMain.mOperator.KidUpdate(mDevice);
-
             Bundle bundle = new Bundle();
-            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mAvatarFilename);
+            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mDevice.mProfile);
 
             mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
         }
@@ -249,6 +253,11 @@ public class FragmentWatchProfile extends ViewFragment {
         public void onFail(int statusCode) {
             mProcessDialog.dismiss();
             Toast.makeText(mActivityMain, "Upload kid avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+
+            Bundle bundle = new Bundle();
+            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mDevice.mProfile);
+
+            mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
         }
     };
 

@@ -22,13 +22,15 @@ public class FragmentWatchFinish extends ViewFragment {
     private Button mViewDashboard;
     private Button mViewAnother;
     private ImageView mViewBack;
-    private String mAvatarFilename;
+    private String mAvatarFilename = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-        mAvatarFilename = getArguments().getString(ViewFragment.BUNDLE_KEY_AVATAR, "");
+        Bundle arg = getArguments();
+        if (arg != null)
+            mAvatarFilename = getArguments().getString(ViewFragment.BUNDLE_KEY_AVATAR, "");
     }
 
     @Override
