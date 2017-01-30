@@ -40,6 +40,6 @@ public class FragmentProfileKid extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
-        mActivityMain.popFragment();
+        mActivityMain.selectFragment(FragmentProfileOption.class.getName(), null);
     }
 }
