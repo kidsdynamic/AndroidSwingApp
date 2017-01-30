@@ -228,7 +228,7 @@ public class FragmentWatchProfile extends ViewFragment {
     ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {
 
         @Override
-        public void onSuccess(int statusCode, ServerGson.kidData response) {
+        public void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response) {
             Bundle bundle = new Bundle();
             bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mAvatarFilename);
 

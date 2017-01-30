@@ -108,7 +108,7 @@ public class FragmentWatchSearch extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response) {
             WatchContact.Kid device = (WatchContact.Kid) mSearchResult.get(mSearchResultIndex);
-            device.mLabel = response.user.email;
+            device.mLabel = response.kid.parent.email;
             device.mBound = true;
             if (!enumerateRegisteredMacId(false))
                 gotoWatchSelect();

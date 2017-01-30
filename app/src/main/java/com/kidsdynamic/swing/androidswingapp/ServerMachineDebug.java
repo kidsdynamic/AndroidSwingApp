@@ -118,6 +118,15 @@ public class ServerMachineDebug extends ServerMachine {
                         ((kidsUpdateListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     break;
 
+                case CMD_KIDS_DELETE:
+                    if (mExpectResponseCode == 200)
+                        ((kidsDeleteListener) mCurrentResponseListener).onSuccess(mExpectResponseCode);
+                    else if (mExpectResponseCode == 400)
+                        ((kidsDeleteListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                    else
+                        ((kidsDeleteListener) mCurrentResponseListener).onFail(mExpectResponseCode);
+                    break;
+
                 case CMD_KIDS_WHO_REGISTERED_MAC_ID:
                     if (mExpectResponseCode == 200)
                         ((kidsWhoRegisteredMacIDListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.kids.whoRegisteredMacID.fromJson(mResponseString));
@@ -430,6 +439,13 @@ public class ServerMachineDebug extends ServerMachine {
                 "    \"profile\": \"\"\n" +
                 "  }\n" +
                 "}";
+    }
+
+    @Override
+    public void kidsDelete(kidsDeleteListener listener, String kidId) {
+        mCurrentCommand = CMD_KIDS_DELETE;
+        mCurrentResponseListener = listener;
+        mHandler.postDelayed(mRunnable, 1000);
     }
 
     @Override
