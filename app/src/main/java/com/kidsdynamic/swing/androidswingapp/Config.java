@@ -26,12 +26,7 @@ public class Config {
     public final static String KEY_LANGUAGE = "KEY_LANGUAGE";
     public final static String KEY_MAIL = "KEY_MAIL";
     public final static String KEY_PASSWORD = "KEY_PASSWORD";
-    public final static String KEY_FIRST_NAME = "KEY_FIRST_NAME";
-    public final static String KEY_LAST_NAME = "KEY_LAST_NAME";
-    public final static String KEY_PHONE = "KEY_PHONE";
-    public final static String KEY_ZIP = "KEY_ZIP";
     public final static String KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN";
-    public final static String KEY_AVATAR_USER = "KEY_AVATAR_USER";
 
     private void LOG(String message) {
         Log.d("Config", message);

@@ -75,7 +75,7 @@ public class FragmentSignupProfile extends ViewFragment {
             mRegisterMail = bundle.getString("MAIL");
             mRegisterPassword = bundle.getString("PASSWORD");
             // GioChen Todo : If mail and password are not null, userRegister below.
-            Log.d("TEST", "mail " + mRegisterMail);
+            Log.d("swing", "mail " + mRegisterMail);
         } else {
             Log.d("TEST", "bundle null");
         }
@@ -189,12 +189,8 @@ public class FragmentSignupProfile extends ViewFragment {
 
                 processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
 
-                if (mRegisterMail != null && mRegisterPassword != null) {
+                if (mRegisterMail != null && mRegisterPassword != null)
                     mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
-                } else {
-                    // GioChen Todo : wrong path
-                    //mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
-                }
             }
 
             return false;
@@ -241,10 +237,22 @@ public class FragmentSignupProfile extends ViewFragment {
     ServerMachine.userUpdateProfileListener mUpdateProfileListener = new ServerMachine.userUpdateProfileListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.userData response) {
-            mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, mFirstName);
-            mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, mLastName);
-            mActivityMain.mConfig.setString(Config.KEY_PHONE, mPhoneNumber);
-            mActivityMain.mConfig.setString(Config.KEY_ZIP, mZipCode);
+            mActivityMain.mConfig.setString(Config.KEY_MAIL, mRegisterMail);
+            mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mRegisterPassword);
+
+            // Todo : check table if user already exists!
+            mActivityMain.mOperator.UserAdd(
+                    new WatchContact.User(
+                            null,
+                            response.id,
+                            response.email,
+                            response.firstName,
+                            response.lastName,
+                            response.lastUpdate,
+                            response.dateCreated,
+                            response.zipCode,
+                            response.phoneNumber)
+            );
 
             if (mRegisterAvatar != null) {
                 mRegisterAvatarFilename = ServerMachine.createAvatarFile(mRegisterAvatar, "User");
@@ -273,7 +281,9 @@ public class FragmentSignupProfile extends ViewFragment {
     ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
-            mActivityMain.mConfig.setString(Config.KEY_AVATAR_USER, mRegisterAvatarFilename);
+            WatchContact.User user = mActivityMain.mOperator.UserGet();
+            user.mProfile = mRegisterAvatarFilename;
+            mActivityMain.mOperator.UserUpdate(user);
 
             mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }

@@ -72,6 +72,7 @@ public class FragmentWatchSearch extends ViewFragment {
             for (BLEMachine.Device dev : result) {
 
                 WatchContact.Kid device = new WatchContact.Kid(null, dev.mAddress, false);
+                device.mMacId = ServerMachine.getMacID(dev.mAddress);
                 mSearchResult.add(device);
             }
 
@@ -106,7 +107,7 @@ public class FragmentWatchSearch extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response) {
             WatchContact.Kid device = (WatchContact.Kid) mSearchResult.get(mSearchResultIndex);
-            device.mLabel = response.user.email;
+            device.mLabel = response.kid.parent.email;
             device.mBound = true;
             if (!enumerateRegisteredMacId(false))
                 gotoWatchSelect();

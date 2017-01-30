@@ -142,12 +142,15 @@ public class FragmentSignupAccount extends ViewFragment {
     ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
+            // Todo : Update profile
+            /*
             mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
             mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
             mActivityMain.mConfig.setString(Config.KEY_FIRST_NAME, response.user.firstName);
             mActivityMain.mConfig.setString(Config.KEY_LAST_NAME, response.user.lastName);
             mActivityMain.mConfig.setString(Config.KEY_PHONE, response.user.phoneNumber);
             mActivityMain.mConfig.setString(Config.KEY_ZIP, response.user.zipCode);
+            */
         }
 
         @Override

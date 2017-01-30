@@ -42,6 +42,7 @@ public class ServerMachine {
 
     protected final static String CMD_KIDS_ADD = SERVER_ADDRESS + "/kids/add";
     protected final static String CMD_KIDS_UPDATE = SERVER_ADDRESS + "/kids/update";
+    protected final static String CMD_KIDS_DELETE = SERVER_ADDRESS + "/kids/delete";
     protected final static String CMD_KIDS_WHO_REGISTERED_MAC_ID = SERVER_ADDRESS + "/kids/whoRegisteredMacID";
 
     protected final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
@@ -209,7 +210,7 @@ public class ServerMachine {
     }
 
     public interface userAvatarUploadKidListener {
-        void onSuccess(int statusCode, ServerGson.kidData response);
+        void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response);
 
         void onFail(int statusCode);
     }
@@ -244,6 +245,19 @@ public class ServerMachine {
         Map<String, String> map = new HashMap<>();
         map.put("json", ServerGson.kids.update.toJson(kidId, firstName, lastName));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_KIDS_UPDATE, map, null), CMD_KIDS_UPDATE, listener));
+    }
+
+    public interface kidsDeleteListener {
+        void onSuccess(int statusCode);
+
+        void onFail(int statusCode);
+    }
+
+    public void kidsDelete(kidsDeleteListener listener, String kidId) {
+        Map<String, String> map = new HashMap<>();
+        String addressForGet = CMD_KIDS_DELETE + "?";
+        addressForGet += "kidId=" + kidId;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.DELETE, addressForGet, map, null), CMD_KIDS_DELETE, listener));
     }
 
     public interface kidsWhoRegisteredMacIDListener {
@@ -543,6 +557,15 @@ public class ServerMachine {
                             ((kidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
+                    case CMD_KIDS_DELETE:
+                        if (responseCode == 200)
+                            ((kidsDeleteListener) mCurrentTask.mResponseListener).onSuccess(responseCode);
+                        else if (responseCode == 400)
+                            ((kidsDeleteListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        else
+                            ((kidsDeleteListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
                     case CMD_KIDS_WHO_REGISTERED_MAC_ID:
                         if (responseCode == 200)
                             ((kidsWhoRegisteredMacIDListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.kids.whoRegisteredMacID.fromJson(responseString));
@@ -723,6 +746,10 @@ public class ServerMachine {
 
                     case CMD_KIDS_UPDATE:
                         ((kidsUpdateListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
+                    case CMD_KIDS_DELETE:
+                        ((kidsDeleteListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_KIDS_WHO_REGISTERED_MAC_ID:

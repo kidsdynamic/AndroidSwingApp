@@ -37,7 +37,7 @@ public class ServerGson {
         String dateCreated;
         String macId;
         String profile;
-        int ParentID;
+        userData parent;
     }
 
     static final class userData {
@@ -225,8 +225,11 @@ public class ServerGson {
             }
 
             public static class uploadKid {
-                public static kidData fromJson(String json) {
-                    return new Gson().fromJson(json, kidData.class);
+                static final class response {
+                    kidDataWithParent kid;
+                }
+                public static response fromJson(String json) {
+                    return new Gson().fromJson(json, response.class);
                 }
             }
         }
@@ -273,7 +276,7 @@ public class ServerGson {
             }
 
             static final class response {
-                kidData kid;
+                kidDataWithParent kid;
             }
 
             public static response fromJson(String json) {
@@ -283,8 +286,7 @@ public class ServerGson {
 
         public static class whoRegisteredMacID {
             static final class response {
-                kidData kid;
-                userData user;
+                kidDataWithParent kid;
             }
 
             public static response fromJson(String json) {
@@ -436,7 +438,7 @@ public class ServerGson {
 
         public static class retrieveEvents {
             static final class response {
-                List<eventData> events;
+                List<eventData> event;
             }
 
             public static response fromJson(String json) {

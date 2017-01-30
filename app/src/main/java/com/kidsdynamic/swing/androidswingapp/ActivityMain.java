@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class ActivityMain extends AppCompatActivity
@@ -144,7 +143,32 @@ public class ActivityMain extends AppCompatActivity
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
-    }
+/*
+        mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
+        WatchContact.User user = mOperator.UserGet();
+        Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
+        user.mFirstName = "TEST";
+        user.mProfile = "jpg";
+        mOperator.UserUpdate(user);
+        user = mOperator.UserGet();
+        Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
+
+        mOperator.KidAdd(new WatchContact.Kid(null, 1, "Kid1", "last1", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 2, "Kid2", "last2", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 3, "Kid3", "last3", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 4, "Kid4", "last4", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 5, "Kid5", "last5", "ccc", "ddd", 3));
+        List<WatchContact.Kid> kids = mOperator.KidGet();
+        for (WatchContact.Kid kid : kids) {
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+            kid.mProfile = kid.mFirstName+ "+profile";
+            mOperator.KidUpdate(kid);
+        }
+        kids = mOperator.KidGet();
+        for (WatchContact.Kid kid : kids)
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+*/
+        }
 
     @Override
     public void onPause() {
