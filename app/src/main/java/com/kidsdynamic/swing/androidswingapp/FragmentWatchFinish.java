@@ -80,13 +80,15 @@ public class FragmentWatchFinish extends ViewFragment {
 
     private View.OnClickListener mDashboardOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
         }
     };
 
     private View.OnClickListener mAnotherOnClickListener = new View.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentWatchOwner.class.getName(), null);
         }
     };
 }
