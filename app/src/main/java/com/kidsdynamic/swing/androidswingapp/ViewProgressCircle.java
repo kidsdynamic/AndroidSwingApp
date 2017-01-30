@@ -24,8 +24,7 @@ public class ViewProgressCircle extends View {
 
     private int mDesiredSize;
 
-    private float mStrokeWidthDp = 4;
-    private int mStrokeWidth;
+    private float mStrokeWidth = 4;
     private int mStrokeType = STROKE_TYPE_DOT;
 
     private int mColorActive;
@@ -76,8 +75,7 @@ public class ViewProgressCircle extends View {
                 final int attr = typedArray.getIndex(idx);
 
                 if (attr == R.styleable.ViewProgressCircle_strokeWidth) {
-                    mStrokeWidthDp = typedArray.getDimension(attr, mStrokeWidthDp);
-                    mStrokeWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, mStrokeWidthDp, getResources().getDisplayMetrics());
+                    mStrokeWidth = typedArray.getDimension(attr, mStrokeWidth);
                 } else if (attr == R.styleable.ViewProgressCircle_strokeActiveColor) {
                     mColorActive = typedArray.getColor(attr, mColorActive);
                 } else if (attr == R.styleable.ViewProgressCircle_strokeNormalColor) {
@@ -90,6 +88,8 @@ public class ViewProgressCircle extends View {
                     mTotal = typedArray.getInteger(attr, mTotal);
                 } else if (attr == R.styleable.ViewProgressCircle_repeat) {
                     mRepeat = typedArray.getBoolean(attr, mRepeat);
+                } else if (attr == R.styleable.ViewProgressCircle_android_progress) {
+                    mProgress = typedArray.getInt(attr, 0);
                 }
             }
 
@@ -175,7 +175,7 @@ public class ViewProgressCircle extends View {
         } else if (repeat) {
             degree = (START_DEGREE + mDegree[progress]) % 360;
             sweep = 360 / mTotal;
-        } else{
+        } else {
             degree = START_DEGREE;
             sweep = progress >= mTotal ? 360 : mDegree[progress];
         }
@@ -190,10 +190,10 @@ public class ViewProgressCircle extends View {
     private void updateVector() {
         mDegree = new float[mTotal];
 
-        float degree = 0;
-        float step = 360 / mTotal;
-        for (int idx = 0; idx < mTotal; idx++, degree += step)
-            mDegree[idx] = degree;
+        float deg = 360;
+        for (int idx = 0; idx < mTotal; idx++) {
+            mDegree[idx] = deg * idx / mTotal;
+        }
 
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
