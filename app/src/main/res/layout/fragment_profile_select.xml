@@ -28,16 +28,17 @@
             app:shrinkWidth="0.8" />
 
         <ScrollView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/watch_select_label_sponge"
-            android:layout_alignStart="@+id/watch_select_label_sponge">
+            android:layout_alignEnd="@+id/profile_select_label_sponge"
+            android:layout_alignStart="@+id/profile_select_label_sponge">
 
             <LinearLayout
                 android:id="@+id/profile_select_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:background="@drawable/contact_background">
 
             </LinearLayout>
         </ScrollView>

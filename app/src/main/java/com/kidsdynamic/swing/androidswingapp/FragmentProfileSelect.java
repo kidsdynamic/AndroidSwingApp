@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,12 @@ public class FragmentProfileSelect extends ViewFragment {
         for (WatchContact.Kid device : mDeviceList) {
             addWatch(device);
         }
+
+        // Test
+        addWatch(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple", false));
+        addWatch(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Monster Yellow", true));
+        addWatch(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster", false));
+        /////////////
 
         return mViewMain;
     }
