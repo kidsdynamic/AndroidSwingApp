@@ -6,37 +6,23 @@
     android:orientation="vertical">
 
     <com.kidsdynamic.swing.androidswingapp.ViewSponge
-        android:id="@+id/sync_search_top"
+        android:id="@+id/sync_search_sponge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        app:shrinkHeight="0.05" />
-
-    <com.kidsdynamic.swing.androidswingapp.ViewSponge
-        android:id="@+id/sync_search_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        app:shrinkHeight="0.5"
-        app:shrinkWidth="0.15" />
-
-    <com.kidsdynamic.swing.androidswingapp.ViewSponge
-        android:id="@+id/sync_search_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        app:shrinkHeight="0.5"
-        app:shrinkWidth="0.15" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        app:shrinkHeight="0.36"
+        app:shrinkWidth="0.7" />
 
     <TextView
         android:id="@+id/sync_search_title"
         style="@style/textview_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/sync_search_start"
-        android:layout_below="@id/sync_search_top"
-        android:layout_toEndOf="@id/sync_search_start"
-        android:layout_toStartOf="@+id/sync_search_end"
+        android:layout_alignBottom="@+id/sync_search_sponge"
+        android:layout_alignEnd="@id/sync_search_sponge"
+        android:layout_alignStart="@+id/sync_search_sponge"
+        android:layout_alignTop="@+id/sync_search_sponge"
         android:gravity="center"
         android:text="Searching\nfor Your\nDevice!" />
 
@@ -44,10 +30,10 @@
         android:id="@+id/sync_search_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/sync_search_start"
-        android:layout_below="@id/sync_search_top"
-        android:layout_toEndOf="@id/sync_search_start"
-        android:layout_toStartOf="@+id/sync_search_end"
+        android:layout_alignBottom="@+id/sync_search_sponge"
+        android:layout_alignEnd="@id/sync_search_sponge"
+        android:layout_alignStart="@+id/sync_search_sponge"
+        android:layout_alignTop="@+id/sync_search_sponge"
         app:duration="12000"
         app:repeat="true"
         app:strokeActiveColor="@color/color_orange"
@@ -61,10 +47,10 @@
         style="@style/button_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sync_search_title"
+        android:layout_alignEnd="@id/sync_search_sponge"
+        android:layout_alignStart="@+id/sync_search_sponge"
+        android:layout_below="@+id/sync_search_sponge"
         android:layout_marginTop="40dp"
-        android:layout_toEndOf="@id/sync_search_start"
-        android:layout_toStartOf="@+id/sync_search_end"
         android:visibility="invisible" />
 
     <Button
@@ -72,10 +58,10 @@
         style="@style/button_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/sync_search_sponge"
+        android:layout_alignStart="@+id/sync_search_sponge"
         android:layout_below="@+id/sync_search_button1"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@id/sync_search_start"
-        android:layout_toStartOf="@+id/sync_search_end"
         android:visibility="invisible" />
 
 </RelativeLayout>

@@ -5,19 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/fragment_back"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="fitStart"
-        android:src="@mipmap/icon_left" />
-
     <TextView
         style="@style/textview_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:gravity="center"
         android:text="Sorry!" />
 
@@ -35,43 +27,43 @@
         android:layout_weight="7">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_sorry_sponge"
+            android:id="@+id/profile_sorry_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:shrinkWidth="0.7" />
 
         <Button
-            android:id="@+id/watch_sorry_search"
+            android:id="@+id/profile_sorry_search"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10dp"
-            android:layout_alignEnd="@+id/watch_sorry_sponge"
-            android:layout_alignStart="@+id/watch_sorry_sponge"
+            android:layout_alignEnd="@+id/profile_sorry_sponge"
+            android:layout_alignStart="@+id/profile_sorry_sponge"
             android:text="Search Again" />
 
         <Button
-            android:id="@+id/watch_sorry_request"
+            android:id="@+id/profile_sorry_request"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/watch_sorry_search"
+            android:layout_below="@+id/profile_sorry_search"
             android:layout_marginBottom="10dp"
-            android:layout_alignEnd="@+id/watch_sorry_sponge"
-            android:layout_alignStart="@+id/watch_sorry_sponge"
+            android:layout_alignEnd="@+id/profile_sorry_sponge"
+            android:layout_alignStart="@+id/profile_sorry_sponge"
             android:text="Request Access to Others" />
 
         <Button
-            android:id="@+id/watch_sorry_contact"
+            android:id="@+id/profile_sorry_contact"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/watch_sorry_request"
+            android:layout_below="@+id/profile_sorry_request"
             android:layout_marginBottom="10dp"
-            android:layout_alignEnd="@+id/watch_sorry_sponge"
-            android:layout_alignStart="@+id/watch_sorry_sponge"
+            android:layout_alignEnd="@+id/profile_sorry_sponge"
+            android:layout_alignStart="@+id/profile_sorry_sponge"
             android:text="Contact Us" />
 
     </RelativeLayout>

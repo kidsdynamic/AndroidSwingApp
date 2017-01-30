@@ -27,18 +27,11 @@
         android:layout_weight="7">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_have_start"
+            android:id="@+id/watch_have_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_have_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <Button
             android:id="@+id/watch_have_yes"
@@ -46,9 +39,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/watch_have_sponge"
+            android:layout_alignEnd="@+id/watch_have_sponge"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/watch_have_start"
-            android:layout_toStartOf="@+id/watch_have_end"
             android:text="Yes" />
 
         <Button
@@ -57,8 +50,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/watch_have_yes"
-            android:layout_toEndOf="@+id/watch_have_start"
-            android:layout_toStartOf="@+id/watch_have_end"
+            android:layout_alignEnd="@+id/watch_have_sponge"
+            android:layout_alignStart="@+id/watch_have_sponge"
             android:text="No" />
 
     </RelativeLayout>

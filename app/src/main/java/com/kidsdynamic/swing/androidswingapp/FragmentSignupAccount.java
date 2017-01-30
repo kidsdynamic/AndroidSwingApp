@@ -68,7 +68,7 @@ public class FragmentSignupAccount extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Sign up", false, false, false,
-                ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
+                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override

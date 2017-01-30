@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +12,17 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 
 /**
- * Created by 03543 on 2016/12/31.
+ * Created by 03543 on 2017/1/30.
  */
 
-public class FragmentWatchSelect extends ViewFragment {
+public class FragmentProfileSelect extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private Button mButtonDashboard;
     private LinearLayout mViewContainer;
-    private ImageView mViewBack;
 
     private ArrayList<WatchContact.Kid> mDeviceList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,47 +38,33 @@ public class FragmentWatchSelect extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_watch_select, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_profile_select, container, false);
 
-        mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.watch_select_container);
-
-        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
-        mViewBack.setOnClickListener(mBackOnClickListener);
-
-        mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_select_dashboard);
-        mButtonDashboard.setOnClickListener(mOnDashboardListener);
+        mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_select_container);
 
         for (WatchContact.Kid device : mDeviceList) {
             addWatch(device);
         }
+
+        // Test
+        addWatch(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple", false));
+        addWatch(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Monster Yellow", true));
+        addWatch(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster", false));
+        /////////////
 
         return mViewMain;
     }
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
-                ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
+        return new ViewFragmentConfig("Search Device", true, true, false,
+                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
-
-    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            onToolbarAction1();
-        }
-    };
-
-    private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
-        }
-    };
 
     private void addWatch(WatchContact.Kid device) {
         View view = WatchContact.inflateBind(mActivityMain, device);
@@ -95,10 +81,12 @@ public class FragmentWatchSelect extends ViewFragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
 
+            /*
             if (device.mBound)
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), bundle);
             else
                 mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), bundle);
+                */
         }
     };
 }

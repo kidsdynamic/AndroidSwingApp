@@ -24,27 +24,20 @@
         android:layout_weight="7">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_account_start"
+            android:id="@+id/signup_account_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_account_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <EditText
             android:id="@+id/signup_account_email"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/signup_account_start"
-            android:layout_toStartOf="@+id/signup_account_end"
+            android:layout_alignEnd="@+id/signup_account_sponge"
             android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/signup_account_sponge"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:hint="Email"
@@ -57,8 +50,8 @@
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/signup_account_start"
-            android:layout_toStartOf="@+id/signup_account_end"
+            android:layout_alignEnd="@+id/signup_account_sponge"
+            android:layout_alignStart="@+id/signup_account_sponge"
             android:layout_below="@+id/signup_account_email"
             android:gravity="center"
             android:hint="Password"

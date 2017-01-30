@@ -28,6 +28,7 @@ public class FragmentProfileSearch extends ViewFragment {
 
         mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.profile_search_progress);
         mViewProgress.setOnProgressListener(mSearchProgressListener);
+        mViewProgress.setRepeat(false); // For test, remove me later
 
         Handler handle = new Handler();
         handle.post(new Runnable() {
@@ -42,7 +43,7 @@ public class FragmentProfileSearch extends ViewFragment {
 
     @Override
     public ViewFragment.ViewFragmentConfig getConfig() {
-        return new ViewFragment.ViewFragmentConfig("Password", true, true, false,
+        return new ViewFragment.ViewFragmentConfig("Search Device", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -54,7 +55,8 @@ public class FragmentProfileSearch extends ViewFragment {
     private ViewProgressCircle.OnProgressListener mSearchProgressListener = new ViewProgressCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewProgressCircle view, int progress, int total) {
-
+            if(progress == total)
+                mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
         }
     };
 }

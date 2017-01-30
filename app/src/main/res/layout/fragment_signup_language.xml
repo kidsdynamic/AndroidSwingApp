@@ -5,43 +5,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.kidsdynamic.swing.androidswingapp.ViewSponge
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:shrinkHeight="0.2" />
-
     <TextView
         style="@style/textview_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="20dp"
+        android:layout_weight="5"
         android:gravity="center"
         android:text="Please Select\nYour Language" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="7">
 
-        <View
-            android:layout_width="0dp"
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/signup_language_sponge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <Button
             android:id="@+id/signup_language_select"
             style="@style/button_main"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_language_sponge"
+            android:layout_alignStart="@+id/signup_language_sponge"
             android:layout_marginBottom="10dp"
-            android:layout_weight="5"
             android:text="Select" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
+        <ListView
+            android:id="@+id/signup_language_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/signup_language_sponge"
+            android:layout_alignStart="@+id/signup_language_sponge"
+            android:layout_below="@+id/signup_language_select" />
+    </RelativeLayout>
 
 
 </LinearLayout>

@@ -112,27 +112,20 @@
         android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/profile_main_start"
+            android:id="@+id/profile_main_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/profile_main_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <Button
             android:id="@+id/profile_main_logout"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/profile_main_sponge"
+            android:layout_alignStart="@+id/profile_main_sponge"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/profile_main_start"
-            android:layout_toStartOf="@+id/profile_main_end"
             android:text="Logout" />
 
     </RelativeLayout>
