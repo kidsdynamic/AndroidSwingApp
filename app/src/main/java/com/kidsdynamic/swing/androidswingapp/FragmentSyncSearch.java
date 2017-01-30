@@ -159,7 +159,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewSearching() {
-        mViewLabel.setText("Searching\nfor Your\nKid!");
+        mViewLabel.setText("Searching\nfor Your\nDevice!");
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -177,7 +177,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewFound() {
-        mViewLabel.setText("Found\nYour\nKid!");
+        mViewLabel.setText("Found\nYour\nDevice!");
         mViewButton1.setText("Sync Now");
 
         mViewButton1.setVisibility(View.VISIBLE);
@@ -226,7 +226,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewNotFound() {
-        mViewLabel.setText("We Can't\nFind Your\nKid!");
+        mViewLabel.setText("We Can't\nFind Your\nDevice!");
 
         mViewButton1.setText("Try Again");
         mViewButton2.setText("Go to Last Synced Data");
