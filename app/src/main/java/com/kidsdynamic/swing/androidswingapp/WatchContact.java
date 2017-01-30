@@ -41,8 +41,39 @@ public class WatchContact implements Serializable {
     }
 
     public static class Person extends WatchContact {
+        public int mId;
+        public String mEmail;
+        public String mFirstName;
+        public String mLastName;
+        public String mLastUpdate;
+        public String mDateCreated;
+        public String mZipCode;
+        public String mPhoneNumber;
+        public String mProfile;
+
         public Person(Bitmap photo, String label) {
             super(photo, label);
+            mId = 0;
+            mEmail = "";
+            mFirstName = "";
+            mLastName = "";
+            mLastUpdate = "";
+            mDateCreated = "";
+            mZipCode = "";
+            mPhoneNumber = "";
+            mProfile = "";
+        }
+
+        public Person(int id, String email, String firstName, String lastName, String lastUpdate, String dateCreated, String zipCode, String phoneNumber) {
+            super(null, firstName + " " + lastName);
+            mId = id;
+            mEmail = email;
+            mFirstName = firstName;
+            mLastName = lastName;
+            mLastUpdate = lastUpdate;
+            mDateCreated = dateCreated;
+            mZipCode = zipCode;
+            mPhoneNumber = phoneNumber;
         }
     }
 
