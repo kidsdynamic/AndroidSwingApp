@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -39,7 +38,7 @@ public class FragmentWatchRequest extends ViewFragment {
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
         // Test
-        addDevice(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster Purple", false));
+        addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster Purple", false));
         //////////////
 
         return mViewMain;
@@ -65,7 +64,7 @@ public class FragmentWatchRequest extends ViewFragment {
         }
     };
 
-    private void addDevice(WatchContact.Device device) {
+    private void addDevice(WatchContact.Kid device) {
         View view = WatchContact.inflateAdd(mActivityMain, device);
         View button = view.findViewById(R.id.watch_contact_add_button);
         button.setOnClickListener(mDeviceClickListener);
@@ -76,7 +75,7 @@ public class FragmentWatchRequest extends ViewFragment {
     private View.OnClickListener mDeviceClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchContact.Device device = (WatchContact.Device) view.getTag();
+            WatchContact.Kid device = (WatchContact.Kid) view.getTag();
         }
     };
 }

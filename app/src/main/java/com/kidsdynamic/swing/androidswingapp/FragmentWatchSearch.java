@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +73,7 @@ public class FragmentWatchSearch extends ViewFragment {
             mSearchResult = new ArrayList<>();
             for (BLEMachine.Device dev : result) {
 
-                WatchContact.Device device = new WatchContact.Device(null, dev.mAddress, false);
+                WatchContact.Kid device = new WatchContact.Kid(null, dev.mAddress, false);
                 mSearchResult.add(device);
             }
 
@@ -108,7 +107,7 @@ public class FragmentWatchSearch extends ViewFragment {
     ServerMachine.kidsWhoRegisteredMacIDListener mKidsWhoRegisteredMacIDListener = new ServerMachine.kidsWhoRegisteredMacIDListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response) {
-            WatchContact.Device device = (WatchContact.Device) mSearchResult.get(mSearchResultIndex);
+            WatchContact.Kid device = (WatchContact.Kid) mSearchResult.get(mSearchResultIndex);
             device.mLabel = response.user.email;
             device.mBound = true;
             if (!enumerateRegisteredMacId(false))

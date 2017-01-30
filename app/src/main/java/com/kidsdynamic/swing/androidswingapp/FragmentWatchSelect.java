@@ -1,17 +1,12 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,14 +22,14 @@ public class FragmentWatchSelect extends ViewFragment {
     private LinearLayout mViewContainer;
     private ImageView mViewBack;
 
-    private ArrayList<WatchContact.Device> mDeviceList;
+    private ArrayList<WatchContact.Kid> mDeviceList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
-        mDeviceList = (ArrayList<WatchContact.Device>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST);
+        mDeviceList = (ArrayList<WatchContact.Kid>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST);
         if (mDeviceList == null)
             mDeviceList = new ArrayList<>();
     }
@@ -51,7 +46,7 @@ public class FragmentWatchSelect extends ViewFragment {
         mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
-        for (WatchContact.Device device : mDeviceList) {
+        for (WatchContact.Kid device : mDeviceList) {
             addWatch(device);
         }
 
@@ -83,7 +78,7 @@ public class FragmentWatchSelect extends ViewFragment {
         }
     };
 
-    private void addWatch(WatchContact.Device device) {
+    private void addWatch(WatchContact.Kid device) {
         View view = WatchContact.inflateBind(mActivityMain, device);
         view.setOnClickListener(mDeviceClickListener);
 
@@ -93,7 +88,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private View.OnClickListener mDeviceClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchContact.Device device = (WatchContact.Device) view.getTag();
+            WatchContact.Kid device = (WatchContact.Kid) view.getTag();
 
             Bundle bundle = new Bundle();
             bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
@@ -108,7 +103,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private ViewWatchContactList.OnContactClickListener mContactClickListener = new ViewWatchContactList.OnContactClickListener() {
         @Override
         public void onClick(ViewWatchContact contact, int position, int button) {
-            WatchContact.Device device = (WatchContact.Device) contact.getItem();
+            WatchContact.Kid device = (WatchContact.Kid) contact.getItem();
             if (device.mBound)
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), null);
             else

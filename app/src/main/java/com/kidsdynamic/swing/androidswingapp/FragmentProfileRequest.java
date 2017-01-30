@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,13 +41,13 @@ public class FragmentProfileRequest extends ViewFragment {
         mViewPendingContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_request_watch_container);
 
         // Test
-        addRequester(new WatchContact.Person(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster purple AAAAAAAAA AAAAAAAAAAAA AAAAAAAAAAAAA AAAAAAAAA"));
-        addRequester(new WatchContact.Person(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Monster green"));
-        addRequester(new WatchContact.Person(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Monster yellow"));
+        addRequester(new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster purple AAAAAAAAA AAAAAAAAAAAA AAAAAAAAAAAAA AAAAAAAAA"));
+        addRequester(new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Monster green"));
+        addRequester(new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Monster yellow"));
 
-        addPending(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster", false));
-        addPending(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster", false));
-        addPending(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster", false));
+        addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster", false));
+        addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster", false));
+        addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster", false));
         ////////////
 
         return mViewMain;
@@ -69,7 +68,7 @@ public class FragmentProfileRequest extends ViewFragment {
         return String.format(Locale.getDefault(), "You Have %d Request", mViewRequestContainer.getChildCount());
     }
 
-    public void delRequester(WatchContact.Person person) {
+    public void delRequester(WatchContact.User person) {
         View view = mViewRequestContainer.findViewWithTag(person);
         if (view != null) {
             mViewRequestContainer.removeView(view);
@@ -78,7 +77,7 @@ public class FragmentProfileRequest extends ViewFragment {
         mViewCount.setText(makeRequesterCount());
     }
 
-    public void addRequester(WatchContact.Person person) {
+    public void addRequester(WatchContact.User person) {
         View view = WatchContact.inflateRequester(mActivityMain, person);
 
         View viewAllow = view.findViewById(R.id.watch_contact_requester_allow);
@@ -97,7 +96,7 @@ public class FragmentProfileRequest extends ViewFragment {
     private View.OnClickListener mRequesterAllowClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchContact.Person person = (WatchContact.Person) view.getTag();
+            WatchContact.User person = (WatchContact.User) view.getTag();
 
             Bundle bundle = new Bundle();
             bundle.putSerializable(BUNDLE_KEY_REQUESTER, person);
@@ -109,12 +108,12 @@ public class FragmentProfileRequest extends ViewFragment {
     private View.OnClickListener mRequesterDenyClick = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchContact.Person person = (WatchContact.Person) view.getTag();
+            WatchContact.User person = (WatchContact.User) view.getTag();
             delRequester(person);
         }
     };
 
-    public void addPending(WatchContact.Device device) {
+    public void addPending(WatchContact.Kid device) {
         View view = WatchContact.inflatePending(mActivityMain, device);
 
         mViewPendingContainer.addView(view);

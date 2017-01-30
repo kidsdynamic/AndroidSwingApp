@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
@@ -47,9 +46,9 @@ public class WatchOperator {
     private SQLiteDatabase mDatabase;
     private ActivityMain mActivityMain;
 
-    public ArrayList<WatchContact.Device> mListDevice;
-    public ArrayList<WatchContact.Device> mListShared;
-    public ArrayList<WatchContact.Person> mListRequest;
+    public ArrayList<WatchContact.Kid> mListDevice;
+    public ArrayList<WatchContact.Kid> mListShared;
+    public ArrayList<WatchContact.User> mListRequest;
 
     public WatchOperator(ActivityMain activity) {
         mActivityMain = activity;
@@ -61,15 +60,15 @@ public class WatchOperator {
         mDatabase = WatchHelper.getDatabase(mActivityMain);
     }
 
-    public ArrayList<WatchContact.Device> getDeviceList() {
+    public ArrayList<WatchContact.Kid> getDeviceList() {
         return mListDevice;
     }
 
-    public ArrayList<WatchContact.Device> getSharedList() {
+    public ArrayList<WatchContact.Kid> getSharedList() {
         return mListShared;
     }
 
-    public ArrayList<WatchContact.Person> getRequestList() {
+    public ArrayList<WatchContact.User> getRequestList() {
         return mListRequest;
     }
 }

@@ -42,7 +42,7 @@ public class FragmentWatchProfile extends ViewFragment {
     private Dialog mProcessDialog = null;
 
     private Uri mPhotoUri;
-    private WatchContact.Device mDevice;
+    private WatchContact.Kid mDevice;
     private Bitmap mAvatarBitmap = null;
     private String mAvatarFilename;
     private String mFirstName;
@@ -56,7 +56,7 @@ public class FragmentWatchProfile extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-        mDevice = (WatchContact.Device)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        mDevice = (WatchContact.Kid)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
         Log.d("swing", "Watch profile " + mDevice.mLabel);
     }
 

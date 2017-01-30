@@ -2,14 +2,11 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -22,7 +19,7 @@ public class FragmentSyncSelect extends ViewFragment {
     private View mViewMain;
     LinearLayout mViewContainer;
 
-    ArrayList<WatchContact.Device> mDeviceList;
+    ArrayList<WatchContact.Kid> mDeviceList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,11 +36,11 @@ public class FragmentSyncSelect extends ViewFragment {
         mDeviceList = new ArrayList<>();
 
         // todo: load binded devices from server
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Kid 001", true));
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", true));
-        mDeviceList.add(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid XX3", true));
+        mDeviceList.add(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Kid 001", true));
+        mDeviceList.add(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", true));
+        mDeviceList.add(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid XX3", true));
 
-        for (WatchContact.Device device : mDeviceList)
+        for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
 
         // todo: select current focused kid
@@ -63,7 +60,7 @@ public class FragmentSyncSelect extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private void addDevice(WatchContact.Device device) {
+    private void addDevice(WatchContact.Kid device) {
         ViewPhotoContact contact = new ViewPhotoContact(mActivityMain);
 
         contact.load(device);
@@ -86,7 +83,7 @@ public class FragmentSyncSelect extends ViewFragment {
         @Override
         public void onClick(View view) {
             ViewPhotoContact contact = (ViewPhotoContact) view;
-            WatchContact.Device device = (WatchContact.Device) contact.getItem();
+            WatchContact.Kid device = (WatchContact.Kid) contact.getItem();
 
             setSelected(mDeviceList.indexOf(device));
 

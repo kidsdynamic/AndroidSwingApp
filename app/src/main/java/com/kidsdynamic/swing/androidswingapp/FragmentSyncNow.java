@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -52,8 +51,8 @@ public class FragmentSyncNow extends ViewFragment {
         @Override
         public void onClick(View view) {
             // Todo : get focus device from config
-            WatchContact.Device device =
-                    new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "E0:E5:CF:1E:D7:C2", true);
+            WatchContact.Kid device =
+                    new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "E0:E5:CF:1E:D7:C2", true);
 
             Bundle bundle = new Bundle();
             bundle.putSerializable(BUNDLE_KEY_DEVICE, device);

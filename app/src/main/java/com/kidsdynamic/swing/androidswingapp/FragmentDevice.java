@@ -29,7 +29,7 @@ public class FragmentDevice extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Device", true, true, false,
+        return new ViewFragmentConfig("Kid", true, true, false,
                 R.mipmap.city_illinois, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 }

@@ -6,8 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -26,7 +24,7 @@ public class FragmentProfileShare extends ViewFragment {
     private TextView mViewTitle;
     private LinearLayout mViewShareContainer;
 
-    private WatchContact.Person mRequester;
+    private WatchContact.User mRequester;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,16 +41,16 @@ public class FragmentProfileShare extends ViewFragment {
         mViewShareContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_share_container);
 
         if (getArguments() != null) {
-            mRequester = (WatchContact.Person) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_REQUESTER);
+            mRequester = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_REQUESTER);
             String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mRequester.mLabel);
 
             mViewTitle.setText(title);
         }
 
         // Test
-        addDevice(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster", false));
-        addDevice(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster", false));
-        addDevice(new WatchContact.Device(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster", false));
+        addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster", false));
+        addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster", false));
+        addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster", false));
         ///////////////////////
 
         return mViewMain;
@@ -67,8 +65,8 @@ public class FragmentProfileShare extends ViewFragment {
     @Override
     public void onToolbarAction1() {
         // Test
-        ArrayList<WatchContact.Device> list = getSelectList();
-        for (WatchContact.Device device : list) {
+        ArrayList<WatchContact.Kid> list = getSelectList();
+        for (WatchContact.Kid device : list) {
             Log.d("xxx", "select:" + device.mLabel);
         }
         ////////////
@@ -76,7 +74,7 @@ public class FragmentProfileShare extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    public void addDevice(WatchContact.Device device) {
+    public void addDevice(WatchContact.Kid device) {
         View view = WatchContact.inflateShare(mActivityMain, device);
 
         view.setOnClickListener(mDeviceClickListener);
@@ -87,12 +85,12 @@ public class FragmentProfileShare extends ViewFragment {
     private View.OnClickListener mDeviceClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchContact.Device device = (WatchContact.Device) view.getTag();
+            WatchContact.Kid device = (WatchContact.Kid) view.getTag();
             selectDevice(device);
         }
     };
 
-    private void selectDevice(WatchContact.Device device) {
+    private void selectDevice(WatchContact.Kid device) {
         View view = mViewShareContainer.findViewWithTag(device);
         View icon = view.findViewById(R.id.watch_contact_share_icon);
 
@@ -102,8 +100,8 @@ public class FragmentProfileShare extends ViewFragment {
             icon.setVisibility(View.VISIBLE);
     }
 
-    private ArrayList<WatchContact.Device> getSelectList() {
-        ArrayList<WatchContact.Device> list = new ArrayList<>();
+    private ArrayList<WatchContact.Kid> getSelectList() {
+        ArrayList<WatchContact.Kid> list = new ArrayList<>();
 
         int count = mViewShareContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
@@ -111,7 +109,7 @@ public class FragmentProfileShare extends ViewFragment {
             View icon = view.findViewById(R.id.watch_contact_share_icon);
 
             if (icon.getVisibility() == View.VISIBLE)
-                list.add((WatchContact.Device) view.getTag());
+                list.add((WatchContact.Kid) view.getTag());
         }
 
         return list;

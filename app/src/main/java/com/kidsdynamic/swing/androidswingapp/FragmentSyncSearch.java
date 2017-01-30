@@ -32,7 +32,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private Button mViewButton2;
     private ViewProgressCircle mViewProgress;
 
-    private WatchContact.Device mDevice;
+    private WatchContact.Kid mDevice;
     private BLEMachine.Device mSearchResult = null;
     private boolean mSyncFinish = false;
 
@@ -52,7 +52,7 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton1 = (Button) mViewMain.findViewById(R.id.sync_search_button1);
         mViewButton2 = (Button) mViewMain.findViewById(R.id.sync_search_button2);
 
-        mDevice = (WatchContact.Device) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
 
         Handler handle = new Handler();
         handle.post(new Runnable() {
@@ -104,7 +104,7 @@ public class FragmentSyncSearch extends ViewFragment {
         public void onProgress(ViewProgressCircle view, int progress, int total) {
             mSyncTimeout--;
 
-            // todo: Below is a simulation. Device has synced after progress 4
+            // todo: Below is a simulation. Kid has synced after progress 4
             if(mSyncFinish) {
                 viewCompleted();
             }
@@ -159,7 +159,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewSearching() {
-        mViewLabel.setText("Searching\nfor Your\nDevice!");
+        mViewLabel.setText("Searching\nfor Your\nKid!");
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -177,7 +177,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewFound() {
-        mViewLabel.setText("Found\nYour\nDevice!");
+        mViewLabel.setText("Found\nYour\nKid!");
         mViewButton1.setText("Sync Now");
 
         mViewButton1.setVisibility(View.VISIBLE);
@@ -226,7 +226,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewNotFound() {
-        mViewLabel.setText("We Can't\nFind Your\nDevice!");
+        mViewLabel.setText("We Can't\nFind Your\nKid!");
 
         mViewButton1.setText("Try Again");
         mViewButton2.setText("Go to Last Synced Data");

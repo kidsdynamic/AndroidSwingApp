@@ -30,17 +30,17 @@ public class WatchContact implements Serializable {
         mLabel = label;
     }
 
-    public static class Device extends WatchContact {
+    public static class Kid extends WatchContact {
         public boolean mBound = false;
 
-        public Device(Bitmap photo, String label, boolean bind) {
+        public Kid(Bitmap photo, String label, boolean bind) {
             super(photo, label);
 
             mBound = bind;
         }
     }
 
-    public static class Person extends WatchContact {
+    public static class User extends WatchContact {
         public int mId;
         public String mEmail;
         public String mFirstName;
@@ -51,7 +51,7 @@ public class WatchContact implements Serializable {
         public String mPhoneNumber;
         public String mProfile;
 
-        public Person(Bitmap photo, String label) {
+        public User(Bitmap photo, String label) {
             super(photo, label);
             mId = 0;
             mEmail = "";
@@ -64,7 +64,7 @@ public class WatchContact implements Serializable {
             mProfile = "";
         }
 
-        public Person(int id, String email, String firstName, String lastName, String lastUpdate, String dateCreated, String zipCode, String phoneNumber) {
+        public User(int id, String email, String firstName, String lastName, String lastUpdate, String dateCreated, String zipCode, String phoneNumber) {
             super(null, firstName + " " + lastName);
             mId = id;
             mEmail = email;
@@ -98,7 +98,7 @@ public class WatchContact implements Serializable {
         return view;
     }
 
-    static View inflateBind(Context context, WatchContact.Device device) {
+    static View inflateBind(Context context, Kid device) {
         View view = inflate(context, R.layout.watch_contact_bind, device);
 
         ImageView viewIcon = (ImageView) view.findViewById(R.id.watch_contact_bind_icon);
@@ -107,25 +107,25 @@ public class WatchContact implements Serializable {
         return view;
     }
 
-    static View inflateRequester(Context context, WatchContact.Person person) {
+    static View inflateRequester(Context context, User person) {
         View view = inflate(context, R.layout.watch_contact_requester, person);
 
         return view;
     }
 
-    static View inflateAdd(Context context, WatchContact.Device device) {
+    static View inflateAdd(Context context, Kid device) {
         View view = inflate(context, R.layout.watch_contact_add, device);
 
         return view;
     }
 
-    static View inflatePending(Context context, WatchContact.Device device) {
+    static View inflatePending(Context context, Kid device) {
         View view = inflate(context, R.layout.watch_contact_pending, device);
 
         return view;
     }
 
-    static View inflateShare(Context context, WatchContact.Device device) {
+    static View inflateShare(Context context, Kid device) {
         View view = inflate(context, R.layout.watch_contact_share, device);
 
         return view;

@@ -5,7 +5,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,10 +49,10 @@ public class FragmentProfileMain extends ViewFragment {
         mViewDeviceAdd.setOnClickListener(mAddSharedListener);
 
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
-            addContact(mViewDeviceContainer, (WatchContact.Device) device);
+            addContact(mViewDeviceContainer, (WatchContact.Kid) device);
 
         for (WatchContact device : mActivityMain.mOperator.getSharedList())
-            addContact(mViewSharedContainer, (WatchContact.Device) device);
+            addContact(mViewSharedContainer, (WatchContact.Kid) device);
 
         return mViewMain;
     }
@@ -100,7 +99,7 @@ public class FragmentProfileMain extends ViewFragment {
         }
     };
 
-    private void addContact(LinearLayout layout, WatchContact.Device device) {
+    private void addContact(LinearLayout layout, WatchContact.Kid device) {
 
         ViewPhoto photo = new ViewPhoto(mActivityMain);
         photo.setShowBorder(true);
