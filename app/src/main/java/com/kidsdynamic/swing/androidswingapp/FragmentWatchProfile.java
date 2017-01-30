@@ -184,7 +184,7 @@ public class FragmentWatchProfile extends ViewFragment {
                 if (mFirstName != null && mLastName != null) {
                     mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
-                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mFirstName, mLastName, macId);
+                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mFirstName, mLastName, macId);//"123456654321");
                 }
             }
 
@@ -195,6 +195,13 @@ public class FragmentWatchProfile extends ViewFragment {
     ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
+            mDevice.mFirstName = response.firstName;
+            mDevice.mLastName = response.lastName;
+            mDevice.mDateCreated= response.dateCreated;
+            mDevice.mMacId = response.macId;
+            mDevice.mParentId = response.parent.id;
+            mActivityMain.mOperator.KidAdd(mDevice);
+
             if (mAvatarBitmap != null) {
                 mKidId = response.id;
                 mAvatarFilename = ServerMachine.createAvatarFile(mAvatarBitmap, mFirstName + mLastName);
@@ -229,6 +236,9 @@ public class FragmentWatchProfile extends ViewFragment {
 
         @Override
         public void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response) {
+            mDevice.mProfile = mAvatarFilename;
+            mActivityMain.mOperator.KidUpdate(mDevice);
+
             Bundle bundle = new Bundle();
             bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mAvatarFilename);
 

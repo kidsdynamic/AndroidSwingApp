@@ -72,6 +72,7 @@ public class FragmentWatchSearch extends ViewFragment {
             for (BLEMachine.Device dev : result) {
 
                 WatchContact.Kid device = new WatchContact.Kid(null, dev.mAddress, false);
+                device.mMacId = ServerMachine.getMacID(dev.mAddress);
                 mSearchResult.add(device);
             }
 
