@@ -39,8 +39,6 @@ public class FragmentWatchSearch extends ViewFragment {
 
         mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.watch_search_progress);
         mViewProgress.setOnProgressListener(mProgressListener);
-        mViewProgress.setRepeat(true);
-        mViewProgress.setDuration(1000);
 
         Handler handle = new Handler();
         handle.post(new Runnable() {
