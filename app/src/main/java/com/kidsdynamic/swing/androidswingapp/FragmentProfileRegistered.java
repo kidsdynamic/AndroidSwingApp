@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,16 +8,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 /**
- * Created by 03543 on 2016/12/31.
+ * Created by 03543 on 2017/1/30.
  */
 
-public class FragmentWatchRegistered extends ViewFragment {
+public class FragmentProfileRegistered extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
     private Button mButtonRequest;
     private Button mButtonContact;
-    private ImageView mViewBack;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,24 +26,21 @@ public class FragmentWatchRegistered extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_watch_registered, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_profile_registered, container, false);
 
-        mButtonRequest = (Button) mViewMain.findViewById(R.id.watch_registered_request);
+        mButtonRequest = (Button) mViewMain.findViewById(R.id.profile_registered_request);
         mButtonRequest.setOnClickListener(mOnRequestListener);
 
-        mButtonContact = (Button) mViewMain.findViewById(R.id.watch_registered_contact);
+        mButtonContact = (Button) mViewMain.findViewById(R.id.profile_registered_contact);
         mButtonContact.setOnClickListener(mOnContactListener);
-
-        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
-        mViewBack.setOnClickListener(mBackOnClickListener);
 
         return mViewMain;
     }
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
-                ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
+        return new ViewFragmentConfig("Search Device", true, true, false,
+                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override
@@ -53,17 +48,10 @@ public class FragmentWatchRegistered extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            onToolbarAction1();
-        }
-    };
-
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
+            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
         }
     };
 

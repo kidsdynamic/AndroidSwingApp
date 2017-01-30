@@ -81,12 +81,10 @@ public class FragmentProfileSelect extends ViewFragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
 
-            /*
             if (device.mBound)
-                mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), bundle);
+                mActivityMain.selectFragment(FragmentProfileRegistered.class.getName(), bundle);
             else
-                mActivityMain.selectFragment(FragmentWatchAdded.class.getName(), bundle);
-                */
+                mActivityMain.selectFragment(FragmentProfileAdded.class.getName(), bundle);
         }
     };
 }

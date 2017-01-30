@@ -21,6 +21,7 @@
             <enum name="dot" value="0" />
             <enum name="arc" value="1" />
         </attr>
+        <attr name="android:progress" />
     </declare-styleable>
 
     <declare-styleable name="ViewPhoto">
