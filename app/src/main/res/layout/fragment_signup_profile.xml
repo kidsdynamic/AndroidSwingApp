@@ -19,26 +19,19 @@
         android:layout_weight="2.5">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_profile_photo_start"
+            android:id="@+id/signup_profile_photo_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_profile_photo_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewPhoto
             android:id="@+id/signup_profile_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_toEndOf="@+id/signup_profile_photo_start"
-            android:layout_toStartOf="@+id/signup_profile_photo_end" />
+            android:layout_alignEnd="@+id/signup_profile_photo_sponge"
+            android:layout_alignStart="@+id/signup_profile_photo_sponge"
+            android:layout_gravity="center" />
     </RelativeLayout>
 
     <View
@@ -52,28 +45,21 @@
         android:layout_weight="7">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_profile_start"
+            android:id="@+id/signup_profile_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_profile_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <EditText
             android:id="@+id/signup_profile_first"
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_profile_sponge"
             android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/signup_profile_sponge"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/signup_profile_start"
-            android:layout_toStartOf="@+id/signup_profile_end"
             android:gravity="center"
             android:hint="First Name"
             android:imeOptions="actionNext"
@@ -85,10 +71,10 @@
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_profile_sponge"
+            android:layout_alignStart="@+id/signup_profile_sponge"
             android:layout_below="@+id/signup_profile_first"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/signup_profile_start"
-            android:layout_toStartOf="@+id/signup_profile_end"
             android:gravity="center"
             android:hint="Last Name"
             android:imeOptions="actionNext"
@@ -100,10 +86,10 @@
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_profile_sponge"
+            android:layout_alignStart="@+id/signup_profile_sponge"
             android:layout_below="@+id/signup_profile_last"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/signup_profile_start"
-            android:layout_toStartOf="@+id/signup_profile_end"
             android:gravity="center"
             android:hint="Phone Number"
             android:imeOptions="actionNext"
@@ -115,10 +101,10 @@
             style="@style/edittext_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_profile_sponge"
+            android:layout_alignStart="@+id/signup_profile_sponge"
             android:layout_below="@+id/signup_profile_phone"
             android:layout_marginBottom="10dp"
-            android:layout_toEndOf="@+id/signup_profile_start"
-            android:layout_toStartOf="@+id/signup_profile_end"
             android:gravity="center"
             android:hint="Zip Code"
             android:imeOptions="actionDone"

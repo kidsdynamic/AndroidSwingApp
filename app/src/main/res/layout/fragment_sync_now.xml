@@ -5,66 +5,58 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.kidsdynamic.swing.androidswingapp.ViewSponge
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:shrinkHeight="0.2" />
-
     <TextView
         style="@style/textview_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="20dp"
+        android:layout_weight="4"
         android:gravity="center"
         android:text="Would You Like to\nSync now?" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="7">
 
-        <View
-            android:layout_width="0dp"
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/sync_now_sponge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/sync_now_yes"
-                style="@style/button_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Yes, Please" />
-
-            <Button
-                android:id="@+id/sync_now_no"
-                style="@style/button_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="No, Go to Dashboard" />
-
-            <Button
-                android:id="@+id/sync_now_another"
-                style="@style/button_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:text="Sync Another Watch" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/sync_now_yes"
+            style="@style/button_main"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    </LinearLayout>
+            android:layout_alignEnd="@+id/sync_now_sponge"
+            android:layout_alignStart="@+id/sync_now_sponge"
+            android:layout_marginBottom="10dp"
+            android:text="Yes, Please" />
 
+        <Button
+            android:id="@+id/sync_now_no"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/sync_now_sponge"
+            android:layout_alignStart="@+id/sync_now_sponge"
+            android:layout_below="@+id/sync_now_yes"
+            android:layout_marginBottom="10dp"
+            android:text="No, Go to Dashboard" />
+
+        <Button
+            android:id="@+id/sync_now_another"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/sync_now_sponge"
+            android:layout_alignStart="@+id/sync_now_sponge"
+            android:layout_below="@+id/sync_now_no"
+            android:layout_marginBottom="10dp"
+            android:text="Sync Another Watch" />
+    </RelativeLayout>
 
 </LinearLayout>

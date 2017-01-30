@@ -27,27 +27,20 @@
         android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_owner_search_start"
+            android:id="@+id/watch_owner_search_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_owner_search_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <Button
             android:id="@+id/watch_owner_search"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/watch_owner_search_sponge"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/watch_owner_search_start"
-            android:layout_toStartOf="@+id/watch_owner_search_end"
+            android:layout_alignStart="@+id/watch_owner_search_sponge"
             android:text="Search Now" />
     </RelativeLayout>
 
@@ -97,27 +90,20 @@
         android:layout_weight="4">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_owner_others_start"
+            android:id="@+id/watch_owner_others_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            app:shrinkWidth="0.15" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_owner_others_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            app:shrinkWidth="0.15" />
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
 
         <Button
             android:id="@+id/watch_owner_others"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/watch_owner_others_sponge"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/watch_owner_others_start"
-            android:layout_toStartOf="@+id/watch_owner_others_end"
+            android:layout_alignStart="@+id/watch_owner_others_sponge"
             android:text="Add Now" />
     </RelativeLayout>
 </LinearLayout>
