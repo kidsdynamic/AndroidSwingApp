@@ -841,6 +841,14 @@ public class ServerMachine {
         return macId;
     }
 
+    public static String getMacAddress(String macId) {
+        return String.format("%c%c:%c%c:%c%c:%c%c:%c%c:%c%c",
+                macId.charAt(0),macId.charAt(1),macId.charAt(2),macId.charAt(3),
+                macId.charAt(4),macId.charAt(5),macId.charAt(6),macId.charAt(7),
+                macId.charAt(8),macId.charAt(9),macId.charAt(10),macId.charAt(11)
+        );
+    }
+
     public static String createAvatarFile(Bitmap bitmap, String filename) {
         String avatarFilename = null;
         FileOutputStream out = null;
