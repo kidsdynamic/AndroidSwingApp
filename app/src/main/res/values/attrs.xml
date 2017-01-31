@@ -45,10 +45,14 @@
     </declare-styleable>
 
     <declare-styleable name="ViewCalendarSelector">
-        <attr name="android:text" />
         <attr name="android:textSize" />
         <attr name="android:textColor" />
         <attr name="android:textColorHint" />
+        <attr name="calendarMode" format="enum">
+            <enum name="year" value="0" />
+            <enum name="month" value="1" />
+            <enum name="day" value="2" />
+        </attr>
     </declare-styleable>
 
 </resources>

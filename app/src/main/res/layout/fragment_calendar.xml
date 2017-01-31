@@ -24,10 +24,10 @@
             android:layout_height="match_parent"
             android:layout_alignStart="@+id/calendar_selector_sponge"
             android:layout_alignEnd="@+id/calendar_selector_sponge"
-            android:text="XXXXX"
             android:textColor="@color/color_orange_main"
             android:textColorHint="@color/color_gray"
-            android:textSize="16sp" />
+            android:textSize="18sp"
+            app:calendarMode="day"/>
     </RelativeLayout>
 
     <View
