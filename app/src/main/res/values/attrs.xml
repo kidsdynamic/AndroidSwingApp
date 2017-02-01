@@ -4,6 +4,11 @@
     <attr name="strokeWidth" format="dimension" />
     <attr name="strokeActiveColor" format="color" />
     <attr name="strokeNormalColor" format="color" />
+    <attr name="calendarMode" format="enum">
+        <enum name="year" value="0" />
+        <enum name="month" value="1" />
+        <enum name="day" value="2" />
+    </attr>
 
     <declare-styleable name="ViewSponge">
         <attr name="shrinkWidth" format="float" />
@@ -48,11 +53,14 @@
         <attr name="android:textSize" />
         <attr name="android:textColor" />
         <attr name="android:textColorHint" />
-        <attr name="calendarMode" format="enum">
-            <enum name="year" value="0" />
-            <enum name="month" value="1" />
-            <enum name="day" value="2" />
-        </attr>
+        <attr name="calendarMode" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewCalendar">
+        <attr name="android:textSize" />
+        <attr name="android:textColor" />
+        <attr name="android:textColorHint" />
+        <attr name="calendarMode" />
     </declare-styleable>
 
 </resources>

@@ -1,42 +1,32 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
-import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/1/31.
  */
 
-public class ViewCalendarSelector extends RelativeLayout {
+public class ViewCalendarSelector extends ViewCalendar implements View.OnClickListener{
     static final int SELECT_PREV = -1;
     static final int SELECT_NEXT = 1;
     static final int SELECT_DATE = 0;
 
-    static final int MODE_INVALID = -1;
-    static final int MODE_YEAR = 0;
-    static final int MODE_MONTH = 1;
-    static final int MODE_DAY = 2;
-
-    private RelativeLayout mThis = this;
+    private ViewCalendar mThis = this;
     private TextView mViewDate;
-    private TextView mViewTriangleLeft;
-    private TextView mViewTriangleRight;
-
-    private int mTextSize = 12;
-    private int mTextColor = 0;
-    private int mTextColorHint = 0;
-
-    private int mMode = MODE_INVALID;
-    private long mDate = Calendar.getInstance().getTimeInMillis();
+    private TextView mViewPrev;
+    private TextView mViewNext;
 
     private OnSelectListener mSelectListener = null;
 
@@ -50,105 +40,98 @@ public class ViewCalendarSelector extends RelativeLayout {
         init(context, attrs);
     }
 
-    public ViewCalendarSelector(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(context, attrs);
+    private void init(Context context, AttributeSet attrs) {
     }
 
-    private void init(Context context, AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(
-                    attrs, R.styleable.ViewCalendarSelector);
+    @Override
+    public void fillCell(Context context) {
+        TableRow tableRow = new TableRow(context);
+        tableRow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
 
-            final int count = typedArray.getIndexCount();
-            for (int idx = 0; idx < count; idx++) {
-                final int attr = typedArray.getIndex(idx);
+        mViewPrev = new TextView(context);
+        mViewPrev.setText("◀"); // U+25C0 &#9664;
+        mViewPrev.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        mViewPrev.setTextColor(mTextColorHint);
+        mViewPrev.setGravity(Gravity.CENTER);
+        mViewPrev.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
+        tableRow.addView(mViewPrev);
 
-                if (attr == R.styleable.ViewCalendarSelector_android_textSize) {
-                    mTextSize = typedArray.getDimensionPixelOffset(attr, mTextSize);
-                } else if (attr == R.styleable.ViewCalendarSelector_android_textColor) {
-                    mTextColor = typedArray.getColor(attr, mTextColor);
-                } else if (attr == R.styleable.ViewCalendarSelector_android_textColorHint) {
-                    mTextColorHint = typedArray.getColor(attr, mTextColorHint);
-                } else if (attr == R.styleable.ViewCalendarSelector_calendarMode) {
-                    mMode = typedArray.getInt(attr, mMode);
-                }
-            }
-
-            typedArray.recycle();
-        }
-
-        inflate(getContext(), R.layout.view_calendar_selector, this);
-
-        mViewTriangleLeft = (TextView) findViewById(R.id.view_calendar_selector_left);
-        mViewTriangleLeft.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        mViewTriangleLeft.setTextColor(mTextColorHint);
-        mViewTriangleLeft.setOnClickListener(mOnClickListener);
-
-        mViewTriangleRight = (TextView) findViewById(R.id.view_calendar_selector_right);
-        mViewTriangleRight.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        mViewTriangleRight.setTextColor(mTextColorHint);
-        mViewTriangleRight.setOnClickListener(mOnClickListener);
-
-        mViewDate = (TextView) findViewById(R.id.view_calendar_selector_date);
+        mViewDate = new TextView(context);
+        mViewDate.setText(makeDateString(mMode));
         mViewDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         mViewDate.setTextColor(mTextColor);
-        mViewDate.setText(makeDateString(mMode));
-        mViewDate.setOnClickListener(mOnClickListener);
+        mViewDate.setGravity(Gravity.CENTER);
+        mViewDate.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 6));
+        tableRow.addView(mViewDate);
+
+        mViewNext = new TextView(context);
+        mViewNext.setText("▶"); // U+25B6 &#9654;
+        mViewNext.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        mViewNext.setTextColor(mTextColorHint);
+        mViewNext.setGravity(Gravity.CENTER);
+        mViewNext.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
+        tableRow.addView(mViewNext);
+
+        addView(tableRow);
+
+        mViewPrev.setOnClickListener(this);
+        mViewDate.setOnClickListener(this);
+        mViewNext.setOnClickListener(this);
+
+        /*
+        for (int row = 0; row < 5; row++) {
+            TableRow tableRow = new TableRow(context);
+            tableRow.setLayoutParams(new LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
+
+            for (int col = 0; col < 7; col++) {
+                TextView tableCell = new TextView(context);
+                tableCell.setText("(" + row + "," + col + ")");
+                tableCell.setGravity(Gravity.CENTER);
+                tableCell.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1));
+
+                tableRow.addView(tableCell);
+            }
+
+            addView(tableRow);
+        }
+        */
     }
 
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (mSelectListener == null)
-                return;
+    @Override
+    public void onClick(View view) {
+        if (mSelectListener == null)
+            return;
 
-            if (view == mViewTriangleLeft)
-                mSelectListener.OnClick(mThis, SELECT_PREV);
-            else if (view == mViewTriangleRight)
-                mSelectListener.OnClick(mThis, SELECT_NEXT);
-            else if (view == mViewDate)
-                mSelectListener.OnClick(mThis, SELECT_DATE);
-        }
-    };
+        if (view == mViewPrev)
+            mSelectListener.OnSelect(mThis, SELECT_PREV);
+        else if (view == mViewNext)
+            mSelectListener.OnSelect(mThis, SELECT_NEXT);
+        else if (view == mViewDate)
+            mSelectListener.OnSelect(mThis, SELECT_DATE);
+    }
+
+    interface OnSelectListener {
+        void OnSelect(View view, int option);
+    }
 
     public void setOnSelectListener(OnSelectListener listener) {
         mSelectListener = listener;
     }
 
-    interface OnSelectListener {
-        void OnClick(View view, int option);
-    }
+    @Override
+    public void setMode(int mode) {
+        mode = (mode == MODE_MONTH) ? MODE_MONTH : MODE_DAY;
 
-    public void setCalendarMode(int mode) {
-        if (mode == mMode)
-            return;
-
-        if (mode == MODE_MONTH)
-            mMode = MODE_MONTH;
-        else
-            mMode = MODE_DAY;
-
+        super.setMode(mode);
         mViewDate.setText(makeDateString(mMode));
-    }
-
-    public int getCalendarMode() {
-        return mMode;
-    }
-
-    public void setDate(long mSecond) {
-    }
-
-    public long getDate() {
-        return mDate;
     }
 
     public String makeDateString(int mode) {
         String format = "yyyy/MM/dd";
 
-        if(mode == MODE_MONTH)
+        if (mode == MODE_MONTH)
             format = "MMMM yyyy";
-        else if(mode == MODE_DAY)
+        else if (mode == MODE_DAY)
             format = "MMM dd, yyyy";
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);

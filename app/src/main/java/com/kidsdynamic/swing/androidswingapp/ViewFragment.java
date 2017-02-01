@@ -37,7 +37,6 @@ abstract public class ViewFragment extends Fragment {
     }
 
     public void onToolbarTitle() {
-
     }
 
     class ViewFragmentConfig {

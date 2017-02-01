@@ -42,7 +42,7 @@ public class FragmentCalendar extends ViewFragment {
 
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
-        public void OnClick(View view, int option) {
+        public void OnSelect(View view, int option) {
             Log.d("xxx", "select:" + option);
         }
     };

@@ -22,17 +22,19 @@
             android:id="@+id/calendar_selector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignStart="@+id/calendar_selector_sponge"
             android:layout_alignEnd="@+id/calendar_selector_sponge"
+            android:layout_alignStart="@+id/calendar_selector_sponge"
             android:textColor="@color/color_orange_main"
             android:textColorHint="@color/color_gray"
             android:textSize="18sp"
-            app:calendarMode="day"/>
+            app:calendarMode="day" />
     </RelativeLayout>
 
-    <View
+    <com.kidsdynamic.swing.androidswingapp.ViewCalendar
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10" />
+        android:layout_weight="10"
+        android:textColor="@color/color_white"
+        android:textSize="16sp" />
 
 </LinearLayout>
