@@ -7,7 +7,8 @@
     <attr name="calendarMode" format="enum">
         <enum name="year" value="0" />
         <enum name="month" value="1" />
-        <enum name="day" value="2" />
+        <enum name="week" value="2" />
+        <enum name="day" value="3" />
     </attr>
 
     <declare-styleable name="ViewSponge">
@@ -58,6 +59,7 @@
 
     <declare-styleable name="ViewCalendar">
         <attr name="android:textSize" />
+        <attr name="android:textStyle" />
         <attr name="android:textColor" />
         <attr name="android:textColorHint" />
         <attr name="calendarMode" />

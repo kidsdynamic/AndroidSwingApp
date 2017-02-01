@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -23,14 +24,17 @@ public class ViewCalendar extends TableLayout {
     static final int MODE_INVALID = -1;
     static final int MODE_YEAR = 0;
     static final int MODE_MONTH = 1;
-    static final int MODE_DAY = 2;
+    static final int MODE_WEEK = 2;
+    static final int MODE_DAY = 3;
 
     protected int mTextSize = 12;
+    protected int mTextStyle = Typeface.NORMAL;
     protected int mTextColor = 0;
     protected int mTextColorHint = 0;
 
     protected int mMode = MODE_INVALID;
-    protected long mDate = Calendar.getInstance().getTimeInMillis();
+    protected long mDate = System.currentTimeMillis();
+    protected int mWeekStart = Calendar.SUNDAY;
 
     public ViewCalendar(Context context) {
         super(context);
@@ -55,6 +59,8 @@ public class ViewCalendar extends TableLayout {
 
                 if (attr == R.styleable.ViewCalendar_android_textSize) {
                     mTextSize = typedArray.getDimensionPixelOffset(attr, mTextSize);
+                } else if (attr == R.styleable.ViewCalendar_android_textStyle) {
+                    mTextStyle = typedArray.getInt(attr, mTextStyle);
                 } else if (attr == R.styleable.ViewCalendar_android_textColor) {
                     mTextColor = typedArray.getColor(attr, mTextColor);
                 } else if (attr == R.styleable.ViewCalendar_android_textColorHint) {
@@ -74,9 +80,10 @@ public class ViewCalendar extends TableLayout {
         TableRow tableRow = new TableRow(context);
         tableRow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
 
-        TextView tableCell = new TextView(context);
+        ViewCalendarCell tableCell = new ViewCalendarCell(context);
         tableCell.setText(simpleDateFormat.format(mDate));
         tableCell.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        tableCell.setTypeface(tableCell.getTypeface(), mTextStyle);
         tableCell.setTextColor(mTextColor);
         tableCell.setGravity(Gravity.CENTER);
         tableCell.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1));
@@ -118,11 +125,24 @@ public class ViewCalendar extends TableLayout {
         return mMode;
     }
 
-    public void setDate(long mSecond) {
-        mDate = mSecond;
+    public void setDate(long milli) {
+        Calendar date = Calendar.getInstance();
+
+        date.setTimeInMillis(milli);
+        date.set(Calendar.HOUR, 0);
+        date.set(Calendar.MINUTE, 0);
+        date.set(Calendar.SECOND, 0);
+
+        mDate = date.getTimeInMillis();
     }
 
     public long getDate() {
         return mDate;
+    }
+
+    public void setWeekStart(int weekStart) {
+        if (weekStart < Calendar.SUNDAY || weekStart > Calendar.SATURDAY)
+            weekStart = Calendar.SUNDAY;
+        mWeekStart = weekStart;
     }
 }

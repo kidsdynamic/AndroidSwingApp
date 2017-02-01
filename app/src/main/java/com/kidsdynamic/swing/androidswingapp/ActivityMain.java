@@ -238,7 +238,7 @@ public class ActivityMain extends AppCompatActivity
             if (view == mViewDevice)
                 selectFragment(FragmentDevice.class.getName(), null);
             else if (view == mViewCalendar)
-                selectFragment(FragmentCalendar.class.getName(), null);
+                selectFragment(FragmentCalendarMain.class.getName(), null);
             else if (view == mViewDashboard)
                 selectFragment(FragmentDashboard.class.getName(), null);
             else if (view == mViewProfile)
