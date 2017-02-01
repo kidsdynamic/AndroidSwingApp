@@ -64,6 +64,8 @@ public class FragmentCalendarMain extends ViewFragment {
         public void onSelect(ViewCalendarWeek week, ViewCalendarCellWeek cell) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault());
             Log.d("xxx", "date: " + simpleDateFormat.format(cell.getDate()));
+
+            mViewSelector.setDate(cell.getDate());
         }
     };
 }

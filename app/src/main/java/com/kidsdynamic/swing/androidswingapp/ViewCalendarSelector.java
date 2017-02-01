@@ -153,14 +153,16 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     public void updateText() {
         Calendar dateNow = ViewCalendar.getInstance();
         int yearNow = dateNow.get(Calendar.YEAR);
-        int weekNow = dateNow.get(Calendar.WEEK_OF_YEAR);
+        int monthNow = dateNow.get(Calendar.MONTH);
+        int dayNow = dateNow.get(Calendar.DAY_OF_MONTH);
 
         Calendar dateSet = ViewCalendar.getInstance();
         dateSet.setTimeInMillis(mDate);
         int yearSet = dateSet.get(Calendar.YEAR);
-        int weekSet = dateSet.get(Calendar.WEEK_OF_YEAR);
+        int monthSet = dateSet.get(Calendar.MONTH);
+        int daySet = dateSet.get(Calendar.DAY_OF_MONTH);
 
-        if (yearNow == yearSet && weekNow == weekSet)
+        if (yearNow == yearSet && monthNow == monthSet && dayNow == daySet)
             mViewDate.setTextColor(mTextColor);
         else
             mViewDate.setTextColor(mTextColorHint);
