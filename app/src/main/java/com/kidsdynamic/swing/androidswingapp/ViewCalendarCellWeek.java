@@ -35,7 +35,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
     public void setDate(long milli) {
         super.setDate(milli);
 
-        Calendar date = Calendar.getInstance();
+        Calendar date = ViewCalendar.getInstance();
         date.setTimeInMillis(mDate);
 
         int day = date.get(Calendar.DAY_OF_MONTH);

@@ -34,7 +34,6 @@ public class ViewCalendar extends TableLayout {
 
     protected int mMode = MODE_INVALID;
     protected long mDate = System.currentTimeMillis();
-    protected int mWeekStart = Calendar.SUNDAY;
 
     public ViewCalendar(Context context) {
         super(context);
@@ -126,12 +125,13 @@ public class ViewCalendar extends TableLayout {
     }
 
     public void setDate(long milli) {
-        Calendar date = Calendar.getInstance();
+        Calendar date = getInstance();
 
         date.setTimeInMillis(milli);
-        date.set(Calendar.HOUR, 0);
+        date.set(Calendar.HOUR_OF_DAY, 0);
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND, 0);
+        date.set(Calendar.MILLISECOND, 0);
 
         mDate = date.getTimeInMillis();
     }
@@ -140,9 +140,9 @@ public class ViewCalendar extends TableLayout {
         return mDate;
     }
 
-    public void setWeekStart(int weekStart) {
-        if (weekStart < Calendar.SUNDAY || weekStart > Calendar.SATURDAY)
-            weekStart = Calendar.SUNDAY;
-        mWeekStart = weekStart;
+    static Calendar getInstance() {
+        return Calendar.getInstance();
+//        return Calendar.getInstance(Locale.US);       // Force to use Sunday to be the first day of week
+//        return Calendar.getInstance(Locale.GERMANY);  // Force to use Monday to be the first day of week
     }
 }

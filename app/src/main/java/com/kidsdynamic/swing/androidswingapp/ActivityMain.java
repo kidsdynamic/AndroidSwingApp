@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Stack;
 
 public class ActivityMain extends AppCompatActivity
@@ -99,7 +100,6 @@ public class ActivityMain extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, fragmentName)
                 .commit();
-
     }
 
     @Override

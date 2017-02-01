@@ -28,7 +28,6 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     private TextView mViewPrev;
     private TextView mViewNext;
 
-    private long mOffsetDate = 0;
     private OnSelectListener mSelectListener = null;
 
     public ViewCalendarSelector(Context context) {
@@ -63,7 +62,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewDate.setTextColor(mTextColor);
         mViewDate.setGravity(Gravity.CENTER);
         mViewDate.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 6));
-        updateDateString();
+        updateText();
         tableRow.addView(mViewDate);
 
         mViewNext = new TextView(context);
@@ -79,24 +78,6 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewPrev.setOnClickListener(this);
         mViewDate.setOnClickListener(this);
         mViewNext.setOnClickListener(this);
-
-        /*
-        for (int row = 0; row < 5; row++) {
-            TableRow tableRow = new TableRow(context);
-            tableRow.setLayoutParams(new LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
-
-            for (int col = 0; col < 7; col++) {
-                TextView tableCell = new TextView(context);
-                tableCell.setText("(" + row + "," + col + ")");
-                tableCell.setGravity(Gravity.CENTER);
-                tableCell.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1));
-
-                tableRow.addView(tableCell);
-            }
-
-            addView(tableRow);
-        }
-        */
     }
 
     @Override
@@ -113,8 +94,8 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         else
             sign = 0;
 
-        Calendar date = Calendar.getInstance();
-        date.setTimeInMillis(mDate + mOffsetDate);
+        Calendar date = ViewCalendar.getInstance();
+        date.setTimeInMillis(mDate);
 
         if (mMode == MODE_YEAR) {
             date.add(Calendar.YEAR, sign);
@@ -126,9 +107,10 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
             date.add(Calendar.DAY_OF_MONTH, sign);
         }
 
-        mOffsetDate = date.getTimeInMillis() - mDate;
-        updateDateString();
-        mSelectListener.OnSelect(mThis, mOffsetDate, date.getTimeInMillis());
+        long offset = date.getTimeInMillis() - mDate;
+
+        setDate(mDate + offset);
+        mSelectListener.OnSelect(mThis, offset, date.getTimeInMillis());
     }
 
     interface OnSelectListener {
@@ -142,15 +124,13 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     @Override
     public void setMode(int mode) {
         super.setMode(mode);
-        mOffsetDate = 0;
-        updateDateString();
+        updateText();
     }
 
     @Override
     public void setDate(long milli) {
         super.setDate(milli);
-        mOffsetDate = 0;
-        updateDateString();
+        updateText();
     }
 
     private String makeDateString(int mode, long ms) {
@@ -170,13 +150,13 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         return simpleDateFormat.format(date);
     }
 
-    public void updateDateString() {
-        Calendar dateNow = Calendar.getInstance();
+    public void updateText() {
+        Calendar dateNow = ViewCalendar.getInstance();
         int yearNow = dateNow.get(Calendar.YEAR);
         int weekNow = dateNow.get(Calendar.WEEK_OF_YEAR);
 
-        Calendar dateSet = Calendar.getInstance();
-        dateSet.setTimeInMillis(mDate + mOffsetDate);
+        Calendar dateSet = ViewCalendar.getInstance();
+        dateSet.setTimeInMillis(mDate);
         int yearSet = dateSet.get(Calendar.YEAR);
         int weekSet = dateSet.get(Calendar.WEEK_OF_YEAR);
 
@@ -185,6 +165,6 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         else
             mViewDate.setTextColor(mTextColorHint);
 
-        mViewDate.setText(makeDateString(mMode, mDate + mOffsetDate));
+        mViewDate.setText(makeDateString(mMode, mDate));
     }
 }

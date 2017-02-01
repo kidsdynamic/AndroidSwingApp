@@ -33,6 +33,8 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
     }
 
     private void init(Context context, AttributeSet attrs) {
+        updateList(mViewNameList);
+        updateList(mViewCellList);
     }
 
     @Override
@@ -75,43 +77,26 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         addView(tableRow);
     }
 
-    public long calculateDate(int day) {
-        Calendar date = Calendar.getInstance();
-
-        date.setTimeInMillis(mDate);
-
-        int weekDay = date.get(Calendar.DAY_OF_WEEK);
-        int shiftDay = 0;
-
-        // Find out the first date shift day in this week
-        if (mWeekStart < weekDay)
-            shiftDay = weekDay - mWeekStart;
-        else if (mWeekStart > weekDay)
-            shiftDay = weekDay + Calendar.SATURDAY - mWeekStart;
-
-        date.add(Calendar.DAY_OF_MONTH, day - shiftDay);
-
-        return date.getTimeInMillis();
-    }
-
     @Override
     public void setDate(long milli) {
         super.setDate(milli);
-
-        for (int idx = 0; idx < mViewCellList.length; idx++) {
-            ViewCalendarCellWeek cell = mViewCellList[idx];
-            cell.setDate(calculateDate(idx));
-        }
+        updateList(mViewCellList);
     }
 
-    @Override
-    public void setWeekStart(int weekStart) {
-        super.setWeekStart(weekStart);
+    public void updateList(ViewCalendarCell[] list) {
+        Calendar cal = ViewCalendar.getInstance();
+        cal.setTimeInMillis(mDate);
 
-        for (int idx = 0; idx < mViewNameList.length; idx++) {
-            ViewCalendarCellWeekName cell = mViewNameList[idx];
+        cal.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
 
-            cell.setDate(calculateDate(idx));
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+
+        for (int idx = 0; idx < list.length; idx++) {
+            list[idx].setDate(cal.getTimeInMillis());
+            cal.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 

@@ -33,12 +33,10 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
         mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_main_selector);
-        mViewSelector.setWeekStart(Calendar.getInstance().getFirstDayOfWeek());
         mViewSelector.setDate(System.currentTimeMillis());
         mViewSelector.setOnSelectListener(mSelectorListener);
 
         mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_main_calendar);
-        mViewCalendar.setWeekStart(Calendar.getInstance().getFirstDayOfWeek());
         mViewCalendar.setDate(System.currentTimeMillis());
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
