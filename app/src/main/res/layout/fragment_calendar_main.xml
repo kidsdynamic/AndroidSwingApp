@@ -50,7 +50,7 @@
             android:layout_alignEnd="@+id/calendar_main_calendar_sponge"
             android:layout_alignStart="@+id/calendar_main_calendar_sponge"
             android:textColor="@color/color_gray_deep"
-            android:textColorHint="@color/color_black"
+            android:textColorHint="@color/color_orange_main"
             android:textSize="16sp"
             android:textStyle="bold" />
 

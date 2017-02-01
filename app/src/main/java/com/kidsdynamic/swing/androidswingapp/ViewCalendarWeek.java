@@ -51,7 +51,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
 
             mViewNameList[idx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             mViewNameList[idx].setTypeface(mViewNameList[idx].getTypeface(), mTextStyle);
-            mViewNameList[idx].setTextColor(mTextColorHint);
+            mViewNameList[idx].setTextColor(mTextColor);
             mViewNameList[idx].setGravity(Gravity.CENTER);
             mViewNameList[idx].setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
 
@@ -68,7 +68,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
             mViewCellList[idx] = new ViewCalendarCellWeek(context);
             mViewCellList[idx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             mViewCellList[idx].setTypeface(mViewCellList[idx].getTypeface(), mTextStyle);
-            mViewCellList[idx].setTextColor(mTextColorHint);
+            mViewCellList[idx].setTextColor(mTextColor);
             mViewCellList[idx].setGravity(Gravity.CENTER);
             mViewCellList[idx].setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
 

@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewParent;
 import android.widget.TextView;
 
 /**
@@ -37,5 +38,18 @@ public class ViewCalendarCell extends TextView {
 
     public long getDate() {
         return mDate;
+    }
+
+    public ViewCalendar findCalendar() {
+        ViewParent parent = getParent();
+
+        while(parent != null) {
+            if(parent instanceof ViewCalendar)
+                return (ViewCalendar)parent;
+
+            parent = parent.getParent();
+        }
+
+        return null;
     }
 }

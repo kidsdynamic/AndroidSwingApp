@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,9 +53,6 @@ public class FragmentCalendarMain extends ViewFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault());
-            Log.d("xxx", "select offs:" + offset + " date: " + simpleDateFormat.format(date));
-
             mViewCalendar.setDate(date);
         }
     };
@@ -62,9 +60,6 @@ public class FragmentCalendarMain extends ViewFragment {
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek week, ViewCalendarCellWeek cell) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault());
-            Log.d("xxx", "date: " + simpleDateFormat.format(cell.getDate()));
-
             mViewSelector.setDate(cell.getDate());
         }
     };
