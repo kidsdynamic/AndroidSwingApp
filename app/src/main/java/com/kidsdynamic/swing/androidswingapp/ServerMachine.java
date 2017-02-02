@@ -158,8 +158,12 @@ public class ServerMachine {
 
     public void userIsTokenValid(userIsTokenValidListener listener, String email, String token) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.user.isTokenValid.toJson(email, token));
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_IS_TOKEN_VALID, map, null), CMD_USER_IS_TOKEN_VALID, listener));
+        String addressForGet = CMD_USER_IS_TOKEN_VALID + "?";
+        addressForGet += "email=" + email;
+        addressForGet += "&token=" + token;
+
+//        map.put("json", ServerGson.user.isTokenValid.toJson(email, token));
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_USER_IS_TOKEN_VALID, listener));
     }
 
     public interface userIsMailAvailableToRegisterListener {
