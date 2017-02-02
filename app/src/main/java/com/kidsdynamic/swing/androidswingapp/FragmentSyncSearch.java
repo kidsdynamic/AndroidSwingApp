@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
 
@@ -33,7 +36,10 @@ public class FragmentSyncSearch extends ViewFragment {
     private ViewProgressCircle mViewProgress;
 
     private WatchContact.Kid mDevice;
+    private String mMacAddress;
     private BLEMachine.Device mSearchResult = null;
+    //private ArrayList<BLEMachine.InOutDoor> mInOutDoors;
+    //private int mInOutDoorsIndex = 0;
     private boolean mSyncFinish = false;
 
     @Override
@@ -53,6 +59,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton2 = (Button) mViewMain.findViewById(R.id.sync_search_button2);
 
         mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
+        //mMacAddress = "E0:E5:CF:1E:D7:C2";
+        Log.d("swing", "mac address " + mMacAddress);
 
         Handler handle = new Handler();
         handle.post(new Runnable() {
@@ -88,7 +97,7 @@ public class FragmentSyncSearch extends ViewFragment {
         public void onProgress(ViewProgressCircle view, int progress, int total) {
             mSearchTimeout--;
 
-            if (mSearchResult != null && mDevice.mLabel.equals(mSearchResult.mAddress)) {
+            if (mSearchResult != null && mMacAddress.equals(mSearchResult.mAddress)) {
                 viewFound();
             }
 
@@ -104,7 +113,6 @@ public class FragmentSyncSearch extends ViewFragment {
         public void onProgress(ViewProgressCircle view, int progress, int total) {
             mSyncTimeout--;
 
-            // todo: Below is a simulation. Kid has synced after progress 4
             if(mSyncFinish) {
                 viewCompleted();
             }
@@ -140,7 +148,7 @@ public class FragmentSyncSearch extends ViewFragment {
     };
 
     private void bleSearchStart() {
-        mActivityMain.mBLEMachine.Search(mBleListener, mDevice.mLabel);
+        mActivityMain.mBLEMachine.Search(mBleListener, mMacAddress);
         mSearchResult = null;
     }
 
@@ -247,7 +255,7 @@ public class FragmentSyncSearch extends ViewFragment {
         @Override
         public void onSearch(ArrayList<BLEMachine.Device> result) {
             for (BLEMachine.Device dev : result) {
-                if (dev.mAddress.equals(mDevice.mLabel)) {
+                if (dev.mAddress.equals(mMacAddress)) {
                     mSearchResult = dev;
                     break;
                 }
@@ -257,15 +265,50 @@ public class FragmentSyncSearch extends ViewFragment {
         @Override
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (resultCode == SYNC_RESULT_SUCCESS) {
-                // Todo : upload indoor/outdoor
-                Log.d("TEST", "Sync done!");
+                for(BLEMachine.InOutDoor res : result) {
+                    WatchOperator.UploadItem uploadItem = new WatchOperator.UploadItem();
+                    uploadItem.mMacId = mDevice.mMacId;
+                    uploadItem.mTime = byteToDec(res.mTime[0], res.mTime[1], res.mTime[2], res.mTime[3]);
+                    uploadItem.mOutdoorActivity = rawString(res.mData1);
+                    uploadItem.mIndoorActivity = rawString(res.mData2);
+
+                    Log.d("TEST", "Add Time " + uploadItem.mTime);
+                    mActivityMain.mOperator.UploadItemAdd(uploadItem);
+                }
+                Intent intent = new Intent(mActivityMain, ServerPushService.class);
+                mActivityMain.startService(intent);
+
                 mSyncFinish = true;
             } else {
                 // Todo : first connect?
-                Log.d("TEST", "Sync failed!");
                 mSyncFinish = true;
 
             }
         }
     };
+
+    private String rawString(byte[] b) {
+        return String.format(Locale.getDefault(), "%s,%d,%s,%s,%s,%s",
+                byteToStr(b[ 0 ], b[ 1 ], b[ 2 ], b[ 3 ]),
+                b[ 4 ],
+                byteToStr(b[ 5 ], b[ 6 ], b[ 7 ], b[ 8 ]),
+                byteToStr(b[ 9 ], b[ 10 ], b[ 11 ], b[ 12 ]),
+                byteToStr(b[ 13 ], b[ 14 ], b[ 15 ], b[ 16 ]),
+                byteToStr(b[ 17 ], b[ 18 ], b[ 19 ], b[ 20 ])
+                );
+    }
+
+    private int byteToDec(byte b0, byte b1, byte b2, byte b3) {
+        int dec;
+
+        dec = b0 & 0xFF;
+        dec |= (b1 << 8) & 0xFF00;
+        dec |= (b2 << 16) & 0xFF0000;
+        dec |= (b3 << 24) & 0xFF000000;
+
+        return dec;
+    }
+    private String byteToStr(byte b0, byte b1, byte b2, byte b3) {
+        return "" + byteToDec(b0, b1, b2, b3);
+    }
 }

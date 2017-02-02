@@ -1,11 +1,15 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by 03543 on 2017/1/1.
@@ -50,13 +54,25 @@ public class FragmentSyncNow extends ViewFragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // Todo : get focus device from config
-            WatchContact.Kid device =
-                    new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "E0:E5:CF:1E:D7:C2", true);
+            List<WatchContact.Kid> devices = mActivityMain.mOperator.KidGet();
+            if (devices.isEmpty()) {
+                Toast.makeText(mActivityMain, "There is no bound device", Toast.LENGTH_SHORT).show();
+            } else {
+                // Todo : get focus device from config
+                WatchContact.Kid device = devices.get(0);
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(BUNDLE_KEY_DEVICE, device);
-            mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
+                if (device.mProfile != null && !device.mProfile.equals("")) {
+                    device.mPhoto = BitmapFactory.decodeFile(device.mProfile);
+                } else {
+                    device.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow);
+                }
+                device.mLabel = device.mFirstName + " " + device.mLastName;
+                device.mBound = true;
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(BUNDLE_KEY_DEVICE, device);
+                mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
+            }
         }
     };
 

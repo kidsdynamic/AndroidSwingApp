@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
@@ -12,6 +13,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.File;
@@ -28,43 +30,45 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class ServerMachine {
-    private final static String SERVER_ADDRESS = "https://childrenlab.com:8111/v1";
+    private final static String SERVER_ADDRESS = "https://childrenlab.com/v1";
 
-    protected final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
-    protected final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
-    protected final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
-    protected final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
-    protected final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
-    protected final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
+    final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
+    final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
+    final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
+    final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
+    final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
+    final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
 
-    protected final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
-    protected final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
+    final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
+    final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
 
-    protected final static String CMD_KIDS_ADD = SERVER_ADDRESS + "/kids/add";
-    protected final static String CMD_KIDS_UPDATE = SERVER_ADDRESS + "/kids/update";
-    protected final static String CMD_KIDS_DELETE = SERVER_ADDRESS + "/kids/delete";
-    protected final static String CMD_KIDS_WHO_REGISTERED_MAC_ID = SERVER_ADDRESS + "/kids/whoRegisteredMacID";
+    final static String CMD_KIDS_ADD = SERVER_ADDRESS + "/kids/add";
+    final static String CMD_KIDS_UPDATE = SERVER_ADDRESS + "/kids/update";
+    final static String CMD_KIDS_DELETE = SERVER_ADDRESS + "/kids/delete";
+    final static String CMD_KIDS_WHO_REGISTERED_MAC_ID = SERVER_ADDRESS + "/kids/whoRegisteredMacID";
 
-    protected final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
-    protected final static String CMD_ACTIVITY_RETRIEVE_DATA = SERVER_ADDRESS + "/activity/retrieveData";
-    protected final static String CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME = SERVER_ADDRESS + "/activity/retrieveDataByTime";
+    final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
+    final static String CMD_ACTIVITY_RETRIEVE_DATA = SERVER_ADDRESS + "/activity/retrieveData";
+    final static String CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME = SERVER_ADDRESS + "/activity/retrieveDataByTime";
 
-    protected final static String CMD_EVENT_ADD = SERVER_ADDRESS + "/event/add";
-    protected final static String CMD_EVENT_UPDATE = SERVER_ADDRESS + "/event/update";
-    protected final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
-    protected final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
-    protected final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
+    final static String CMD_EVENT_ADD = SERVER_ADDRESS + "/event/add";
+    final static String CMD_EVENT_UPDATE = SERVER_ADDRESS + "/event/update";
+    final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
+    final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
+    final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
 
-    protected final static String CMD_EVENT_TODO_DONE = SERVER_ADDRESS + "/event/todo/done";
+    final static String CMD_EVENT_TODO_DONE = SERVER_ADDRESS + "/event/todo/done";
 
-    protected final static String CMD_SUBHOST_ADD = SERVER_ADDRESS + "subHost/add";
-    protected final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "subHost/accept";
-    protected final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "subHost/deny";
-    protected final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "subHost/list";
+    final static String CMD_SUBHOST_ADD = SERVER_ADDRESS + "/subHost/add";
+    final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "/subHost/accept";
+    final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "/subHost/deny";
+    final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
 
-    public RequestQueue mRequestQueue;
+    final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
+
+    private RequestQueue mRequestQueue;
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
-    protected Handler mHandler = new Handler();
+    private Handler mHandler = new Handler();
     private Context mContext;
     private String mAuthToken = null;
 
@@ -77,14 +81,14 @@ public class ServerMachine {
         mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
     }
 
-    public boolean Start() {
+    boolean Start() {
         mState = 0;
         mTaskQueue.clear();
         mHandler.postDelayed(stateMachine, 100);
         return true;
     }
 
-    public boolean Stop() {
+    boolean Stop() {
         mHandler.removeCallbacks(stateMachine);
         return true;
     }
@@ -158,8 +162,12 @@ public class ServerMachine {
 
     public void userIsTokenValid(userIsTokenValidListener listener, String email, String token) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.user.isTokenValid.toJson(email, token));
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_IS_TOKEN_VALID, map, null), CMD_USER_IS_TOKEN_VALID, listener));
+        String addressForGet = CMD_USER_IS_TOKEN_VALID + "?";
+        addressForGet += "email=" + email;
+        addressForGet += "&token=" + token;
+
+//        map.put("json", ServerGson.user.isTokenValid.toJson(email, token));
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_USER_IS_TOKEN_VALID, listener));
     }
 
     public interface userIsMailAvailableToRegisterListener {
@@ -283,7 +291,7 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, String time, String macId) {
+    public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, int time, String macId) {
         Map<String, String> map = new HashMap<>();
         map.put("json", ServerGson.activity.uploadRawData.toJson(indoorActivity, outdoorActivity, time, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_ACTIVITY_UPLOAD_RAW_DATA, map, null), CMD_ACTIVITY_UPLOAD_RAW_DATA, listener));
@@ -446,22 +454,41 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_SUBHOST_LIST, listener));
     }
 
+    public interface getAvatarListener {
+        void onSuccess(Bitmap avatar, String filename);
+
+        void onFail(int statusCode);
+    }
+
+    public void getAvatar(getAvatarListener listener, String filename) {
+        Map<String, String> map = new HashMap<>();
+        String addressForGet = CMD_GET_AVATAR + filename;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_GET_AVATAR, listener, filename));
+    }
+
     Response.Listener<NetworkResponse> mSuccessListener = new Response.Listener<NetworkResponse>() {
         @Override
         public void onResponse(NetworkResponse response) {
             String responseString = "";
+            Bitmap bitmap = null;
             int responseCode = 0;
-            try {
-                responseString = new String(
-                        new String(
-                                response.data,
-                                HttpHeaderParser.parseCharset(response.headers)
-                        ).getBytes("ISO-8859-1"),
-                        "utf-8"
-                );
-                responseCode = response.statusCode;
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (mCurrentTask.mCommand.equals(CMD_GET_AVATAR)) {
+                BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
+                decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
+                bitmap = BitmapFactory.decodeByteArray(response.data, 0, response.data.length, decodeOptions);
+            } else {
+                try {
+                    responseString = new String(
+                            new String(
+                                    response.data,
+                                    HttpHeaderParser.parseCharset(response.headers)
+                            ).getBytes("ISO-8859-1"),
+                            "utf-8"
+                    );
+                    responseCode = response.statusCode;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             if (mCurrentTask.mResponseListener != null) {
@@ -689,16 +716,18 @@ public class ServerMachine {
                         else
                             ((subHostListListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
-                }
 
-                //mCurrentTask.mResponseListener.onResponse(true, responseCode, responseString);
+                    case CMD_GET_AVATAR:
+                        ((getAvatarListener) mCurrentTask.mResponseListener).onSuccess(bitmap, mCurrentTask.mImageFile);
+                        break;
+                }
             }
 
             mCurrentTask = null;
         }
     };
 
-    Response.ErrorListener mErrorListener = new Response.ErrorListener() {
+    private Response.ErrorListener mErrorListener = new Response.ErrorListener() {
         @Override
         public void onErrorResponse(VolleyError error) {
             int responseCode = 0;
@@ -810,9 +839,12 @@ public class ServerMachine {
                     case CMD_SUBHOST_LIST:
                         ((subHostListListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
-                }
 
-                //mCurrentTask.mResponseListener.onResponse(false, result, error.getMessage());
+                    case CMD_GET_AVATAR:
+                        ((getAvatarListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
+                }
             }
 
             mCurrentTask = null;
@@ -823,15 +855,23 @@ public class ServerMachine {
         String mCommand;
         Request<NetworkResponse> mRequest;
         Object mResponseListener;
+        String mImageFile;
 
         TaskItem(Request<NetworkResponse> request, String command, Object responseListener) {
             mRequest = request;
             mCommand = command;
             mResponseListener = responseListener;
         }
+
+        TaskItem(Request<NetworkResponse> request, String command, Object responseListener, String imageFile) {
+            mRequest = request;
+            mCommand = command;
+            mResponseListener = responseListener;
+            mImageFile = imageFile;
+        }
     }
 
-    public static String getMacID(String macAddress) {
+    static String getMacID(String macAddress) {
         String[] separated = macAddress.split(":");
         String macId = "";
         for (String s : separated)
@@ -841,7 +881,7 @@ public class ServerMachine {
         return macId;
     }
 
-    public static String getMacAddress(String macId) {
+    static String getMacAddress(String macId) {
         return String.format("%c%c:%c%c:%c%c:%c%c:%c%c:%c%c",
                 macId.charAt(0),macId.charAt(1),macId.charAt(2),macId.charAt(3),
                 macId.charAt(4),macId.charAt(5),macId.charAt(6),macId.charAt(7),
@@ -849,13 +889,15 @@ public class ServerMachine {
         );
     }
 
-    public static String createAvatarFile(Bitmap bitmap, String filename) {
+    static String createAvatarFile(Bitmap bitmap, String filename) {
         String avatarFilename = null;
         FileOutputStream out = null;
         try {
             File sdCard = Environment.getExternalStorageDirectory();
             File dir = new File(sdCard.getAbsolutePath() + "/Swing");
-            dir.mkdirs();
+            if(dir.mkdirs())
+                Log.d("swing", "false");
+
             avatarFilename = dir + "/Avatar"+ filename + ".png";
             out = new FileOutputStream(avatarFilename);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
