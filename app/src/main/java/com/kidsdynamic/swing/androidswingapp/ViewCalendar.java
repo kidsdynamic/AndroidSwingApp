@@ -145,4 +145,18 @@ public class ViewCalendar extends TableLayout {
 //        return Calendar.getInstance(Locale.US);       // Force to use Sunday to be the first day of week
 //        return Calendar.getInstance(Locale.GERMANY);  // Force to use Monday to be the first day of week
     }
+
+    static boolean isToday(long msecond) {
+        Calendar calcSet = getInstance();
+        calcSet.setTimeInMillis(msecond);
+
+        Calendar calcNow = getInstance();
+
+        if(calcSet.get(Calendar.YEAR) != calcNow.get(Calendar.YEAR))
+            return false;
+        if(calcSet.get(Calendar.DAY_OF_YEAR) != calcNow.get(Calendar.DAY_OF_YEAR))
+            return false;
+
+        return true;
+    }
 }

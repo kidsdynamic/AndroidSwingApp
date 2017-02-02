@@ -56,9 +56,43 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="@color/color_white">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/calendar_main_alert_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.8" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
+            android:id="@+id/calendar_main_alert"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/monster_yellow"
+            app:strokeBegin="0"
+            app:strokeEnd="88"
+            app:crossColor="@color/color_white"
+            app:crossRatio="0.2"
+            app:crossWidth="2dp"
+            app:fillColor="@android:color/white"
+            app:fillDarker="false"
+            app:strokeColorActive="@color/color_blue"
+            app:strokeColorNormal="@color/color_green"
+            app:strokeCount="100"
+            app:strokeType="arc"
+            app:strokeWidth="10dp" />
+
+    </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="8" />
+        android:layout_weight="6" />
 
 </LinearLayout>

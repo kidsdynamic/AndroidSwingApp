@@ -47,7 +47,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
         ViewCalendar calendar = findCalendar();
         if (calendar != null) {
-            if (DateUtils.isToday(mDate))
+            if (ViewCalendar.isToday(mDate))
                 setTextColor(Color.WHITE);
             else
                 setTextColor(calendar.getTextColor());
@@ -62,7 +62,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (DateUtils.isToday(mDate))
+        if (ViewCalendar.isToday(mDate))
             drawToday(canvas);
 
         super.onDraw(canvas);

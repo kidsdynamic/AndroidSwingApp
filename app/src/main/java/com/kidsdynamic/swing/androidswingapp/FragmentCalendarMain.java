@@ -22,6 +22,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
     private ViewCalendarSelector mViewSelector;
     private ViewCalendarWeek mViewCalendar;
+    private ViewCircle mViewAlert;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_main_calendar);
         mViewCalendar.setDate(System.currentTimeMillis());
         mViewCalendar.setOnSelectListener(mCalendarListener);
+
+        mViewAlert = (ViewCircle)mViewMain.findViewById(R.id.calendar_main_alert);
 
         return mViewMain;
     }

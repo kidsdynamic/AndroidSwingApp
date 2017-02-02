@@ -4,6 +4,12 @@
     <attr name="strokeWidth" format="dimension" />
     <attr name="strokeActiveColor" format="color" />
     <attr name="strokeNormalColor" format="color" />
+    <attr name="strokeType" format="enum">
+        <enum name="dot" value="0" />
+        <enum name="arc" value="1" />
+    </attr>
+    <attr name="strokeCount" format="integer" />
+
     <attr name="calendarMode" format="enum">
         <enum name="year" value="0" />
         <enum name="month" value="1" />
@@ -23,10 +29,7 @@
         <attr name="duration" format="integer" />
         <attr name="total" format="integer" />
         <attr name="repeat" format="boolean" />
-        <attr name="strokeType" format="enum">
-            <enum name="dot" value="0" />
-            <enum name="arc" value="1" />
-        </attr>
+        <attr name="strokeType" />
         <attr name="android:progress" />
     </declare-styleable>
 
@@ -63,6 +66,22 @@
         <attr name="android:textColor" />
         <attr name="android:textColorHint" />
         <attr name="calendarMode" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewCircle">
+        <attr name="strokeWidth" />
+        <attr name="strokeColorActive" format="color"/>
+        <attr name="strokeColorNormal" format="color"/>
+        <attr name="strokeType" />
+        <attr name="strokeCount" />
+        <attr name="strokeBegin" format="integer" />
+        <attr name="strokeEnd" format="integer" />
+        <attr name="android:src" />
+        <attr name="fillColor" format="color" />
+        <attr name="fillDarker" format="boolean" />
+        <attr name="crossWidth" format="dimension" />
+        <attr name="crossColor" format="color" />
+        <attr name="crossRatio" format="float" />
     </declare-styleable>
 
 </resources>
