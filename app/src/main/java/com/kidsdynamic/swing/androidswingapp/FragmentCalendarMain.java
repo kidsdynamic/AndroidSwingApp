@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -42,7 +43,7 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewCalendar.setDate(System.currentTimeMillis());
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
-        mViewAlert = (ViewCircle)mViewMain.findViewById(R.id.calendar_main_alert);
+        mViewAlert = (ViewCircle) mViewMain.findViewById(R.id.calendar_main_alert);
 
         return mViewMain;
     }
@@ -57,6 +58,16 @@ public class FragmentCalendarMain extends ViewFragment {
         @Override
         public void OnSelect(View view, long offset, long date) {
             mViewCalendar.setDate(date);
+
+            ValueAnimator animator = ValueAnimator.ofInt(4, 30);
+            animator.setDuration(500);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator animation) {
+                    mViewAlert.setStrokeWidth((Integer) animation.getAnimatedValue());
+                }
+            });
+            animator.start();
         }
     };
 

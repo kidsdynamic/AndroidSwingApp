@@ -12,8 +12,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -21,7 +21,7 @@ import android.view.View;
  */
 
 public class ViewCircle extends View {
-    private final float START_DEGREE = 270;
+    private final float DEGREE_START = 270;
 
     public final int STROKE_TYPE_DOT = 0;
     public final int STROKE_TYPE_ARC = 1;
@@ -33,7 +33,6 @@ public class ViewCircle extends View {
     private int mStrokeBegin = 0;
     private int mStrokeEnd = 0;
     private int mStrokeCount = 0;
-    private float[] mStrokeDegree;
 
     private Bitmap mBitmap = null;
     private int mFillColor = Color.TRANSPARENT;
@@ -69,7 +68,10 @@ public class ViewCircle extends View {
             for (int idx = 0; idx < count; idx++) {
                 final int attr = typedArray.getIndex(idx);
 
-                if (attr == R.styleable.ViewCircle_strokeWidth) {
+                if (attr == R.styleable.ViewCircle_android_src) {
+                    Drawable drawable = typedArray.getDrawable(attr);
+                    setBitmap(((BitmapDrawable) drawable).getBitmap());
+                } else if (attr == R.styleable.ViewCircle_strokeWidth) {
                     mStrokeWidth = typedArray.getDimension(attr, mStrokeWidth);
                 } else if (attr == R.styleable.ViewCircle_strokeColorActive) {
                     mStrokeColorActive = typedArray.getColor(attr, mStrokeColorActive);
@@ -83,9 +85,6 @@ public class ViewCircle extends View {
                     mStrokeBegin = typedArray.getInt(attr, mStrokeBegin);
                 } else if (attr == R.styleable.ViewCircle_strokeEnd) {
                     mStrokeEnd = typedArray.getInt(attr, mStrokeEnd);
-                } else if (attr == R.styleable.ViewCircle_android_src) {
-                    Drawable drawable = typedArray.getDrawable(attr);
-                    setBitmap(((BitmapDrawable) drawable).getBitmap());
                 } else if (attr == R.styleable.ViewCircle_crossWidth) {
                     mCrossWidth = typedArray.getDimension(attr, mCrossWidth);
                 } else if (attr == R.styleable.ViewCircle_crossColor) {
@@ -210,7 +209,7 @@ public class ViewCircle extends View {
 
         for (int idx = 0; idx < mStrokeCount; idx++) {
             boolean active = (idx >= mStrokeBegin && idx <= mStrokeEnd);
-            float degree = (START_DEGREE + mStrokeDegree[idx]) % 360;
+            float degree = (DEGREE_START + (idx * 360 / mStrokeCount)) % 360;
 
             int dotCenterX = (int) (centerX + (radius * Math.cos(degree * 3.1415 / 180)));
             int dotCenterY = (int) (centerY + (radius * Math.sin(degree * 3.1415 / 180)));
@@ -249,7 +248,7 @@ public class ViewCircle extends View {
             degree = (begin * 360) / mStrokeCount;
             sweep = ((end - begin) * 360) / mStrokeCount;
         }
-        degree = (START_DEGREE + degree) % 360;
+        degree = (DEGREE_START + degree) % 360;
 
         RectF rectf = new RectF(rect);
 
@@ -284,11 +283,6 @@ public class ViewCircle extends View {
                 rect.centerY() - radius + strokeShift,
                 rect.centerX() + radius - strokeShift,
                 rect.centerY() + radius - strokeShift);
-
-        mStrokeDegree = new float[mStrokeCount];
-        for (int idx = 0; idx < mStrokeCount; idx++) {
-            mStrokeDegree[idx] = 360 * idx / mStrokeCount;
-        }
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -321,5 +315,122 @@ public class ViewCircle extends View {
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rectDst, rectSrc, paint);
+    }
+
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
+
+    public void setStrokeWidth(float width) {
+        mStrokeWidth = width;
+        requestLayout();    // mStrokeWidth is a factor of size.
+        invalidate();
+    }
+
+    public float getStrokeWidth() {
+        return mStrokeWidth;
+    }
+
+    public void setStrokeColorActive(@ColorInt int color) {
+        mStrokeColorActive = color;
+        invalidate();
+    }
+
+    public int getStrokeColorActive() {
+        return mStrokeColorActive;
+    }
+
+    public void setStrokeColorNormal(@ColorInt int color) {
+        mStrokeColorActive = color;
+        invalidate();
+    }
+
+    public int getStrokeColorNormal() {
+        return mStrokeColorActive;
+    }
+
+    public void setStrokeType(int type) {
+        mStrokeType = type;
+        invalidate();
+    }
+
+    public int getStrokeType() {
+        return mStrokeType;
+    }
+
+    public void setStrokeCount(int count) {
+        mStrokeCount = count;
+        invalidate();
+    }
+
+    public int getStrokeCount() {
+        return mStrokeCount;
+    }
+
+    public void setStrokeBegin(int begin) {
+        mStrokeBegin = begin;
+        invalidate();
+    }
+
+    public int getStrokeBegin() {
+        return mStrokeBegin;
+    }
+
+    public void setStrokeEnd(int end) {
+        mStrokeEnd = end;
+    }
+
+    public int getStrokeEnd() {
+        return mStrokeEnd;
+    }
+
+    public void setStrokeActive(int active) {
+        mStrokeBegin = mStrokeEnd = active;
+        invalidate();
+    }
+
+    public void setCrossWidth(float width) {
+        mCrossWidth = width;
+        invalidate();
+    }
+
+    public float getCrossWidth() {
+        return mCrossWidth;
+    }
+
+    public void setCrossColor(@ColorInt int color) {
+        mCrossColor = color;
+        invalidate();
+    }
+
+    public int getCrossColor() {
+        return mCrossColor;
+    }
+
+    public void setCrossRatio(float ratio) {
+        mCrossRatio = ratio;
+        invalidate();
+    }
+
+    public float getCrossRatio() {
+        return mCrossRatio;
+    }
+
+    public void setFillColor(@ColorInt int color) {
+        mFillColor = color;
+        invalidate();
+    }
+
+    public int getFillColor() {
+        return mFillColor;
+    }
+
+    public void setFillDarker(boolean darker) {
+        mFillDarker = darker;
+        invalidate();
+    }
+
+    public boolean getFillDarker() {
+        return mFillDarker;
     }
 }

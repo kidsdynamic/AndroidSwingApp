@@ -74,9 +74,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@mipmap/monster_yellow"
-            app:strokeBegin="0"
-            app:strokeEnd="88"
+            android:src="@mipmap/iconbutton_yes"
+            app:strokeBegin="1"
+            app:strokeEnd="12"
             app:crossColor="@color/color_white"
             app:crossRatio="0.2"
             app:crossWidth="2dp"
@@ -84,8 +84,8 @@
             app:fillDarker="false"
             app:strokeColorActive="@color/color_blue"
             app:strokeColorNormal="@color/color_green"
-            app:strokeCount="100"
-            app:strokeType="arc"
+            app:strokeCount="12"
+            app:strokeType="dot"
             app:strokeWidth="10dp" />
 
     </RelativeLayout>
