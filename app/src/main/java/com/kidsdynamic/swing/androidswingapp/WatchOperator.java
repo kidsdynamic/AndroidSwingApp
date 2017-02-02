@@ -1,8 +1,10 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 public class WatchOperator {
     public static final String TABLE_USER = "User";
     public static final String TABLE_KIDS = "Kids";
+    public static final String TABLE_UPLOAD = "Upload";
 
     public static String ID = "ID";
     public static String EMAIL = "EMAIL";
@@ -26,6 +29,10 @@ public class WatchOperator {
     public static String PROFILE = "PROFILE";
     public static String MAC_ID = "MAC_ID";
     public static String PARENT_ID = "PARENT_ID";
+
+    public static String TIME = "TIME";
+    public static String INDOOR_ACTIVITY = "INDOOR_ACTIVITY";
+    public static String OUTDOOR_ACTIVITY = "OUTDOOR_ACTIVITY";
 
     public static final String CREATE_USER_TABLE =
             "CREATE TABLE " + TABLE_USER + " (" +
@@ -49,21 +56,28 @@ public class WatchOperator {
                     PARENT_ID + " INTEGER NOT NULL, " +
                     PROFILE + " TEXT)";
 
+    public static final String CREATE_UPLOAD_TABLE =
+            "CREATE TABLE " + TABLE_UPLOAD + " (" +
+                    TIME + " INTEGER NOT NULL, " +
+                    MAC_ID + " TEXT NOT NULL, " +
+                    INDOOR_ACTIVITY + " TEXT NOT NULL, " +
+                    OUTDOOR_ACTIVITY + " TEXT NOT NULL)";
+
     private SQLiteDatabase mDatabase;
-    private ActivityMain mActivityMain;
+    private Context mContext;
 
     public ArrayList<WatchContact.Kid> mListDevice;
     public ArrayList<WatchContact.Kid> mListShared;
     public ArrayList<WatchContact.User> mListRequest;
 
-    public WatchOperator(ActivityMain activity) {
-        mActivityMain = activity;
+    public WatchOperator(Context context) {
+        mContext = context;
 
         mListDevice = new ArrayList<>();
         mListShared = new ArrayList<>();
         mListRequest = new ArrayList<>();
 
-        mDatabase = WatchHelper.getDatabase(mActivityMain);
+        mDatabase = WatchHelper.getDatabase(mContext);
     }
 
     public long UserAdd(WatchContact.User user) {
@@ -175,6 +189,70 @@ public class WatchOperator {
         item.mMacId = cursor.getString(4);
         item.mParentId = cursor.getInt(5);
         item.mProfile = cursor.getString(6);
+
+        return item;
+    }
+
+    public long UploadItemAdd(UploadItem item) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(TIME, item.mTime);
+        contentValues.put(MAC_ID, item.mMacId);
+        contentValues.put(INDOOR_ACTIVITY, item.mIndoorActivity);
+        contentValues.put(OUTDOOR_ACTIVITY, item.mOutdoorActivity);
+
+        return mDatabase.insert(TABLE_UPLOAD, null, contentValues);
+    }
+
+    public int UploadItemDelete(UploadItem item) {
+        return mDatabase.delete(TABLE_UPLOAD, TIME + "=" + item.mTime + " AND " + MAC_ID + "='" + item.mMacId + "'", null);
+    }
+
+    public UploadItem UploadItemGet() {
+        UploadItem item = null;
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " LIMIT 1", null);
+
+        if (cursor.moveToNext())
+            item = cursorToUploadItem(cursor);
+
+        cursor.close();
+
+        return item;
+    }
+
+    public int UploadItemCount() {
+        int result = 0;
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_UPLOAD, null);
+
+        if (cursor.moveToNext())
+            result = cursor.getInt(0);
+
+        cursor.close();
+
+        return result;
+    }
+
+    public static class UploadItem {
+        String mIndoorActivity;
+        String mOutdoorActivity;
+        int mTime;
+        String mMacId;
+
+        UploadItem() {
+            mIndoorActivity = "";
+            mOutdoorActivity = "";
+            mTime = 0;
+            mMacId = "";
+        }
+    }
+
+    private UploadItem cursorToUploadItem(Cursor cursor) {
+        UploadItem item = new UploadItem();
+
+        item.mTime = cursor.getInt(0);
+        item.mMacId = cursor.getString(1);
+        item.mIndoorActivity = cursor.getString(2);
+        item.mOutdoorActivity = cursor.getString(3);
 
         return item;
     }

@@ -478,7 +478,7 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, String time, String macId) {
+    public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, int time, String macId) {
         mCurrentCommand = CMD_ACTIVITY_UPLOAD_RAW_DATA;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);
