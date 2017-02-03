@@ -19,7 +19,7 @@ public class FragmentDevice extends ViewFragment {
     private View mViewMain;
 
     private TextView mViewCapacity;
-    private ViewProgressCircle mViewProgress;
+    private ViewCircle mViewProgress;
 
     private Handler mHandler;
     private boolean mPause = false;
@@ -35,7 +35,7 @@ public class FragmentDevice extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_device, container, false);
 
         mViewCapacity = (TextView) mViewMain.findViewById(R.id.device_capacity);
-        mViewProgress = (ViewProgressCircle)mViewMain.findViewById(R.id.device_progress);
+        mViewProgress = (ViewCircle)mViewMain.findViewById(R.id.device_battery);
 
         mHandler = new Handler();
 
@@ -72,7 +72,7 @@ public class FragmentDevice extends ViewFragment {
     private void setCapacity(int percent) {
         String string = String.format(Locale.getDefault(), "%d%%", percent);
         mViewCapacity.setText(string);
-        mViewProgress.setProgress(percent);
+        mViewProgress.setStrokeBeginEnd(0, percent);
     }
 
     private Runnable mRunnable = new Runnable() {

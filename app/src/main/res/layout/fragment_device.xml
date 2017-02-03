@@ -26,30 +26,19 @@
             android:layout_centerHorizontal="true"
             app:shrinkWidth="0.6" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewPhoto
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/device_battery"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/device_sponge"
             android:layout_alignStart="@+id/device_sponge"
             android:src="@mipmap/battery_photo"
-            app:selected="true"
-            app:showBorder="false"
-            app:showCross="false"
-            app:showDarker="false" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewProgressCircle
-            android:id="@+id/device_progress"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/device_sponge"
-            android:layout_alignStart="@+id/device_sponge"
-            android:progress="0"
-            app:strokeActiveColor="@color/color_orange_main"
-            app:strokeNormalColor="@color/color_gray_light"
-            app:strokeType="arc"
-            app:strokeWidth="10dp"
-            app:total="100" />
+            app:strokeBegin="100"
+            app:strokeColorActive="@color/color_orange_main"
+            app:strokeColorNormal="@color/color_gray_light"
+            app:strokeCount="100"
+            app:strokeEnd="-1"
+            app:strokeWidth="10dp" />
 
         <View
             android:id="@+id/device_base_line"
