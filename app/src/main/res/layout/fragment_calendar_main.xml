@@ -59,40 +59,96 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="@color/color_white">
+        android:layout_marginTop="10dp"
+        android:layout_weight="5">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
             android:id="@+id/calendar_main_alert_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:shrinkWidth="0.8" />
+            app:shrinkWidth="0.7" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_alert_sponge"
+            android:layout_alignStart="@+id/calendar_main_alert_sponge"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/calendar_main_time"
+                style="@style/textview_main"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|bottom"
+                android:text="14:00"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/calendar_main_event"
+                style="@style/textview_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_weight="1"
+                android:gravity="center_horizontal|top"
+                android:text="Swimming with\nCocah Brain" />
+
+        </LinearLayout>
 
         <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/calendar_main_alert"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_alert_sponge"
+            android:layout_alignStart="@+id/calendar_main_alert_sponge"
             android:layout_centerInParent="true"
-            android:src="@mipmap/iconbutton_yes"
             app:strokeBegin="-1"
+            app:strokeColorActive="@color/color_orange"
+            app:strokeColorNormal="@color/color_white_snow"
+            app:strokeCount="60"
             app:strokeEnd="-1"
-            app:crossColor="@color/color_white"
-            app:crossRatio="0.2"
-            app:crossWidth="2dp"
-            app:fillColor="@android:color/white"
-            app:fillDarker="false"
-            app:strokeColorActive="@color/color_blue"
-            app:strokeColorNormal="@color/color_green"
-            app:strokeCount="12"
-            app:strokeType="dot"
-            app:strokeWidth="10dp" />
+            app:strokeWidth="12dp" />
 
     </RelativeLayout>
 
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6" />
+        android:layout_marginTop="10dp"
+        android:layout_weight="3">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/calendar_main_button_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
+
+        <Button
+            android:id="@+id/calendar_main_today"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/calendar_main_button_sponge"
+            android:layout_alignStart="@+id/calendar_main_button_sponge"
+            android:text="Today's Schedule" />
+
+        <Button
+            android:id="@+id/calendar_main_monthly"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/calendar_main_button_sponge"
+            android:layout_alignStart="@+id/calendar_main_button_sponge"
+            android:layout_below="@+id/calendar_main_today"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
+            android:text="Monthly Schedule" />
+
+    </RelativeLayout>
 
 </LinearLayout>
