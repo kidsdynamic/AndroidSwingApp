@@ -130,33 +130,36 @@ public class ViewCircle extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        int desireSize = (int) Math.ceil(mStrokeWidth * 2);
-
-        if (mBitmap != null && !mBitmap.isRecycled())
-            desireSize += Math.min(mBitmap.getWidth(), mBitmap.getHeight());
-        else
-            desireSize += 200;
-
-        int paddingV = getPaddingTop() + getPaddingBottom();
-        int paddingH = getPaddingStart() + getPaddingEnd();
-        desireSize += Math.max(paddingV, paddingH);
-
         int width, height;
 
-        if (widthMode == MeasureSpec.EXACTLY) {
+        if (widthMode == MeasureSpec.EXACTLY && heightMode == MeasureSpec.EXACTLY) {
             width = widthSize;
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(desireSize, widthSize);
-        } else {
-            width = desireSize;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = Math.min(desireSize, heightSize);
+
+        } else if (widthMode == MeasureSpec.EXACTLY) {
+            width = widthSize;
+            height = widthSize;
+            if (heightMode == MeasureSpec.AT_MOST)
+                height = Math.min(height, heightSize);
+
+        } else if (heightMode == MeasureSpec.EXACTLY) {
+            height = heightSize;
+            width = heightSize;
+            if (widthMode == MeasureSpec.AT_MOST)
+                width = Math.min(width, widthSize);
+
         } else {
-            height = desireSize;
+            if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
+                width = Math.min(widthSize, heightSize);
+            } else if (widthMode == MeasureSpec.AT_MOST) {
+                width = widthSize;
+            } else if (heightMode == MeasureSpec.AT_MOST) {
+                width = heightSize;
+            } else {
+                width = (int) Math.ceil(mStrokeWidth * 2) + Math.max(getPaddingStart() + getPaddingEnd(), getPaddingTop() + getPaddingBottom());
+            }
+
+            height = width;
         }
 
         setMeasuredDimension(width, height);

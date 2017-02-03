@@ -13,28 +13,14 @@
         android:scaleType="fitStart"
         android:src="@mipmap/icon_left" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <com.kidsdynamic.swing.androidswingapp.ViewCircle
+        android:id="@+id/signup_profile_photo"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="2.5">
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_profile_photo_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewCircle
-            android:id="@+id/signup_profile_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/signup_profile_photo_sponge"
-            android:layout_alignStart="@+id/signup_profile_photo_sponge"
-            android:layout_gravity="center"
-            app:crossWidth="2dp"
-            app:strokeColorNormal="@color/color_orange" />
-    </RelativeLayout>
+        android:layout_gravity="center"
+        android:layout_weight="2.5"
+        app:crossWidth="2dp"
+        app:strokeColorNormal="@color/color_orange" />
 
     <View
         android:layout_width="match_parent"

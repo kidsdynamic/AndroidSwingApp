@@ -135,8 +135,8 @@ public class WatchContact implements Serializable {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(layout, null);
 
-        ViewPhoto viewPhoto = (ViewPhoto) view.findViewById(R.id.watch_contact_photo);
-        viewPhoto.setPhoto(contact.mPhoto);
+        ViewCircle viewPhoto = (ViewCircle) view.findViewById(R.id.watch_contact_photo);
+        viewPhoto.setBitmap(contact.mPhoto);
 
         TextView viewLabel = (TextView) view.findViewById(R.id.watch_contact_label);
         viewLabel.setText(contact.mLabel);

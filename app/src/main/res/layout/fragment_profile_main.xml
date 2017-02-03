@@ -13,12 +13,7 @@
         android:layout_margin="20dp"
         android:layout_weight="4"
         android:layout_gravity="center"
-        app:crossColor="@color/color_white"
-        app:crossRatio="0.2"
-        app:crossWidth="0dp"
-        app:fillColor="@android:color/transparent"
-        app:strokeBegin="-1"
-        app:strokeColorActive="@color/color_orange"
+        app:strokeBegin="12"
         app:strokeColorNormal="@color/color_white"
         app:strokeCount="12"
         app:strokeEnd="-1"
@@ -72,9 +67,7 @@
                     app:crossColor="@color/color_white"
                     app:crossRatio="0.2"
                     app:crossWidth="2dp"
-                    app:fillColor="@android:color/transparent"
                     app:strokeBegin="12"
-                    app:strokeColorActive="@color/color_orange"
                     app:strokeColorNormal="@color/color_white"
                     app:strokeCount="12"
                     app:strokeEnd="-1"
@@ -122,14 +115,12 @@
                     app:crossColor="@color/color_white"
                     app:crossRatio="0.2"
                     app:crossWidth="2dp"
-                    app:fillColor="@android:color/transparent"
                     app:strokeBegin="12"
-                    app:strokeColorActive="@color/color_orange"
                     app:strokeColorNormal="@color/color_white"
                     app:strokeCount="12"
                     app:strokeEnd="-1"
                     app:strokeType="arc"
-                    app:strokeWidth="2dp" />
+                    app:strokeWidth="2dp"/>
 
             </LinearLayout>
         </HorizontalScrollView>
