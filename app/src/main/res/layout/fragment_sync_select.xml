@@ -20,9 +20,18 @@
         android:layout_marginStart="10dp"
         android:layout_weight="7">
 
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/sync_select_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.4"/>
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignStart="@+id/sync_select_sponge"
+            android:layout_alignEnd="@+id/sync_select_sponge">
 
             <LinearLayout
                 android:id="@+id/sync_select_container"

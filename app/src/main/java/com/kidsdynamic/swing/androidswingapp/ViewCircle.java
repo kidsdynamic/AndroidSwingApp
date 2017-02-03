@@ -477,6 +477,14 @@ public class ViewCircle extends View {
         invalidate();
     }
 
+    public void setStrokeActive() {
+        setStrokeBeginEnd(-1, mStrokeCount);
+    }
+
+    public void setStrokeNormal() {
+        setStrokeBeginEnd(mStrokeCount, -1);
+    }
+
     public void setCrossWidth(float width) {
         mCrossWidth = width;
         invalidate();
