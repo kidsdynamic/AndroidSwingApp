@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -12,9 +13,14 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+
+import java.util.concurrent.Semaphore;
 
 /**
  * Created by 03543 on 2017/2/2.
@@ -44,6 +50,12 @@ public class ViewCircle extends View {
     private Rect mRectBitmap;
     private Rect mRectBorder;
     private Paint mPaint;
+
+    private Handler mProgressHandler;
+    private int mProgressInterval;
+    private int mProgressStepBegin;
+    private int mProgressStepEnd;
+    private OnProgressListener mProgressListener = null;
 
     public ViewCircle(Context context) {
         super(context);
@@ -100,7 +112,14 @@ public class ViewCircle extends View {
             typedArray.recycle();
         }
 
+        mProgressHandler = new Handler();
         mPaint = new Paint();
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        stopProgress();
     }
 
     @Override
@@ -208,7 +227,9 @@ public class ViewCircle extends View {
         int dotRadius = (int) Math.floor(mStrokeWidth / 2);
 
         for (int idx = 0; idx < mStrokeCount; idx++) {
-            boolean active = (idx >= mStrokeBegin && idx <= mStrokeEnd);
+            boolean active = (mStrokeBegin <= mStrokeEnd) ?
+                    (idx >= mStrokeBegin && idx <= mStrokeEnd) :
+                    (idx >= mStrokeBegin || idx <= mStrokeEnd);
             float degree = (DEGREE_START + (idx * 360 / mStrokeCount)) % 360;
 
             int dotCenterX = (int) (centerX + (radius * Math.cos(degree * 3.1415 / 180)));
@@ -283,6 +304,63 @@ public class ViewCircle extends View {
                 rect.centerY() - radius + strokeShift,
                 rect.centerX() + radius - strokeShift,
                 rect.centerY() + radius - strokeShift);
+    }
+
+    public void startProgress(int interval, int stepBegin, int stepEnd) {
+        stopProgress();
+
+        mProgressInterval = interval;
+        mProgressStepBegin = stepBegin;
+        mProgressStepEnd = stepEnd;
+
+        mProgressHandler.postDelayed(mProgressRunnable, mProgressInterval);
+    }
+
+    public void stopProgress() {
+        mProgressHandler.removeCallbacksAndMessages(null);
+    }
+
+    private Runnable mProgressRunnable = new Runnable() {
+        @Override
+        public void run() {
+            boolean stepBegin = mProgressStepBegin != 0;
+            boolean stepEnd = mProgressStepEnd != 0;
+
+            if (mProgressStepBegin > 0)
+                mProgressStepBegin--;
+            if (mProgressStepEnd > 0)
+                mProgressStepEnd--;
+
+            int begin = mStrokeBegin;
+            if (stepBegin) {
+                begin++;
+                if (begin >= mStrokeCount)
+                    begin = 0;
+            }
+
+            int end = mStrokeEnd;
+            if (stepEnd) {
+                end++;
+                if (end >= mStrokeCount)
+                    end = 0;
+            }
+
+            setStrokeBeginEnd(begin, end);
+
+            if (mProgressListener != null)
+                mProgressListener.onProgress(begin, end);
+
+            if (stepBegin || stepEnd)
+                mProgressHandler.postDelayed(mProgressRunnable, mProgressInterval);
+        }
+    };
+
+    interface OnProgressListener {
+        void onProgress(int begin, int end);
+    }
+
+    public void setOnProgressListener(OnProgressListener listener) {
+        mProgressListener = listener;
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -378,6 +456,7 @@ public class ViewCircle extends View {
 
     public void setStrokeEnd(int end) {
         mStrokeEnd = end;
+        invalidate();
     }
 
     public int getStrokeEnd() {
@@ -386,6 +465,12 @@ public class ViewCircle extends View {
 
     public void setStrokeActive(int active) {
         mStrokeBegin = mStrokeEnd = active;
+        invalidate();
+    }
+
+    public void setStrokeBeginEnd(int begin, int end) {
+        mStrokeBegin = begin;
+        mStrokeEnd = end;
         invalidate();
     }
 

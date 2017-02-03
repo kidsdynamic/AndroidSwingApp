@@ -59,15 +59,15 @@ public class FragmentCalendarMain extends ViewFragment {
         public void OnSelect(View view, long offset, long date) {
             mViewCalendar.setDate(date);
 
-            ValueAnimator animator = ValueAnimator.ofInt(4, 30);
-            animator.setDuration(500);
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mViewAlert.setStrokeWidth((Integer) animation.getAnimatedValue());
-                }
-            });
-            animator.start();
+            mViewAlert.setOnProgressListener(mAlertListener);
+            mViewAlert.startProgress(200, mViewAlert.getStrokeCount(), mViewAlert.getStrokeCount());
+        }
+    };
+
+    private ViewCircle.OnProgressListener mAlertListener = new ViewCircle.OnProgressListener() {
+        @Override
+        public void onProgress(int begin, int end) {
+            Log.d("xxx", "AlertListener:" + begin + "," + end);
         }
     };
 
