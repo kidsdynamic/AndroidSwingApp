@@ -889,12 +889,16 @@ public class ServerMachine {
         );
     }
 
+    static String GetAvatarFilePath() {
+        File sdCard = Environment.getExternalStorageDirectory();
+        return sdCard.getAbsolutePath() + "/Swing";
+    }
+
     static String createAvatarFile(Bitmap bitmap, String filename) {
         String avatarFilename = null;
         FileOutputStream out = null;
         try {
-            File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File(sdCard.getAbsolutePath() + "/Swing");
+            File dir = new File(GetAvatarFilePath());
             if(dir.mkdirs())
                 Log.d("swing", "false");
 

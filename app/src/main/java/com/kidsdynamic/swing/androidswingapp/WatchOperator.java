@@ -17,6 +17,7 @@ public class WatchOperator {
     public static final String TABLE_USER = "User";
     public static final String TABLE_KIDS = "Kids";
     public static final String TABLE_UPLOAD = "Upload";
+    public static final String TABLE_EVENT = "Event";
 
     public static String ID = "ID";
     public static String EMAIL = "EMAIL";
@@ -29,6 +30,9 @@ public class WatchOperator {
     public static String PROFILE = "PROFILE";
     public static String MAC_ID = "MAC_ID";
     public static String PARENT_ID = "PARENT_ID";
+    public static String FOCUS_ID = "FOCUS_ID";
+    public static String FOCUS_PID = "FOCUS_PID";
+
 
     public static String TIME = "TIME";
     public static String INDOOR_ACTIVITY = "INDOOR_ACTIVITY";
@@ -44,7 +48,9 @@ public class WatchOperator {
                     DATE_CREATED + " TEXT, " +
                     ZIP_CODE + " TEXT NOT NULL, " +
                     PHONE_NUMBER + " TEXT NOT NULL, " +
-                    PROFILE + " TEXT)";
+                    PROFILE + " TEXT, " +
+                    FOCUS_ID + " INTEGER, " +
+                    FOCUS_PID + " INTEGER)";
 
     public static final String CREATE_KIDS_TABLE =
             "CREATE TABLE " + TABLE_KIDS + " (" +
@@ -177,6 +183,42 @@ public class WatchOperator {
         cursor.close();
 
         return result;
+    }
+
+    public void KidSetFocus(WatchContact.Kid kid) {
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + ID + "=" + kid.mId + " AND " + PARENT_ID + "=" + kid.mParentId, null);
+
+        if (cursor.moveToNext())
+            KidUpdate(kid);
+        else
+            KidAdd(kid);
+        cursor.close();
+
+        ContentValues contentValues = new ContentValues();
+        WatchContact.User user = UserGet();
+        contentValues.put(FOCUS_ID, kid.mId);
+        contentValues.put(FOCUS_PID, kid.mParentId);
+        mDatabase.update(TABLE_USER, contentValues, ID + "=" + user.mId, null);
+    }
+
+    public WatchContact.Kid KidGetFocus() {
+        int id = 0;
+        int pid = 0;
+        Cursor cursor = mDatabase.rawQuery("SELECT " + FOCUS_ID + "," + FOCUS_PID +" FROM " + TABLE_USER + " LIMIT 1", null);
+        if (cursor.moveToNext()) {
+            id = cursor.getInt(0);
+            pid = cursor.getInt(1);
+        }
+        cursor.close();
+
+        WatchContact.Kid kid = null;
+        cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + ID + "=" + id + " AND " + PARENT_ID + "=" + pid + " LIMIT 1", null);
+        if (cursor.moveToNext()) {
+            kid = cursorToKid(cursor);
+        }
+        cursor.close();
+
+        return kid;
     }
 
     private WatchContact.Kid cursorToKid(Cursor cursor) {
