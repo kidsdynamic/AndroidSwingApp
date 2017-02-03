@@ -15,7 +15,7 @@ public class FragmentProfileEditor extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private ViewPhoto mViewPhoto;
+    private ViewCircle mViewPhoto;
     private EditText mViewFirst;
     private EditText mViewLast;
 
@@ -29,7 +29,7 @@ public class FragmentProfileEditor extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_editor, container, false);
 
-        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.profile_editor_photo);
+        mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_editor_photo);
 
         mViewFirst = (EditText)
                 mViewMain.findViewById(R.id.profile_editor_first).
