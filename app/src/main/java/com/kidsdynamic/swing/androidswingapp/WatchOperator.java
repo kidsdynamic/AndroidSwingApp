@@ -345,6 +345,7 @@ public class WatchOperator {
     }
 
     public long EventAdd(Event event) {
+        long rtn;
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, event.mId);
@@ -364,7 +365,16 @@ public class WatchOperator {
         contentValues.put(DATE_CREATED, event.mDateCreated);
         contentValues.put(LAST_UPDATE, event.mLastUpdated);
 
-        return mDatabase.insert(TABLE_EVENT, null, contentValues);
+        rtn = mDatabase.insert(TABLE_EVENT, null, contentValues);
+
+        for (Todo todo : event.mTodoList) {
+            todo.mEventId = event.mId;
+            todo.mUserId = event.mUserId;
+            todo.mKidId = event.mKidId;
+            TodoAdd(todo);
+        }
+
+        return rtn;
     }
 
     public long EventUpdate(Event event) {
@@ -399,8 +409,18 @@ public class WatchOperator {
 
         cursor.close();
 
+        for (Event event : result) {
+            // Todo : Get Todo list
+        }
+
         return result;
     }
+
+//    public List<Event> EventGet(int day) {
+//       List<Event> result = new ArrayList<>();
+//
+//    }
+
 
     public static class Event {
         int mId;
@@ -419,6 +439,30 @@ public class WatchOperator {
         int mTimezoneOffset;
         String mDateCreated;
         String mLastUpdated;
+        List<Todo> mTodoList;
+
+        Event(int id, String startDate, String endDate) {
+            mId = id;
+            mUserId = 0;
+            mKidId = 0;
+            mName = "";
+            mStartDate = startDate;
+            mEndDate = endDate;
+            mColor = "";
+            mStatus = "";
+            mDescription = "";
+            mAlert = 0;
+            mCity = "";
+            mState = "";
+            mRepeat = "";
+            mTimezoneOffset = 0;
+            mDateCreated = "";
+            mLastUpdated = "";
+            mTodoList = new ArrayList<Todo>();
+            mTodoList.add(new Todo(id, 0, 0, 0, startDate, "", "", ""));
+            mTodoList.add(new Todo(id, 0, 0, 0, endDate, "", "", ""));
+        }
+
         Event(int id, int userId, int kidId, String name, String startDate,
               String endDate, String color, String status, String description,
               int alert, String city, String state, String repeat,
@@ -439,6 +483,7 @@ public class WatchOperator {
             mTimezoneOffset = timezoneOffset;
             mDateCreated = dateCreated;
             mLastUpdated = lastUpdated;
+            mTodoList = new ArrayList<Todo>();
         }
     }
 
