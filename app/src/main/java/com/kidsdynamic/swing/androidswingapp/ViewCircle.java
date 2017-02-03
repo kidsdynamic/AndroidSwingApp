@@ -163,8 +163,6 @@ public class ViewCircle extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.RED);
-
         paintCircle(canvas, mRectBorder);
 
         if (mBitmap != null) {

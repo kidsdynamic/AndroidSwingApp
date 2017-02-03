@@ -35,7 +35,7 @@ public class FragmentSignupProfile extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private ViewPhoto mViewPhoto;
+    private ViewCircle mViewPhoto;
     private EditText mViewFirstName;
     private EditText mViewLastName;
     private EditText mViewPhone;
@@ -80,7 +80,7 @@ public class FragmentSignupProfile extends ViewFragment {
             Log.d("TEST", "bundle null");
         }
 
-        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.signup_profile_photo);
+        mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.signup_profile_photo);
         mViewPhoto.setOnClickListener(mPhotoClickListener);
 
         mViewFirstName = (EditText) mViewMain.findViewById(R.id.signup_profile_first);
@@ -127,7 +127,7 @@ public class FragmentSignupProfile extends ViewFragment {
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
             mRegisterAvatar = mActivityMain.mBitmapStack.pop();
-            mViewPhoto.setPhoto(mRegisterAvatar);
+            mViewPhoto.setBitmap(mRegisterAvatar);
         }
     }
 

@@ -25,13 +25,24 @@
             android:layout_centerInParent="true"
             app:shrinkWidth="0.7" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewPhoto
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/signup_profile_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/signup_profile_photo_sponge"
             android:layout_alignStart="@+id/signup_profile_photo_sponge"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            app:crossColor="@color/color_white"
+            app:crossRatio="0.2"
+            app:crossWidth="2dp"
+            app:fillColor="@android:color/transparent"
+            app:strokeBegin="-1"
+            app:strokeColorActive="@color/color_orange_main"
+            app:strokeColorNormal="@color/color_white"
+            app:strokeCount="12"
+            app:strokeEnd="12"
+            app:strokeType="arc"
+            app:strokeWidth="6dp" />
     </RelativeLayout>
 
     <View
