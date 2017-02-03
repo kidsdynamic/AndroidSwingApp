@@ -51,6 +51,7 @@ public class ViewCircle extends View {
     private Rect mRectBorder;
     private Paint mPaint;
 
+    private ViewCircle mThis = this;
     private Handler mProgressHandler;
     private int mProgressInterval;
     private int mProgressStepBegin;
@@ -309,7 +310,7 @@ public class ViewCircle extends View {
                 rect.centerY() + radius - strokeShift);
     }
 
-    public void startProgress(int interval, int stepBegin, int stepEnd) {
+    public synchronized void startProgress(int interval, int stepBegin, int stepEnd) {
         stopProgress();
 
         mProgressInterval = interval;
@@ -319,7 +320,9 @@ public class ViewCircle extends View {
         mProgressHandler.postDelayed(mProgressRunnable, mProgressInterval);
     }
 
-    public void stopProgress() {
+    synchronized public void stopProgress() {
+        mProgressStepBegin = 0;     // Keep Begin and End is zero to avoid runnable active in thread
+        mProgressStepEnd = 0;
         mProgressHandler.removeCallbacksAndMessages(null);
     }
 
@@ -351,7 +354,7 @@ public class ViewCircle extends View {
             setStrokeBeginEnd(begin, end);
 
             if (mProgressListener != null)
-                mProgressListener.onProgress(begin, end);
+                mProgressListener.onProgress(mThis, begin, end);
 
             if (stepBegin || stepEnd)
                 mProgressHandler.postDelayed(mProgressRunnable, mProgressInterval);
@@ -359,7 +362,7 @@ public class ViewCircle extends View {
     };
 
     interface OnProgressListener {
-        void onProgress(int begin, int end);
+        void onProgress(ViewCircle view, int begin, int end);
     }
 
     public void setOnProgressListener(OnProgressListener listener) {

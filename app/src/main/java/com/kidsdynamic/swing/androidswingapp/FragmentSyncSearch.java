@@ -32,7 +32,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private TextView mViewLabel;
     private Button mViewButton1;
     private Button mViewButton2;
-    private ViewProgressCircle mViewProgress;
+    private ViewCircle mViewProgress;
 
     private WatchContact.Kid mDevice;
     private String mMacAddress;
@@ -51,15 +51,18 @@ public class FragmentSyncSearch extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_sync_search, container, false);
 
-        mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.sync_search_progress);
+        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.sync_search_progress);
 
         mViewLabel = (TextView) mViewMain.findViewById(R.id.sync_search_title);
         mViewButton1 = (Button) mViewMain.findViewById(R.id.sync_search_button1);
         mViewButton2 = (Button) mViewMain.findViewById(R.id.sync_search_button2);
 
-        mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
-        mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
-        //mMacAddress = "E0:E5:CF:1E:D7:C2";
+        if (getArguments() != null)
+            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        else
+            mDevice = new WatchContact.Kid();
+        //mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
+        mMacAddress = "E0:E5:CF:1E:D7:C2";
         Log.d("swing", "mac address " + mMacAddress);
 
         Handler handle = new Handler();
@@ -91,9 +94,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private ViewProgressCircle.OnProgressListener mSearchProgressListener = new ViewProgressCircle.OnProgressListener() {
+    private ViewCircle.OnProgressListener mSearchProgressListener = new ViewCircle.OnProgressListener() {
         @Override
-        public void onProgress(ViewProgressCircle view, int progress, int total) {
+        public void onProgress(ViewCircle view, int begin, int end) {
             mSearchTimeout--;
 
             if (mSearchResult != null && mMacAddress.equals(mSearchResult.mAddress)) {
@@ -107,12 +110,12 @@ public class FragmentSyncSearch extends ViewFragment {
         }
     };
 
-    private ViewProgressCircle.OnProgressListener mSyncProgressListener = new ViewProgressCircle.OnProgressListener() {
+    private ViewCircle.OnProgressListener mSyncProgressListener = new ViewCircle.OnProgressListener() {
         @Override
-        public void onProgress(ViewProgressCircle view, int progress, int total) {
+        public void onProgress(ViewCircle view, int begin, int end) {
             mSyncTimeout--;
 
-            if(mSyncFinish) {
+            if (mSyncFinish) {
                 viewCompleted();
             }
 
@@ -176,11 +179,9 @@ public class FragmentSyncSearch extends ViewFragment {
 
         mSearchTimeout = SEARCH_TIMEOUT;
 
-        mViewProgress.pause();
-        mViewProgress.setRepeat(true);
-        mViewProgress.setProgress(0);
         mViewProgress.setOnProgressListener(mSearchProgressListener);
-        mViewProgress.start();
+        mViewProgress.setStrokeBeginEnd(0, 0);
+        mViewProgress.startProgress(250, -1, -1);
     }
 
     private void viewFound() {
@@ -193,10 +194,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton2.setVisibility(View.INVISIBLE);
         mViewButton2.setOnClickListener(null);
 
-        mViewProgress.pause();
-        mViewProgress.setRepeat(false);
-        mViewProgress.setProgress(mViewProgress.getTotal());
+        mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
+        mViewProgress.setStrokeActive();
     }
 
     private void viewSyncing() {
@@ -209,11 +209,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton2.setOnClickListener(null);
 
         mSyncTimeout = SYNC_TIMEOUT;
-        mViewProgress.pause();
-        mViewProgress.setRepeat(true);
-        mViewProgress.setProgress(0);
         mViewProgress.setOnProgressListener(mSyncProgressListener);
-        mViewProgress.start();
+        mViewProgress.setStrokeBeginEnd(0, 0);
+        mViewProgress.startProgress(250, -1, -1);
     }
 
     private void viewCompleted() {
@@ -226,10 +224,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton2.setVisibility(View.INVISIBLE);
         mViewButton2.setOnClickListener(null);
 
-        mViewProgress.pause();
-        mViewProgress.setRepeat(false);
-        mViewProgress.setProgress(mViewProgress.getTotal());
+        mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
+        mViewProgress.setStrokeActive();
     }
 
     private void viewNotFound() {
@@ -244,10 +241,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton2.setVisibility(View.VISIBLE);
         mViewButton2.setOnClickListener(mExitListener);
 
-        mViewProgress.pause();
-        mViewProgress.setRepeat(false);
-        mViewProgress.setProgress(0);
+        mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
+        mViewProgress.setStrokeNormal();
     }
 
     BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
@@ -264,7 +260,7 @@ public class FragmentSyncSearch extends ViewFragment {
         @Override
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (resultCode == SYNC_RESULT_SUCCESS) {
-                for(BLEMachine.InOutDoor res : result) {
+                for (BLEMachine.InOutDoor res : result) {
                     WatchOperator.Upload uploadItem = new WatchOperator.Upload();
                     uploadItem.mMacId = mDevice.mMacId;
                     uploadItem.mTime = byteToDec(res.mTime[0], res.mTime[1], res.mTime[2], res.mTime[3]);
@@ -288,13 +284,13 @@ public class FragmentSyncSearch extends ViewFragment {
 
     private String rawString(byte[] b) {
         return String.format(Locale.getDefault(), "%s,%d,%s,%s,%s,%s",
-                byteToStr(b[ 0 ], b[ 1 ], b[ 2 ], b[ 3 ]),
-                b[ 4 ],
-                byteToStr(b[ 5 ], b[ 6 ], b[ 7 ], b[ 8 ]),
-                byteToStr(b[ 9 ], b[ 10 ], b[ 11 ], b[ 12 ]),
-                byteToStr(b[ 13 ], b[ 14 ], b[ 15 ], b[ 16 ]),
-                byteToStr(b[ 17 ], b[ 18 ], b[ 19 ], b[ 20 ])
-                );
+                byteToStr(b[0], b[1], b[2], b[3]),
+                b[4],
+                byteToStr(b[5], b[6], b[7], b[8]),
+                byteToStr(b[9], b[10], b[11], b[12]),
+                byteToStr(b[13], b[14], b[15], b[16]),
+                byteToStr(b[17], b[18], b[19], b[20])
+        );
     }
 
     private int byteToDec(byte b0, byte b1, byte b2, byte b3) {
@@ -307,6 +303,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
         return dec;
     }
+
     private String byteToStr(byte b0, byte b1, byte b2, byte b3) {
         return "" + byteToDec(b0, b1, b2, b3);
     }

@@ -66,7 +66,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
     private ViewCircle.OnProgressListener mAlertListener = new ViewCircle.OnProgressListener() {
         @Override
-        public void onProgress(int begin, int end) {
+        public void onProgress(ViewCircle view, int begin, int end) {
             Log.d("xxx", "AlertListener:" + begin + "," + end);
         }
     };

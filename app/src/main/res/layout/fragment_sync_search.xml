@@ -26,7 +26,7 @@
         android:gravity="center"
         android:text="Searching\nfor Your\nDevice!" />
 
-    <com.kidsdynamic.swing.androidswingapp.ViewProgressCircle
+    <com.kidsdynamic.swing.androidswingapp.ViewCircle
         android:id="@+id/sync_search_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,13 +34,10 @@
         android:layout_alignEnd="@id/sync_search_sponge"
         android:layout_alignStart="@+id/sync_search_sponge"
         android:layout_alignTop="@+id/sync_search_sponge"
-        app:duration="12000"
-        app:repeat="true"
-        app:strokeActiveColor="@color/color_orange"
-        app:strokeNormalColor="@color/color_white_snow"
-        app:strokeType="arc"
-        app:strokeWidth="4dp"
-        app:total="12" />
+        app:strokeColorActive="@color/color_orange"
+        app:strokeColorNormal="@color/color_white"
+        app:strokeType="dot"
+        app:strokeWidth="12dp" />
 
     <Button
         android:id="@+id/sync_search_button1"
