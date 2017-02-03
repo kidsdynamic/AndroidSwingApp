@@ -19,7 +19,7 @@ public class FragmentWatchSearch extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
     private ImageView mViewBack;
-    private ViewProgressCircle mViewProgress;
+    private ViewCircle mViewProgress;
 
     private ArrayList<WatchContact> mSearchResult;
     private int mSearchResultIndex = 0;
@@ -37,16 +37,11 @@ public class FragmentWatchSearch extends ViewFragment {
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
 
-        mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.watch_search_progress);
+        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.watch_search_progress);
         mViewProgress.setOnProgressListener(mProgressListener);
 
-        Handler handle = new Handler();
-        handle.post(new Runnable() {
-            @Override
-            public void run() {
-                mViewProgress.start();
-            }
-        });
+        mViewProgress.setStrokeBeginEnd(0, 0);
+        mViewProgress.startProgress(250, -1, -1);
 
         mActivityMain.mBLEMachine.Search(mBleListener, 10);
 
@@ -121,7 +116,7 @@ public class FragmentWatchSearch extends ViewFragment {
 
         @Override
         public void onFail(int statusCode) {
-            mViewProgress.pause();
+            mViewProgress.stopProgress();
             Toast.makeText(mActivityMain, "Search MAC failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
@@ -140,9 +135,9 @@ public class FragmentWatchSearch extends ViewFragment {
         }
     };
 
-    private ViewProgressCircle.OnProgressListener mProgressListener = new ViewProgressCircle.OnProgressListener() {
+    private ViewCircle.OnProgressListener mProgressListener = new ViewCircle.OnProgressListener() {
         @Override
-        public void onProgress(ViewProgressCircle view, int progress, int total) {
+        public void onProgress(ViewCircle view, int begin, int end) {
         }
     };
 }
