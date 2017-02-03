@@ -145,7 +145,21 @@ public class ActivityMain extends AppCompatActivity
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
-/*
+        /*
+        mOperator.EventAdd(new WatchOperator.Event(0, "2015-08-30T08:20:00Z", "2016-01-30T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(1, "2015-08-30T08:20:00Z", "2016-02-30T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(2, "2015-08-30T08:20:00Z", "2016-03-30T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(3, "2015-08-30T08:20:00Z", "2016-04-30T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(4, "2015-08-30T08:20:00Z", "2016-05-30T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(5, "2015-08-30T08:20:00Z", "2016-06-30T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(6, "2015-08-30T08:20:00Z", "2015-08-31T08:20:00Z"));
+        mOperator.EventAdd(new WatchOperator.Event(7, "2015-08-30T08:20:00Z", "2015-08-30T09:20:00Z"));
+        List<WatchOperator.Event> events = mOperator.EventGet();
+
+        for (WatchOperator.Event event : events) {
+            Log.d("TEST", "event " + event.mId + " Start " + event.mStartDate + " End " + event.mEndDate);
+        }
+
         mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
         WatchContact.User user = mOperator.UserGet();
         Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
@@ -165,18 +179,18 @@ public class ActivityMain extends AppCompatActivity
         mOperator.KidAdd(new WatchContact.Kid(null, 5, "Kid5", "last5", "ccc", "ddd", 3));
         List<WatchContact.Kid> kids = mOperator.KidGet();
         for (WatchContact.Kid kid : kids) {
-            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
             kid.mProfile = kid.mFirstName+ "+profile";
             mOperator.KidUpdate(kid);
         }
         kids = mOperator.KidGet();
         for (WatchContact.Kid kid : kids)
-            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
 
         focus = new WatchContact.Kid(null, 6, "Kid6", "last6", "ccc", "ddd", 3);
         mOperator.KidSetFocus(focus);
         focus = mOperator.KidGetFocus();
-        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mParentId + " "+ focus.mProfile);
+        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mUserId + " "+ focus.mProfile);
 */
     }
 

@@ -37,7 +37,7 @@ public class WatchContact implements Serializable {
         public String mDateCreated;
         public String mMacId;
         public String mProfile;
-        public int mParentId;
+        public int mUserId;
         public boolean mBound = false;
 
         public Kid() {
@@ -47,7 +47,7 @@ public class WatchContact implements Serializable {
             mLastName = "";
             mDateCreated = "";
             mMacId = "";
-            mParentId = 0;
+            mUserId = 0;
             mProfile = "";
 
             mBound = false;
@@ -60,7 +60,7 @@ public class WatchContact implements Serializable {
             mLastName = "";
             mDateCreated = "";
             mMacId = "";
-            mParentId = 0;
+            mUserId = 0;
             mProfile = "";
 
             mBound = bind;
@@ -74,7 +74,7 @@ public class WatchContact implements Serializable {
             mLastName = lastName;
             mDateCreated = dateCreated;
             mMacId = macId;
-            mParentId = parentId;
+            mUserId = parentId;
             mProfile = "";
             mBound = true;
         }
