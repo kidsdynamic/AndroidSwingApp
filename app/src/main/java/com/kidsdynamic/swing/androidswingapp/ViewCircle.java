@@ -124,20 +124,22 @@ public class ViewCircle extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int desireSize = (int) Math.ceil(mStrokeWidth * 2);
-
-        if (mBitmap != null && !mBitmap.isRecycled())
-            desireSize += Math.min(mBitmap.getWidth(), mBitmap.getHeight());
-
-        int paddingV = getPaddingTop() + getPaddingBottom();
-        int paddingH = getPaddingStart() + getPaddingEnd();
-        desireSize += Math.max(paddingV, paddingH);
-
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int desireSize = (int) Math.ceil(mStrokeWidth * 2);
+
+        if (mBitmap != null && !mBitmap.isRecycled())
+            desireSize += Math.min(mBitmap.getWidth(), mBitmap.getHeight());
+        else
+            desireSize += 200;
+
+        int paddingV = getPaddingTop() + getPaddingBottom();
+        int paddingH = getPaddingStart() + getPaddingEnd();
+        desireSize += Math.max(paddingV, paddingH);
 
         int width, height;
 

@@ -16,9 +16,9 @@ import android.widget.TextView;
 public class FragmentProfileMain extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
-    private ViewPhoto mViewPhoto;
-    private ViewPhoto mViewDeviceAdd;
-    private ViewPhoto mViewSharedAdd;
+    private ViewCircle mViewPhoto;
+    private ViewCircle mViewDeviceAdd;
+    private ViewCircle mViewSharedAdd;
     private TextView mViewName;
     private LinearLayout mViewDeviceContainer;
     private LinearLayout mViewSharedContainer;
@@ -34,18 +34,18 @@ public class FragmentProfileMain extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_main, container, false);
 
-        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_photo);
+        mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_main_photo);
         mViewName = (TextView) mViewMain.findViewById(R.id.profile_main_name);
 
         mViewLogout = (Button) mViewMain.findViewById(R.id.profile_main_logout);
         mViewLogout.setOnClickListener(mLogoutListener);
 
         mViewDeviceContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_device_container);
-        mViewDeviceAdd = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_device_add);
+        mViewDeviceAdd = (ViewCircle) mViewMain.findViewById(R.id.profile_main_device_add);
         mViewDeviceAdd.setOnClickListener(mAddDeviceListener);
 
         mViewSharedContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_shared_container);
-        mViewDeviceAdd = (ViewPhoto) mViewMain.findViewById(R.id.profile_main_shared_add);
+        mViewDeviceAdd = (ViewCircle) mViewMain.findViewById(R.id.profile_main_shared_add);
         mViewDeviceAdd.setOnClickListener(mAddSharedListener);
 
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
@@ -101,11 +101,9 @@ public class FragmentProfileMain extends ViewFragment {
 
     private void addContact(LinearLayout layout, WatchContact.Kid device) {
 
-        ViewPhoto photo = new ViewPhoto(mActivityMain);
-        photo.setShowBorder(true);
-        photo.setSelected(false);
-        photo.setShowCross(false);
-        photo.setShowDarker(false);
+        ViewCircle photo = new ViewCircle(mActivityMain);
+        photo.setStrokeCount(12);
+        photo.setStrokeBeginEnd(-1, 12);
 
         int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
 
