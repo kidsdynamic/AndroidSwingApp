@@ -41,14 +41,14 @@ public class FragmentBoot extends ViewFragment {
         return new ViewFragmentConfig("Boot", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
-
+/*
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             mActivityMain.selectFragment(FragmentProfileRequest.class.getName(), null);
         }
     };
-/*
+*/
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
@@ -83,7 +83,7 @@ public class FragmentBoot extends ViewFragment {
             }
         }
     };
-*/
+
     private void gotoSyncNow() {
         Fragment fragment = Fragment.instantiate(mActivityMain, FragmentSyncNow.class.getName(), null);
         getFragmentManager()
