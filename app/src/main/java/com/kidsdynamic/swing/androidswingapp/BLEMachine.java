@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -132,7 +133,7 @@ public class BLEMachine extends BLEControl {
 
                 case STATE_DISCOVERY:
                     if (mRelationDevice.mState.mDiscovered) {
-                        int currentTime = (int) (System.currentTimeMillis() / 1000);
+                        int currentTime = (int)(getCurrentTime()/1000);
                         byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
                         mState = STATE_SET_TIME;
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
@@ -501,5 +502,11 @@ public class BLEMachine extends BLEControl {
             builder.append(String.format("0x%02X ", b));
         }
         return builder.toString();
+    }
+
+    public static long getCurrentTime() {
+        Calendar now = Calendar.getInstance();
+        int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+        return now.getTimeInMillis() + offset;
     }
 }

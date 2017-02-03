@@ -282,7 +282,11 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
             WatchContact.User user = mActivityMain.mOperator.UserGet();
-            user.mProfile = mRegisterAvatarFilename;
+            File fileFrom = new File(mRegisterAvatarFilename);
+            File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
+            if(!fileFrom.renameTo(fileTo))
+                Log.d("swing", "Rename failed! " + mRegisterAvatarFilename + " to " + response.user.profile);
+            user.mProfile = response.user.profile;
             mActivityMain.mOperator.UserUpdate(user);
 
             mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);

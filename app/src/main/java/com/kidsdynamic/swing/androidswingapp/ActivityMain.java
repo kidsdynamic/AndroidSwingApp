@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Stack;
 
 public class ActivityMain extends AppCompatActivity
@@ -152,6 +154,9 @@ public class ActivityMain extends AppCompatActivity
         mOperator.UserUpdate(user);
         user = mOperator.UserGet();
         Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
+        WatchContact.Kid focus = mOperator.KidGetFocus();
+        if (focus == null)
+            Log.d("TEST", "No focus item");
 
         mOperator.KidAdd(new WatchContact.Kid(null, 1, "Kid1", "last1", "ccc", "ddd", 3));
         mOperator.KidAdd(new WatchContact.Kid(null, 2, "Kid2", "last2", "ccc", "ddd", 3));
@@ -167,8 +172,13 @@ public class ActivityMain extends AppCompatActivity
         kids = mOperator.KidGet();
         for (WatchContact.Kid kid : kids)
             Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+
+        focus = new WatchContact.Kid(null, 6, "Kid6", "last6", "ccc", "ddd", 3);
+        mOperator.KidSetFocus(focus);
+        focus = mOperator.KidGetFocus();
+        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mParentId + " "+ focus.mProfile);
 */
-        }
+    }
 
     @Override
     public void onPause() {
