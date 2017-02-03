@@ -32,19 +32,16 @@
             android:gravity="center"
             android:text="Searching" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewProgressCircle
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/profile_search_progress"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/profile_search_sponge"
             android:layout_alignStart="@+id/profile_search_sponge"
-            app:duration="1000"
-            app:repeat="true"
-            app:strokeActiveColor="@color/color_white_snow"
-            app:strokeNormalColor="@color/color_gray_light"
+            app:strokeColorActive="@color/color_white_snow"
+            app:strokeColorNormal="@color/color_gray_light"
             app:strokeType="dot"
-            app:strokeWidth="4dp"
-            app:total="12" />
+            app:strokeWidth="16dp"/>
     </RelativeLayout>
 
     <View

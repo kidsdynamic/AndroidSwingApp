@@ -14,7 +14,8 @@ public class FragmentProfileSearch extends ViewFragment {
 
     private ActivityMain mActivityMain;
     private View mViewMain;
-    private ViewProgressCircle mViewProgress;
+    private ViewCircle mViewProgress;
+    private int mTimeOut;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,17 +27,11 @@ public class FragmentProfileSearch extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_search, container, false);
 
-        mViewProgress = (ViewProgressCircle) mViewMain.findViewById(R.id.profile_search_progress);
+        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.profile_search_progress);
         mViewProgress.setOnProgressListener(mSearchProgressListener);
-        mViewProgress.setRepeat(false); // For test, remove me later
-
-        Handler handle = new Handler();
-        handle.post(new Runnable() {
-            @Override
-            public void run() {
-                mViewProgress.start();
-            }
-        });
+        mTimeOut = 40;
+        mViewProgress.setStrokeBeginEnd(0, 0); // For test, remove me later
+        mViewProgress.startProgress(250, -1, -1);
 
         return mViewMain;
     }
@@ -52,10 +47,11 @@ public class FragmentProfileSearch extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private ViewProgressCircle.OnProgressListener mSearchProgressListener = new ViewProgressCircle.OnProgressListener() {
+    private ViewCircle.OnProgressListener mSearchProgressListener = new ViewCircle.OnProgressListener() {
         @Override
-        public void onProgress(ViewProgressCircle view, int progress, int total) {
-            if(progress == total)
+        public void onProgress(ViewCircle view, int begin, int end) {
+            mTimeOut--;
+            if(mTimeOut == 0)
                 mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
         }
     };
