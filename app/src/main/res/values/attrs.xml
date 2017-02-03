@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="strokeWidth" format="dimension" />
-    <attr name="strokeActiveColor" format="color" />
-    <attr name="strokeNormalColor" format="color" />
     <attr name="strokeType" format="enum">
         <enum name="dot" value="0" />
         <enum name="arc" value="1" />
     </attr>
-    <attr name="strokeCount" format="integer" />
 
     <attr name="calendarMode" format="enum">
         <enum name="year" value="0" />
@@ -20,17 +16,6 @@
     <declare-styleable name="ViewSponge">
         <attr name="shrinkWidth" format="float" />
         <attr name="shrinkHeight" format="float" />
-    </declare-styleable>
-
-    <declare-styleable name="ViewProgressCircle">
-        <attr name="strokeWidth" />
-        <attr name="strokeActiveColor" />
-        <attr name="strokeNormalColor" />
-        <attr name="duration" format="integer" />
-        <attr name="total" format="integer" />
-        <attr name="repeat" format="boolean" />
-        <attr name="strokeType" />
-        <attr name="android:progress" />
     </declare-styleable>
 
     <declare-styleable name="ViewPhotoClip">
@@ -58,11 +43,11 @@
     </declare-styleable>
 
     <declare-styleable name="ViewCircle">
-        <attr name="strokeWidth" />
-        <attr name="strokeColorActive" format="color"/>
-        <attr name="strokeColorNormal" format="color"/>
+        <attr name="strokeWidth" format="dimension" />
+        <attr name="strokeColorActive" format="color" />
+        <attr name="strokeColorNormal" format="color" />
         <attr name="strokeType" />
-        <attr name="strokeCount" />
+        <attr name="strokeCount" format="integer" />
         <attr name="strokeBegin" format="integer" />
         <attr name="strokeEnd" format="integer" />
         <attr name="android:src" />

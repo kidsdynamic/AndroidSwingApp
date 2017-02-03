@@ -45,7 +45,7 @@ public class FragmentBoot extends ViewFragment {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            mActivityMain.selectFragment(FragmentDevice.class.getName(), null);
+            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
         }
     };
 */
