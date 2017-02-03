@@ -18,7 +18,7 @@ public class FragmentWatchFinish extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private ViewPhoto mViewPhoto;
+    private ViewCircle mViewPhoto;
     private Button mViewDashboard;
     private Button mViewAnother;
     private ImageView mViewBack;
@@ -46,7 +46,7 @@ public class FragmentWatchFinish extends ViewFragment {
         mViewAnother = (Button)mViewMain.findViewById(R.id.watch_finish_another);
         mViewAnother.setOnClickListener(mAnotherOnClickListener);
 
-        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.watch_finish_photo);
+        mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.watch_finish_photo);
 
         return mViewMain;
     }
@@ -58,7 +58,7 @@ public class FragmentWatchFinish extends ViewFragment {
         if (!mAvatarFilename.equals("")) {
             Bitmap bitmap = BitmapFactory.decodeFile(mAvatarFilename);
             if (bitmap != null)
-                mViewPhoto.setPhoto(bitmap);
+                mViewPhoto.setBitmap(bitmap);
         }
     }
 

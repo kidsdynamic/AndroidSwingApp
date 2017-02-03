@@ -37,7 +37,7 @@
             app:crossWidth="2dp"
             app:fillColor="@android:color/transparent"
             app:strokeBegin="-1"
-            app:strokeColorActive="@color/color_orange_main"
+            app:strokeColorActive="@color/color_orange"
             app:strokeColorNormal="@color/color_white"
             app:strokeCount="12"
             app:strokeEnd="12"
