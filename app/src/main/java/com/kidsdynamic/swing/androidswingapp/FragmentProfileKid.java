@@ -13,6 +13,7 @@ public class FragmentProfileKid extends ViewFragment {
 
     private ActivityMain mActivityMain;
     private View mViewMain;
+    private ViewCircle mViewPhoto;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,8 @@ public class FragmentProfileKid extends ViewFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_kid, container, false);
+
+        mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_kid_photo);
 
         return mViewMain;
     }

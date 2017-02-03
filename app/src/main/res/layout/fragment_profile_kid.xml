@@ -21,17 +21,15 @@
             android:layout_centerInParent="true"
             app:shrinkWidth="0.7" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewPhoto
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/profile_kid_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/profile_kid_photo_sponge"
             android:layout_alignStart="@+id/profile_kid_photo_sponge"
             android:layout_gravity="center"
-            app:selected="false"
-            app:showBorder="true"
-            app:showCross="true"
-            app:showDarker="false" />
+            app:crossWidth="2dp"
+            app:strokeColorNormal="@color/color_orange" />
     </RelativeLayout>
 
     <LinearLayout
