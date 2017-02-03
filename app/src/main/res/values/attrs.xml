@@ -33,17 +33,6 @@
         <attr name="android:progress" />
     </declare-styleable>
 
-    <declare-styleable name="ViewPhoto">
-        <attr name="android:src" />
-        <attr name="strokeWidth" />
-        <attr name="strokeActiveColor" />
-        <attr name="strokeNormalColor" />
-        <attr name="selected" format="boolean" />
-        <attr name="showCross" format="boolean" />
-        <attr name="showBorder" format="boolean" />
-        <attr name="showDarker" format="boolean" />
-    </declare-styleable>
-
     <declare-styleable name="ViewPhotoClip">
         <attr name="android:src" />
     </declare-styleable>
