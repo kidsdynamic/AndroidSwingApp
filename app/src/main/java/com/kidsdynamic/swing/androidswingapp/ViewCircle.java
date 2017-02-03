@@ -32,13 +32,13 @@ public class ViewCircle extends View {
     public final int STROKE_TYPE_DOT = 0;
     public final int STROKE_TYPE_ARC = 1;
 
-    private int mStrokeType = STROKE_TYPE_DOT;
-    private float mStrokeWidth = 4;
+    private int mStrokeType = STROKE_TYPE_ARC;
+    private float mStrokeWidth = 8;
     private int mStrokeColorActive = Color.WHITE;
     private int mStrokeColorNormal = Color.LTGRAY;
-    private int mStrokeBegin = 0;
-    private int mStrokeEnd = 0;
-    private int mStrokeCount = 0;
+    private int mStrokeCount = 12;
+    private int mStrokeBegin = mStrokeCount;
+    private int mStrokeEnd = -1;
 
     private Bitmap mBitmap = null;
     private int mFillColor = Color.TRANSPARENT;

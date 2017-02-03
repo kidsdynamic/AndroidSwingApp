@@ -25,20 +25,11 @@
             android:id="@+id/profile_editor_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignStart="@+id/profile_editor_photo_sponge"
             android:layout_alignEnd="@+id/profile_editor_photo_sponge"
+            android:layout_alignStart="@+id/profile_editor_photo_sponge"
             android:layout_gravity="center"
-            app:crossColor="@color/color_white"
-            app:crossRatio="0.2"
             app:crossWidth="2dp"
-            app:fillColor="@android:color/transparent"
-            app:strokeBegin="-1"
-            app:strokeColorActive="@color/color_orange"
-            app:strokeColorNormal="@color/color_white"
-            app:strokeCount="12"
-            app:strokeEnd="12"
-            app:strokeType="arc"
-            app:strokeWidth="4dp" />
+            app:strokeColorNormal="@color/color_white" />
     </RelativeLayout>
 
     <LinearLayout
@@ -52,8 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_pen"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_pen" />
 
         <EditText
             android:id="@+id/profile_editor_first"
@@ -76,8 +67,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_null"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_null" />
 
         <EditText
             android:id="@+id/profile_editor_last"
@@ -100,8 +91,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_pen"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_pen" />
 
         <EditText
             android:id="@+id/profile_editor_phone"
@@ -124,8 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_pen"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_pen" />
 
         <EditText
             android:id="@+id/profile_editor_mail"
@@ -148,8 +139,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_pen"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_pen" />
 
         <EditText
             android:id="@+id/profile_editor_address1"
@@ -173,8 +164,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:src="@mipmap/icon_null"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:src="@mipmap/icon_null" />
 
         <EditText
             android:id="@+id/profile_editor_address2"
