@@ -42,7 +42,7 @@
             app:strokeCount="12"
             app:strokeEnd="12"
             app:strokeType="arc"
-            app:strokeWidth="6dp" />
+            app:strokeWidth="4dp" />
     </RelativeLayout>
 
     <View

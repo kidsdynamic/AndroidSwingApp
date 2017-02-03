@@ -36,7 +36,7 @@ public class FragmentWatchProfile extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private ViewPhoto mViewPhoto;
+    private ViewCircle mViewPhoto;
     private EditText mViewName;
     private EditText mViewZip;
     private ImageView mViewBack;
@@ -55,15 +55,17 @@ public class FragmentWatchProfile extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-        mDevice = (WatchContact.Kid)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
-        Log.d("swing", "Watch profile " + mDevice.mLabel);
+
+        mDevice = (getArguments() != null) ?
+                (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE) :
+                new WatchContact.Kid();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_profile, container, false);
 
-        mViewPhoto = (ViewPhoto) mViewMain.findViewById(R.id.watch_profile_photo);
+        mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.watch_profile_photo);
         mViewPhoto.setOnClickListener(mPhotoClickListener);
 
         mViewName = (EditText) mViewMain.findViewById(R.id.watch_profile_name);
@@ -95,7 +97,7 @@ public class FragmentWatchProfile extends ViewFragment {
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
             mAvatarBitmap = mActivityMain.mBitmapStack.pop();
-            mViewPhoto.setPhoto(mAvatarBitmap);
+            mViewPhoto.setBitmap(mAvatarBitmap);
         }
     }
 
@@ -181,7 +183,7 @@ public class FragmentWatchProfile extends ViewFragment {
                 mDevice.mLastName = mViewZip.getText().toString();
 
                 if (!mDevice.mFirstName.equals("") && !mDevice.mLastName.equals("")) {
-                    mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+                    mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
                     mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, mDevice.mLastName, macId);
                     //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, mDevice.mLastName, "123456654325");
@@ -198,7 +200,7 @@ public class FragmentWatchProfile extends ViewFragment {
             mDevice.mId = response.id;
             mDevice.mFirstName = response.firstName;
             mDevice.mLastName = response.lastName;
-            mDevice.mDateCreated= response.dateCreated;
+            mDevice.mDateCreated = response.dateCreated;
             mDevice.mMacId = response.macId;
             mDevice.mParentId = response.parent.id;
             mActivityMain.mOperator.KidSetFocus(mDevice);
@@ -207,7 +209,7 @@ public class FragmentWatchProfile extends ViewFragment {
             if (mDevice.mProfile == null)
                 mDevice.mProfile = "";
 
-            mActivityMain.mBLEMachine.Sync(mBleListener,ServerMachine.getMacAddress(mDevice.mMacId));
+            mActivityMain.mBLEMachine.Sync(mBleListener, ServerMachine.getMacAddress(mDevice.mMacId));
             //mActivityMain.mBLEMachine.Sync(mBleListener, mDevice.mLabel);
         }
 
@@ -232,7 +234,7 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (!mDevice.mProfile.equals("")) {
-                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, ""+mDevice.mId, mDevice.mProfile);
+                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mDevice.mId, mDevice.mProfile);
             } else {
                 mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
             }
