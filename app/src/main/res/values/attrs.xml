@@ -6,13 +6,6 @@
         <enum name="arc" value="1" />
     </attr>
 
-    <attr name="calendarMode" format="enum">
-        <enum name="year" value="0" />
-        <enum name="month" value="1" />
-        <enum name="week" value="2" />
-        <enum name="day" value="3" />
-    </attr>
-
     <declare-styleable name="ViewSponge">
         <attr name="shrinkWidth" format="float" />
         <attr name="shrinkHeight" format="float" />
@@ -27,19 +20,24 @@
         <attr name="android:textSize" />
     </declare-styleable>
 
-    <declare-styleable name="ViewCalendarSelector">
-        <attr name="android:textSize" />
-        <attr name="android:textColor" />
-        <attr name="android:textColorHint" />
-        <attr name="calendarMode" />
-    </declare-styleable>
-
     <declare-styleable name="ViewCalendar">
         <attr name="android:textSize" />
         <attr name="android:textStyle" />
         <attr name="android:textColor" />
-        <attr name="android:textColorHint" />
-        <attr name="calendarMode" />
+        <attr name="todayColor" format="color" />
+        <attr name="exceedColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ViewCalendarSelector">
+        <attr name="android:textSize" />
+        <attr name="android:textStyle" />
+        <attr name="android:textColor" />
+        <attr name="calendarMode" format="enum">
+            <enum name="year" value="0" />
+            <enum name="month" value="1" />
+            <enum name="week" value="2" />
+            <enum name="day" value="3" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="ViewCircle">

@@ -24,11 +24,12 @@
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/calendar_main_selector_sponge"
             android:layout_alignStart="@+id/calendar_main_selector_sponge"
-            android:textColor="@color/color_orange_main"
-            android:textColorHint="@color/color_gray"
+            android:textColor="@color/color_gray_deep"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:calendarMode="week" />
+            app:calendarMode="week"
+            app:exceedColor="@color/color_gray_deep"
+            app:todayColor="@color/color_orange_main" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -50,9 +51,10 @@
             android:layout_alignEnd="@+id/calendar_main_calendar_sponge"
             android:layout_alignStart="@+id/calendar_main_calendar_sponge"
             android:textColor="@color/color_gray_deep"
-            android:textColorHint="@color/color_orange_main"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            app:exceedColor="@color/color_gray_light"
+            app:todayColor="@color/color_orange_main" />
 
     </RelativeLayout>
 

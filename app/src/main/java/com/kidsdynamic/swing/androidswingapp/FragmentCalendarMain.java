@@ -82,7 +82,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
-        public void onSelect(ViewCalendarWeek week, ViewCalendarCellWeek cell) {
+        public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
             long date = cell.getDate();
             mViewSelector.setDate(cell.getDate());
 

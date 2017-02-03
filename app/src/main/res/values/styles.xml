@@ -84,4 +84,5 @@
         <item name="android:textStyle">normal</item>
         <item name="android:singleLine">true</item>
     </style>
+
 </resources>

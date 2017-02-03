@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,18 +19,12 @@ import java.util.Locale;
 
 public class ViewCalendar extends TableLayout {
 
-    static final int MODE_INVALID = -1;
-    static final int MODE_YEAR = 0;
-    static final int MODE_MONTH = 1;
-    static final int MODE_WEEK = 2;
-    static final int MODE_DAY = 3;
+    protected int mTextSize = 20;
+    protected int mTextStyle = Typeface.BOLD;
+    protected int mTextColor = 0x000000;
+    protected int mTodayColor = 0xFFFFFF;
+    protected int mExceedColor = 0x666666;
 
-    protected int mTextSize = 12;
-    protected int mTextStyle = Typeface.NORMAL;
-    protected int mTextColor = 0;
-    protected int mTextColorHint = 0;
-
-    protected int mMode = MODE_INVALID;
     protected long mDate = System.currentTimeMillis();
 
     public ViewCalendar(Context context) {
@@ -62,10 +54,10 @@ public class ViewCalendar extends TableLayout {
                     mTextStyle = typedArray.getInt(attr, mTextStyle);
                 } else if (attr == R.styleable.ViewCalendar_android_textColor) {
                     mTextColor = typedArray.getColor(attr, mTextColor);
-                } else if (attr == R.styleable.ViewCalendar_android_textColorHint) {
-                    mTextColorHint = typedArray.getColor(attr, mTextColorHint);
-                } else if (attr == R.styleable.ViewCalendar_calendarMode) {
-                    mMode = typedArray.getInt(attr, mMode);
+                } else if (attr == R.styleable.ViewCalendar_todayColor) {
+                    mTodayColor = typedArray.getColor(attr, mTodayColor);
+                } else if (attr == R.styleable.ViewCalendar_exceedColor) {
+                    mExceedColor = typedArray.getColor(attr, mExceedColor);
                 }
             }
 
@@ -108,20 +100,20 @@ public class ViewCalendar extends TableLayout {
         return mTextColor;
     }
 
-    public void setTextColorHint(int color) {
-        mTextColorHint = color;
+    public void setTodayColor(int color) {
+        mTodayColor = color;
     }
 
-    public int getTextColorHint() {
-        return mTextColorHint;
+    public int getTodayColor() {
+        return mTodayColor;
     }
 
-    public void setMode(int mode) {
-        mMode = mode;
+    public void setExceedColor(int color) {
+        mExceedColor = color;
     }
 
-    public int getMode() {
-        return mMode;
+    public int getExceedColor() {
+        return mExceedColor;
     }
 
     public void setDate(long milli) {
@@ -152,9 +144,9 @@ public class ViewCalendar extends TableLayout {
 
         Calendar calcNow = getInstance();
 
-        if(calcSet.get(Calendar.YEAR) != calcNow.get(Calendar.YEAR))
+        if (calcSet.get(Calendar.YEAR) != calcNow.get(Calendar.YEAR))
             return false;
-        if(calcSet.get(Calendar.DAY_OF_YEAR) != calcNow.get(Calendar.DAY_OF_YEAR))
+        if (calcSet.get(Calendar.DAY_OF_YEAR) != calcNow.get(Calendar.DAY_OF_YEAR))
             return false;
 
         return true;

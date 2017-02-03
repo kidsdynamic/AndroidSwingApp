@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -23,6 +24,13 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     static final int SELECT_NEXT = 1;
     static final int SELECT_DATE = 0;
 
+    static final int MODE_INVALID = -1;
+    static final int MODE_YEAR = 0;
+    static final int MODE_MONTH = 1;
+    static final int MODE_WEEK = 2;
+    static final int MODE_DAY = 3;
+    protected int mMode = MODE_INVALID;
+
     private ViewCalendar mThis = this;
     private TextView mViewDate;
     private TextView mViewPrev;
@@ -41,6 +49,21 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     }
 
     private void init(Context context, AttributeSet attrs) {
+        if (attrs != null) {
+            TypedArray typedArray = context.obtainStyledAttributes(
+                    attrs, R.styleable.ViewCalendarSelector);
+
+            final int count = typedArray.getIndexCount();
+            for (int idx = 0; idx < count; idx++) {
+                final int attr = typedArray.getIndex(idx);
+
+                if (attr == R.styleable.ViewCalendarSelector_calendarMode) {
+                    mMode = typedArray.getInt(attr, mMode);
+                }
+            }
+
+            typedArray.recycle();
+        }
     }
 
     @Override
@@ -51,7 +74,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewPrev = new TextView(context);
         mViewPrev.setText("◀"); // U+25C0 &#9664;
         mViewPrev.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        mViewPrev.setTextColor(mTextColorHint);
+        mViewPrev.setTextColor(mTextColor);
         mViewPrev.setGravity(Gravity.CENTER);
         mViewPrev.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
         tableRow.addView(mViewPrev);
@@ -59,7 +82,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewDate = new TextView(context);
         mViewDate.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         mViewDate.setTypeface(mViewDate.getTypeface(), mTextStyle);
-        mViewDate.setTextColor(mTextColor);
+        mViewDate.setTextColor(mTodayColor);
         mViewDate.setGravity(Gravity.CENTER);
         mViewDate.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 6));
         updateText();
@@ -68,7 +91,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewNext = new TextView(context);
         mViewNext.setText("▶"); // U+25B6 &#9654;
         mViewNext.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        mViewNext.setTextColor(mTextColorHint);
+        mViewNext.setTextColor(mTextColor);
         mViewNext.setGravity(Gravity.CENTER);
         mViewNext.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 2));
         tableRow.addView(mViewNext);
@@ -115,15 +138,18 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
 
     interface OnSelectListener {
         void OnSelect(View view, long offset, long date);
+
     }
 
     public void setOnSelectListener(OnSelectListener listener) {
         mSelectListener = listener;
     }
 
-    @Override
+    public int getMode() {
+        return mMode;
+    }
+
     public void setMode(int mode) {
-        super.setMode(mode);
         updateText();
     }
 
@@ -163,9 +189,9 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         int daySet = dateSet.get(Calendar.DAY_OF_MONTH);
 
         if (yearNow == yearSet && monthNow == monthSet && dayNow == daySet)
-            mViewDate.setTextColor(mTextColor);
+            mViewDate.setTextColor(mTodayColor);
         else
-            mViewDate.setTextColor(mTextColorHint);
+            mViewDate.setTextColor(mExceedColor);
 
         mViewDate.setText(makeDateString(mMode, mDate));
     }

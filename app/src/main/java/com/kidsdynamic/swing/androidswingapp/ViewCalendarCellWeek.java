@@ -72,7 +72,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
         int circleColor = getCurrentTextColor();
         ViewCalendar calendar = findCalendar();
         if (calendar != null)
-            circleColor = calendar.getTextColorHint();
+            circleColor = calendar.getTodayColor();
 
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();

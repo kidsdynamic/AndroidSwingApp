@@ -24,11 +24,12 @@
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/calendar_month_selector_sponge"
             android:layout_alignStart="@+id/calendar_month_selector_sponge"
-            android:textColor="@color/color_orange_main"
-            android:textColorHint="@color/color_gray"
+            android:textColor="@color/color_gray_deep"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:calendarMode="month" />
+            app:calendarMode="month"
+            app:exceedColor="@color/color_gray_deep"
+            app:todayColor="@color/color_orange_main" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -43,6 +44,18 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:shrinkWidth="0.9" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewCalendarMonth
+            android:id="@+id/calendar_main_calendar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_month_calendar_sponge"
+            android:layout_alignStart="@+id/calendar_month_calendar_sponge"
+            android:textColor="@color/color_gray_deep"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:exceedColor="@color/color_gray_light"
+            app:todayColor="@color/color_orange_main" />
 
     </RelativeLayout>
 
