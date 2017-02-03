@@ -31,6 +31,8 @@ public class WatchHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(WatchOperator.CREATE_USER_TABLE);
         sqLiteDatabase.execSQL(WatchOperator.CREATE_KIDS_TABLE);
         sqLiteDatabase.execSQL(WatchOperator.CREATE_UPLOAD_TABLE);
+        sqLiteDatabase.execSQL(WatchOperator.CREATE_EVENT_TABLE);
+        sqLiteDatabase.execSQL(WatchOperator.CREATE_TODO_TABLE);
     }
 
     @Override
@@ -38,6 +40,8 @@ public class WatchHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_USER);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_KIDS);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_UPLOAD);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_EVENT);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_TODO);
         onCreate(sqLiteDatabase);
     }
 }

@@ -165,18 +165,18 @@ public class ActivityMain extends AppCompatActivity
         mOperator.KidAdd(new WatchContact.Kid(null, 5, "Kid5", "last5", "ccc", "ddd", 3));
         List<WatchContact.Kid> kids = mOperator.KidGet();
         for (WatchContact.Kid kid : kids) {
-            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
             kid.mProfile = kid.mFirstName+ "+profile";
             mOperator.KidUpdate(kid);
         }
         kids = mOperator.KidGet();
         for (WatchContact.Kid kid : kids)
-            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mParentId + " "+ kid.mProfile);
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
 
         focus = new WatchContact.Kid(null, 6, "Kid6", "last6", "ccc", "ddd", 3);
         mOperator.KidSetFocus(focus);
         focus = mOperator.KidGetFocus();
-        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mParentId + " "+ focus.mProfile);
+        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mUserId + " "+ focus.mProfile);
 */
     }
 

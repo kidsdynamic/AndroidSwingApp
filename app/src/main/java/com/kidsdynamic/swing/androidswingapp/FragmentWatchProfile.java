@@ -26,8 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
-
 /**
  * Created by 03543 on 2017/1/6.
  */
@@ -202,7 +200,7 @@ public class FragmentWatchProfile extends ViewFragment {
             mDevice.mLastName = response.lastName;
             mDevice.mDateCreated = response.dateCreated;
             mDevice.mMacId = response.macId;
-            mDevice.mParentId = response.parent.id;
+            mDevice.mUserId = response.parent.id;
             mActivityMain.mOperator.KidSetFocus(mDevice);
             if (mAvatarBitmap != null)
                 mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mFirstName + mDevice.mLastName);

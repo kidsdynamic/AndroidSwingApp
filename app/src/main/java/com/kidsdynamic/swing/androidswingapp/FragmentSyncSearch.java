@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
@@ -266,7 +265,7 @@ public class FragmentSyncSearch extends ViewFragment {
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (resultCode == SYNC_RESULT_SUCCESS) {
                 for(BLEMachine.InOutDoor res : result) {
-                    WatchOperator.UploadItem uploadItem = new WatchOperator.UploadItem();
+                    WatchOperator.Upload uploadItem = new WatchOperator.Upload();
                     uploadItem.mMacId = mDevice.mMacId;
                     uploadItem.mTime = byteToDec(res.mTime[0], res.mTime[1], res.mTime[2], res.mTime[3]);
                     uploadItem.mOutdoorActivity = rawString(res.mData1);

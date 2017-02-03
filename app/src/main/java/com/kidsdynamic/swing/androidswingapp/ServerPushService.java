@@ -6,9 +6,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-
 /**
  * Created by weichigio on 2017/2/1.
  */
@@ -20,7 +17,7 @@ public class ServerPushService extends Service {
     public Config mConfig;
     private Handler mHandler = new Handler();
 
-    private WatchOperator.UploadItem mUploadItem = null;
+    private WatchOperator.Upload mUploadItem = null;
 
     @Override
     public void onCreate() {
