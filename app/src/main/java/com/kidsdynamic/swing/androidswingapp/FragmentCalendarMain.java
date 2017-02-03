@@ -61,6 +61,15 @@ public class FragmentCalendarMain extends ViewFragment {
                 R.mipmap.city_florida, R.mipmap.icon_calendar, R.mipmap.icon_add);
     }
 
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), null);
+    }
+
+    @Override
+    public void onToolbarAction2() {
+    }
+
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
