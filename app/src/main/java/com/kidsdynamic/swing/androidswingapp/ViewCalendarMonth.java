@@ -68,6 +68,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
 
             for (int idx = 0; idx < 7; idx++) {
                 mViewCellList[cidx] = new ViewCalendarCellMonth(context);
+                mViewCellList[cidx].setCalendar(this);
                 mViewCellList[cidx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
                 mViewCellList[cidx].setTypeface(mViewCellList[idx].getTypeface(), mTextStyle);
                 mViewCellList[cidx].setTextColor(mTextColor);
@@ -95,7 +96,9 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         cal.clear(Calendar.SECOND);
         cal.clear(Calendar.MILLISECOND);
 
-        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+//        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        while(cal.get(Calendar.DAY_OF_WEEK) != cal.getFirstDayOfWeek())
+            cal.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
             list[idx].setDate(cal.getTimeInMillis());
@@ -113,7 +116,8 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         cal.clear(Calendar.MILLISECOND);
 
         cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        while(cal.get(Calendar.DAY_OF_WEEK) != cal.getFirstDayOfWeek())
+            cal.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
             list[idx].setDate(cal.getTimeInMillis());

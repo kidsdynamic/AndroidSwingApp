@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 
 import java.util.Calendar;
@@ -34,6 +35,16 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
     @Override
     public void setDate(long milli) {
         super.setDate(milli);
+
+        ViewCalendar calendar = getCalendar();
+        if (calendar != null) {
+            if (ViewCalendar.isToday(mDate))
+                setTextColor(calendar.getTodayColor());
+            else if (ViewCalendar.isMonth(mDate))
+                setTextColor(calendar.getTextColor());
+            else
+                setTextColor(calendar.getExceedColor());
+        }
 
         Calendar date = ViewCalendar.getInstance();
         date.setTimeInMillis(mDate);

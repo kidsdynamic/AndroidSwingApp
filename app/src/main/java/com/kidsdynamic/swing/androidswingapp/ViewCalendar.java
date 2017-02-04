@@ -151,4 +151,18 @@ public class ViewCalendar extends TableLayout {
 
         return true;
     }
+
+    static boolean isMonth(long msecond) {
+        Calendar calcSet = getInstance();
+        calcSet.setTimeInMillis(msecond);
+
+        Calendar calcNow = getInstance();
+
+        if (calcSet.get(Calendar.YEAR) != calcNow.get(Calendar.YEAR))
+            return false;
+        if (calcSet.get(Calendar.MONTH) != calcNow.get(Calendar.MONTH))
+            return false;
+
+        return true;
+    }
 }

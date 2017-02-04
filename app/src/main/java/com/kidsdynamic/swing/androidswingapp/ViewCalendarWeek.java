@@ -66,6 +66,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         mViewCellList = new ViewCalendarCellWeek[7];
         for (int idx = 0; idx < mViewCellList.length; idx++) {
             mViewCellList[idx] = new ViewCalendarCellWeek(context);
+            mViewCellList[idx].setCalendar(this);
             mViewCellList[idx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
             mViewCellList[idx].setTypeface(mViewCellList[idx].getTypeface(), mTextStyle);
             mViewCellList[idx].setTextColor(mTextColor);
