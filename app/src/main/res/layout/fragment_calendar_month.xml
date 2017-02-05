@@ -46,7 +46,7 @@
             app:shrinkWidth="0.9" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewCalendarMonth
-            android:id="@+id/calendar_main_calendar"
+            android:id="@+id/calendar_month_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/calendar_month_calendar_sponge"

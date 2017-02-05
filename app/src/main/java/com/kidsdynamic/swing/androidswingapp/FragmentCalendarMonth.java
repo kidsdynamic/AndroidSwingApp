@@ -16,6 +16,7 @@ public class FragmentCalendarMonth extends ViewFragment {
     private View mViewMain;
 
     private ViewCalendarSelector mViewSelector;
+    private ViewCalendarMonth mViewCalendar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,10 @@ public class FragmentCalendarMonth extends ViewFragment {
         mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_month_selector);
         mViewSelector.setDate(System.currentTimeMillis());
         mViewSelector.setOnSelectListener(mSelectorListener);
+
+        mViewCalendar = (ViewCalendarMonth)mViewMain.findViewById(R.id.calendar_month_calendar);
+        mViewCalendar.setDate(System.currentTimeMillis());
+        mViewCalendar.setOnSelectListener(mCalendarListener);
 
         return mViewMain;
     }
@@ -52,6 +57,14 @@ public class FragmentCalendarMonth extends ViewFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
+            mViewCalendar.setDate(date);
+        }
+    };
+
+    private ViewCalendarMonth.OnSelectListener mCalendarListener = new ViewCalendarMonth.OnSelectListener() {
+        @Override
+        public void onSelect(ViewCalendarMonth calendar, ViewCalendarCellMonth cell) {
+            mViewSelector.setDate(cell.getDate());
         }
     };
 }
