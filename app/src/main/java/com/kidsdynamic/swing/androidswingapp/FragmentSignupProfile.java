@@ -248,8 +248,8 @@ public class FragmentSignupProfile extends ViewFragment {
                             response.email,
                             response.firstName,
                             response.lastName,
-                            response.lastUpdate,
-                            response.dateCreated,
+                            WatchOperator.getTimeStamp(response.lastUpdate),
+                            WatchOperator.getTimeStamp(response.dateCreated),
                             response.zipCode,
                             response.phoneNumber)
             );
