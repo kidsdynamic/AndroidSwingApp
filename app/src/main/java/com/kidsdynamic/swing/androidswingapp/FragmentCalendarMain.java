@@ -68,6 +68,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
+        mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
     }
 
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {

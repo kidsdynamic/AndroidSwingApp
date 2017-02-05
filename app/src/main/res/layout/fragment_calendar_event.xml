@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                android:id="@+id/calendar_event_sponge"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_centerInParent="true"
+                app:shrinkWidth="0.8" />
+
+            <LinearLayout
+                android:id="@+id/calendar_event_select"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="Select Event" />
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="▼"
+                    android:textColor="@color/color_brown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_event_assign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_select"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Assign to" />
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="▼"
+                    android:textColor="@color/color_brown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_event_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_assign"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Start" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_event_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_start"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="End" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_event_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_end"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Color Label" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_event_repeat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_color"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Repeat" />
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|end"
+                    android:text="Never ▼"
+                    android:textColor="@color/color_brown" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/calendar_event_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_repeat"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Description" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/calendar_event_todo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_description"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/contact_background"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:visibility="invisible">
+
+                <TextView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:text="To Do List" />
+
+                <ImageView
+                    style="@style/textview_calendar_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/iconbutton_add" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/calendar_event_sponge"
+                android:layout_alignStart="@+id/calendar_event_sponge"
+                android:layout_below="@+id/calendar_event_todo"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    style="@style/button_main"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="Save" />
+
+                <Button
+                    style="@style/button_main"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Advance" />
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
