@@ -5,8 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by 03543 on 2017/1/23.
@@ -58,8 +63,8 @@ public class WatchOperator {
                     EMAIL + " TEXT NOT NULL, " +
                     FIRST_NAME + " TEXT NOT NULL, " +
                     LAST_NAME + " TEXT NOT NULL, " +
-                    LAST_UPDATE + " TEXT, " +
-                    DATE_CREATED + " TEXT, " +
+                    LAST_UPDATE + " INTEGER, " +
+                    DATE_CREATED + " INTEGER, " +
                     ZIP_CODE + " TEXT NOT NULL, " +
                     PHONE_NUMBER + " TEXT NOT NULL, " +
                     PROFILE + " TEXT, " +
@@ -71,7 +76,7 @@ public class WatchOperator {
                     ID + " INTEGER NOT NULL, " +
                     FIRST_NAME + " TEXT NOT NULL, " +
                     LAST_NAME + " TEXT NOT NULL, " +
-                    DATE_CREATED + " TEXT NOT NULL, " +
+                    DATE_CREATED + " INTEGER NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
                     PROFILE + " TEXT)";
@@ -89,8 +94,8 @@ public class WatchOperator {
                     USER_ID + " INTEGER NOT NULL, " +
                     KID_ID + " INTEGER NOT NULL, " +
                     NAME + " TEXT NOT NULL, " +
-                    START_DATE + " TEXT NOT NULL, " +
-                    END_DATE + " TEXT NOT NULL, " +
+                    START_DATE + " INTEGER NOT NULL, " +
+                    END_DATE + " INTEGER NOT NULL, " +
                     COLOR + " TEXT NOT NULL, " +
                     STATUS + " TEXT NOT NULL, " +
                     DESCRIPTION + " TEXT NOT NULL, " +
@@ -99,8 +104,8 @@ public class WatchOperator {
                     STATE + " TEXT NOT NULL, " +
                     REPEAT + " TEXT NOT NULL, " +
                     TIMEZONE_OFFSET + " INTEGER NOT NULL, " +
-                    DATE_CREATED + " TEXT NOT NULL, " +
-                    LAST_UPDATE + " TEXT NOT NULL)";
+                    DATE_CREATED + " INTEGER NOT NULL, " +
+                    LAST_UPDATE + " INTEGER NOT NULL)";
 
     public static final String CREATE_TODO_TABLE =
             "CREATE TABLE " + TABLE_TODO + " (" +
@@ -110,8 +115,8 @@ public class WatchOperator {
                     EVENT_ID + " INTEGER NOT NULL, " +
                     TEXT + " TEXT NOT NULL, " +
                     STATUS + " TEXT NOT NULL, " +
-                    DATE_CREATED + " TEXT NOT NULL, " +
-                    LAST_UPDATE + " TEXT NOT NULL)";
+                    DATE_CREATED + " INTEGER NOT NULL, " +
+                    LAST_UPDATE + " INTEGER NOT NULL)";
 
     private SQLiteDatabase mDatabase;
     private Context mContext;
@@ -181,8 +186,8 @@ public class WatchOperator {
         item.mEmail = cursor.getString(1);
         item.mFirstName = cursor.getString(2);
         item.mLastName = cursor.getString(3);
-        item.mLastUpdate = cursor.getString(4);
-        item.mDateCreated = cursor.getString(5);
+        item.mLastUpdate = cursor.getInt(4);
+        item.mDateCreated = cursor.getInt(5);
         item.mZipCode = cursor.getString(6);
         item.mPhoneNumber = cursor.getString(7);
         item.mProfile = cursor.getString(8);
@@ -272,7 +277,7 @@ public class WatchOperator {
         item.mId = cursor.getInt(0);
         item.mFirstName = cursor.getString(1);
         item.mLastName = cursor.getString(2);
-        item.mDateCreated = cursor.getString(3);
+        item.mDateCreated = cursor.getInt(3);
         item.mMacId = cursor.getString(4);
         item.mUserId = cursor.getInt(5);
         item.mProfile = cursor.getString(6);
@@ -427,8 +432,8 @@ public class WatchOperator {
         int mUserId;
         int mKidId;
         String mName;
-        String mStartDate;
-        String mEndDate;
+        long mStartDate;
+        long mEndDate;
         String mColor;
         String mStatus;
         String mDescription;
@@ -437,11 +442,11 @@ public class WatchOperator {
         String mState;
         String mRepeat;
         int mTimezoneOffset;
-        String mDateCreated;
-        String mLastUpdated;
+        long mDateCreated;
+        long mLastUpdated;
         List<Todo> mTodoList;
 
-        Event(int id, String startDate, String endDate) {
+        Event(int id, long startDate, long endDate) {
             mId = id;
             mUserId = 0;
             mKidId = 0;
@@ -456,17 +461,17 @@ public class WatchOperator {
             mState = "";
             mRepeat = "";
             mTimezoneOffset = 0;
-            mDateCreated = "";
-            mLastUpdated = "";
+            mDateCreated = 0;
+            mLastUpdated = 0;
             mTodoList = new ArrayList<Todo>();
-            mTodoList.add(new Todo(id, 0, 0, 0, startDate, "", "", ""));
-            mTodoList.add(new Todo(id, 0, 0, 0, endDate, "", "", ""));
+            mTodoList.add(new Todo(id, 0, 0, 0, "TEST", "", 0, 0));
+            mTodoList.add(new Todo(id, 0, 0, 0, "TEST", "", 0, 0));
         }
 
-        Event(int id, int userId, int kidId, String name, String startDate,
-              String endDate, String color, String status, String description,
+        Event(int id, int userId, int kidId, String name, long startDate,
+              long endDate, String color, String status, String description,
               int alert, String city, String state, String repeat,
-              int timezoneOffset, String dateCreated, String lastUpdated) {
+              int timezoneOffset, long dateCreated, long lastUpdated) {
             mId = id;
             mUserId = userId;
             mKidId = kidId;
@@ -493,8 +498,8 @@ public class WatchOperator {
                 cursor.getInt(1),
                 cursor.getInt(2),
                 cursor.getString(3),
-                cursor.getString(4),
-                cursor.getString(5),
+                cursor.getInt(4),
+                cursor.getInt(5),
                 cursor.getString(6),
                 cursor.getString(7),
                 cursor.getString(8),
@@ -503,8 +508,8 @@ public class WatchOperator {
                 cursor.getString(11),
                 cursor.getString(12),
                 cursor.getInt(13),
-                cursor.getString(14),
-                cursor.getString(15)
+                cursor.getInt(14),
+                cursor.getInt(15)
         );
     }
 
@@ -557,11 +562,11 @@ public class WatchOperator {
         int mEventId;
         String mText;
         String mStatus;
-        String mDateCreated;
-        String mLastUpdated;
+        long mDateCreated;
+        long mLastUpdated;
 
         Todo(int id, int userId, int kidId, int eventId, String text, String status,
-             String dateCreated, String lastUpdated) {
+             long dateCreated, long lastUpdated) {
             mId = id;
             mUserId = userId;
             mKidId = kidId;
@@ -581,9 +586,36 @@ public class WatchOperator {
                 cursor.getInt(3),
                 cursor.getString(4),
                 cursor.getString(5),
-                cursor.getString(6),
-                cursor.getString(7)
+                cursor.getInt(6),
+                cursor.getInt(7)
         );
+    }
+
+    public static long getTimeStamp(String dateString) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date;
+        try {
+            date = format.parse(dateString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            date = null;
+        }
+        if (date == null)
+            return 0;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        return cal.getTimeInMillis();
+    }
+
+    public static String getTimeString(long timeStamp) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date date = new Date();
+        date.setTime(timeStamp);
+        return format.format(date);
     }
 
     public ArrayList<WatchContact.Kid> getDeviceList() {

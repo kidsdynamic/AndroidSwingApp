@@ -34,7 +34,7 @@ public class WatchContact implements Serializable {
         public int mId;
         public String mFirstName;
         public String mLastName;
-        public String mDateCreated;
+        public long mDateCreated;
         public String mMacId;
         public String mProfile;
         public int mUserId;
@@ -45,7 +45,7 @@ public class WatchContact implements Serializable {
             mId = 0;
             mFirstName = "";
             mLastName = "";
-            mDateCreated = "";
+            mDateCreated = 0;
             mMacId = "";
             mUserId = 0;
             mProfile = "";
@@ -58,7 +58,7 @@ public class WatchContact implements Serializable {
             mId = 0;
             mFirstName = "";
             mLastName = "";
-            mDateCreated = "";
+            mDateCreated = 0;
             mMacId = "";
             mUserId = 0;
             mProfile = "";
@@ -66,7 +66,7 @@ public class WatchContact implements Serializable {
             mBound = bind;
         }
 
-        public Kid(Bitmap photo, int id, String firstName, String lastName, String dateCreated, String macId, int parentId) {
+        public Kid(Bitmap photo, int id, String firstName, String lastName, long dateCreated, String macId, int parentId) {
             super(photo, firstName + " " + lastName);
 
             mId = id;
@@ -85,8 +85,8 @@ public class WatchContact implements Serializable {
         public String mEmail;
         public String mFirstName;
         public String mLastName;
-        public String mLastUpdate;
-        public String mDateCreated;
+        public long mLastUpdate;
+        public long mDateCreated;
         public String mZipCode;
         public String mPhoneNumber;
         public String mProfile;
@@ -97,8 +97,8 @@ public class WatchContact implements Serializable {
             mEmail = "";
             mFirstName = "";
             mLastName = "";
-            mLastUpdate = "";
-            mDateCreated = "";
+            mLastUpdate = 0;
+            mDateCreated = 0;
             mZipCode = "";
             mPhoneNumber = "";
             mProfile = "";
@@ -110,14 +110,14 @@ public class WatchContact implements Serializable {
             mEmail = "";
             mFirstName = "";
             mLastName = "";
-            mLastUpdate = "";
-            mDateCreated = "";
+            mLastUpdate = 0;
+            mDateCreated = 0;
             mZipCode = "";
             mPhoneNumber = "";
             mProfile = "";
         }
 
-        public User(Bitmap photo, int id, String email, String firstName, String lastName, String lastUpdate, String dateCreated, String zipCode, String phoneNumber) {
+        public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber) {
             super(photo, firstName + " " + lastName);
             mId = id;
             mEmail = email;

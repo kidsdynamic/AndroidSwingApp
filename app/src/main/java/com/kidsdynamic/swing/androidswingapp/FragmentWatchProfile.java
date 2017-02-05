@@ -198,7 +198,7 @@ public class FragmentWatchProfile extends ViewFragment {
             mDevice.mId = response.id;
             mDevice.mFirstName = response.firstName;
             mDevice.mLastName = response.lastName;
-            mDevice.mDateCreated = response.dateCreated;
+            mDevice.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
             mDevice.mMacId = response.macId;
             mDevice.mUserId = response.parent.id;
             mActivityMain.mOperator.KidSetFocus(mDevice);
