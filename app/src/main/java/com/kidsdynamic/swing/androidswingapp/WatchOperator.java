@@ -405,27 +405,40 @@ public class WatchOperator {
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId + " AND " + KID_ID + "=" + event.mKidId, null);
     }
 
-    public List<Event> EventGet() {
+    public List<Event> EventGet(WatchContact.Kid kid) {
         List<Event> result = new ArrayList<>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT, null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT + " WHERE " + USER_ID + "=" + kid.mUserId + " AND " + KID_ID + "=" + kid.mId, null);
 
         while (cursor.moveToNext())
             result.add(cursorToEvent(cursor));
 
         cursor.close();
 
-        for (Event event : result) {
-            // Todo : Get Todo list
-        }
+        for (Event event : result)
+            event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
 
         return result;
     }
 
-//    public List<Event> EventGet(int day) {
-//       List<Event> result = new ArrayList<>();
-//
-//    }
+    public List<Event> EventGet(WatchContact.Kid kid, long startTimeStamp, long endTimeStamp) {
+        List<Event> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
+                " WHERE (" + USER_ID + "=" + kid.mUserId + " AND " + KID_ID + "=" + kid.mId + ") AND " +
+                "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
+                " (" + startTimeStamp + "<=" + START_DATE + " AND " + endTimeStamp + ">=" + END_DATE + ") OR" +
+                " (" + endTimeStamp + ">=" + START_DATE + " AND " + endTimeStamp + "<=" + END_DATE + "))", null);
 
+
+        while (cursor.moveToNext())
+            result.add(cursorToEvent(cursor));
+
+        cursor.close();
+
+        for (Event event : result)
+            event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
+
+        return result;
+    }
 
     public static class Event {
         int mId;
@@ -546,6 +559,18 @@ public class WatchOperator {
     public List<Todo> TodoGet() {
         List<Todo> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO, null);
+
+        while (cursor.moveToNext())
+            result.add(cursorToTodo(cursor));
+
+        cursor.close();
+
+        return result;
+    }
+
+    public List<Todo> TodoGet(int eventId, int userId, int kidId) {
+        List<Todo> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId, null);
 
         while (cursor.moveToNext())
             result.add(cursorToTodo(cursor));
