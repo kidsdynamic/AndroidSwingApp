@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -75,6 +76,9 @@ public class BLEMachine extends BLEControl {
     private ArrayList<Device> mScanResult;
     private String mSearchAddress = "";
     private boolean mSearchAddressFound = false;
+    private List<VoiceAlert> mVoiceAlerts = new ArrayList<>();
+    private int mVoiceAlertCount = 0;
+
 
     private Runnable stateTransition = new Runnable() {
 
@@ -152,6 +156,7 @@ public class BLEMachine extends BLEControl {
                 case STATE_GET_ADDRESS:
                     if (mRelationDevice.mState.mAddress != null) {
                         mState = STATE_SEND_ALERT;
+                        mVoiceAlertCount = 0;
                     } else if (!mRelationDevice.mState.mConnected) {
                         syncFailProcess();
                     }
@@ -162,7 +167,7 @@ public class BLEMachine extends BLEControl {
                     synchronized (mVoiceAlerts) {
                         if (!mRelationDevice.mState.mConnected) {
                             syncFailProcess();
-                        } else if (mVoiceAlerts.isEmpty()) {
+                        } else if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 250) {
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
 
@@ -170,10 +175,12 @@ public class BLEMachine extends BLEControl {
                             Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
                             mState = STATE_GET_HEADER;
                         } else {
-                            VoiceAlert alert = mVoiceAlerts.poll();
+                            VoiceAlert alert = mVoiceAlerts.get(0);
                             byte[] timeInByte = new byte[]{(byte) (alert.mCountdown), (byte) (alert.mCountdown >> 8), (byte) (alert.mCountdown >> 16), (byte) (alert.mCountdown >> 24)};
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mNumber});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
+                            mVoiceAlerts.remove(0);
+                            mVoiceAlertCount++;
                         }
                     }
                     break;
@@ -297,10 +304,11 @@ public class BLEMachine extends BLEControl {
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Sync(onFinishListener listener, Device device) {
+    public int Sync(onFinishListener listener, Device device, List<VoiceAlert> alerts) {
         mOnFinishListener = listener;
         mRelationDevice.Copy(device);
         mRelationDevice.mAction.mSync = true;
+        mVoiceAlerts = alerts;
         return 0;
     }
 
@@ -311,26 +319,17 @@ public class BLEMachine extends BLEControl {
         return 0;
     }
 
-    public int AddVoiceAlert(byte number, int countdown) {
-        synchronized (mVoiceAlerts) {
-            mVoiceAlerts.add(new VoiceAlert(number, countdown));
-        }
-        return mVoiceAlerts.size();
-    }
+    public static class VoiceAlert {
+        byte mAlert;
+        long mCountdown;
 
-    public class VoiceAlert {
-        byte mNumber;
-        int mCountdown;
-
-        VoiceAlert(byte number, int countdown) {
-            mNumber = number;
+        VoiceAlert(byte number, long countdown) {
+            mAlert = number;
             mCountdown = countdown;
         }
     }
 
-    final Queue<VoiceAlert> mVoiceAlerts = new ConcurrentLinkedQueue<>();
-
-    public class InOutDoor {
+    public static class InOutDoor {
         byte[] mTime;
         byte[] mData1;
         byte[] mData2;

@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,9 +42,9 @@ public class FragmentSyncSearch extends ViewFragment {
     private String mMacAddress;
     private BLEMachine.Device mSearchResult = null;
     private List<WatchOperator.Event> mEventList;
-    private List<voiceAlert> mVoiceAlertList;
-    //private ArrayList<BLEMachine.InOutDoor> mInOutDoors;
-    //private int mInOutDoorsIndex = 0;
+    private List<BLEMachine.VoiceAlert> mVoiceAlertList;
+    private long mStartTimeStamp;
+    private long mEndTimeStamp;
     private boolean mSyncFinish = false;
 
     @Override
@@ -65,9 +67,15 @@ public class FragmentSyncSearch extends ViewFragment {
             mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
         else
             mDevice = new WatchContact.Kid();
-        mEventList = mActivityMain.mOperator.EventGet(mDevice);
-        //mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
-        mMacAddress = "E0:E5:CF:1E:D7:C2";
+
+        Calendar cal = Calendar.getInstance();
+        mStartTimeStamp = cal.getTimeInMillis();
+        cal.add(Calendar.MONTH, 2);
+        mEndTimeStamp = cal.getTimeInMillis();
+        mEventList = mActivityMain.mOperator.EventGet(mDevice, mStartTimeStamp, mEndTimeStamp);
+        mVoiceAlertList = mActivityMain.getAlertList(mEventList, mStartTimeStamp, mEndTimeStamp);
+        mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
+        //mMacAddress = "E0:E5:CF:1E:D7:C2";
         Log.d("swing", "mac address " + mMacAddress);
 
         Handler handle = new Handler();
@@ -82,36 +90,9 @@ public class FragmentSyncSearch extends ViewFragment {
         return mViewMain;
     }
 
-    private class voiceAlert {
-        public int mAlert;
-        public long mTimestamp;
-        voiceAlert(int alert, long timeStamp) {
-            mAlert = alert;
-            mTimestamp = timeStamp;
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        mVoiceAlertList = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-
-        for (WatchOperator.Event event : mEventList) {
-            if (event.mRepeat.equals("")) {
-                mVoiceAlertList.add(new voiceAlert(event.mAlert, event.mStartDate));
-
-            } else if (event.mRepeat.contains("DAILY")) {
-                mVoiceAlertList.add(new voiceAlert(event.mAlert, event.mStartDate));
-
-            } else if (event.mRepeat.contains("WEEKLY")) {
-                mVoiceAlertList.add(new voiceAlert(event.mAlert, event.mStartDate));
-
-            } else if (event.mRepeat.contains("MONTHLY")) {
-                mVoiceAlertList.add(new voiceAlert(event.mAlert, event.mStartDate));
-
-            }
-        }
     }
 
     @Override
@@ -197,7 +178,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
     private void bleSyncStart() {
         if (mSearchResult != null)
-            mActivityMain.mBLEMachine.Sync(mBleListener, mSearchResult);
+            mActivityMain.mBLEMachine.Sync(mBleListener, mSearchResult, mVoiceAlertList);
         mSyncFinish = false;
     }
 

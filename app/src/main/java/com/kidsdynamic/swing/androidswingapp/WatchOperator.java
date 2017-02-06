@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -186,8 +187,8 @@ public class WatchOperator {
         item.mEmail = cursor.getString(1);
         item.mFirstName = cursor.getString(2);
         item.mLastName = cursor.getString(3);
-        item.mLastUpdate = cursor.getInt(4);
-        item.mDateCreated = cursor.getInt(5);
+        item.mLastUpdate = cursor.getLong(4);
+        item.mDateCreated = cursor.getLong(5);
         item.mZipCode = cursor.getString(6);
         item.mPhoneNumber = cursor.getString(7);
         item.mProfile = cursor.getString(8);
@@ -277,7 +278,7 @@ public class WatchOperator {
         item.mId = cursor.getInt(0);
         item.mFirstName = cursor.getString(1);
         item.mLastName = cursor.getString(2);
-        item.mDateCreated = cursor.getInt(3);
+        item.mDateCreated = cursor.getLong(3);
         item.mMacId = cursor.getString(4);
         item.mUserId = cursor.getInt(5);
         item.mProfile = cursor.getString(6);
@@ -349,6 +350,11 @@ public class WatchOperator {
         return item;
     }
 
+    public void EventReset() {
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_EVENT);
+        mDatabase.execSQL(WatchOperator.CREATE_EVENT_TABLE);
+    }
+
     public long EventAdd(Event event) {
         long rtn;
         ContentValues contentValues = new ContentValues();
@@ -405,25 +411,10 @@ public class WatchOperator {
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId + " AND " + KID_ID + "=" + event.mKidId, null);
     }
 
-    public List<Event> EventGet(WatchContact.Kid kid) {
-        List<Event> result = new ArrayList<>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT + " WHERE " + USER_ID + "=" + kid.mUserId + " AND " + KID_ID + "=" + kid.mId, null);
-
-        while (cursor.moveToNext())
-            result.add(cursorToEvent(cursor));
-
-        cursor.close();
-
-        for (Event event : result)
-            event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
-
-        return result;
-    }
-
-    public List<Event> EventGet(WatchContact.Kid kid, long startTimeStamp, long endTimeStamp) {
+    public List<Event> EventGet(int userId, int kidId, long startTimeStamp, long endTimeStamp) {
         List<Event> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
-                " WHERE (" + USER_ID + "=" + kid.mUserId + " AND " + KID_ID + "=" + kid.mId + ") AND " +
+                " WHERE (" + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId + ") AND " +
                 "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
                 " (" + startTimeStamp + "<=" + START_DATE + " AND " + endTimeStamp + ">=" + END_DATE + ") OR" +
                 " (" + endTimeStamp + ">=" + START_DATE + " AND " + endTimeStamp + "<=" + END_DATE + "))", null);
@@ -438,6 +429,10 @@ public class WatchOperator {
             event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
 
         return result;
+    }
+
+    public List<Event> EventGet(WatchContact.Kid kid, long startTimeStamp, long endTimeStamp) {
+        return EventGet(kid.mUserId, kid.mId, startTimeStamp, endTimeStamp);
     }
 
     public static class Event {
@@ -459,7 +454,7 @@ public class WatchOperator {
         long mLastUpdated;
         List<Todo> mTodoList;
 
-        Event(int id, long startDate, long endDate) {
+        Event(int id, int alert, String repeat, long startDate, long endDate) {
             mId = id;
             mUserId = 0;
             mKidId = 0;
@@ -469,10 +464,10 @@ public class WatchOperator {
             mColor = "";
             mStatus = "";
             mDescription = "";
-            mAlert = 0;
+            mAlert = alert;
             mCity = "";
             mState = "";
-            mRepeat = "";
+            mRepeat = repeat;
             mTimezoneOffset = 0;
             mDateCreated = 0;
             mLastUpdated = 0;
@@ -511,8 +506,8 @@ public class WatchOperator {
                 cursor.getInt(1),
                 cursor.getInt(2),
                 cursor.getString(3),
-                cursor.getInt(4),
-                cursor.getInt(5),
+                cursor.getLong(4),
+                cursor.getLong(5),
                 cursor.getString(6),
                 cursor.getString(7),
                 cursor.getString(8),
@@ -521,8 +516,8 @@ public class WatchOperator {
                 cursor.getString(11),
                 cursor.getString(12),
                 cursor.getInt(13),
-                cursor.getInt(14),
-                cursor.getInt(15)
+                cursor.getLong(14),
+                cursor.getLong(15)
         );
     }
 
@@ -533,10 +528,10 @@ public class WatchOperator {
         contentValues.put(USER_ID, todo.mUserId);
         contentValues.put(KID_ID, todo.mKidId);
         contentValues.put(EVENT_ID, todo.mEventId);
-        contentValues.put(NAME, todo.mText);
-        contentValues.put(START_DATE, todo.mStatus);
-        contentValues.put(END_DATE, todo.mDateCreated);
-        contentValues.put(COLOR, todo.mLastUpdated);
+        contentValues.put(TEXT, todo.mText);
+        contentValues.put(STATUS, todo.mStatus);
+        contentValues.put(DATE_CREATED, todo.mDateCreated);
+        contentValues.put(LAST_UPDATE, todo.mLastUpdated);
 
         return mDatabase.insert(TABLE_TODO, null, contentValues);
     }
@@ -548,10 +543,10 @@ public class WatchOperator {
         contentValues.put(USER_ID, todo.mUserId);
         contentValues.put(KID_ID, todo.mKidId);
         contentValues.put(EVENT_ID, todo.mEventId);
-        contentValues.put(NAME, todo.mText);
-        contentValues.put(START_DATE, todo.mStatus);
-        contentValues.put(END_DATE, todo.mDateCreated);
-        contentValues.put(COLOR, todo.mLastUpdated);
+        contentValues.put(TEXT, todo.mText);
+        contentValues.put(STATUS, todo.mStatus);
+        contentValues.put(DATE_CREATED, todo.mDateCreated);
+        contentValues.put(LAST_UPDATE, todo.mLastUpdated);
 
         return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId + " AND " + USER_ID + "=" + todo.mUserId + " AND " + KID_ID + "=" + todo.mKidId + " AND " + EVENT_ID + "=" + todo.mEventId, null);
     }
@@ -611,8 +606,8 @@ public class WatchOperator {
                 cursor.getInt(3),
                 cursor.getString(4),
                 cursor.getString(5),
-                cursor.getInt(6),
-                cursor.getInt(7)
+                cursor.getLong(6),
+                cursor.getLong(7)
         );
     }
 

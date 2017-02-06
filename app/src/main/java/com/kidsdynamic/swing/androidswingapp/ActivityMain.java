@@ -18,7 +18,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
@@ -146,18 +149,20 @@ public class ActivityMain extends AppCompatActivity
         if (mServiceMachine != null)
             mServiceMachine.Start();
         /*
-        mOperator.EventAdd(new WatchOperator.Event(0, "2015-08-30T08:20:00Z", "2016-01-30T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(1, "2015-08-30T08:20:00Z", "2016-02-30T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(2, "2015-08-30T08:20:00Z", "2016-03-30T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(3, "2015-08-30T08:20:00Z", "2016-04-30T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(4, "2015-08-30T08:20:00Z", "2016-05-30T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(5, "2015-08-30T08:20:00Z", "2016-06-30T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(6, "2015-08-30T08:20:00Z", "2015-08-31T08:20:00Z"));
-        mOperator.EventAdd(new WatchOperator.Event(7, "2015-08-30T08:20:00Z", "2015-08-30T09:20:00Z"));
-        List<WatchOperator.Event> events = mOperator.EventGet();
+        mOperator.EventReset();
+        mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-29T08:20:00Z"), WatchOperator.getTimeStamp("2016-01-30T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(1, 6, "", WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2016-02-30T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(2, 5, "", WatchOperator.getTimeStamp("2015-08-27T08:20:00Z"), WatchOperator.getTimeStamp("2016-03-30T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(3, 4, "", WatchOperator.getTimeStamp("2015-08-01T08:20:00Z"), WatchOperator.getTimeStamp("2016-04-30T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(4, 3, "MONTHLY", WatchOperator.getTimeStamp("2015-09-01T08:20:00Z"), WatchOperator.getTimeStamp("2016-05-30T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(5, 2, "WEEKLY", WatchOperator.getTimeStamp("2015-09-20T08:20:00Z"), WatchOperator.getTimeStamp("2016-06-30T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(6, 1, "DAILY", WatchOperator.getTimeStamp("2015-08-20T08:20:00Z"), WatchOperator.getTimeStamp("2015-09-05T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(7, 0, "", WatchOperator.getTimeStamp("2015-07-10T08:20:00Z"), WatchOperator.getTimeStamp("2015-08-30T09:20:00Z")));
+        List<WatchOperator.Event> events = mOperator.EventGet(0, 0, WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2017-08-30T08:20:00Z"));
+        List<BLEMachine.VoiceAlert> alerts = getAlertList(events, WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2017-08-30T08:20:00Z"));
 
-        for (WatchOperator.Event event : events) {
-            Log.d("TEST", "event " + event.mId + " Start " + event.mStartDate + " End " + event.mEndDate);
+        for (BLEMachine.VoiceAlert alert : alerts) {
+            Log.d("Alert test", "Alert " + alert.mAlert + " countdown " + alert.mCountdown + " " + WatchOperator.getTimeString(alert.mCountdown));
         }
 
         mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
@@ -382,5 +387,60 @@ public class ActivityMain extends AppCompatActivity
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    public List<BLEMachine.VoiceAlert> getAlertList(List<WatchOperator.Event> events, long startTime, long endTime) {
+        List<BLEMachine.VoiceAlert> rtn = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+
+        for (WatchOperator.Event event : events) {
+            cal.setTimeInMillis(event.mStartDate);
+            long nextTime = cal.getTimeInMillis();
+
+            if (event.mRepeat.equals("")) {
+                if (nextTime >= startTime)
+                    rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
+
+            } else if (event.mRepeat.contains("DAILY")) {
+                do {
+                    if (nextTime >= startTime)
+                        rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
+                    cal.add(Calendar.DATE, 1);
+                    nextTime = cal.getTimeInMillis();
+                } while (nextTime < event.mEndDate && nextTime < endTime);
+
+            } else if (event.mRepeat.contains("WEEKLY")) {
+                do {
+                    if (nextTime >= startTime)
+                        rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
+                    cal.add(Calendar.DATE, 7);
+                    nextTime = cal.getTimeInMillis();
+                } while (nextTime < event.mEndDate && nextTime < endTime);
+
+            } else if (event.mRepeat.contains("MONTHLY")) {
+                do {
+                    if (nextTime >= startTime)
+                        rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
+                    cal.add(Calendar.MONTH, 1);
+                    nextTime = cal.getTimeInMillis();
+                } while (nextTime < event.mEndDate && nextTime < endTime);
+
+            }
+        }
+
+        Collections.sort(rtn, new Comparator<BLEMachine.VoiceAlert>() {
+            @Override
+            public int compare(BLEMachine.VoiceAlert t1, BLEMachine.VoiceAlert t2) {
+                if (t2.mCountdown > t1.mCountdown) {
+                    return -1;
+                } else if (t2.mCountdown < t1.mCountdown) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        return rtn;
     }
 }
