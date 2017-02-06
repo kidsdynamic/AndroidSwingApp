@@ -39,7 +39,7 @@
     </style>
 
     <style name="textview_photo_name">
-        <item name="android:textColor">@color/color_blue_green</item>
+        <item name="android:textColor">@color/color_green_main</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>

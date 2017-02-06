@@ -21,7 +21,7 @@
                 app:shrinkWidth="0.8" />
 
             <LinearLayout
-                android:id="@+id/calendar_event_select"
+                android:id="@+id/calendar_event_select_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
@@ -48,12 +48,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/calendar_event_assign"
+                android:id="@+id/calendar_event_assign_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_select"
+                android:layout_below="@+id/calendar_event_select_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
@@ -76,12 +76,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/calendar_event_start"
+                android:id="@+id/calendar_event_start_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_assign"
+                android:layout_below="@+id/calendar_event_assign_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
@@ -96,12 +96,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/calendar_event_end"
+                android:id="@+id/calendar_event_end_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_start"
+                android:layout_below="@+id/calendar_event_start_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
@@ -116,32 +116,129 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/calendar_event_color"
+                android:id="@+id/calendar_event_color_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_end"
+                android:layout_below="@+id/calendar_event_end_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp">
 
-                <TextView
-                    style="@style/textview_calendar_event"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="Color Label" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/calendar_event_color_title"
+                        style="@style/textview_calendar_event"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="5"
+                        android:gravity="center_vertical"
+                        android:text="Color Label" />
+
+                    <com.kidsdynamic.swing.androidswingapp.ViewShape
+                        android:id="@+id/calendar_event_color_label"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        app:color="@color/color_orange_main"
+                        app:desiredSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/calendar_event_color_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/color_gray_light" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.kidsdynamic.swing.androidswingapp.ViewShape
+                            android:id="@+id/calendar_event_color_yellow"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:color="@color/color_yellow_main"
+                            app:desiredSize="20sp"
+                            app:shape="circle" />
+
+                        <com.kidsdynamic.swing.androidswingapp.ViewShape
+                            android:id="@+id/calendar_event_color_blue"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:color="@color/color_blue_main"
+                            app:desiredSize="20sp"
+                            app:shape="circle" />
+
+                        <com.kidsdynamic.swing.androidswingapp.ViewShape
+                            android:id="@+id/calendar_event_color_green"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:color="@color/color_green_main"
+                            app:desiredSize="20sp"
+                            app:shape="circle" />
+
+                        <com.kidsdynamic.swing.androidswingapp.ViewShape
+                            android:id="@+id/calendar_event_color_pink"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:color="@color/color_pink_main"
+                            app:desiredSize="20sp"
+                            app:shape="circle" />
+
+                        <com.kidsdynamic.swing.androidswingapp.ViewShape
+                            android:id="@+id/calendar_event_color_orange"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:color="@color/color_orange_main"
+                            app:desiredSize="20sp"
+                            app:shape="circle" />
+
+                        <com.kidsdynamic.swing.androidswingapp.ViewShape
+                            android:id="@+id/calendar_event_color_gray"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            app:color="@color/color_gray_main"
+                            app:desiredSize="20sp"
+                            app:shape="circle" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/calendar_event_repeat"
+                android:id="@+id/calendar_event_repeat_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_color"
+                android:layout_below="@+id/calendar_event_color_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
@@ -165,12 +262,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/calendar_event_description"
+                android:id="@+id/calendar_event_description_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_repeat"
+                android:layout_below="@+id/calendar_event_repeat_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
@@ -186,12 +283,12 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/calendar_event_todo"
+                android:id="@+id/calendar_event_todo_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_description"
+                android:layout_below="@+id/calendar_event_description_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
@@ -219,19 +316,25 @@
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/calendar_event_sponge"
                 android:layout_alignStart="@+id/calendar_event_sponge"
-                android:layout_below="@+id/calendar_event_todo"
+                android:layout_below="@+id/calendar_event_todo_line"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/calendar_event_save"
                     style="@style/button_main"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:text="Save" />
 
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.1"/>
+
                 <Button
+                    android:id="@+id/calendar_event_advance"
                     style="@style/button_main"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
