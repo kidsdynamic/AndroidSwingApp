@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -162,7 +161,7 @@ public class ActivityMain extends AppCompatActivity
         List<BLEMachine.VoiceAlert> alerts = getAlertList(events, WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2017-08-30T08:20:00Z"));
 
         for (BLEMachine.VoiceAlert alert : alerts) {
-            Log.d("Alert test", "Alert " + alert.mAlert + " countdown " + alert.mCountdown + " " + WatchOperator.getTimeString(alert.mCountdown));
+            Log.d("Alert test", "Alert " + alert.mAlert + " countdown " + alert.mTimeStamp + " " + WatchOperator.getTimeString(alert.mTimeStamp));
         }
 
         mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
@@ -431,9 +430,9 @@ public class ActivityMain extends AppCompatActivity
         Collections.sort(rtn, new Comparator<BLEMachine.VoiceAlert>() {
             @Override
             public int compare(BLEMachine.VoiceAlert t1, BLEMachine.VoiceAlert t2) {
-                if (t2.mCountdown > t1.mCountdown) {
+                if (t2.mTimeStamp > t1.mTimeStamp) {
                     return -1;
-                } else if (t2.mCountdown < t1.mCountdown) {
+                } else if (t2.mTimeStamp < t1.mTimeStamp) {
                     return 1;
                 } else {
                     return 0;
