@@ -23,6 +23,8 @@ public class ViewCalendar extends TableLayout {
     protected int mTextStyle = Typeface.BOLD;
     protected int mTextColor = 0x000000;
     protected int mTodayColor = 0xFFFFFF;
+    protected int mFocusColor = 0xFFFFFF;
+    protected int mFocusBackgroundColor = 0xA00000;
     protected int mExceedColor = 0x666666;
 
     protected long mDate = System.currentTimeMillis();
@@ -56,6 +58,10 @@ public class ViewCalendar extends TableLayout {
                     mTextColor = typedArray.getColor(attr, mTextColor);
                 } else if (attr == R.styleable.ViewCalendar_todayColor) {
                     mTodayColor = typedArray.getColor(attr, mTodayColor);
+                } else if (attr == R.styleable.ViewCalendar_focusColor) {
+                    mFocusColor = typedArray.getColor(attr, mFocusColor);
+                } else if (attr == R.styleable.ViewCalendar_focusBackgroundColor) {
+                    mFocusBackgroundColor = typedArray.getColor(attr, mFocusBackgroundColor);
                 } else if (attr == R.styleable.ViewCalendar_exceedColor) {
                     mExceedColor = typedArray.getColor(attr, mExceedColor);
                 }
@@ -108,6 +114,22 @@ public class ViewCalendar extends TableLayout {
         return mTodayColor;
     }
 
+    public void setFocusColor(int color) {
+        mFocusColor = color;
+    }
+
+    public int getFocusColor() {
+        return mFocusColor;
+    }
+
+    public void setFocusBackgroundColor(int color) {
+        mFocusBackgroundColor = color;
+    }
+
+    public int getFocusBackgroundColor() {
+        return mFocusBackgroundColor;
+    }
+
     public void setExceedColor(int color) {
         mExceedColor = color;
     }
@@ -116,16 +138,16 @@ public class ViewCalendar extends TableLayout {
         return mExceedColor;
     }
 
-    public void setDate(long milli) {
-        Calendar date = getInstance();
+    public void setDate(long date) {
+        Calendar calc = getInstance();
 
-        date.setTimeInMillis(milli);
-        date.set(Calendar.HOUR_OF_DAY, 0);
-        date.set(Calendar.MINUTE, 0);
-        date.set(Calendar.SECOND, 0);
-        date.set(Calendar.MILLISECOND, 0);
+        calc.setTimeInMillis(date);
+        calc.clear(Calendar.HOUR_OF_DAY);
+        calc.clear(Calendar.MINUTE);
+        calc.clear(Calendar.SECOND);
+        calc.clear(Calendar.MILLISECOND);
 
-        mDate = date.getTimeInMillis();
+        mDate = calc.getTimeInMillis();
     }
 
     public long getDate() {

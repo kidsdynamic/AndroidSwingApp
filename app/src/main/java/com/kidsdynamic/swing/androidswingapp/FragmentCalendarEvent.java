@@ -34,10 +34,16 @@ public class FragmentCalendarEvent extends ViewFragment {
     private ViewShape mViewcolorOrange;
     private ViewShape mViewColorGray;
 
+    private long mDefaultDate = System.currentTimeMillis();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        if(getArguments()!= null) {
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+        }
     }
 
     @Override

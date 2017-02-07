@@ -23,7 +23,11 @@ public class FragmentProfileAdded extends ViewFragment {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
-        mDevice = (WatchContact.Kid)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        if (getArguments() != null) {
+            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+        } else {
+            mDevice = new WatchContact.Kid();
+        }
     }
 
     @Override

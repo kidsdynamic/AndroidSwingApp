@@ -129,7 +129,9 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         if (mSelectListener == null)
             return;
 
-        mSelectListener.onSelect(mThis, (ViewCalendarCellMonth) view);
+        ViewCalendarCellMonth cell = (ViewCalendarCellMonth) view;
+        setDate(cell.getDate());
+        mSelectListener.onSelect(mThis, cell);
     }
 
     public void setOnSelectListener(ViewCalendarMonth.OnSelectListener listener) {
