@@ -750,7 +750,10 @@ public class ServerMachine {
                         break;
 
                     case CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER:
-                        ((userIsMailAvailableToRegisterListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        if (responseCode == 409)
+                            ((userIsMailAvailableToRegisterListener) mCurrentTask.mResponseListener).onValidState(false);
+                        else
+                            ((userIsMailAvailableToRegisterListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_USER_UPDATE_PROFILE:
@@ -902,7 +905,7 @@ public class ServerMachine {
             if(dir.mkdirs())
                 Log.d("swing", "false");
 
-            avatarFilename = dir + "/Avatar"+ filename + ".png";
+            avatarFilename = dir + "/"+ filename + ".png";
             out = new FileOutputStream(avatarFilename);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
 
@@ -921,5 +924,4 @@ public class ServerMachine {
         }
         return avatarFilename;
     }
-
 }

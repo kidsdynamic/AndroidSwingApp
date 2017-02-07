@@ -8,9 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Created by weichigio on 2017/1/11.
@@ -176,11 +174,15 @@ public class BLEMachine extends BLEControl {
                             mState = STATE_GET_HEADER;
                         } else {
                             VoiceAlert alert = mVoiceAlerts.get(0);
-                            byte[] timeInByte = new byte[]{(byte) (alert.mCountdown), (byte) (alert.mCountdown >> 8), (byte) (alert.mCountdown >> 16), (byte) (alert.mCountdown >> 24)};
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
                             mVoiceAlerts.remove(0);
-                            mVoiceAlertCount++;
+                            Calendar cal = Calendar.getInstance();
+                            int countdown = (int)((alert.mTimeStamp-cal.getTimeInMillis())/1000);
+                            if (countdown > 0) {
+                                byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
+                                Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
+                                Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
+                                mVoiceAlertCount++;
+                            }
                         }
                     }
                     break;
@@ -321,11 +323,11 @@ public class BLEMachine extends BLEControl {
 
     public static class VoiceAlert {
         byte mAlert;
-        long mCountdown;
+        long mTimeStamp;
 
         VoiceAlert(byte number, long countdown) {
             mAlert = number;
-            mCountdown = countdown;
+            mTimeStamp = countdown;
         }
     }
 

@@ -53,7 +53,7 @@ public class FragmentBoot extends ViewFragment {
         @Override
         public void run() {
 
-            if (mActivityMain.mRequestingPermission != 0) {
+            if (!mActivityMain.isPermissionGranted()) {
                 mHandler.postDelayed(this, 2000);
                 return;
             }

@@ -32,13 +32,25 @@ public class ActivityMain extends AppCompatActivity
     public final static int INTERNET_PERMISSION = 0x1002;
     public final static int WRITE_STORAGE_PERMISSION = 0x1003;
     public final static int READ_STORAGE_PERMISSION = 0x1004;
+    public final static int ACCESS_COARSE_LOCATION_PERMISSION = 0x1005;
+    public final static int ACCESS_FINE_LOCATION_PERMISSION = 0x1006;
+
+    private class permission {
+        String mName;
+        int mResult;
+        permission(String name, int result) {
+            mName = name;
+            mResult = result;
+        }
+    }
+    private List<permission> mPermissionList;
 
     public Config mConfig;
     public WatchOperator mOperator;
     public Stack<Bitmap> mBitmapStack;
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
-    public int mRequestingPermission = 0;
+    //public int mRequestingPermission = 0;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -69,8 +81,7 @@ public class ActivityMain extends AppCompatActivity
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
 
-        //mBLEMachine = new BLEMachine(this, mHandler);
-        //mServiceMachine = new ServerMachine(this);
+        initPermissionList();
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
@@ -113,29 +124,7 @@ public class ActivityMain extends AppCompatActivity
         boolean activeBLE = true;
         boolean activeService = true;
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH}, BLUETOOTH_PERMISSION);
-            mRequestingPermission++;
-            activeBLE = false;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH_ADMIN}, BLUETOOTH_ADMIN_PERMISSION);
-            mRequestingPermission++;
-            activeBLE = false;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.INTERNET}, INTERNET_PERMISSION);
-            mRequestingPermission++;
-            activeService = false;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_PERMISSION);
-            mRequestingPermission++;
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
-            mRequestingPermission++;
-        }
+        requestPermission();
 
         if (activeBLE && mBLEMachine == null)
             mBLEMachine = new BLEMachine(this);
@@ -162,7 +151,7 @@ public class ActivityMain extends AppCompatActivity
         List<BLEMachine.VoiceAlert> alerts = getAlertList(events, WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2017-08-30T08:20:00Z"));
 
         for (BLEMachine.VoiceAlert alert : alerts) {
-            Log.d("Alert test", "Alert " + alert.mAlert + " countdown " + alert.mCountdown + " " + WatchOperator.getTimeString(alert.mCountdown));
+            Log.d("Alert test", "Alert " + alert.mAlert + " countdown " + alert.mTimeStamp + " " + WatchOperator.getTimeString(alert.mTimeStamp));
         }
 
         mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
@@ -206,6 +195,35 @@ public class ActivityMain extends AppCompatActivity
         if (mServiceMachine != null)
             mServiceMachine.Stop();
         super.onPause();
+    }
+
+    private void initPermissionList() {
+        mPermissionList = new ArrayList<>();
+        mPermissionList.add(new permission(android.Manifest.permission.BLUETOOTH, BLUETOOTH_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.BLUETOOTH_ADMIN, BLUETOOTH_ADMIN_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.INTERNET, INTERNET_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_STORAGE_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.ACCESS_COARSE_LOCATION, ACCESS_COARSE_LOCATION_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_LOCATION_PERMISSION));
+    }
+
+    public boolean requestPermission() {
+        for (permission perm : mPermissionList) {
+            if (ContextCompat.checkSelfPermission(this, perm.mName) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{perm.mName}, perm.mResult);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPermissionGranted() {
+        for (permission perm : mPermissionList) {
+            if (ContextCompat.checkSelfPermission(this, perm.mName) != PackageManager.PERMISSION_GRANTED)
+                return false;
+        }
+        return true;
     }
 
     public void popFragment() {
@@ -364,25 +382,12 @@ public class ActivityMain extends AppCompatActivity
 
         switch (requestCode) {
             case BLUETOOTH_PERMISSION:
-                mRequestingPermission--;
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(ActivityMain.this, "Bluetooth permission denied", Toast.LENGTH_SHORT).show();
-                }
-                break;
             case BLUETOOTH_ADMIN_PERMISSION:
-                mRequestingPermission--;
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(ActivityMain.this, "Bluetooth admin permission denied", Toast.LENGTH_SHORT).show();
-                }
-                break;
             case INTERNET_PERMISSION:
-                mRequestingPermission--;
-                break;
             case READ_STORAGE_PERMISSION:
-                mRequestingPermission--;
-                break;
             case WRITE_STORAGE_PERMISSION:
-                mRequestingPermission--;
+            case ACCESS_COARSE_LOCATION_PERMISSION:
+            case ACCESS_FINE_LOCATION_PERMISSION:
                 break;
         }
 
@@ -431,9 +436,9 @@ public class ActivityMain extends AppCompatActivity
         Collections.sort(rtn, new Comparator<BLEMachine.VoiceAlert>() {
             @Override
             public int compare(BLEMachine.VoiceAlert t1, BLEMachine.VoiceAlert t2) {
-                if (t2.mCountdown > t1.mCountdown) {
+                if (t2.mTimeStamp > t1.mTimeStamp) {
                     return -1;
-                } else if (t2.mCountdown < t1.mCountdown) {
+                } else if (t2.mTimeStamp < t1.mTimeStamp) {
                     return 1;
                 } else {
                     return 0;
