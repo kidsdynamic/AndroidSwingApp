@@ -23,6 +23,8 @@ public class ViewCalendar extends TableLayout {
     protected int mTextStyle = Typeface.BOLD;
     protected int mTextColor = 0x000000;
     protected int mTodayColor = 0xFFFFFF;
+    protected int mFocusColor = 0xFFFFFF;
+    protected int mFocusBackgroundColor = 0xA00000;
     protected int mExceedColor = 0x666666;
 
     protected long mDate = System.currentTimeMillis();
@@ -56,6 +58,10 @@ public class ViewCalendar extends TableLayout {
                     mTextColor = typedArray.getColor(attr, mTextColor);
                 } else if (attr == R.styleable.ViewCalendar_todayColor) {
                     mTodayColor = typedArray.getColor(attr, mTodayColor);
+                } else if (attr == R.styleable.ViewCalendar_focusColor) {
+                    mFocusColor = typedArray.getColor(attr, mFocusColor);
+                } else if (attr == R.styleable.ViewCalendar_focusBackgroundColor) {
+                    mFocusBackgroundColor = typedArray.getColor(attr, mFocusBackgroundColor);
                 } else if (attr == R.styleable.ViewCalendar_exceedColor) {
                     mExceedColor = typedArray.getColor(attr, mExceedColor);
                 }
@@ -106,6 +112,22 @@ public class ViewCalendar extends TableLayout {
 
     public int getTodayColor() {
         return mTodayColor;
+    }
+
+    public void setFocusColor(int color) {
+        mFocusColor = color;
+    }
+
+    public int getFocusColor() {
+        return mFocusColor;
+    }
+
+    public void setFocusBackgroundColor(int color) {
+        mFocusBackgroundColor = color;
+    }
+
+    public int getFocusBackgroundColor() {
+        return mFocusBackgroundColor;
     }
 
     public void setExceedColor(int color) {

@@ -68,18 +68,6 @@ public class FragmentCalendarMonth extends ViewFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
-            if (offset == 0) {
-                Calendar calc = ViewCalendar.getInstance();
-
-                calc.set(Calendar.HOUR_OF_DAY, 0);
-                calc.clear(Calendar.MINUTE);
-                calc.clear(Calendar.SECOND);
-                calc.clear(Calendar.MILLISECOND);
-
-                date = calc.getTimeInMillis();
-                mViewSelector.setDate(date);
-            }
-
             mViewCalendar.setDate(date);
         }
     };

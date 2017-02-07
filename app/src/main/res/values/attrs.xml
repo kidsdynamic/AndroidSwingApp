@@ -25,6 +25,8 @@
         <attr name="android:textStyle" />
         <attr name="android:textColor" />
         <attr name="todayColor" format="color" />
+        <attr name="focusColor" format="color" />
+        <attr name="focusBackgroundColor" format="color" />
         <attr name="exceedColor" format="color" />
     </declare-styleable>
 

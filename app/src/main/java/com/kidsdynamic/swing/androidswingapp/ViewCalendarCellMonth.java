@@ -2,6 +2,9 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import java.util.Calendar;
@@ -37,7 +40,9 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
         ViewCalendar calendar = getCalendar();
 
         if (calendar != null) {
-            if (ViewCalendar.isToday(mDate))
+            if (calendar.getDate() == mDate)
+                setTextColor(calendar.getFocusColor());
+            else if (ViewCalendar.isToday(mDate))
                 setTextColor(calendar.getTodayColor());
             else if (calendar.isInMonth(mDate))
                 setTextColor(calendar.getTextColor());
@@ -54,6 +59,28 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        ViewCalendar calendar = getCalendar();
+        if (calendar != null && calendar.getDate() == mDate)
+            drawFocus(canvas, calendar.getFocusBackgroundColor());
+
         super.onDraw(canvas);
+    }
+
+    private void drawFocus(Canvas canvas, int color) {
+        int width = getMeasuredWidth();
+        int height = getMeasuredHeight();
+        float size = getTextSize() * 1.64f; // golden ratio.
+
+        size = Math.min(size, width);
+        size = Math.min(size, height);
+
+        RectF rect = new RectF((width - size) / 2, (height - size) / 2, (width + size) / 2, (height + size) / 2);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.FILL);
+
+        canvas.drawCircle(rect.centerX(), rect.centerY(), size / 2, paint);
     }
 }

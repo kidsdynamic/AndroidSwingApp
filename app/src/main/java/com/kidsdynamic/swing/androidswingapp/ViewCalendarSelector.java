@@ -120,7 +120,9 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         Calendar date = ViewCalendar.getInstance();
         date.setTimeInMillis(mDate);
 
-        if (mMode == MODE_YEAR) {
+        if (sign == 0) {
+            date.setTimeInMillis(System.currentTimeMillis());
+        } else if (mMode == MODE_YEAR) {
             date.add(Calendar.YEAR, sign);
         } else if (mMode == MODE_MONTH) {
             date.add(Calendar.MONTH, sign);

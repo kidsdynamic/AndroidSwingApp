@@ -93,7 +93,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         calc.clear(Calendar.SECOND);
         calc.clear(Calendar.MILLISECOND);
 
-        while(calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+        while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
             calc.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
@@ -111,7 +111,7 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         calc.clear(Calendar.SECOND);
         calc.clear(Calendar.MILLISECOND);
 
-        while(calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+        while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
             calc.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
@@ -125,7 +125,9 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
         if (mSelectListener == null)
             return;
 
-        mSelectListener.onSelect(mThis, (ViewCalendarCellWeek) view);
+        ViewCalendarCellWeek cell = (ViewCalendarCellWeek) view;
+        setDate(cell.getDate());
+        mSelectListener.onSelect(mThis, cell);
     }
 
     public void setOnSelectListener(OnSelectListener listener) {

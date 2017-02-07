@@ -39,8 +39,10 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
         ViewCalendar calendar = getCalendar();
         if (calendar != null) {
-            if (ViewCalendar.isToday(mDate))
-                setTextColor(Color.WHITE);
+            if (calendar.getDate() == mDate)
+                setTextColor(calendar.getFocusColor());
+            else if (ViewCalendar.isToday(mDate))
+                setTextColor(calendar.getTodayColor());
             else
                 setTextColor(calendar.getTextColor());
         }
@@ -54,18 +56,14 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (ViewCalendar.isToday(mDate))
-            drawToday(canvas);
+        ViewCalendar calendar = getCalendar();
+        if (calendar != null && calendar.getDate() == mDate)
+            drawFocus(canvas, calendar.getFocusBackgroundColor());
 
         super.onDraw(canvas);
     }
 
-    private void drawToday(Canvas canvas) {
-        int circleColor = getCurrentTextColor();
-        ViewCalendar calendar = getCalendar();
-        if (calendar != null)
-            circleColor = calendar.getTodayColor();
-
+    private void drawFocus(Canvas canvas, int color) {
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
         float size = getTextSize() * 1.64f; // golden ratio.
@@ -77,7 +75,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
         Paint paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(circleColor);
+        paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
 
         canvas.drawCircle(rect.centerX(), rect.centerY(), size / 2, paint);
