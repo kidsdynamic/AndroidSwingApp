@@ -8,4 +8,7 @@
     <integer name="icon_size_denominator">12</integer>
 
     <integer name="contact_label_denominator">12</integer>
+
+    <dimen name="calendar_alarm_line_denominator">40dp</dimen>
+    <dimen name="calendar_alarm_separator_denominator">1dp</dimen>
 </resources>

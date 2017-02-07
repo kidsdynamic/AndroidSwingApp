@@ -119,7 +119,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mEventListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            mActivityMain.selectFragment(FragmentCalendarAlarm.class.getName(), null);
         }
     };
 

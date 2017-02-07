@@ -290,9 +290,9 @@
                 android:layout_alignStart="@+id/calendar_event_sponge"
                 android:layout_below="@+id/calendar_event_description_line"
                 android:layout_marginTop="10dp"
+                android:padding="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
-                android:padding="10dp"
                 android:visibility="invisible">
 
                 <TextView
@@ -318,6 +318,7 @@
                 android:layout_alignStart="@+id/calendar_event_sponge"
                 android:layout_below="@+id/calendar_event_todo_line"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal">
 
                 <Button
