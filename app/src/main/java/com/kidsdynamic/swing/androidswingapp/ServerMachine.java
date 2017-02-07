@@ -897,7 +897,7 @@ public class ServerMachine {
         return sdCard.getAbsolutePath() + "/Swing";
     }
 
-    static String createAvatarFile(Bitmap bitmap, String filename) {
+    static String createAvatarFile(Bitmap bitmap, String filename, String extension) {
         String avatarFilename = null;
         FileOutputStream out = null;
         try {
@@ -905,9 +905,9 @@ public class ServerMachine {
             if(dir.mkdirs())
                 Log.d("swing", "false");
 
-            avatarFilename = dir + "/"+ filename + ".png";
+            avatarFilename = dir + "/"+ filename + extension;
             out = new FileOutputStream(avatarFilename);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
         } catch (Exception e) {
             avatarFilename = null;
@@ -922,6 +922,7 @@ public class ServerMachine {
                 e.printStackTrace();
             }
         }
+        Log.d("createAvatarFile", "Filename " + avatarFilename);
         return avatarFilename;
     }
 }

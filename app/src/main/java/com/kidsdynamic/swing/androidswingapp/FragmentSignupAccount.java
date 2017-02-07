@@ -177,16 +177,10 @@ public class FragmentSignupAccount extends ViewFragment {
                 mKidList.add(kid);
             }
 
-            if (!response.user.profile.equals("")) {
-                String name = response.user.profile;
-                int pos = name.lastIndexOf(".");
-                if (pos>0)
-                    name = name.substring(0, pos);
-
-                mActivityMain.mServiceMachine.getAvatar(mGetUserAvatarListener, name);
-            } else {
+            if (!response.user.profile.equals(""))
+                mActivityMain.mServiceMachine.getAvatar(mGetUserAvatarListener, response.user.profile);
+            else
                 getKidAvatar(true);
-            }
         }
 
         @Override
@@ -199,12 +193,8 @@ public class FragmentSignupAccount extends ViewFragment {
     ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
         @Override
         public void onSuccess(Bitmap avatar, String filename) {
-            ServerMachine.createAvatarFile(avatar, filename);
-            if (mKidList.isEmpty()) {
-                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
-            } else {
-                getKidAvatar(true);
-            }
+            ServerMachine.createAvatarFile(avatar, filename, "");
+            getKidAvatar(true);
         }
 
         @Override
@@ -214,8 +204,7 @@ public class FragmentSignupAccount extends ViewFragment {
         }
     };
 
-    private int mProcessKidAvatar = 0;
-
+    private int mProcessKidAvatar;
     private void getKidAvatar(boolean start) {
         if (start)
             mProcessKidAvatar = 0;
@@ -224,22 +213,24 @@ public class FragmentSignupAccount extends ViewFragment {
 
         if (mProcessKidAvatar >= mKidList.size()) {
             mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
-        } else {
-            while (mKidList.get(mProcessKidAvatar).mProfile.equals("")) {
-                mProcessKidAvatar++;
-                if (mProcessKidAvatar >= mKidList.size()) {
-                    mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
-                    return;
-                }
-            }
-            mActivityMain.mServiceMachine.getAvatar(mGetKidAvatarListener, mKidList.get(mProcessKidAvatar).mProfile);
+            return;
         }
+
+        while (mKidList.get(mProcessKidAvatar).mProfile.equals("")) {
+            mProcessKidAvatar++;
+            if (mProcessKidAvatar >= mKidList.size()) {
+                mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+                return;
+            }
+        }
+
+        mActivityMain.mServiceMachine.getAvatar(mGetKidAvatarListener, mKidList.get(mProcessKidAvatar).mProfile);
     }
 
     ServerMachine.getAvatarListener mGetKidAvatarListener = new ServerMachine.getAvatarListener() {
         @Override
         public void onSuccess(Bitmap avatar, String filename) {
-            ServerMachine.createAvatarFile(avatar, filename);
+            ServerMachine.createAvatarFile(avatar, filename, "");
             getKidAvatar(false);
         }
 
@@ -249,5 +240,4 @@ public class FragmentSignupAccount extends ViewFragment {
             Toast.makeText(mActivityMain,""+statusCode,Toast.LENGTH_SHORT).show();
         }
     };
-
 }
