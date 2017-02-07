@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,13 +32,25 @@ public class ActivityMain extends AppCompatActivity
     public final static int INTERNET_PERMISSION = 0x1002;
     public final static int WRITE_STORAGE_PERMISSION = 0x1003;
     public final static int READ_STORAGE_PERMISSION = 0x1004;
+    public final static int ACCESS_COARSE_LOCATION_PERMISSION = 0x1005;
+    public final static int ACCESS_FINE_LOCATION_PERMISSION = 0x1006;
+
+    private class permission {
+        String mName;
+        int mResult;
+        permission(String name, int result) {
+            mName = name;
+            mResult = result;
+        }
+    }
+    private List<permission> mPermissionList;
 
     public Config mConfig;
     public WatchOperator mOperator;
     public Stack<Bitmap> mBitmapStack;
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
-    public int mRequestingPermission = 0;
+    //public int mRequestingPermission = 0;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -68,8 +81,7 @@ public class ActivityMain extends AppCompatActivity
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
 
-        //mBLEMachine = new BLEMachine(this, mHandler);
-        //mServiceMachine = new ServerMachine(this);
+        initPermissionList();
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
@@ -111,7 +123,8 @@ public class ActivityMain extends AppCompatActivity
         super.onResume();
         boolean activeBLE = true;
         boolean activeService = true;
-
+        requestPermission();
+/*
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.BLUETOOTH}, BLUETOOTH_PERMISSION);
             mRequestingPermission++;
@@ -135,7 +148,15 @@ public class ActivityMain extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, READ_STORAGE_PERMISSION);
             mRequestingPermission++;
         }
-
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_COARSE_LOCATION_PERMISSION);
+            mRequestingPermission++;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_FINE_LOCATION_PERMISSION);
+            mRequestingPermission++;
+        }
+*/
         if (activeBLE && mBLEMachine == null)
             mBLEMachine = new BLEMachine(this);
 
@@ -205,6 +226,35 @@ public class ActivityMain extends AppCompatActivity
         if (mServiceMachine != null)
             mServiceMachine.Stop();
         super.onPause();
+    }
+
+    private void initPermissionList() {
+        mPermissionList = new ArrayList<>();
+        mPermissionList.add(new permission(android.Manifest.permission.BLUETOOTH, BLUETOOTH_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.BLUETOOTH_ADMIN, BLUETOOTH_ADMIN_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.INTERNET, INTERNET_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_STORAGE_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.READ_EXTERNAL_STORAGE, READ_STORAGE_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.ACCESS_COARSE_LOCATION, ACCESS_COARSE_LOCATION_PERMISSION));
+        mPermissionList.add(new permission(android.Manifest.permission.ACCESS_FINE_LOCATION, ACCESS_FINE_LOCATION_PERMISSION));
+    }
+
+    public boolean requestPermission() {
+        for (permission perm : mPermissionList) {
+            if (ContextCompat.checkSelfPermission(this, perm.mName) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{perm.mName}, perm.mResult);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isPermissionGranted() {
+        for (permission perm : mPermissionList) {
+            if (ContextCompat.checkSelfPermission(this, perm.mName) != PackageManager.PERMISSION_GRANTED)
+                return false;
+        }
+        return true;
     }
 
     public void popFragment() {
@@ -363,25 +413,12 @@ public class ActivityMain extends AppCompatActivity
 
         switch (requestCode) {
             case BLUETOOTH_PERMISSION:
-                mRequestingPermission--;
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(ActivityMain.this, "Bluetooth permission denied", Toast.LENGTH_SHORT).show();
-                }
-                break;
             case BLUETOOTH_ADMIN_PERMISSION:
-                mRequestingPermission--;
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(ActivityMain.this, "Bluetooth admin permission denied", Toast.LENGTH_SHORT).show();
-                }
-                break;
             case INTERNET_PERMISSION:
-                mRequestingPermission--;
-                break;
             case READ_STORAGE_PERMISSION:
-                mRequestingPermission--;
-                break;
             case WRITE_STORAGE_PERMISSION:
-                mRequestingPermission--;
+            case ACCESS_COARSE_LOCATION_PERMISSION:
+            case ACCESS_FINE_LOCATION_PERMISSION:
                 break;
         }
 
