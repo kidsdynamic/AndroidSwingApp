@@ -255,7 +255,7 @@ public class FragmentSignupProfile extends ViewFragment {
             );
 
             if (mRegisterAvatar != null) {
-                mRegisterAvatarFilename = ServerMachine.createAvatarFile(mRegisterAvatar, "User");
+                mRegisterAvatarFilename = ServerMachine.createAvatarFile(mRegisterAvatar, "User", ".jpg");
 
                 if (mRegisterAvatarFilename != null) {
                     mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mRegisterAvatarFilename);

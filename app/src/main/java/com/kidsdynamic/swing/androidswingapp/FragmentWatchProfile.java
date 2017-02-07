@@ -203,7 +203,7 @@ public class FragmentWatchProfile extends ViewFragment {
             mDevice.mUserId = response.parent.id;
             mActivityMain.mOperator.KidSetFocus(mDevice);
             if (mAvatarBitmap != null)
-                mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mFirstName + mDevice.mLastName);
+                mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mFirstName + mDevice.mLastName, ".jpg");
             if (mDevice.mProfile == null)
                 mDevice.mProfile = "";
 
