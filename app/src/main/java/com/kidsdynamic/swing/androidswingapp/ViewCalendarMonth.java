@@ -88,40 +88,39 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
     }
 
     public void updateNameList(ViewCalendarCellWeekName[] list) {
-        Calendar cal = ViewCalendar.getInstance();
-        cal.setTimeInMillis(mDate);
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(mDate);
 
-        cal.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
-        cal.clear(Calendar.MINUTE);
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
+        calc.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
+        calc.clear(Calendar.MINUTE);
+        calc.clear(Calendar.SECOND);
+        calc.clear(Calendar.MILLISECOND);
 
-//        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
-        while(cal.get(Calendar.DAY_OF_WEEK) != cal.getFirstDayOfWeek())
-            cal.add(Calendar.DAY_OF_MONTH, -1);
+        while(calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+            calc.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
-            list[idx].setDate(cal.getTimeInMillis());
-            cal.add(Calendar.DAY_OF_MONTH, 1);
+            list[idx].setDate(calc.getTimeInMillis());
+            calc.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
     public void updateCellList(ViewCalendarCellMonth[] list) {
-        Calendar cal = ViewCalendar.getInstance();
-        cal.setTimeInMillis(mDate);
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(mDate);
 
-        cal.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
-        cal.clear(Calendar.MINUTE);
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
+        calc.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
+        calc.clear(Calendar.MINUTE);
+        calc.clear(Calendar.SECOND);
+        calc.clear(Calendar.MILLISECOND);
 
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        while(cal.get(Calendar.DAY_OF_WEEK) != cal.getFirstDayOfWeek())
-            cal.add(Calendar.DAY_OF_MONTH, -1);
+        calc.set(Calendar.DAY_OF_MONTH, 1);
+        while(calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+            calc.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
-            list[idx].setDate(cal.getTimeInMillis());
-            cal.add(Calendar.DAY_OF_MONTH, 1);
+            list[idx].setDate(calc.getTimeInMillis());
+            calc.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
