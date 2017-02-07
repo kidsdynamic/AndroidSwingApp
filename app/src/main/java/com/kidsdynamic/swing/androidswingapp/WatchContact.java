@@ -117,6 +117,19 @@ public class WatchContact implements Serializable {
             mProfile = "";
         }
 
+        public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber, String profile) {
+            super(photo, firstName + " " + lastName);
+            mId = id;
+            mEmail = email;
+            mFirstName = firstName;
+            mLastName = lastName;
+            mLastUpdate = lastUpdate;
+            mDateCreated = dateCreated;
+            mZipCode = zipCode;
+            mPhoneNumber = phoneNumber;
+            mProfile = profile;
+        }
+
         public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber) {
             super(photo, firstName + " " + lastName);
             mId = id;

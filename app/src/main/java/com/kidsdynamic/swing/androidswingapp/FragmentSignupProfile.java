@@ -240,7 +240,7 @@ public class FragmentSignupProfile extends ViewFragment {
             mActivityMain.mConfig.setString(Config.KEY_MAIL, mRegisterMail);
             mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mRegisterPassword);
 
-            // Todo : check table if user already exists!
+            mActivityMain.mOperator.ResetDatabase();
             mActivityMain.mOperator.UserAdd(
                     new WatchContact.User(
                             null,

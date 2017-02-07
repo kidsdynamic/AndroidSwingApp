@@ -136,6 +136,20 @@ public class WatchOperator {
         mDatabase = WatchHelper.getDatabase(mContext);
     }
 
+    public void ResetDatabase() {
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_USER);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_KIDS);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_UPLOAD);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_EVENT);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_TODO);
+
+        mDatabase.execSQL(WatchOperator.CREATE_USER_TABLE);
+        mDatabase.execSQL(WatchOperator.CREATE_KIDS_TABLE);
+        mDatabase.execSQL(WatchOperator.CREATE_UPLOAD_TABLE);
+        mDatabase.execSQL(WatchOperator.CREATE_EVENT_TABLE);
+        mDatabase.execSQL(WatchOperator.CREATE_TODO_TABLE);
+    }
+
     public long UserAdd(WatchContact.User user) {
         ContentValues contentValues = new ContentValues();
 
