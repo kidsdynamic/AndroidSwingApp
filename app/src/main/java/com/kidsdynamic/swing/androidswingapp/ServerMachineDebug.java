@@ -390,37 +390,27 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void kidsAdd(kidsAddListener listener, String firstName, String lastName, String macId) {
+    public void kidsAdd(kidsAddListener listener, String name, String macId) {
         mCurrentCommand = CMD_KIDS_ADD;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);
         mResponseString = "{\n" +
-                "  \"kids\": [\n" +
-                "    {\n" +
-                "      \"id\": 18,\n" +
-                "      \"firstName\": \"Jay\",\n" +
-                "      \"lastName\": \"Chen\",\n" +
-                "      \"dateCreated\": \"2016-12-11T22:37:15Z\",\n" +
-                "      \"macId\": \"13031FCFE5E02\",\n" +
-                "      \"profile\": \"\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": 19,\n" +
-                "      \"firstName\": \"KIDLLE\",\n" +
-                "      \"lastName\": \"YES\",\n" +
-                "      \"dateCreated\": \"2016-12-18T04:17:35Z\",\n" +
-                "      \"macId\": \"hgweorahgbkljwhnpi\",\n" +
-                "      \"profile\": \"\"\n" +
-                "    },\n" +
-                "    {\n" +
-                "      \"id\": 20,\n" +
-                "      \"firstName\": \"KIDLLE\",\n" +
-                "      \"lastName\": \"YES\",\n" +
-                "      \"dateCreated\": \"2016-12-18T21:19:54Z\",\n" +
-                "      \"macId\": \"hgweorahgbkljwhnpi2\",\n" +
-                "      \"profile\": \"\"\n" +
-                "    }\n" +
-                "  ]\n" +
+                "  \"id\": 2,\n" +
+                "  \"name\": \"Kids3\",\n" +
+                "  \"dateCreated\": \"2017-02-02T01:14:16Z\",\n" +
+                "  \"macId\": \"Mac_ID4\",\n" +
+                "  \"profile\": \"\",\n" +
+                "  \"parent\": {\n" +
+                "    \"id\": 2,\n" +
+                "    \"email\": \"jack08300@gmail.com\",\n" +
+                "    \"firstName\": \"Jay\",\n" +
+                "    \"lastName\": \"Chen\",\n" +
+                "    \"lastUpdate\": \"0001-01-01T00:00:00Z\",\n" +
+                "    \"dateCreated\": \"0001-01-01T00:00:00Z\",\n" +
+                "    \"zipCode\": \"\",\n" +
+                "    \"phoneNumber\": \"\",\n" +
+                "    \"profile\": \"\"\n" +
+                "  }\n" +
                 "}";
     }
 

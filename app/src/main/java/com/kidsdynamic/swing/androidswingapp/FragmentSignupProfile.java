@@ -241,6 +241,7 @@ public class FragmentSignupProfile extends ViewFragment {
             mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mRegisterPassword);
 
             mActivityMain.mOperator.ResetDatabase();
+            ServerMachine.ResetAvatar();
             mActivityMain.mOperator.UserAdd(
                     new WatchContact.User(
                             null,

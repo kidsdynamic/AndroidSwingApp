@@ -148,6 +148,7 @@ public class FragmentSignupAccount extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
             mActivityMain.mOperator.ResetDatabase();
+            ServerMachine.ResetAvatar();
             mActivityMain.mOperator.UserAdd(
                     new WatchContact.User(
                             null,
@@ -166,8 +167,8 @@ public class FragmentSignupAccount extends ViewFragment {
             for (ServerGson.kidData kidData : response.kids) {
                 WatchContact.Kid kid = new WatchContact.Kid();
                 kid.mId = kidData.id;
-                kid.mFirstName = kidData.firstName;
-                kid.mLastName = kidData.lastName;
+                kid.mFirstName = kidData.name;
+                kid.mLastName = "";
                 kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
                 kid.mMacId = kidData.macId;
                 kid.mUserId = response.user.id;

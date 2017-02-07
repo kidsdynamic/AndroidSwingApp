@@ -23,8 +23,7 @@ public class ServerGson {
 
     static final class kidData {
         int id;
-        String firstName;
-        String lastName;
+        String name;
         String dateCreated;
         String macId;
         String profile;
@@ -32,8 +31,7 @@ public class ServerGson {
 
     static final class kidDataWithParent {
         int id;
-        String firstName;
-        String lastName;
+        String name;
         String dateCreated;
         String macId;
         String profile;
@@ -238,19 +236,17 @@ public class ServerGson {
     public static class kids {
         public static class add {
             private static class c {
-                String firstName;
-                String lastName;
+                String name;
                 String macId;
 
-                c(String pFirstName, String pLastName, String pMacId) {
-                    firstName = pFirstName;
-                    lastName = pLastName;
+                c(String pName, String pMacId) {
+                    name = pName;
                     macId = pMacId;
                 }
             }
 
-            public static String toJson(String pFirstName, String pLastName, String pMacId) {
-                return new Gson().toJson(new c(pFirstName, pLastName, pMacId));
+            public static String toJson(String pName, String pMacId) {
+                return new Gson().toJson(new c(pName, pMacId));
             }
 
             public static kidDataWithParent fromJson(String json) {
