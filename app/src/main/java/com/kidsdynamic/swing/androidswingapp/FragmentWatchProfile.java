@@ -173,6 +173,8 @@ public class FragmentWatchProfile extends ViewFragment {
         }
     };
 
+    //private static int testCounter = 0;
+
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
@@ -183,8 +185,23 @@ public class FragmentWatchProfile extends ViewFragment {
                 if (!mDevice.mFirstName.equals("") && !mDevice.mLastName.equals("")) {
                     mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
-                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, mDevice.mLastName, macId);
-                    //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, mDevice.mLastName, "123456654325");
+                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, macId);
+                    /*
+                    switch(testCounter) {
+                        case 0:
+                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, "AAAAAABBBB01");
+                            testCounter = 1;
+                            break;
+                        case 1:
+                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, "AAAAAABBBB02");
+                            testCounter = 2;
+                            break;
+                        case 2:
+                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, "AAAAAABBBB03");
+                            testCounter = 0;
+                            break;
+                    }
+                    */
                 }
             }
 
@@ -196,8 +213,8 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
             mDevice.mId = response.id;
-            mDevice.mFirstName = response.firstName;
-            mDevice.mLastName = response.lastName;
+            mDevice.mFirstName = response.name;
+            mDevice.mLastName = "";
             mDevice.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
             mDevice.mMacId = response.macId;
             mDevice.mUserId = response.parent.id;

@@ -132,6 +132,8 @@ public class FragmentSignupAccount extends ViewFragment {
     ServerMachine.userLoginListener mLoginListener = new ServerMachine.userLoginListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
+            mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
             mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
             mActivityMain.mServiceMachine.setAuthToken(result.access_token);
             mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
@@ -148,6 +150,7 @@ public class FragmentSignupAccount extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
             mActivityMain.mOperator.ResetDatabase();
+            ServerMachine.ResetAvatar();
             mActivityMain.mOperator.UserAdd(
                     new WatchContact.User(
                             null,
@@ -166,8 +169,8 @@ public class FragmentSignupAccount extends ViewFragment {
             for (ServerGson.kidData kidData : response.kids) {
                 WatchContact.Kid kid = new WatchContact.Kid();
                 kid.mId = kidData.id;
-                kid.mFirstName = kidData.firstName;
-                kid.mLastName = kidData.lastName;
+                kid.mFirstName = kidData.name;
+                kid.mLastName = "";
                 kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
                 kid.mMacId = kidData.macId;
                 kid.mUserId = response.user.id;

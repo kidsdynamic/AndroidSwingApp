@@ -237,9 +237,9 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void kidsAdd(kidsAddListener listener, String firstName, String lastName, String macId) {
+    public void kidsAdd(kidsAddListener listener, String name, String macId) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.kids.add.toJson(firstName, lastName, macId));
+        map.put("json", ServerGson.kids.add.toJson(name, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_KIDS_ADD, map, null), CMD_KIDS_ADD, listener));
     }
 
@@ -885,6 +885,9 @@ public class ServerMachine {
     }
 
     static String getMacAddress(String macId) {
+        if (macId.length()<12)
+            return "00:00:00:00:00:00";
+
         return String.format("%c%c:%c%c:%c%c:%c%c:%c%c:%c%c",
                 macId.charAt(0),macId.charAt(1),macId.charAt(2),macId.charAt(3),
                 macId.charAt(4),macId.charAt(5),macId.charAt(6),macId.charAt(7),
@@ -895,6 +898,15 @@ public class ServerMachine {
     static String GetAvatarFilePath() {
         File sdCard = Environment.getExternalStorageDirectory();
         return sdCard.getAbsolutePath() + "/Swing";
+    }
+
+    static void ResetAvatar() {
+        File dir = new File(GetAvatarFilePath());
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for(String child : children)
+                new File(dir, child).delete();
+        }
     }
 
     static String createAvatarFile(Bitmap bitmap, String filename, String extension) {

@@ -41,10 +41,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private WatchContact.Kid mDevice;
     private String mMacAddress;
     private BLEMachine.Device mSearchResult = null;
-    private List<WatchOperator.Event> mEventList;
     private List<BLEMachine.VoiceAlert> mVoiceAlertList;
-    private long mStartTimeStamp;
-    private long mEndTimeStamp;
     private boolean mSyncFinish = false;
 
     @Override
@@ -69,14 +66,15 @@ public class FragmentSyncSearch extends ViewFragment {
             mDevice = new WatchContact.Kid();
 
         Calendar cal = Calendar.getInstance();
-        mStartTimeStamp = cal.getTimeInMillis();
+        long startTimeStamp = cal.getTimeInMillis();
         cal.add(Calendar.MONTH, 2);
-        mEndTimeStamp = cal.getTimeInMillis();
-        mEventList = mActivityMain.mOperator.EventGet(mDevice, mStartTimeStamp, mEndTimeStamp);
-        mVoiceAlertList = mActivityMain.getAlertList(mEventList, mStartTimeStamp, mEndTimeStamp);
+        long endTimeStamp = cal.getTimeInMillis();
+
+        List<WatchOperator.Event> eventList = mActivityMain.mOperator.EventGet(mDevice, startTimeStamp, endTimeStamp);
+
+        mVoiceAlertList = mActivityMain.getAlertList(eventList, startTimeStamp, endTimeStamp);
         mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
         //mMacAddress = "E0:E5:CF:1E:D7:C2";
-        Log.d("swing", "mac address " + mMacAddress);
 
         Handler handle = new Handler();
         handle.post(new Runnable() {
@@ -285,7 +283,7 @@ public class FragmentSyncSearch extends ViewFragment {
                     uploadItem.mOutdoorActivity = rawString(res.mData1);
                     uploadItem.mIndoorActivity = rawString(res.mData2);
 
-                    Log.d("TEST", "Add Time " + uploadItem.mTime);
+                    //Log.d("TEST", "Add Time " + uploadItem.mTime);
                     mActivityMain.mOperator.UploadItemAdd(uploadItem);
                 }
                 Intent intent = new Intent(mActivityMain, ServerPushService.class);
