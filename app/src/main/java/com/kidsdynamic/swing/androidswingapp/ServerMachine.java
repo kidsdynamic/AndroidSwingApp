@@ -885,6 +885,9 @@ public class ServerMachine {
     }
 
     static String getMacAddress(String macId) {
+        if (macId.length()<12)
+            return "00:00:00:00:00:00";
+
         return String.format("%c%c:%c%c:%c%c:%c%c:%c%c:%c%c",
                 macId.charAt(0),macId.charAt(1),macId.charAt(2),macId.charAt(3),
                 macId.charAt(4),macId.charAt(5),macId.charAt(6),macId.charAt(7),

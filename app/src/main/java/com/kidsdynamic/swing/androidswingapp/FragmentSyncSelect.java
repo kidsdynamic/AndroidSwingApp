@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 03543 on 2017/1/15.
@@ -19,7 +21,7 @@ public class FragmentSyncSelect extends ViewFragment {
     private View mViewMain;
     LinearLayout mViewContainer;
 
-    ArrayList<WatchContact.Kid> mDeviceList;
+    List<WatchContact.Kid> mDeviceList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,12 +35,26 @@ public class FragmentSyncSelect extends ViewFragment {
 
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.sync_select_container);
 
-        mDeviceList = new ArrayList<>();
+        mDeviceList = mActivityMain.mOperator.KidGet();
+        for (WatchContact.Kid kid: mDeviceList) {
+            kid.mLastName = kid.mFirstName;
 
-        // todo: load binded devices from server
-        mDeviceList.add(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Kid 001", true));
-        mDeviceList.add(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Kid 002", true));
-        mDeviceList.add(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Kid XX3", true));
+            if (kid.mProfile.equals("")) {
+                switch (kid.mId % 3) {
+                    case 1:
+                        kid.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green);
+                        break;
+                    case 2:
+                        kid.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow);
+                        break;
+                    default:
+                        kid.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple);
+                        break;
+                }
+            } else {
+                kid.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+            }
+        }
 
         for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
@@ -84,6 +100,8 @@ public class FragmentSyncSelect extends ViewFragment {
         public void onClick(View view) {
             ViewPhotoContact contact = (ViewPhotoContact) view;
             WatchContact.Kid device = (WatchContact.Kid) contact.getItem();
+
+            mActivityMain.mOperator.KidSetFocus(device);
 
             setSelected(mDeviceList.indexOf(device));
 

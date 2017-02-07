@@ -132,6 +132,8 @@ public class FragmentSignupAccount extends ViewFragment {
     ServerMachine.userLoginListener mLoginListener = new ServerMachine.userLoginListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mActivityMain.mConfig.setString(Config.KEY_MAIL, mMail);
+            mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mPassword);
             mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
             mActivityMain.mServiceMachine.setAuthToken(result.access_token);
             mActivityMain.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
