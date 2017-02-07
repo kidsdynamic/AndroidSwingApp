@@ -116,16 +116,16 @@ public class ViewCalendar extends TableLayout {
         return mExceedColor;
     }
 
-    public void setDate(long milli) {
-        Calendar date = getInstance();
+    public void setDate(long date) {
+        Calendar calc = getInstance();
 
-        date.setTimeInMillis(milli);
-        date.set(Calendar.HOUR_OF_DAY, 0);
-        date.set(Calendar.MINUTE, 0);
-        date.set(Calendar.SECOND, 0);
-        date.set(Calendar.MILLISECOND, 0);
+        calc.setTimeInMillis(date);
+        calc.clear(Calendar.HOUR_OF_DAY);
+        calc.clear(Calendar.MINUTE);
+        calc.clear(Calendar.SECOND);
+        calc.clear(Calendar.MILLISECOND);
 
-        mDate = date.getTimeInMillis();
+        mDate = calc.getTimeInMillis();
     }
 
     public long getDate() {

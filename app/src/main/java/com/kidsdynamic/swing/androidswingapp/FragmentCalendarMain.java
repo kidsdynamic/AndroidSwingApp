@@ -1,11 +1,14 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.util.Calendar;
 
 /**
  * Created by 03543 on 2016/12/19.
@@ -23,10 +26,16 @@ public class FragmentCalendarMain extends ViewFragment {
     private Button mViewToday;
     private Button mViewMonthly;
 
+    private long mDefaultDate = System.currentTimeMillis();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        if(getArguments()!= null) {
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+        }
     }
 
     @Override
@@ -34,11 +43,11 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
         mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_main_selector);
-        mViewSelector.setDate(System.currentTimeMillis());
+        mViewSelector.setDate(mDefaultDate);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
         mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_main_calendar);
-        mViewCalendar.setDate(System.currentTimeMillis());
+        mViewCalendar.setDate(mDefaultDate);
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
         mViewAlert = (ViewCircle) mViewMain.findViewById(R.id.calendar_main_alert);
@@ -63,7 +72,10 @@ public class FragmentCalendarMain extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), null);
+        Bundle bundle = new Bundle();
+        bundle.putLong(BUNDLE_KEY_DATE, mViewCalendar.getDate());
+
+        mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), bundle);
     }
 
     @Override
@@ -74,8 +86,19 @@ public class FragmentCalendarMain extends ViewFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
-            mViewCalendar.setDate(date);
+            if(offset == 0) {
+                Calendar calc = ViewCalendar.getInstance();
 
+                calc.set(Calendar.HOUR_OF_DAY, 0);
+                calc.clear(Calendar.MINUTE);
+                calc.clear(Calendar.SECOND);
+                calc.clear(Calendar.MILLISECOND);
+
+                date = calc.getTimeInMillis();
+                mViewSelector.setDate(date);
+            }
+
+            mViewCalendar.setDate(date);
             loadCalendar(date, date + 86400 - 1);
             updateAlert();
         }
