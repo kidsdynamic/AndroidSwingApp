@@ -132,15 +132,73 @@ public class ViewCalendar extends TableLayout {
         return mDate;
     }
 
+    public boolean isInDay(long date) {
+        Calendar calcThis = getInstance();
+        calcThis.setTimeInMillis(mDate);
+
+        Calendar calcDate = getInstance();
+        calcDate.setTimeInMillis(date);
+
+        if (calcThis.get(Calendar.YEAR) != calcDate.get(Calendar.YEAR))
+            return false;
+        if (calcThis.get(Calendar.DAY_OF_YEAR) != calcDate.get(Calendar.DAY_OF_YEAR))
+            return false;
+
+        return true;
+    }
+
+    public boolean isInWeek(long date) {
+        Calendar calcThis = getInstance();
+        calcThis.setTimeInMillis(mDate);
+
+        Calendar calcDate = getInstance();
+        calcDate.setTimeInMillis(date);
+
+        if (calcThis.get(Calendar.YEAR) != calcDate.get(Calendar.YEAR))
+            return false;
+        if (calcThis.get(Calendar.WEEK_OF_YEAR) != calcDate.get(Calendar.WEEK_OF_YEAR))
+            return false;
+
+        return true;
+    }
+
+    public boolean isInMonth(long date) {
+        Calendar calcThis = getInstance();
+        calcThis.setTimeInMillis(mDate);
+
+        Calendar calcDate = getInstance();
+        calcDate.setTimeInMillis(date);
+
+        if (calcThis.get(Calendar.YEAR) != calcDate.get(Calendar.YEAR))
+            return false;
+        if (calcThis.get(Calendar.MONTH) != calcDate.get(Calendar.MONTH))
+            return false;
+
+        return true;
+    }
+
+    public boolean isInYear(long date) {
+        Calendar calcThis = getInstance();
+        calcThis.setTimeInMillis(mDate);
+
+        Calendar calcDate = getInstance();
+        calcDate.setTimeInMillis(date);
+
+        if (calcThis.get(Calendar.YEAR) != calcDate.get(Calendar.YEAR))
+            return false;
+
+        return true;
+    }
+
     static Calendar getInstance() {
         return Calendar.getInstance();
 //        return Calendar.getInstance(Locale.US);       // Force to use Sunday to be the first day of week
 //        return Calendar.getInstance(Locale.GERMANY);  // Force to use Monday to be the first day of week
     }
 
-    static boolean isToday(long msecond) {
+    static boolean isToday(long date) {
         Calendar calcSet = getInstance();
-        calcSet.setTimeInMillis(msecond);
+        calcSet.setTimeInMillis(date);
 
         Calendar calcNow = getInstance();
 
@@ -152,9 +210,9 @@ public class ViewCalendar extends TableLayout {
         return true;
     }
 
-    static boolean isMonth(long msecond) {
+    static boolean isMonth(long date) {
         Calendar calcSet = getInstance();
-        calcSet.setTimeInMillis(msecond);
+        calcSet.setTimeInMillis(date);
 
         Calendar calcNow = getInstance();
 
