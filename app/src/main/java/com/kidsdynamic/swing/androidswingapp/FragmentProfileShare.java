@@ -79,6 +79,7 @@ public class FragmentProfileShare extends ViewFragment {
             ArrayList<WatchContact.Kid> list = getSelectList();
             for (WatchContact.Kid device : list) {
                 Log.d("xxx", "save:" + device.mLabel);
+                // Todo: emit request.
             }
 
             mActivityMain.popFragment();
