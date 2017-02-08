@@ -8,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -50,7 +49,7 @@ public class FragmentProfileRequestTo extends ViewFragment {
         addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster", false));
         ////////////
 
-        for (WatchContact.Kid kid : mActivityMain.mOperator.getRequestToList())
+        for (WatchContact.Kid kid : mActivityMain.mOperator.getRequestToKidList(null))
             addPending(kid);
 
         return mViewMain;
@@ -58,7 +57,7 @@ public class FragmentProfileRequestTo extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Request", true, true, false,
+        return new ViewFragmentConfig("Send Requests To", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -116,7 +115,7 @@ public class FragmentProfileRequestTo extends ViewFragment {
             WatchContact.User person = (WatchContact.User) view.getTag();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable(BUNDLE_KEY_REQUESTER, person);
+            bundle.putSerializable(BUNDLE_KEY_CONTACT, person);
 
             mActivityMain.selectFragment(FragmentProfileShare.class.getName(), bundle);
         }

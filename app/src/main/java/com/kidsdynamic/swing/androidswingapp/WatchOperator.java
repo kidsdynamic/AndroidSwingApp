@@ -761,11 +761,21 @@ public class WatchOperator {
         return new ArrayList<>();
     }
 
-    public ArrayList<WatchContact.User> getRequestFromList() {
+    public ArrayList<WatchContact.User> getRequestFromUserList() {
         return new ArrayList<>();
     }
 
-    public ArrayList<WatchContact.Kid> getRequestToList() {
+    public ArrayList<WatchContact.Kid> getRequestFromKidList(WatchContact.User user) {
+        // If user is null, return all requested kid, else just user's requested
+        return new ArrayList<>();
+    }
+
+    public ArrayList<WatchContact.User> getRequestToUserList() {
+        return new ArrayList<>();
+    }
+
+    public ArrayList<WatchContact.Kid> getRequestToKidList(WatchContact.User user) {
+        // If user is null, return all requested kid, else just user's kids
         return new ArrayList<>();
     }
 }

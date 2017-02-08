@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +72,7 @@ public class FragmentProfileMain extends ViewFragment {
         addContact(mViewRequestToContainer, to1, null);
 
         WatchContact.User from1 = new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "RequestFrom 1");
-        addContact(mViewRequestFromContainer, from1, null);
+        addContact(mViewRequestFromContainer, from1, mContactListener);
         ///
 
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
@@ -82,11 +81,11 @@ public class FragmentProfileMain extends ViewFragment {
         for (WatchContact device : mActivityMain.mOperator.getSharedList())
             addContact(mViewSharedContainer, device, mContactListener);
 
-        for (WatchContact user : mActivityMain.mOperator.getRequestToList())
+        for (WatchContact user : mActivityMain.mOperator.getRequestToUserList())
             addContact(mViewRequestToContainer, user, null);
 
-        for (WatchContact user : mActivityMain.mOperator.getRequestFromList())
-            addContact(mViewRequestFromContainer, user, null);
+        for (WatchContact user : mActivityMain.mOperator.getRequestFromUserList())
+            addContact(mViewRequestFromContainer, user, mContactListener);
         updateRequestFromTitle();
 
         return mViewMain;
@@ -134,18 +133,18 @@ public class FragmentProfileMain extends ViewFragment {
             WatchContact contact = (WatchContact) viewCircle.getTag();
 
             if (viewContainer == mViewDeviceContainer) {
-                Log.d("xxx", "onClick: device " + contact.mLabel);
                 focusContact(contact);
 
             } else if (viewContainer == mViewSharedContainer) {
-                Log.d("xxx", "onClick: shared " + contact.mLabel);
                 focusContact(contact);
 
-            } else if (viewContainer == mViewRequestFromContainer) {
-                Log.d("xxx", "onClick: requestFrom " + contact.mLabel);
-
             } else if (viewContainer == mViewRequestToContainer) {
-                Log.d("xxx", "onClick: requestTo " + contact.mLabel);
+
+            } else if (viewContainer == mViewRequestFromContainer) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, contact);
+
+                mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), bundle);
             }
         }
     };

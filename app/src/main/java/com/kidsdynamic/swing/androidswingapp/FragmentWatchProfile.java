@@ -55,7 +55,7 @@ public class FragmentWatchProfile extends ViewFragment {
         mActivityMain = (ActivityMain) getActivity();
 
         mDevice = (getArguments() != null) ?
-                (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE) :
+                (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT) :
                 new WatchContact.Kid();
     }
 

@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -23,14 +21,13 @@ public class FragmentProfileSelect extends ViewFragment {
 
     private ArrayList<WatchContact.Kid> mDeviceList;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
         if (getArguments() != null) {
-            mDeviceList = (ArrayList<WatchContact.Kid>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST);
+            mDeviceList = (ArrayList<WatchContact.Kid>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT_LIST);
         }
         if (mDeviceList == null)
             mDeviceList = new ArrayList<>();
@@ -79,7 +76,7 @@ public class FragmentProfileSelect extends ViewFragment {
             WatchContact.Kid device = (WatchContact.Kid) view.getTag();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, device);
 
             if (device.mBound)
                 mActivityMain.selectFragment(FragmentProfileRegistered.class.getName(), bundle);

@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,7 +122,7 @@ public class FragmentWatchSearch extends ViewFragment {
 
     private void gotoWatchSelect() {
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST, mSearchResult);
+        bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT_LIST, mSearchResult);
 
         mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
     }

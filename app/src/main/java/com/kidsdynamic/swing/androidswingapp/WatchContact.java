@@ -175,8 +175,8 @@ public class WatchContact implements Serializable {
         return view;
     }
 
-    static View inflateRequester(Context context, User person) {
-        View view = inflate(context, R.layout.watch_contact_requester, person);
+    static View inflateOnOff(Context context, WatchContact contact) {
+        View view = inflate(context, R.layout.watch_contact_onoff, contact);
 
         return view;
     }
@@ -190,11 +190,11 @@ public class WatchContact implements Serializable {
         return view;
     }
 
-    static View inflateCheck(Context context, Kid device, boolean isCheck) {
-        View view = inflate(context, R.layout.watch_contact_check, device);
+    static View inflateCheck(Context context, WatchContact contact, boolean isCheck) {
+        View view = inflate(context, R.layout.watch_contact_check, contact);
 
         ImageView icon = (ImageView) view.findViewById(R.id.watch_contact_check_icon);
-        icon.setVisibility(isCheck ? View.VISIBLE : View.INVISIBLE);
+        icon.setSelected(isCheck);
 
         return view;
     }

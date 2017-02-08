@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 /**
  * Created by 03543 on 2017/1/30.
@@ -24,7 +23,7 @@ public class FragmentProfileAdded extends ViewFragment {
         mActivityMain = (ActivityMain) getActivity();
 
         if (getArguments() != null) {
-            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
         } else {
             mDevice = new WatchContact.Kid();
         }
@@ -55,7 +54,7 @@ public class FragmentProfileAdded extends ViewFragment {
         @Override
         public void onClick(View view) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, mDevice);
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, mDevice);
 
             // todo: Here, we registered a watch and should focus on it automatically.
 

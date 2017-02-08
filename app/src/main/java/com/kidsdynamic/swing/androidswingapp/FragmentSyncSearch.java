@@ -3,7 +3,6 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -61,7 +58,7 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton2 = (Button) mViewMain.findViewById(R.id.sync_search_button2);
 
         if (getArguments() != null)
-            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE);
+            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
         else
             mDevice = new WatchContact.Kid();
 

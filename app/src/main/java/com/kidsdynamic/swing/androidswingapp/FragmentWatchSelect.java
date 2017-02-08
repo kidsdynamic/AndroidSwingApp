@@ -30,7 +30,7 @@ public class FragmentWatchSelect extends ViewFragment {
         mActivityMain = (ActivityMain) getActivity();
 
         if (getArguments() != null) {
-            mDeviceList = (ArrayList<WatchContact.Kid>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_DEVICE_LIST);
+            mDeviceList = (ArrayList<WatchContact.Kid>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT_LIST);
         }
         if (mDeviceList == null)
             mDeviceList = new ArrayList<>();
@@ -93,7 +93,7 @@ public class FragmentWatchSelect extends ViewFragment {
             WatchContact.Kid device = (WatchContact.Kid) view.getTag();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_DEVICE, device);
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, device);
 
             if (device.mBound)
                 mActivityMain.selectFragment(FragmentWatchRegistered.class.getName(), bundle);

@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
-import java.util.List;
 
 /**
  * Created by 03543 on 2017/1/1.
@@ -68,7 +65,7 @@ public class FragmentSyncNow extends ViewFragment {
                 device.mBound = true;
 
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(BUNDLE_KEY_DEVICE, device);
+                bundle.putSerializable(BUNDLE_KEY_CONTACT, device);
                 mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
             }
         }

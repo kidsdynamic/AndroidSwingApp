@@ -31,8 +31,8 @@
             android:layout_alignBottom="@+id/watch_contact_check_sponge"
             android:layout_alignTop="@+id/watch_contact_check_sponge"
             android:layout_centerHorizontal="true"
+            android:scaleType="centerInside"
             android:adjustViewBounds="true"
-            android:src="@mipmap/iconbutton_yes"
-            android:visibility="invisible" />
+            app:srcCompat="@drawable/iconbutton_check_background" />
     </RelativeLayout>
 </LinearLayout>

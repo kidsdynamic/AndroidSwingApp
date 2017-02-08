@@ -26,7 +26,7 @@ public class FragmentProfileShare extends ViewFragment {
     private TextView mViewTitle;
     private LinearLayout mViewShareContainer;
 
-    private WatchContact.User mAccount;
+    private WatchContact.User mRequestTo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,18 +39,18 @@ public class FragmentProfileShare extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_share, container, false);
 
-        mViewSave = (Button)mViewMain.findViewById(R.id.profile_share_save);
+        mViewSave = (Button) mViewMain.findViewById(R.id.profile_share_save);
         mViewSave.setOnClickListener(mSaveListener);
 
         mViewTitle = (TextView) mViewMain.findViewById(R.id.profile_share_title);
         mViewShareContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_share_container);
 
         if (getArguments() != null) {
-            mAccount = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_REQUESTER);
-            String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mAccount.mLabel);
+            mRequestTo = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
+            String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mRequestTo.mLabel);
             mViewTitle.setText(title);
 
-            // Todo: Load Kids of mAccount and insert into container. like test below
+            // Todo: Load Kids of mRequestTo and insert into container. like test below
         }
 
         // Test
@@ -77,8 +77,8 @@ public class FragmentProfileShare extends ViewFragment {
         @Override
         public void onClick(View view) {
             ArrayList<WatchContact.Kid> list = getSelectList();
-            for (WatchContact.Kid device : list) {
-                Log.d("xxx", "save:" + device.mLabel);
+            for (WatchContact.Kid kid : list) {
+                Log.d("xxx", "request:" + mRequestTo.mLabel + "," + kid.mLabel);
                 // Todo: emit request.
             }
 
@@ -98,30 +98,23 @@ public class FragmentProfileShare extends ViewFragment {
         @Override
         public void onClick(View view) {
             WatchContact.Kid device = (WatchContact.Kid) view.getTag();
-            selectDevice(device);
+
+            View label = mViewShareContainer.findViewWithTag(device);
+            View check = label.findViewById(R.id.watch_contact_check_icon);
+            check.setSelected(!check.isSelected());
         }
     };
-
-    private void selectDevice(WatchContact.Kid device) {
-        View view = mViewShareContainer.findViewWithTag(device);
-        View icon = view.findViewById(R.id.watch_contact_check_icon);
-
-        if (icon.getVisibility() == View.VISIBLE)
-            icon.setVisibility(View.INVISIBLE);
-        else
-            icon.setVisibility(View.VISIBLE);
-    }
 
     private ArrayList<WatchContact.Kid> getSelectList() {
         ArrayList<WatchContact.Kid> list = new ArrayList<>();
 
         int count = mViewShareContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
-            View view = mViewShareContainer.getChildAt(idx);
-            View icon = view.findViewById(R.id.watch_contact_check_icon);
+            View label = mViewShareContainer.getChildAt(idx);
+            View check = label.findViewById(R.id.watch_contact_check_icon);
 
-            if (icon.getVisibility() == View.VISIBLE)
-                list.add((WatchContact.Kid) view.getTag());
+            if (check.isSelected())
+                list.add((WatchContact.Kid) label.getTag());
         }
 
         return list;
