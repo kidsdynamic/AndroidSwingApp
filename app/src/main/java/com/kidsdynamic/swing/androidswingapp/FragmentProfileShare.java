@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,10 +22,11 @@ public class FragmentProfileShare extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
+    private Button mViewSave;
     private TextView mViewTitle;
     private LinearLayout mViewShareContainer;
 
-    private WatchContact.User mRequester;
+    private WatchContact.User mAccount;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,14 +39,18 @@ public class FragmentProfileShare extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_share, container, false);
 
+        mViewSave = (Button)mViewMain.findViewById(R.id.profile_share_save);
+        mViewSave.setOnClickListener(mSaveListener);
+
         mViewTitle = (TextView) mViewMain.findViewById(R.id.profile_share_title);
         mViewShareContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_share_container);
 
         if (getArguments() != null) {
-            mRequester = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_REQUESTER);
-            String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mRequester.mLabel);
-
+            mAccount = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_REQUESTER);
+            String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mAccount.mLabel);
             mViewTitle.setText(title);
+
+            // Todo: Load Kids of mAccount and insert into container. like test below
         }
 
         // Test
@@ -64,18 +70,23 @@ public class FragmentProfileShare extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        // Test
-        ArrayList<WatchContact.Kid> list = getSelectList();
-        for (WatchContact.Kid device : list) {
-            Log.d("xxx", "select:" + device.mLabel);
-        }
-        ////////////
-
         mActivityMain.popFragment();
     }
 
+    private View.OnClickListener mSaveListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ArrayList<WatchContact.Kid> list = getSelectList();
+            for (WatchContact.Kid device : list) {
+                Log.d("xxx", "save:" + device.mLabel);
+            }
+
+            mActivityMain.popFragment();
+        }
+    };
+
     public void addDevice(WatchContact.Kid device) {
-        View view = WatchContact.inflateShare(mActivityMain, device);
+        View view = WatchContact.inflateCheck(mActivityMain, device, false);
 
         view.setOnClickListener(mDeviceClickListener);
 
@@ -92,7 +103,7 @@ public class FragmentProfileShare extends ViewFragment {
 
     private void selectDevice(WatchContact.Kid device) {
         View view = mViewShareContainer.findViewWithTag(device);
-        View icon = view.findViewById(R.id.watch_contact_share_icon);
+        View icon = view.findViewById(R.id.watch_contact_check_icon);
 
         if (icon.getVisibility() == View.VISIBLE)
             icon.setVisibility(View.INVISIBLE);
@@ -106,7 +117,7 @@ public class FragmentProfileShare extends ViewFragment {
         int count = mViewShareContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             View view = mViewShareContainer.getChildAt(idx);
-            View icon = view.findViewById(R.id.watch_contact_share_icon);
+            View icon = view.findViewById(R.id.watch_contact_check_icon);
 
             if (icon.getVisibility() == View.VISIBLE)
                 list.add((WatchContact.Kid) view.getTag());

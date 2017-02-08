@@ -196,8 +196,11 @@ public class WatchContact implements Serializable {
         return view;
     }
 
-    static View inflateShare(Context context, Kid device) {
-        View view = inflate(context, R.layout.watch_contact_share, device);
+    static View inflateCheck(Context context, Kid device, boolean isCheck) {
+        View view = inflate(context, R.layout.watch_contact_check, device);
+
+        ImageView icon = (ImageView) view.findViewById(R.id.watch_contact_check_icon);
+        icon.setVisibility(isCheck ? View.VISIBLE : View.INVISIBLE);
 
         return view;
     }

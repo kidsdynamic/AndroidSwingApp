@@ -18,18 +18,18 @@
         android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_contact_share_sponge"
+            android:id="@+id/watch_contact_check_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:shrinkHeight="0.7" />
 
         <ImageView
-            android:id="@+id/watch_contact_share_icon"
+            android:id="@+id/watch_contact_check_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/watch_contact_share_sponge"
-            android:layout_alignTop="@+id/watch_contact_share_sponge"
+            android:layout_alignBottom="@+id/watch_contact_check_sponge"
+            android:layout_alignTop="@+id/watch_contact_check_sponge"
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
             android:src="@mipmap/iconbutton_yes"

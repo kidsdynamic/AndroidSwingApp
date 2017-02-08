@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +8,9 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -91,6 +94,9 @@ public class FragmentProfileRequestTo extends ViewFragment {
                 return false;
 
             mViewUserContainer.removeAllViews();
+
+            InputMethodManager imm = (InputMethodManager) mActivityMain.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mViewMail.getWindowToken(), 0);
 
             String mail = mViewMail.getText().toString();
 
