@@ -139,20 +139,15 @@ public class ActivityMain extends AppCompatActivity
             mServiceMachine.Start();
         /*
         mOperator.EventReset();
-        mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-29T08:20:00Z"), WatchOperator.getTimeStamp("2016-01-30T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(1, 6, "", WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2016-02-30T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(2, 5, "", WatchOperator.getTimeStamp("2015-08-27T08:20:00Z"), WatchOperator.getTimeStamp("2016-03-30T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(3, 4, "", WatchOperator.getTimeStamp("2015-08-01T08:20:00Z"), WatchOperator.getTimeStamp("2016-04-30T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(4, 3, "MONTHLY", WatchOperator.getTimeStamp("2015-09-01T08:20:00Z"), WatchOperator.getTimeStamp("2016-05-30T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(5, 2, "WEEKLY", WatchOperator.getTimeStamp("2015-09-20T08:20:00Z"), WatchOperator.getTimeStamp("2016-06-30T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(6, 1, "DAILY", WatchOperator.getTimeStamp("2015-08-20T08:20:00Z"), WatchOperator.getTimeStamp("2015-09-05T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(7, 0, "", WatchOperator.getTimeStamp("2015-07-10T08:20:00Z"), WatchOperator.getTimeStamp("2015-08-30T09:20:00Z")));
-        List<WatchOperator.Event> events = mOperator.EventGet(0, 0, WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2017-08-30T08:20:00Z"));
-        List<BLEMachine.VoiceAlert> alerts = getAlertList(events, WatchOperator.getTimeStamp("2015-08-30T08:20:00Z"), WatchOperator.getTimeStamp("2017-08-30T08:20:00Z"));
-
-        for (BLEMachine.VoiceAlert alert : alerts) {
-            Log.d("Alert test", "Alert " + alert.mAlert + " countdown " + alert.mTimeStamp + " " + WatchOperator.getTimeString(alert.mTimeStamp));
-        }
+        mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-31T06:20:00Z"), WatchOperator.getTimeStamp("2015-08-31T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(1, 6, "", WatchOperator.getTimeStamp("2015-08-30T09:20:00Z"), WatchOperator.getTimeStamp("2015-08-30T11:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(2, 5, "", WatchOperator.getTimeStamp("2015-09-01T05:20:00Z"), WatchOperator.getTimeStamp("2015-09-01T07:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(3, 4, "", WatchOperator.getTimeStamp("2015-08-01T08:20:00Z"), WatchOperator.getTimeStamp("2015-08-01T09:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(4, 3, "WEEKLY", WatchOperator.getTimeStamp("2015-08-31T13:00:00Z"), WatchOperator.getTimeStamp("2015-08-31T15:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(5, 2, "WEEKLY", WatchOperator.getTimeStamp("2015-09-01T16:00:00Z"), WatchOperator.getTimeStamp("2015-09-01T18:00:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(6, 1, "WEEKLY", WatchOperator.getTimeStamp("2015-08-30T12:00:00Z"), WatchOperator.getTimeStamp("2015-08-30T12:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(7, 0, "", WatchOperator.getTimeStamp("2015-07-10T08:20:00Z"), WatchOperator.getTimeStamp("2015-07-10T12:00:00Z")));
+        List<WatchOperator.Event> events = mOperator.EventGet(0, 0, WatchOperator.getTimeStamp("2015-08-29T08:20:00Z"), WatchOperator.getTimeStamp("2015-09-10T08:20:00Z"));
 
         mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
         WatchContact.User user = mOperator.UserGet();
@@ -392,60 +387,5 @@ public class ActivityMain extends AppCompatActivity
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    public List<BLEMachine.VoiceAlert> getAlertList(List<WatchOperator.Event> events, long startTime, long endTime) {
-        List<BLEMachine.VoiceAlert> rtn = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
-
-        for (WatchOperator.Event event : events) {
-            cal.setTimeInMillis(event.mStartDate);
-            long nextTime = cal.getTimeInMillis();
-
-            if (event.mRepeat.equals("")) {
-                if (nextTime >= startTime)
-                    rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
-
-            } else if (event.mRepeat.contains("DAILY")) {
-                do {
-                    if (nextTime >= startTime)
-                        rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
-                    cal.add(Calendar.DATE, 1);
-                    nextTime = cal.getTimeInMillis();
-                } while (nextTime < event.mEndDate && nextTime < endTime);
-
-            } else if (event.mRepeat.contains("WEEKLY")) {
-                do {
-                    if (nextTime >= startTime)
-                        rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
-                    cal.add(Calendar.DATE, 7);
-                    nextTime = cal.getTimeInMillis();
-                } while (nextTime < event.mEndDate && nextTime < endTime);
-
-            } else if (event.mRepeat.contains("MONTHLY")) {
-                do {
-                    if (nextTime >= startTime)
-                        rtn.add(new BLEMachine.VoiceAlert((byte)event.mAlert, nextTime));
-                    cal.add(Calendar.MONTH, 1);
-                    nextTime = cal.getTimeInMillis();
-                } while (nextTime < event.mEndDate && nextTime < endTime);
-
-            }
-        }
-
-        Collections.sort(rtn, new Comparator<BLEMachine.VoiceAlert>() {
-            @Override
-            public int compare(BLEMachine.VoiceAlert t1, BLEMachine.VoiceAlert t2) {
-                if (t2.mTimeStamp > t1.mTimeStamp) {
-                    return -1;
-                } else if (t2.mTimeStamp < t1.mTimeStamp) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            }
-        });
-
-        return rtn;
     }
 }

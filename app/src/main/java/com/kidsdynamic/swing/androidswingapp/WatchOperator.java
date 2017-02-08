@@ -9,6 +9,8 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -417,10 +419,54 @@ public class WatchOperator {
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId + " AND " + KID_ID + "=" + event.mKidId, null);
     }
 
+    private List<Event>EventGetRepeat(int userId, int kidId, long startTimeStamp, long endTimeStamp, String repeat) {
+        List<Event>repeatResult = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
+                " WHERE " +
+                USER_ID + "=" + userId + " AND " +
+                KID_ID + "=" + kidId + " AND " +
+                REPEAT + "='" + repeat + "'" + " AND " +
+                endTimeStamp + ">=" + START_DATE, null);
+
+        while (cursor.moveToNext())
+            repeatResult.add(cursorToEvent(cursor));
+
+        cursor.close();
+
+        for (Event event : repeatResult)
+            event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
+
+        List<Event> result = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+
+        for(Event event : repeatResult) {
+            cal.setTimeInMillis(event.mAlertTimeStamp);
+            do {
+                if (event.mAlertTimeStamp >= startTimeStamp && event.mAlertTimeStamp <= endTimeStamp) {
+                    result.add(new Event(event));
+                }
+                switch(repeat) {
+                    case "DAILY":
+                        cal.add(Calendar.DATE, 1);
+                        break;
+                    case "WEEKLY":
+                        cal.add(Calendar.DATE, 7);
+                        break;
+                    case "MONTHLY":
+                        cal.add(Calendar.MONTH, 1);
+                        break;
+                }
+                event.mAlertTimeStamp = cal.getTimeInMillis();
+            } while(event.mAlertTimeStamp <= endTimeStamp);
+        }
+
+        return result;
+    }
+
     public List<Event> EventGet(int userId, int kidId, long startTimeStamp, long endTimeStamp) {
         List<Event> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
-                " WHERE (" + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId + ") AND " +
+                " WHERE (" + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId + " AND " + REPEAT + "=''" + ") AND " +
                 "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
                 " (" + startTimeStamp + "<=" + START_DATE + " AND " + endTimeStamp + ">=" + END_DATE + ") OR" +
                 " (" + endTimeStamp + ">=" + START_DATE + " AND " + endTimeStamp + "<=" + END_DATE + "))", null);
@@ -433,6 +479,32 @@ public class WatchOperator {
 
         for (Event event : result)
             event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
+
+        List<Event>dailyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "DAILY");
+        List<Event>weeklyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "WEEKLY");
+        List<Event>monthlyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "MONTHLY");
+
+        for (Event event : dailyResult)
+            result.add(event);
+
+        for (Event event : weeklyResult)
+            result.add(event);
+
+        for (Event event : monthlyResult)
+            result.add(event);
+
+        Collections.sort(result, new Comparator<Event>() {
+            @Override
+            public int compare(Event t1, Event t2) {
+                if (t2.mAlertTimeStamp > t1.mAlertTimeStamp) {
+                    return -1;
+                } else if (t2.mAlertTimeStamp < t1.mAlertTimeStamp) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
 
         return result;
     }
@@ -459,6 +531,7 @@ public class WatchOperator {
         long mDateCreated;
         long mLastUpdated;
         List<Todo> mTodoList;
+        long mAlertTimeStamp;
 
         Event(int id, int alert, String repeat, long startDate, long endDate) {
             mId = id;
@@ -480,6 +553,7 @@ public class WatchOperator {
             mTodoList = new ArrayList<Todo>();
             mTodoList.add(new Todo(id, 0, 0, 0, "TEST", "", 0, 0));
             mTodoList.add(new Todo(id, 0, 0, 0, "TEST", "", 0, 0));
+            mAlertTimeStamp = startDate;
         }
 
         Event(int id, int userId, int kidId, String name, long startDate,
@@ -503,6 +577,30 @@ public class WatchOperator {
             mDateCreated = dateCreated;
             mLastUpdated = lastUpdated;
             mTodoList = new ArrayList<Todo>();
+            mAlertTimeStamp = startDate;
+        }
+
+        Event(Event src) {
+            mId = src.mId;
+            mUserId = src.mUserId;
+            mKidId = src.mKidId;
+            mName = src.mName;
+            mStartDate = src.mStartDate;
+            mEndDate = src.mEndDate;
+            mColor = src.mColor;
+            mStatus = src.mStatus;
+            mDescription = src.mDescription;
+            mAlert = src.mAlert;
+            mCity = src.mCity;
+            mState = src.mState;
+            mRepeat = src.mRepeat;
+            mTimezoneOffset = src.mTimezoneOffset;
+            mDateCreated = src.mDateCreated;
+            mLastUpdated = src.mLastUpdated;
+            mTodoList = new ArrayList<>();
+            for(Todo todo : src.mTodoList)
+                mTodoList.add(new Todo(todo));
+            mAlertTimeStamp = src.mAlertTimeStamp;
         }
     }
 
@@ -601,6 +699,17 @@ public class WatchOperator {
             mStatus = status;
             mDateCreated = dateCreated;
             mLastUpdated = lastUpdated;
+        }
+
+        Todo(Todo src) {
+            mId = src.mId;
+            mUserId = src.mUserId;
+            mKidId = src.mKidId;
+            mEventId = src.mEventId;
+            mText = src.mText;
+            mStatus = src.mStatus;
+            mDateCreated = src.mDateCreated;
+            mLastUpdated = src.mLastUpdated;
         }
     }
 
