@@ -46,6 +46,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:enabled="false"
             android:hint="Name" />
     </LinearLayout>
 
@@ -63,6 +64,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:enabled="false"
             android:hint="Zip" />
     </LinearLayout>
 
@@ -85,14 +87,14 @@
             app:shrinkWidth="0.7" />
 
         <Button
-            android:id="@+id/profile_kid_delete"
+            android:id="@+id/profile_kid_remove"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/profile_kid_sponge"
             android:layout_alignStart="@+id/profile_kid_sponge"
             android:layout_centerVertical="true"
-            android:text="Delete" />
+            android:text="Remove" />
 
     </RelativeLayout>
 </LinearLayout>

@@ -113,8 +113,8 @@ public class FragmentSignupAccount extends ViewFragment {
         public void onValidState(boolean valid) {
             if (valid) {
                 Bundle bundle = new Bundle();
-                bundle.putString("MAIL", mMail);
-                bundle.putString("PASSWORD", mPassword);
+                bundle.putString(ViewFragment.BUNDLE_KEY_MAIL, mMail);
+                bundle.putString(ViewFragment.BUNDLE_KEY_PASSWORD, mPassword);
 
                 mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), bundle);
             } else {

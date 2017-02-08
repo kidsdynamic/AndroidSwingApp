@@ -840,4 +840,8 @@ public class WatchOperator {
         // If user is null, return all requested kid, else just user's kids
         return new ArrayList<>();
     }
+
+    public WatchContact.Kid getFocusKid() {
+        return null;
+    }
 }

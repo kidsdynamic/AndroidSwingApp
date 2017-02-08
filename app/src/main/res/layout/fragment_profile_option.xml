@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Edit Profile" />
+            android:text="Edit Your Kid's Profile" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -79,35 +79,6 @@
         android:text="About" />
 
     <RelativeLayout
-        android:id="@+id/profile_option_faq"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/color_white"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="FAQ" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_right" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_gray_light" />
-
-    <RelativeLayout
         android:id="@+id/profile_option_contact"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -121,35 +92,6 @@
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="Contact Us" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_right" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/color_gray_light" />
-
-    <RelativeLayout
-        android:id="@+id/profile_option_terms"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/color_white"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:text="Terms and Conditions" />
 
         <ImageView
             android:layout_width="wrap_content"
