@@ -10,9 +10,9 @@
         android:id="@+id/profile_main_photo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_gravity="center"
         android:layout_margin="20dp"
         android:layout_weight="4"
-        android:layout_gravity="center"
         app:strokeBegin="12"
         app:strokeColorNormal="@color/color_white"
         app:strokeCount="12"
@@ -61,9 +61,9 @@
                     android:id="@+id/profile_main_device_add"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
-                    android:layout_gravity="center"
                     app:crossColor="@color/color_white"
                     app:crossRatio="0.2"
                     app:crossWidth="2dp"
@@ -72,7 +72,7 @@
                     app:strokeCount="12"
                     app:strokeEnd="-1"
                     app:strokeType="arc"
-                    app:strokeWidth="2dp"/>
+                    app:strokeWidth="2dp" />
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -103,15 +103,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
+                android:orientation="horizontal" />
+
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2.5"
+        android:background="@color/color_blue_main"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/profile_main_request_to_title"
+            style="@style/textview_profile_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="You've sent requests to" />
+
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/profile_main_request_to_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <com.kidsdynamic.swing.androidswingapp.ViewCircle
-                    android:id="@+id/profile_main_shared_add"
+                    android:id="@+id/profile_main_request_to_add"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
-                    android:layout_gravity="center"
                     app:crossColor="@color/color_white"
                     app:crossRatio="0.2"
                     app:crossWidth="2dp"
@@ -120,34 +151,39 @@
                     app:strokeCount="12"
                     app:strokeEnd="-1"
                     app:strokeType="arc"
-                    app:strokeWidth="2dp"/>
+                    app:strokeWidth="2dp" />
 
             </LinearLayout>
         </HorizontalScrollView>
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="2.5"
+        android:background="@color/color_pink_main"
+        android:orientation="vertical"
+        android:paddingBottom="6dp">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/profile_main_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
-
-        <Button
-            android:id="@+id/profile_main_logout"
-            style="@style/button_main"
+        <TextView
+            style="@style/textview_profile_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/profile_main_sponge"
-            android:layout_alignStart="@+id/profile_main_sponge"
-            android:layout_centerVertical="true"
-            android:text="Logout" />
+            android:gravity="center"
+            android:text="You've 2 requests from" />
 
-    </RelativeLayout>
+        <HorizontalScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/profile_main_request_from_container"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
 </LinearLayout>
 

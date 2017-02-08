@@ -1,11 +1,12 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewParent;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,11 +19,13 @@ public class FragmentProfileMain extends ViewFragment {
     private View mViewMain;
     private ViewCircle mViewPhoto;
     private ViewCircle mViewDeviceAdd;
-    private ViewCircle mViewSharedAdd;
+    private ViewCircle mViewRequestToAdd;
     private TextView mViewName;
+    private TextView mViewRequestFromTitle;
     private LinearLayout mViewDeviceContainer;
     private LinearLayout mViewSharedContainer;
-    private Button mViewLogout;
+    private LinearLayout mViewRequestToContainer;
+    private LinearLayout mViewRequestFromContainer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,22 +40,29 @@ public class FragmentProfileMain extends ViewFragment {
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_main_photo);
         mViewName = (TextView) mViewMain.findViewById(R.id.profile_main_name);
 
-        mViewLogout = (Button) mViewMain.findViewById(R.id.profile_main_logout);
-        mViewLogout.setOnClickListener(mLogoutListener);
-
         mViewDeviceContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_device_container);
         mViewDeviceAdd = (ViewCircle) mViewMain.findViewById(R.id.profile_main_device_add);
         mViewDeviceAdd.setOnClickListener(mAddDeviceListener);
 
-        mViewSharedContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_shared_container);
-        mViewDeviceAdd = (ViewCircle) mViewMain.findViewById(R.id.profile_main_shared_add);
-        mViewDeviceAdd.setOnClickListener(mAddSharedListener);
+        mViewSharedContainer = (LinearLayout)mViewMain.findViewById(R.id.profile_main_shared_container);
+
+        mViewRequestToContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_request_to_container);
+        mViewRequestToAdd = (ViewCircle) mViewMain.findViewById(R.id.profile_main_request_to_add);
+        mViewRequestToAdd.setOnClickListener(mAddRequestToListener);
+
+        mViewRequestFromContainer = (LinearLayout)mViewMain.findViewById(R.id.profile_main_request_from_container);
 
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
-            addContact(mViewDeviceContainer, (WatchContact.Kid) device);
+            addContact(mViewDeviceContainer, device);
 
         for (WatchContact device : mActivityMain.mOperator.getSharedList())
-            addContact(mViewSharedContainer, (WatchContact.Kid) device);
+            addContact(mViewSharedContainer, device);
+
+        for(WatchContact user : mActivityMain.mOperator.getRequestToList())
+            addContact(mViewRequestToContainer, user);
+
+        for(WatchContact user : mActivityMain.mOperator.getRequestFromList())
+            addContact(mViewRequestFromContainer, user);
 
         return mViewMain;
     }
@@ -85,21 +95,30 @@ public class FragmentProfileMain extends ViewFragment {
         }
     };
 
-    private View.OnClickListener mAddSharedListener = new View.OnClickListener() {
+    private View.OnClickListener mAddRequestToListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             mActivityMain.selectFragment(FragmentProfileRequest.class.getName(), null);
         }
     };
 
-    private View.OnClickListener mLogoutListener = new View.OnClickListener() {
+    private View.OnClickListener mContactListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            ViewParent container = view.getParent();
+            if(container == mViewDeviceContainer) {
+                Log.d("xxx", "onClick: device");
+            } else if(container == mViewSharedContainer) {
+                Log.d("xxx", "onClick: shared");
+            } else if(container == mViewRequestFromContainer) {
+                Log.d("xxx", "onClick: requestFrom");
+            } else if(container == mViewRequestToContainer) {
+                Log.d("xxx", "onClick: requestTo");
+            }
         }
     };
 
-    private void addContact(LinearLayout layout, WatchContact.Kid device) {
+    private void addContact(LinearLayout layout, WatchContact contact) {
 
         ViewCircle photo = new ViewCircle(mActivityMain);
         photo.setStrokeCount(12);
@@ -111,5 +130,6 @@ public class FragmentProfileMain extends ViewFragment {
         layoutParams.setMargins(margin, 0, margin, 0);
 
         layout.addView(photo, 0, layoutParams);
+        photo.setOnClickListener(mContactListener);
     }
 }

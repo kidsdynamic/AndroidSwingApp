@@ -122,16 +122,8 @@ public class WatchOperator {
     private SQLiteDatabase mDatabase;
     private Context mContext;
 
-    public ArrayList<WatchContact.Kid> mListDevice;
-    public ArrayList<WatchContact.Kid> mListShared;
-    public ArrayList<WatchContact.User> mListRequest;
-
     public WatchOperator(Context context) {
         mContext = context;
-
-        mListDevice = new ArrayList<>();
-        mListShared = new ArrayList<>();
-        mListRequest = new ArrayList<>();
 
         mDatabase = WatchHelper.getDatabase(mContext);
     }
@@ -653,14 +645,18 @@ public class WatchOperator {
     }
 
     public ArrayList<WatchContact.Kid> getDeviceList() {
-        return mListDevice;
+        return new ArrayList<>();
     }
 
     public ArrayList<WatchContact.Kid> getSharedList() {
-        return mListShared;
+        return new ArrayList<>();
     }
 
-    public ArrayList<WatchContact.User> getRequestList() {
-        return mListRequest;
+    public ArrayList<WatchContact.User> getRequestFromList() {
+        return new ArrayList<>();
+    }
+
+    public ArrayList<WatchContact.User> getRequestToList() {
+        return new ArrayList<>();
     }
 }
