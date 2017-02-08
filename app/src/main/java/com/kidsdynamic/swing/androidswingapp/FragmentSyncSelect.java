@@ -35,7 +35,7 @@ public class FragmentSyncSelect extends ViewFragment {
 
         mDeviceList = mActivityMain.mOperator.KidGet();
         for (WatchContact.Kid kid: mDeviceList) {
-            kid.mLastName = kid.mFirstName;
+            kid.mLabel = kid.mFirstName;
 
             if (kid.mProfile.equals("")) {
                 switch (kid.mId % 3) {

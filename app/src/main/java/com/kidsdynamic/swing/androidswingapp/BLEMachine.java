@@ -17,6 +17,7 @@ import java.util.UUID;
 public class BLEMachine extends BLEControl {
     private Handler mHandler = new Handler();
     private onFinishListener mOnFinishListener = null;
+    private onBatteryListener mOnBatteryListener = null;
     private boolean mRunning = false;
 
     private void Log(String msg) {
@@ -267,6 +268,10 @@ public class BLEMachine extends BLEControl {
         void onSync(int resultCode, ArrayList<InOutDoor> result);
     }
 
+    public interface onBatteryListener {
+        void onBattery(byte value);
+    }
+
     private void resetSearchCondition() {
         mOnFinishListener = null;
         mRelationDevice.mAction.mScanTime = 0;
@@ -309,6 +314,7 @@ public class BLEMachine extends BLEControl {
     public int Sync(onFinishListener listener, Device device, List<VoiceAlert> alerts) {
         mOnFinishListener = listener;
         mRelationDevice.Copy(device);
+        mRelationDevice.resetFlag();
         mRelationDevice.mAction.mSync = true;
         mVoiceAlerts = alerts;
         return 0;
@@ -318,6 +324,14 @@ public class BLEMachine extends BLEControl {
         mOnFinishListener = listener;
         mRelationDevice = new Device("Swing", macAddress, 0);
         mRelationDevice.mAction.mSync = true;
+        mVoiceAlerts = new ArrayList<>();
+        return 0;
+    }
+
+    public int Battery(onBatteryListener listener, String macAddress) {
+        mOnBatteryListener = listener;
+        mRelationDevice = new Device("Swing", macAddress, 0);
+        mRelationDevice.mAction.mBattery = true;
         return 0;
     }
 
@@ -355,6 +369,7 @@ public class BLEMachine extends BLEControl {
         class Action {
             int mScanTime;
             boolean mSync;
+            boolean mBattery;
         }
 
         class State {
@@ -367,11 +382,13 @@ public class BLEMachine extends BLEControl {
             byte[] mTime;
             byte[] mData1;
             byte[] mData2;
+            byte mBattery;
         }
 
         void resetFlag() {
             mAction.mScanTime = 0;
             mAction.mSync = false;
+            mAction.mBattery = false;
             mState.mBonded = false;
             mState.mConnected = false;
             mState.mDiscovered = false;

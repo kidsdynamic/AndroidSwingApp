@@ -17,7 +17,7 @@ public class Config {
     private Context mContext;
 
     final static String DEF_APPNAME = "Config";
-    final static String DEF_APPVERSION = "0000-0000-0000";
+    final static String DEF_APPVERSION = "0000-0000-0001";
     final static String PREFS_SPLIT = "__BPPS:__";
 
     public final static String KEY_APPNAME = "KEY_NAME";

@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,8 +57,8 @@ public class FragmentProfileMain extends ViewFragment {
 
         mViewRequestFromContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_request_from_container);
 
-
         // Test
+        /*
         WatchContact.Kid device1 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Device 1", true);
         WatchContact.Kid device2 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Device 2", true);
         addContact(mViewDeviceContainer, device1, mContactListener);
@@ -73,7 +74,14 @@ public class FragmentProfileMain extends ViewFragment {
 
         WatchContact.User from1 = new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "RequestFrom 1");
         addContact(mViewRequestFromContainer, from1, mContactListener);
+        */
         ///
+
+        WatchContact.User parent = mActivityMain.mOperator.UserGet();
+        mViewName.setText(parent.mLabel);
+        if (parent.mPhoto != null) {
+            mViewPhoto.setBitmap(parent.mPhoto);
+        }
 
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
             addContact(mViewDeviceContainer, device, mContactListener);
@@ -86,9 +94,16 @@ public class FragmentProfileMain extends ViewFragment {
 
         for (WatchContact user : mActivityMain.mOperator.getRequestFromUserList())
             addContact(mViewRequestFromContainer, user, mContactListener);
+
         updateRequestFromTitle();
 
         return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        focusContact(mActivityMain.mOperator.KidGetFocus(), true);
     }
 
     @Override
@@ -133,18 +148,15 @@ public class FragmentProfileMain extends ViewFragment {
             WatchContact contact = (WatchContact) viewCircle.getTag();
 
             if (viewContainer == mViewDeviceContainer) {
-                focusContact(contact);
+                Log.d("xxx", "onClick: device " + contact.mLabel);
+                focusContact(contact, false);
 
             } else if (viewContainer == mViewSharedContainer) {
-                focusContact(contact);
+                Log.d("xxx", "onClick: shared " + contact.mLabel);
+                focusContact(contact, false);
 
             } else if (viewContainer == mViewRequestToContainer) {
-
-            } else if (viewContainer == mViewRequestFromContainer) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, contact);
-
-                mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), bundle);
+                Log.d("xxx", "onClick: requestTo " + contact.mLabel);
             }
         }
     };
@@ -169,22 +181,29 @@ public class FragmentProfileMain extends ViewFragment {
         photo.setOnClickListener(listener);
     }
 
-    private void focusContact(WatchContact contact) {
+    private void focusContact(WatchContact contact, boolean onCreate) {
         int count;
 
         count = mViewDeviceContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewDeviceContainer.getChildAt(idx);
-            viewCircle.setStrokeActive(viewCircle.getTag() == contact);
+            WatchContact.Kid kid1 = (WatchContact.Kid)contact;
+            WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
+            if (kid2!=null)
+                viewCircle.setStrokeActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
         }
 
         count = mViewSharedContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewSharedContainer.getChildAt(idx);
-            viewCircle.setStrokeActive(viewCircle.getTag() == contact);
+            WatchContact.Kid kid1 = (WatchContact.Kid)contact;
+            WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
+            if (kid2!=null)
+                viewCircle.setStrokeActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
         }
 
-        // todo: Set focus contact in Database
+        if (!onCreate)
+            mActivityMain.mOperator.KidSetFocus((WatchContact.Kid)contact);
     }
 
     private void updateRequestFromTitle() {
