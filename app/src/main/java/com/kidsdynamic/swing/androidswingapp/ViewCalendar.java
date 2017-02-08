@@ -32,13 +32,13 @@ public class ViewCalendar extends TableLayout {
     public ViewCalendar(Context context) {
         super(context);
         init(context, null);
-        fillCell(context);
+        onFillCell(context);
     }
 
     public ViewCalendar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
-        fillCell(context);
+        onFillCell(context);
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -71,7 +71,7 @@ public class ViewCalendar extends TableLayout {
         }
     }
 
-    public void fillCell(Context context) {
+    public void onFillCell(Context context) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault());
 
         TableRow tableRow = new TableRow(context);

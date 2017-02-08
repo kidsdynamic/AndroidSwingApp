@@ -38,7 +38,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
     }
 
     @Override
-    public void fillCell(Context context) {
+    public void onFillCell(Context context) {
         TableRow tableRow;
 
         // Week Name

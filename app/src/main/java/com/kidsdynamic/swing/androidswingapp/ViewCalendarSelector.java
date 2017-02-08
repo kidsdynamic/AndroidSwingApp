@@ -67,7 +67,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     }
 
     @Override
-    public void fillCell(Context context) {
+    public void onFillCell(Context context) {
         TableRow tableRow = new TableRow(context);
         tableRow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
 
