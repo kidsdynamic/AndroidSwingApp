@@ -656,7 +656,7 @@ public class WatchOperator {
         return new ArrayList<>();
     }
 
-    public ArrayList<WatchContact.User> getRequestToList() {
+    public ArrayList<WatchContact.Kid> getRequestToList() {
         return new ArrayList<>();
     }
 }

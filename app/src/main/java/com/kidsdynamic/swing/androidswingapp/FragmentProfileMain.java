@@ -122,7 +122,7 @@ public class FragmentProfileMain extends ViewFragment {
     private View.OnClickListener mAddRequestToListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentProfileRequest.class.getName(), null);
+            mActivityMain.selectFragment(FragmentProfileRequestTo.class.getName(), null);
         }
     };
 

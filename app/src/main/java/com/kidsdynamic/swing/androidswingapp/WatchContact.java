@@ -6,6 +6,7 @@ import android.support.annotation.LayoutRes;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -180,8 +181,11 @@ public class WatchContact implements Serializable {
         return view;
     }
 
-    static View inflateAdd(Context context, Kid device) {
-        View view = inflate(context, R.layout.watch_contact_add, device);
+    static View inflateButton(Context context, WatchContact contact, String text) {
+        View view = inflate(context, R.layout.watch_contact_button, contact);
+
+        Button button = (Button) view.findViewById(R.id.watch_contact_button_button);
+        button.setText(text);
 
         return view;
     }
