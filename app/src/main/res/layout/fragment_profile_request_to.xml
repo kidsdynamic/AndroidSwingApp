@@ -19,23 +19,23 @@
         android:background="@drawable/contact_background">
 
         <EditText
-            android:id="@+id/profile_request_mail"
+            android:id="@+id/profile_request_to_mail"
             style="@style/edittext_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:imeOptions="actionDone"
             android:hint="Search User Email" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/profile_request_count"
         style="@style/textview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:text="You Have 1 Request" />
+        android:text="Users" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         android:layout_weight="3">
 
         <LinearLayout
-            android:id="@+id/profile_request_request_container"
+            android:id="@+id/profile_request_to_user_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
@@ -63,7 +63,7 @@
         android:layout_weight="4">
 
         <LinearLayout
-            android:id="@+id/profile_request_watch_container"
+            android:id="@+id/profile_request_to_pending_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />

@@ -65,8 +65,8 @@ public class FragmentWatchRequest extends ViewFragment {
     };
 
     private void addDevice(WatchContact.Kid device) {
-        View view = WatchContact.inflateAdd(mActivityMain, device);
-        View button = view.findViewById(R.id.watch_contact_add_button);
+        View view = WatchContact.inflateButton(mActivityMain, device, "Add");
+        View button = view.findViewById(R.id.watch_contact_button_button);
         button.setOnClickListener(mDeviceClickListener);
 
         mViewContainer.addView(view);
