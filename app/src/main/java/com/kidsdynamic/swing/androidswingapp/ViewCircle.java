@@ -29,8 +29,8 @@ import java.util.concurrent.Semaphore;
 public class ViewCircle extends View {
     private final float DEGREE_START = 270;
 
-    public final int STROKE_TYPE_DOT = 0;
-    public final int STROKE_TYPE_ARC = 1;
+    public final static int STROKE_TYPE_DOT = 0;
+    public final static int STROKE_TYPE_ARC = 1;
 
     private int mStrokeType = STROKE_TYPE_ARC;
     private float mStrokeWidth = 8;
@@ -425,7 +425,7 @@ public class ViewCircle extends View {
     }
 
     public void setStrokeColorNormal(@ColorInt int color) {
-        mStrokeColorActive = color;
+        mStrokeColorNormal = color;
         invalidate();
     }
 
@@ -480,12 +480,11 @@ public class ViewCircle extends View {
         invalidate();
     }
 
-    public void setStrokeActive() {
-        setStrokeBeginEnd(-1, mStrokeCount);
-    }
-
-    public void setStrokeNormal() {
-        setStrokeBeginEnd(mStrokeCount, -1);
+    public void setStrokeActive(boolean active) {
+        if (active)
+            setStrokeBeginEnd(-1, mStrokeCount);
+        else
+            setStrokeBeginEnd(mStrokeCount, -1);
     }
 
     public void setCrossWidth(float width) {

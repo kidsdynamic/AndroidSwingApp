@@ -57,10 +57,7 @@ public class ViewPhotoContact extends LinearLayout {
     }
 
     public void setSelected(boolean selected) {
-        if (selected)
-            mViewPhoto.setStrokeActive();
-        else
-            mViewPhoto.setStrokeNormal();
+        mViewPhoto.setStrokeActive(selected);
     }
 
     public void setName(String name) {

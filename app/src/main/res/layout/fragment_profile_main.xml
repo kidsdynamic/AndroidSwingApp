@@ -117,7 +117,6 @@
         android:paddingBottom="6dp">
 
         <TextView
-            android:id="@+id/profile_main_request_to_title"
             style="@style/textview_profile_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,11 +165,11 @@
         android:paddingBottom="6dp">
 
         <TextView
+            android:id="@+id/profile_main_request_from_title"
             style="@style/textview_profile_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="You've 2 requests from" />
+            android:gravity="center"/>
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
