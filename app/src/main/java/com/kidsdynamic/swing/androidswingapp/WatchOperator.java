@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -184,6 +185,11 @@ public class WatchOperator {
             user = cursorToUser(cursor);
 
         cursor.close();
+
+        user.mLabel = user.mFirstName + " " + user.mLastName;
+        if (!user.mProfile.equals("")) {
+            user.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
+        }
 
         return user;
     }
@@ -754,11 +760,67 @@ public class WatchOperator {
     }
 
     public ArrayList<WatchContact.Kid> getDeviceList() {
-        return new ArrayList<>();
+        WatchContact.User user = UserGet();
+
+        ArrayList<WatchContact.Kid> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + USER_ID + "=" + user.mId, null);
+
+        while (cursor.moveToNext()) {
+            WatchContact.Kid kid = cursorToKid(cursor);
+            kid.mLabel = kid.mFirstName;
+            if (kid.mProfile.equals("")) {
+                switch (kid.mId % 3) {
+                    case 1:
+                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_green);
+                        break;
+                    case 2:
+                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_yellow);
+                        break;
+                    default:
+                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_purple);
+                        break;
+                }
+            } else {
+                kid.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+            }
+            result.add(kid);
+        }
+
+        cursor.close();
+
+        return result;
     }
 
     public ArrayList<WatchContact.Kid> getSharedList() {
-        return new ArrayList<>();
+        WatchContact.User user = UserGet();
+
+        ArrayList<WatchContact.Kid> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + USER_ID + "!=" + user.mId, null);
+
+        while (cursor.moveToNext()) {
+            WatchContact.Kid kid = cursorToKid(cursor);
+            kid.mLabel = kid.mFirstName;
+            if (kid.mProfile.equals("")) {
+                switch (kid.mId % 3) {
+                    case 1:
+                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_green);
+                        break;
+                    case 2:
+                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_yellow);
+                        break;
+                    default:
+                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_purple);
+                        break;
+                }
+            } else {
+                kid.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+            }
+            result.add(kid);
+        }
+
+        cursor.close();
+
+        return result;
     }
 
     public ArrayList<WatchContact.User> getRequestFromList() {

@@ -57,8 +57,8 @@ public class FragmentProfileMain extends ViewFragment {
 
         mViewRequestFromContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_request_from_container);
 
-
         // Test
+        /*
         WatchContact.Kid device1 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Device 1", true);
         WatchContact.Kid device2 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Device 2", true);
         addContact(mViewDeviceContainer, device1, mContactListener);
@@ -74,7 +74,14 @@ public class FragmentProfileMain extends ViewFragment {
 
         WatchContact.User from1 = new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "RequestFrom 1");
         addContact(mViewRequestFromContainer, from1, null);
+        */
         ///
+
+        WatchContact.User parent = mActivityMain.mOperator.UserGet();
+        mViewName.setText(parent.mLabel);
+        if (parent.mPhoto != null) {
+            mViewPhoto.setBitmap(parent.mPhoto);
+        }
 
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
             addContact(mViewDeviceContainer, device, mContactListener);
@@ -90,6 +97,12 @@ public class FragmentProfileMain extends ViewFragment {
         updateRequestFromTitle();
 
         return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        focusContact(mActivityMain.mOperator.KidGetFocus(), true);
     }
 
     @Override
@@ -135,11 +148,11 @@ public class FragmentProfileMain extends ViewFragment {
 
             if (viewContainer == mViewDeviceContainer) {
                 Log.d("xxx", "onClick: device " + contact.mLabel);
-                focusContact(contact);
+                focusContact(contact, false);
 
             } else if (viewContainer == mViewSharedContainer) {
                 Log.d("xxx", "onClick: shared " + contact.mLabel);
-                focusContact(contact);
+                focusContact(contact, false);
 
             } else if (viewContainer == mViewRequestFromContainer) {
                 Log.d("xxx", "onClick: requestFrom " + contact.mLabel);
@@ -170,22 +183,29 @@ public class FragmentProfileMain extends ViewFragment {
         photo.setOnClickListener(listener);
     }
 
-    private void focusContact(WatchContact contact) {
+    private void focusContact(WatchContact contact, boolean onCreate) {
         int count;
 
         count = mViewDeviceContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewDeviceContainer.getChildAt(idx);
-            viewCircle.setStrokeActive(viewCircle.getTag() == contact);
+            WatchContact.Kid kid1 = (WatchContact.Kid)contact;
+            WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
+            if (kid2!=null)
+                viewCircle.setStrokeActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
         }
 
         count = mViewSharedContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewSharedContainer.getChildAt(idx);
-            viewCircle.setStrokeActive(viewCircle.getTag() == contact);
+            WatchContact.Kid kid1 = (WatchContact.Kid)contact;
+            WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
+            if (kid2!=null)
+                viewCircle.setStrokeActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
         }
 
-        // todo: Set focus contact in Database
+        if (!onCreate)
+            mActivityMain.mOperator.KidSetFocus((WatchContact.Kid)contact);
     }
 
     private void updateRequestFromTitle() {
