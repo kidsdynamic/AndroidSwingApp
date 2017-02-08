@@ -57,26 +57,6 @@ public class FragmentProfileMain extends ViewFragment {
 
         mViewRequestFromContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_request_from_container);
 
-        // Test
-        /*
-        WatchContact.Kid device1 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Device 1", true);
-        WatchContact.Kid device2 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Device 2", true);
-        addContact(mViewDeviceContainer, device1, mContactListener);
-        addContact(mViewDeviceContainer, device2, mContactListener);
-
-        WatchContact.Kid shared1 = new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Shared 1", true);
-        addContact(mViewSharedContainer, shared1, mContactListener);
-
-        focusContact(shared1);
-
-        WatchContact.User to1 = new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "RequestTo 1");
-        addContact(mViewRequestToContainer, to1, null);
-
-        WatchContact.User from1 = new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "RequestFrom 1");
-        addContact(mViewRequestFromContainer, from1, mContactListener);
-        */
-        ///
-
         WatchContact.User parent = mActivityMain.mOperator.UserGet();
         mViewName.setText(parent.mLabel);
         if (parent.mPhoto != null) {
@@ -148,15 +128,18 @@ public class FragmentProfileMain extends ViewFragment {
             WatchContact contact = (WatchContact) viewCircle.getTag();
 
             if (viewContainer == mViewDeviceContainer) {
-                Log.d("xxx", "onClick: device " + contact.mLabel);
                 focusContact(contact, false);
 
             } else if (viewContainer == mViewSharedContainer) {
-                Log.d("xxx", "onClick: shared " + contact.mLabel);
                 focusContact(contact, false);
 
             } else if (viewContainer == mViewRequestToContainer) {
-                Log.d("xxx", "onClick: requestTo " + contact.mLabel);
+
+            } else if (viewContainer == mViewRequestFromContainer) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, contact);
+
+                mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), bundle);
             }
         }
     };
