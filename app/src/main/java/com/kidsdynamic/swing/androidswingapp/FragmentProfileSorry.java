@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -72,7 +74,9 @@ public class FragmentProfileSorry extends ViewFragment {
     private Button.OnClickListener mOnContactListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // todo: intend browser to access www.kidsdynamic.com
-        }
+            String url = "http://www.kidsdynamic.com";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);        }
     };
 }

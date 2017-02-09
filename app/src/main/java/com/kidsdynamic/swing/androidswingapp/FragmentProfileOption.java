@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +74,15 @@ public class FragmentProfileOption extends ViewFragment {
     private View.OnClickListener mLogoutListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // todo: logout system, reset database, reset config, select to FragmentSignupLogin
+            mActivityMain.mConfig.loadDefaultTable();
+            mActivityMain.mOperator.ResetDatabase();
+            mActivityMain.mServiceMachine.setAuthToken(null);
+            ServerMachine.ResetAvatar();
+
+            Intent i = mActivityMain.getBaseContext().getPackageManager()
+                    .getLaunchIntentForPackage(mActivityMain.getBaseContext().getPackageName());
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
         }
     };
 }
