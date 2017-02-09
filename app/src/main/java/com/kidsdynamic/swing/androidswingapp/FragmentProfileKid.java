@@ -2,6 +2,8 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,14 +12,19 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by 03543 on 2017/1/24.
@@ -29,8 +36,10 @@ public class FragmentProfileKid extends ViewFragment {
     private View mViewMain;
     private ViewCircle mViewPhoto;
     private EditText mViewName;
-    //private EditText mViewZip;
     private Button mViewRemove;
+
+    private Dialog mProcessDialog = null;
+    private Bitmap mAvatarBitmap = null;
 
     AlertDialog mDialog;
     private Uri mPhotoUri;
@@ -53,7 +62,8 @@ public class FragmentProfileKid extends ViewFragment {
         super.onResume();
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
-            mViewPhoto.setBitmap(mActivityMain.mBitmapStack.pop());
+            mAvatarBitmap = mActivityMain.mBitmapStack.pop();
+            mViewPhoto.setBitmap(mAvatarBitmap);
         }
     }
 
@@ -207,6 +217,103 @@ public class FragmentProfileKid extends ViewFragment {
         }
     };
 
+    private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+            if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
+                if (!mKid.mBound) {
+                    mKid.mFirstName = mViewName.getText().toString();
+
+                    if (!mKid.mFirstName.equals("")) {
+                        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+                        String macId = ServerMachine.getMacID(mKid.mLabel);
+                        mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mFirstName, macId);
+                        //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mFirstName, "AAAAAABBBB04");
+                    }
+                }
+            }
+
+            return false;
+        }
+    };
+
+    ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
+            mKid.mId = response.id;
+            mKid.mFirstName = response.name;
+            mKid.mLastName = "";
+            mKid.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
+            mKid.mMacId = response.macId;
+            mKid.mUserId = response.parent.id;
+            mActivityMain.mOperator.KidSetFocus(mKid);
+            if (mAvatarBitmap != null)
+                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mFirstName, ".jpg");
+            if (mKid.mProfile == null)
+                mKid.mProfile = "";
+
+            mActivityMain.mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mKid.mMacId));
+        }
+
+        @Override
+        public void onConflict(int statusCode) {
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
+        @Override
+        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
+            if (!mKid.mProfile.equals("")) {
+                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
+            } else {
+                mProcessDialog.dismiss();
+                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
+            }
+        }
+    };
+
+    ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {
+
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response) {
+
+            File fileFrom = new File(mKid.mProfile);
+            File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.kid.profile);
+            if (!fileFrom.renameTo(fileTo)) {
+                Log.d("swing", "Rename failed! " + mKid.mProfile + " to " + response.kid.profile);
+            }
+            mKid.mProfile = response.kid.profile;
+            mActivityMain.mOperator.KidSetFocus(mKid);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
+
+            mProcessDialog.dismiss();
+            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, "Upload kid avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+
+            Bundle bundle = new Bundle();
+            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mKid.mProfile);
+
+            mProcessDialog.dismiss();
+            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
+        }
+    };
+
+
     private void viewMyKid() {
         mViewPhoto.setBitmap(mKid.mPhoto);
         mViewName.setText(mKid.mLabel);
@@ -235,6 +342,7 @@ public class FragmentProfileKid extends ViewFragment {
         mViewPhoto.setOnClickListener(mPhotoListener);
 
         mViewName.setEnabled(true);
+        mViewName.setOnEditorActionListener(mEdittextActionListener);
         mViewRemove.setVisibility(View.INVISIBLE);
     }
 
