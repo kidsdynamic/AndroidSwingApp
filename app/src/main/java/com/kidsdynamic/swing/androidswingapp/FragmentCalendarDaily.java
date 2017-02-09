@@ -28,7 +28,7 @@ public class FragmentCalendarDaily extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Calendar", true, true, true,
+        return new ViewFragmentConfig("Calendar", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_add);
     }
 
