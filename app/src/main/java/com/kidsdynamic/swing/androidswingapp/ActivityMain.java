@@ -48,6 +48,7 @@ public class ActivityMain extends AppCompatActivity
     public Config mConfig;
     public WatchOperator mOperator;
     public Stack<Bitmap> mBitmapStack;
+    public Stack<WatchContact> mContactStack;
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
     //public int mRequestingPermission = 0;
@@ -80,6 +81,7 @@ public class ActivityMain extends AppCompatActivity
         mConfig = new Config(this, null);
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
+        mContactStack = new Stack<>();
 
         initPermissionList();
 

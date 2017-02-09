@@ -114,10 +114,8 @@ public class FragmentProfileRequestTo extends ViewFragment {
         public void onClick(View view) {
             WatchContact.User person = (WatchContact.User) view.getTag();
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(BUNDLE_KEY_CONTACT, person);
-
-            mActivityMain.selectFragment(FragmentProfileShare.class.getName(), bundle);
+            mActivityMain.mContactStack.push(person);
+            mActivityMain.selectFragment(FragmentProfileShare.class.getName(), null);
         }
     };
 

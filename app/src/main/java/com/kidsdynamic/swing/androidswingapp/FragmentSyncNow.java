@@ -64,9 +64,8 @@ public class FragmentSyncNow extends ViewFragment {
                 device.mLabel = device.mFirstName + " " + device.mLastName;
                 device.mBound = true;
 
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(BUNDLE_KEY_CONTACT, device);
-                mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
+                mActivityMain.mContactStack.push(device);
+                mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), null);
             }
         }
     };

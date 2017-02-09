@@ -38,8 +38,8 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         mViewCount = (TextView) mViewMain.findViewById(R.id.profile_request_from_count);
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_request_from_container);
 
-        if (getArguments() != null) {
-            mRequestFrom = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
+        if (!mActivityMain.mContactStack.isEmpty()) {
+            mRequestFrom = (WatchContact.User) mActivityMain.mContactStack.pop();
             ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getRequestFromKidList(mRequestFrom);
             for (WatchContact.Kid kid : list)
                 addKid(kid);

@@ -116,10 +116,9 @@ public class FragmentWatchSearch extends ViewFragment {
     };
 
     private void gotoWatchSelect() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT_LIST, mSearchResult);
-
-        mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), bundle);
+        for (WatchContact contact : mSearchResult)
+            mActivityMain.mContactStack.push(contact);
+        mActivityMain.selectFragment(FragmentWatchSelect.class.getName(), null);
     }
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {

@@ -26,11 +26,9 @@ public class FragmentProfileSelect extends ViewFragment {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
-        if (getArguments() != null) {
-            mDeviceList = (ArrayList<WatchContact.Kid>) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT_LIST);
-        }
-        if (mDeviceList == null)
-            mDeviceList = new ArrayList<>();
+        mDeviceList = new ArrayList<>();
+        while(!mActivityMain.mContactStack.isEmpty())
+            mDeviceList.add((WatchContact.Kid)mActivityMain.mContactStack.pop());
     }
 
     @Override
@@ -69,13 +67,11 @@ public class FragmentProfileSelect extends ViewFragment {
         public void onClick(View view) {
             WatchContact.Kid device = (WatchContact.Kid) view.getTag();
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, device);
-
+            mActivityMain.mContactStack.push(device);
             if (device.mBound)
-                mActivityMain.selectFragment(FragmentProfileRegistered.class.getName(), bundle);
+                mActivityMain.selectFragment(FragmentProfileRegistered.class.getName(), null);
             else
-                mActivityMain.selectFragment(FragmentProfileAdded.class.getName(), bundle);
+                mActivityMain.selectFragment(FragmentProfileAdded.class.getName(), null);
         }
     };
 }

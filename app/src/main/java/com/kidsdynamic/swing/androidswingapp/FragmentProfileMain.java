@@ -136,10 +136,8 @@ public class FragmentProfileMain extends ViewFragment {
             } else if (viewContainer == mViewRequestToContainer) {
 
             } else if (viewContainer == mViewRequestFromContainer) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, contact);
-
-                mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), bundle);
+                mActivityMain.mContactStack.push(contact);
+                mActivityMain.selectFragment(FragmentProfileRequestFrom.class.getName(), null);
             }
         }
     };

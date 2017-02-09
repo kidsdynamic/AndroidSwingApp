@@ -57,10 +57,9 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewButton1 = (Button) mViewMain.findViewById(R.id.sync_search_button1);
         mViewButton2 = (Button) mViewMain.findViewById(R.id.sync_search_button2);
 
-        if (getArguments() != null)
-            mDevice = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
-        else
-            mDevice = new WatchContact.Kid();
+        mDevice = mActivityMain.mContactStack.isEmpty() ?
+                new WatchContact.Kid() :
+                (WatchContact.Kid) mActivityMain.mContactStack.pop();
 
         Calendar cal = Calendar.getInstance();
         long startTimeStamp = cal.getTimeInMillis();
@@ -70,7 +69,7 @@ public class FragmentSyncSearch extends ViewFragment {
         List<WatchOperator.Event> eventList = mActivityMain.mOperator.EventGet(mDevice, startTimeStamp, endTimeStamp);
         mVoiceAlertList = new ArrayList<>();
         for (WatchOperator.Event event : eventList)
-            mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte)event.mAlert, event.mAlertTimeStamp));
+            mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
 
         mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
         //mMacAddress = "E0:E5:CF:1E:D7:C2";
@@ -300,7 +299,7 @@ public class FragmentSyncSearch extends ViewFragment {
     };
 
 
-        private String rawString(byte[] b) {
+    private String rawString(byte[] b) {
         return String.format(Locale.getDefault(), "%s,%d,%s,%s,%s,%s",
                 byteToStr(b[0], b[1], b[2], b[3]),
                 b[4],

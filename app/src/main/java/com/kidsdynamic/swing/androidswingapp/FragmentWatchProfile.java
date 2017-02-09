@@ -53,9 +53,9 @@ public class FragmentWatchProfile extends ViewFragment {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
-        mDevice = (getArguments() != null) ?
-                (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT) :
-                new WatchContact.Kid();
+        mDevice = mActivityMain.mContactStack.isEmpty() ?
+                new WatchContact.Kid() :
+                (WatchContact.Kid) mActivityMain.mContactStack.pop();
     }
 
     @Override

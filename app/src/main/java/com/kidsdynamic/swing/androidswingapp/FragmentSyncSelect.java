@@ -34,7 +34,7 @@ public class FragmentSyncSelect extends ViewFragment {
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.sync_select_container);
 
         mDeviceList = mActivityMain.mOperator.KidGet();
-         for (WatchContact.Kid device : mDeviceList)
+        for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
 
         // todo: select current focused kid
@@ -83,10 +83,8 @@ public class FragmentSyncSelect extends ViewFragment {
 
             setSelected(mDeviceList.indexOf(device));
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, device);
-
-            mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), bundle);
+            mActivityMain.mContactStack.push(device);
+            mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), null);
         }
     };
 }

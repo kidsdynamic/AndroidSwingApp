@@ -23,7 +23,10 @@ public class FragmentWatchAdded extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-        mDevice = (WatchContact.Kid)getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
+
+        mDevice = mActivityMain.mContactStack.isEmpty() ?
+                new WatchContact.Kid() :
+                (WatchContact.Kid) mActivityMain.mContactStack.pop();
     }
 
     @Override
@@ -60,10 +63,8 @@ public class FragmentWatchAdded extends ViewFragment {
     private Button.OnClickListener mOnProfileListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, mDevice);
-
-            mActivityMain.selectFragment(FragmentWatchProfile.class.getName(), bundle);
+            mActivityMain.mContactStack.push(mDevice);
+            mActivityMain.selectFragment(FragmentWatchProfile.class.getName(), null);
         }
     };
 

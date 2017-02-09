@@ -45,8 +45,9 @@ public class FragmentProfileShare extends ViewFragment {
         mViewTitle = (TextView) mViewMain.findViewById(R.id.profile_share_title);
         mViewShareContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_share_container);
 
-        if (getArguments() != null) {
-            mRequestTo = (WatchContact.User) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
+        if(!mActivityMain.mContactStack.isEmpty()) {
+            mRequestTo = (WatchContact.User)mActivityMain.mContactStack.pop();
+
             String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mRequestTo.mLabel);
             mViewTitle.setText(title);
 

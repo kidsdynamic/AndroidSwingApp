@@ -112,10 +112,9 @@ public class FragmentProfileSearch extends ViewFragment {
     };
 
     private void gotoWatchSelect() {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT_LIST, mSearchResult);
-
-        mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), bundle);
+        for(WatchContact contact : mSearchResult)
+            mActivityMain.mContactStack.push(contact);
+        mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
     }
 
     private ViewCircle.OnProgressListener mSearchProgressListener = new ViewCircle.OnProgressListener() {
