@@ -68,6 +68,28 @@
             android:src="@mipmap/icon_right" />
     </RelativeLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_gray_light" />
+
+    <RelativeLayout
+        android:id="@+id/profile_option_logout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/color_white"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="Logout" />
+
+    </RelativeLayout>
+
     <TextView
         style="@style/textview_toolbar"
         android:layout_width="match_parent"

@@ -17,6 +17,7 @@ public class FragmentProfileOption extends ViewFragment {
     private View mViewMain;
     private View mViewPassword;
     private View mViewProfile;
+    private View mViewLogout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,9 @@ public class FragmentProfileOption extends ViewFragment {
 
         mViewPassword = mViewMain.findViewById(R.id.profile_option_password);
         mViewPassword.setOnClickListener(mPasswordListener);
+
+        mViewLogout = mViewMain.findViewById(R.id.profile_option_logout);
+        mViewLogout.setOnClickListener(mLogoutListener);
 
         TextView view = (TextView) mViewMain.findViewById(R.id.profile_option_version);
         view.setText(BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE);
@@ -62,6 +66,13 @@ public class FragmentProfileOption extends ViewFragment {
         @Override
         public void onClick(View view) {
             mActivityMain.selectFragment(FragmentProfilePassword.class.getName(), null);
+        }
+    };
+
+    private View.OnClickListener mLogoutListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // todo: logout system, reset database, reset config, select to FragmentSignupLogin
         }
     };
 }
