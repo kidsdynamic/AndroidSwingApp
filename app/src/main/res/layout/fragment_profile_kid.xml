@@ -49,25 +49,7 @@
             android:enabled="false"
             android:hint="Name" />
     </LinearLayout>
-<!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
 
-        <EditText
-            android:id="@+id/profile_kid_zip"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:enabled="false"
-            android:hint="Zip" />
-    </LinearLayout>
--->
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"

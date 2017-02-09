@@ -1,14 +1,11 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.Calendar;
 
 /**
  * Created by 03543 on 2016/12/19.
@@ -42,11 +39,11 @@ public class FragmentCalendarMain extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
-        mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_main_selector);
+        mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_daily_selector);
         mViewSelector.setDate(mDefaultDate);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
-        mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_main_calendar);
+        mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_daily_calendar);
         mViewCalendar.setDate(mDefaultDate);
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
@@ -86,23 +83,32 @@ public class FragmentCalendarMain extends ViewFragment {
         mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), bundle);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        long date = mViewCalendar.getDate();
+        loadCalendar(date, date + 86400 - 1);
+        updateAlert();
+    }
+
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
-            mViewCalendar.setDate(date);
-            loadCalendar(date, date + 86400 - 1);
-            updateAlert();
+            Bundle bundle = new Bundle();
+            bundle.putLong(BUNDLE_KEY_DATE, date);
+
+            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
         }
     };
 
     private ViewCalendarWeek.OnSelectListener mCalendarListener = new ViewCalendarWeek.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
-            long date = cell.getDate();
-            mViewSelector.setDate(cell.getDate());
+            Bundle bundle = new Bundle();
+            bundle.putLong(BUNDLE_KEY_DATE, cell.getDate());
 
-            loadCalendar(date, date + 86400 - 1);
-            updateAlert();
+            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
         }
     };
 
