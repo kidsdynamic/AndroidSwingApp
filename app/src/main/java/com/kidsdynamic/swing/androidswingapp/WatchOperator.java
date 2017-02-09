@@ -374,7 +374,7 @@ public class WatchOperator {
         mDatabase.execSQL(WatchOperator.CREATE_EVENT_TABLE);
     }
 
-    public long EventAdd(Event event) {
+    public long EventAdd(WatchEvent event) {
         long rtn;
         ContentValues contentValues = new ContentValues();
 
@@ -397,7 +397,7 @@ public class WatchOperator {
 
         rtn = mDatabase.insert(TABLE_EVENT, null, contentValues);
 
-        for (Todo todo : event.mTodoList) {
+        for (WatchTodo todo : event.mTodoList) {
             todo.mEventId = event.mId;
             todo.mUserId = event.mUserId;
             todo.mKidId = event.mKidId;
@@ -407,7 +407,7 @@ public class WatchOperator {
         return rtn;
     }
 
-    public long EventUpdate(Event event) {
+    public long EventUpdate(WatchEvent event) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, event.mId);
@@ -430,8 +430,8 @@ public class WatchOperator {
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId + " AND " + KID_ID + "=" + event.mKidId, null);
     }
 
-    private List<Event>EventGetRepeat(int userId, int kidId, long startTimeStamp, long endTimeStamp, String repeat) {
-        List<Event>repeatResult = new ArrayList<>();
+    private List<WatchEvent>EventGetRepeat(int userId, int kidId, long startTimeStamp, long endTimeStamp, String repeat) {
+        List<WatchEvent>repeatResult = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
                 " WHERE " +
                 USER_ID + "=" + userId + " AND " +
@@ -444,17 +444,17 @@ public class WatchOperator {
 
         cursor.close();
 
-        for (Event event : repeatResult)
+        for (WatchEvent event : repeatResult)
             event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
 
-        List<Event> result = new ArrayList<>();
+        List<WatchEvent> result = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
 
-        for(Event event : repeatResult) {
+        for(WatchEvent event : repeatResult) {
             cal.setTimeInMillis(event.mAlertTimeStamp);
             do {
                 if (event.mAlertTimeStamp >= startTimeStamp && event.mAlertTimeStamp <= endTimeStamp) {
-                    result.add(new Event(event));
+                    result.add(new WatchEvent(event));
                 }
                 switch(repeat) {
                     case "DAILY":
@@ -474,8 +474,8 @@ public class WatchOperator {
         return result;
     }
 
-    public List<Event> EventGet(int userId, int kidId, long startTimeStamp, long endTimeStamp) {
-        List<Event> result = new ArrayList<>();
+    public List<WatchEvent> EventGet(int userId, int kidId, long startTimeStamp, long endTimeStamp) {
+        List<WatchEvent> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
                 " WHERE (" + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId + " AND " + REPEAT + "=''" + ") AND " +
                 "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
@@ -488,25 +488,25 @@ public class WatchOperator {
 
         cursor.close();
 
-        for (Event event : result)
+        for (WatchEvent event : result)
             event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
 
-        List<Event>dailyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "DAILY");
-        List<Event>weeklyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "WEEKLY");
-        List<Event>monthlyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "MONTHLY");
+        List<WatchEvent>dailyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "DAILY");
+        List<WatchEvent>weeklyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "WEEKLY");
+        List<WatchEvent>monthlyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "MONTHLY");
 
-        for (Event event : dailyResult)
+        for (WatchEvent event : dailyResult)
             result.add(event);
 
-        for (Event event : weeklyResult)
+        for (WatchEvent event : weeklyResult)
             result.add(event);
 
-        for (Event event : monthlyResult)
+        for (WatchEvent event : monthlyResult)
             result.add(event);
 
-        Collections.sort(result, new Comparator<Event>() {
+        Collections.sort(result, new Comparator<WatchEvent>() {
             @Override
-            public int compare(Event t1, Event t2) {
+            public int compare(WatchEvent t1, WatchEvent t2) {
                 if (t2.mAlertTimeStamp > t1.mAlertTimeStamp) {
                     return -1;
                 } else if (t2.mAlertTimeStamp < t1.mAlertTimeStamp) {
@@ -520,103 +520,12 @@ public class WatchOperator {
         return result;
     }
 
-    public List<Event> EventGet(WatchContact.Kid kid, long startTimeStamp, long endTimeStamp) {
+    public List<WatchEvent> EventGet(WatchContact.Kid kid, long startTimeStamp, long endTimeStamp) {
         return EventGet(kid.mUserId, kid.mId, startTimeStamp, endTimeStamp);
     }
 
-    public static class Event {
-        int mId;
-        int mUserId;
-        int mKidId;
-        String mName;
-        long mStartDate;
-        long mEndDate;
-        String mColor;
-        String mStatus;
-        String mDescription;
-        int mAlert;
-        String mCity;
-        String mState;
-        String mRepeat;
-        int mTimezoneOffset;
-        long mDateCreated;
-        long mLastUpdated;
-        List<Todo> mTodoList;
-        long mAlertTimeStamp;
-
-        Event(int id, int alert, String repeat, long startDate, long endDate) {
-            mId = id;
-            mUserId = 0;
-            mKidId = 0;
-            mName = "";
-            mStartDate = startDate;
-            mEndDate = endDate;
-            mColor = "";
-            mStatus = "";
-            mDescription = "";
-            mAlert = alert;
-            mCity = "";
-            mState = "";
-            mRepeat = repeat;
-            mTimezoneOffset = 0;
-            mDateCreated = 0;
-            mLastUpdated = 0;
-            mTodoList = new ArrayList<Todo>();
-            mTodoList.add(new Todo(id, 0, 0, 0, "TEST", "", 0, 0));
-            mTodoList.add(new Todo(id, 0, 0, 0, "TEST", "", 0, 0));
-            mAlertTimeStamp = startDate;
-        }
-
-        Event(int id, int userId, int kidId, String name, long startDate,
-              long endDate, String color, String status, String description,
-              int alert, String city, String state, String repeat,
-              int timezoneOffset, long dateCreated, long lastUpdated) {
-            mId = id;
-            mUserId = userId;
-            mKidId = kidId;
-            mName = name;
-            mStartDate = startDate;
-            mEndDate = endDate;
-            mColor = color;
-            mStatus = status;
-            mDescription = description;
-            mAlert = alert;
-            mCity = city;
-            mState = state;
-            mRepeat = repeat;
-            mTimezoneOffset = timezoneOffset;
-            mDateCreated = dateCreated;
-            mLastUpdated = lastUpdated;
-            mTodoList = new ArrayList<Todo>();
-            mAlertTimeStamp = startDate;
-        }
-
-        Event(Event src) {
-            mId = src.mId;
-            mUserId = src.mUserId;
-            mKidId = src.mKidId;
-            mName = src.mName;
-            mStartDate = src.mStartDate;
-            mEndDate = src.mEndDate;
-            mColor = src.mColor;
-            mStatus = src.mStatus;
-            mDescription = src.mDescription;
-            mAlert = src.mAlert;
-            mCity = src.mCity;
-            mState = src.mState;
-            mRepeat = src.mRepeat;
-            mTimezoneOffset = src.mTimezoneOffset;
-            mDateCreated = src.mDateCreated;
-            mLastUpdated = src.mLastUpdated;
-            mTodoList = new ArrayList<>();
-            for(Todo todo : src.mTodoList)
-                mTodoList.add(new Todo(todo));
-            mAlertTimeStamp = src.mAlertTimeStamp;
-        }
-    }
-
-    private Event cursorToEvent(Cursor cursor) {
-        return new Event(
+    private WatchEvent cursorToEvent(Cursor cursor) {
+        return new WatchEvent(
                 cursor.getInt(0),
                 cursor.getInt(1),
                 cursor.getInt(2),
@@ -636,7 +545,7 @@ public class WatchOperator {
         );
     }
 
-    public long TodoAdd(Todo todo) {
+    public long TodoAdd(WatchTodo todo) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, todo.mId);
@@ -651,7 +560,7 @@ public class WatchOperator {
         return mDatabase.insert(TABLE_TODO, null, contentValues);
     }
 
-    public long TodoUpdate(Todo todo) {
+    public long TodoUpdate(WatchTodo todo) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, todo.mId);
@@ -666,8 +575,8 @@ public class WatchOperator {
         return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId + " AND " + USER_ID + "=" + todo.mUserId + " AND " + KID_ID + "=" + todo.mKidId + " AND " + EVENT_ID + "=" + todo.mEventId, null);
     }
 
-    public List<Todo> TodoGet() {
-        List<Todo> result = new ArrayList<>();
+    public List<WatchTodo> TodoGet() {
+        List<WatchTodo> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO, null);
 
         while (cursor.moveToNext())
@@ -678,8 +587,8 @@ public class WatchOperator {
         return result;
     }
 
-    public List<Todo> TodoGet(int eventId, int userId, int kidId) {
-        List<Todo> result = new ArrayList<>();
+    public List<WatchTodo> TodoGet(int eventId, int userId, int kidId) {
+        List<WatchTodo> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId, null);
 
         while (cursor.moveToNext())
@@ -690,42 +599,8 @@ public class WatchOperator {
         return result;
     }
 
-    public static class Todo {
-        int mId;
-        int mUserId;
-        int mKidId;
-        int mEventId;
-        String mText;
-        String mStatus;
-        long mDateCreated;
-        long mLastUpdated;
-
-        Todo(int id, int userId, int kidId, int eventId, String text, String status,
-             long dateCreated, long lastUpdated) {
-            mId = id;
-            mUserId = userId;
-            mKidId = kidId;
-            mEventId = eventId;
-            mText = text;
-            mStatus = status;
-            mDateCreated = dateCreated;
-            mLastUpdated = lastUpdated;
-        }
-
-        Todo(Todo src) {
-            mId = src.mId;
-            mUserId = src.mUserId;
-            mKidId = src.mKidId;
-            mEventId = src.mEventId;
-            mText = src.mText;
-            mStatus = src.mStatus;
-            mDateCreated = src.mDateCreated;
-            mLastUpdated = src.mLastUpdated;
-        }
-    }
-
-    private Todo cursorToTodo(Cursor cursor) {
-        return new Todo(
+    private WatchTodo cursorToTodo(Cursor cursor) {
+        return new WatchTodo(
                 cursor.getInt(0),
                 cursor.getInt(1),
                 cursor.getInt(2),

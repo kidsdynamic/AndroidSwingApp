@@ -66,9 +66,9 @@ public class FragmentSyncSearch extends ViewFragment {
         cal.add(Calendar.MONTH, 2);
         long endTimeStamp = cal.getTimeInMillis();
 
-        List<WatchOperator.Event> eventList = mActivityMain.mOperator.EventGet(mDevice, startTimeStamp, endTimeStamp);
+        List<WatchEvent> eventList = mActivityMain.mOperator.EventGet(mDevice, startTimeStamp, endTimeStamp);
         mVoiceAlertList = new ArrayList<>();
-        for (WatchOperator.Event event : eventList)
+        for (WatchEvent event : eventList)
             mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
 
         mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
