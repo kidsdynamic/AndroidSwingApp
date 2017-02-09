@@ -12,18 +12,18 @@
         android:layout_weight="1">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/calendar_main_selector_sponge"
+            android:id="@+id/calendar_daily_selector_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:shrinkWidth="0.8" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewCalendarSelector
-            android:id="@+id/calendar_main_selector"
+            android:id="@+id/calendar_daily_selector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/calendar_main_selector_sponge"
-            android:layout_alignStart="@+id/calendar_main_selector_sponge"
+            android:layout_alignEnd="@+id/calendar_daily_selector_sponge"
+            android:layout_alignStart="@+id/calendar_daily_selector_sponge"
             android:textColor="@color/color_gray_deep"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -38,25 +38,25 @@
         android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/calendar_main_calendar_sponge"
+            android:id="@+id/calendar_daily_calendar_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             app:shrinkWidth="0.9" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewCalendarWeek
-            android:id="@+id/calendar_main_calendar"
+            android:id="@+id/calendar_daily_calendar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/calendar_main_calendar_sponge"
-            android:layout_alignStart="@+id/calendar_main_calendar_sponge"
+            android:layout_alignEnd="@+id/calendar_daily_calendar_sponge"
+            android:layout_alignStart="@+id/calendar_daily_calendar_sponge"
             android:textColor="@color/color_gray_deep"
             android:textSize="16sp"
             android:textStyle="bold"
             app:exceedColor="@color/color_gray_light"
-            app:todayColor="@color/color_orange_main"
+            app:focusBackgroundColor="@color/color_orange_main"
             app:focusColor="@color/color_white"
-            app:focusBackgroundColor="@color/color_orange_main"/>
+            app:todayColor="@color/color_orange_main" />
 
     </RelativeLayout>
 
