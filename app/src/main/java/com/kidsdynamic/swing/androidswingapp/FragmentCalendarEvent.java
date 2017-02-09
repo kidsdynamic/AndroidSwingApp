@@ -224,14 +224,20 @@ public class FragmentCalendarEvent extends ViewFragment {
     };
 
     private void eventLoad() {
+        // Load alarm
         String alarmName = "";
         for (FragmentCalendarAlarm.NoticeAlarm alarm : FragmentCalendarAlarm.NoticeAlarmList) {
             if (alarm.mId == mEvent.mAlert)
                 alarmName = FragmentCalendarAlarm.findAlarmName(mEvent.mAlert);
         }
 
-        if (alarmName.length() == 0 || mEvent.mAlert == 0)
+        if (alarmName.length() == 0) { // Event is illegal, select first one
+            mEvent.mAlert = FragmentCalendarAlarm.NoticeAlarmList[0].mId;
+        }
+
+        if (mEvent.mAlert == 0)// simple name
             alarmName = "App Only";
+
         mViewAlarmLabel.setText(alarmName);
     }
 
