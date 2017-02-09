@@ -58,7 +58,10 @@ public class FragmentProfileOption extends ViewFragment {
     private View.OnClickListener mProfileListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentProfileKid.class.getName(), null);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, mActivityMain.mOperator.getFocusKid());
+
+            mActivityMain.selectFragment(FragmentProfileKid.class.getName(), bundle);
         }
     };
 

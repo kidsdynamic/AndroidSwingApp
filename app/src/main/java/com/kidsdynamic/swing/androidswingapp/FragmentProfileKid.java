@@ -43,6 +43,10 @@ public class FragmentProfileKid extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        if (getArguments() != null) {
+            mKid = (WatchContact.Kid) getArguments().getSerializable(ViewFragment.BUNDLE_KEY_CONTACT);
+        }
     }
 
     @Override
@@ -60,23 +64,18 @@ public class FragmentProfileKid extends ViewFragment {
 
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_kid_photo);
 
-        mViewName = (EditText)mViewMain.findViewById(R.id.profile_kid_name);
+        mViewName = (EditText) mViewMain.findViewById(R.id.profile_kid_name);
 
-        mViewRemove = (Button)mViewMain.findViewById(R.id.profile_kid_remove);
+        mViewRemove = (Button) mViewMain.findViewById(R.id.profile_kid_remove);
         mViewRemove.setOnClickListener(mRemoveListener);
 
-        mKid = mActivityMain.mOperator.getFocusKid();
-        if(mKid != null) {
-            mViewPhoto.setBitmap(mKid.mPhoto);
-            mViewName.setText(mKid.mLabel);
-
-            if(true) {    // todo: if Kid is belong to user
-                mViewPhoto.setFillDarker(true);
-                mViewPhoto.setCrossWidth(4);
-                mViewPhoto.setOnClickListener(mPhotoListener);
-
-                mViewName.setEnabled(true);
-            }
+        if (mKid != null) {
+            if (!mKid.mBound)
+                viewNewKid();
+            else if (mKid.mUserId == mActivityMain.mOperator.UserGet().mId)
+                viewMyKid();
+            else
+                viewOthersKid();
         }
 
         return mViewMain;
@@ -96,7 +95,7 @@ public class FragmentProfileKid extends ViewFragment {
     @Override
     public void onToolbarAction2() {
         saveContact(mKid);
-        mActivityMain.selectFragment(FragmentProfileOption.class.getName(), null);
+        mActivityMain.popFragment();
     }
 
     @Override
@@ -204,13 +203,44 @@ public class FragmentProfileKid extends ViewFragment {
     private View.OnClickListener mRemoveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(mKid == null)
+            if (mKid == null)
                 return;
         }
     };
 
+    private void viewMyKid() {
+        mViewPhoto.setBitmap(mKid.mPhoto);
+        mViewName.setText(mKid.mLabel);
+        mViewPhoto.setFillDarker(true);
+        mViewPhoto.setCrossWidth(4);
+        mViewPhoto.setOnClickListener(mPhotoListener);
+
+        mViewName.setEnabled(true);
+        mViewRemove.setVisibility(View.VISIBLE);
+    }
+
+    private void viewOthersKid() {
+        mViewPhoto.setBitmap(mKid.mPhoto);
+        mViewName.setText(mKid.mLabel);
+        mViewPhoto.setFillDarker(false);
+        mViewPhoto.setCrossWidth(0);
+        mViewPhoto.setOnClickListener(null);
+
+        mViewName.setEnabled(false);
+        mViewRemove.setVisibility(View.VISIBLE);
+    }
+
+    private void viewNewKid() {
+        mViewPhoto.setFillDarker(true);
+        mViewPhoto.setCrossWidth(4);
+        mViewPhoto.setOnClickListener(mPhotoListener);
+
+        mViewName.setEnabled(true);
+        mViewRemove.setVisibility(View.INVISIBLE);
+    }
+
     private void saveContact(WatchContact.Kid kid) {
-        if(mKid == null)
+        if (mKid == null)
             return;
     }
 }
