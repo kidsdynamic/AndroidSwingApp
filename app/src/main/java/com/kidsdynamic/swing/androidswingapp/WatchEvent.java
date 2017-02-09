@@ -9,6 +9,11 @@ import java.util.List;
  */
 
 public class WatchEvent implements Serializable {
+    public final static String REPEAT_NONE = "";
+    public final static String REPEAT_DAILY = "DAILY";
+    public final static String REPEAT_WEEKLY = "WEEKLY";
+    public final static String REPEAT_MONTHLY = "MONTHLY";
+
     public int mId;
     public int mUserId;
     public int mKidId;
@@ -28,30 +33,38 @@ public class WatchEvent implements Serializable {
     public List<WatchTodo> mTodoList;
     public long mAlertTimeStamp;
 
-    public WatchEvent(int id, int alert, String repeat, long startDate, long endDate) {
-        mId = id;
-        mUserId = 0;
-        mKidId = 0;
-        mName = "";
-        mStartDate = startDate;
-        mEndDate = endDate;
-        mColor = "";
-        mStatus = "";
-        mDescription = "";
-        mAlert = alert;
-        mCity = "";
-        mState = "";
-        mRepeat = repeat;
-        mTimezoneOffset = 0;
-        mDateCreated = 0;
-        mLastUpdated = 0;
-        mTodoList = new ArrayList<WatchTodo>();
-        mTodoList.add(new WatchTodo(id, 0, 0, 0, "TEST", "", 0, 0));
-        mTodoList.add(new WatchTodo(id, 0, 0, 0, "TEST", "", 0, 0));
-        mAlertTimeStamp = startDate;
+    public WatchEvent() {
+        long now = System.currentTimeMillis();
+        init(0, 0, 0, "", now, now, "", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+    }
+
+    public WatchEvent(long date) {
+        long now = System.currentTimeMillis();
+        init(0, 0, 0, "", date, date, "", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+    }
+
+    public WatchEvent(long startDate, long endDate) {
+        long now = System.currentTimeMillis();
+        init(0, 0, 0, "", startDate, endDate, "", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, int kidId, String name, long startDate,
+                      long endDate, String color, String status, String description,
+                      int alert, String city, String state, String repeat,
+                      int timezoneOffset, long dateCreated, long lastUpdated) {
+        init(id, userId, kidId, name, startDate, endDate, color, status, description,
+                alert, city, state, repeat, timezoneOffset, dateCreated, lastUpdated);
+    }
+
+    public WatchEvent(WatchEvent src) {
+        init(src.mId, src.mUserId, src.mKidId, src.mName, src.mStartDate, src.mEndDate, src.mColor, src.mStatus, src.mDescription,
+                src.mAlert, src.mCity, src.mState, src.mRepeat, src.mTimezoneOffset, src.mDateCreated, src.mLastUpdated);
+
+        for (WatchTodo todo : src.mTodoList)
+            mTodoList.add(new WatchTodo(todo));
+    }
+
+    private void init(int id, int userId, int kidId, String name, long startDate,
                       long endDate, String color, String status, String description,
                       int alert, String city, String state, String repeat,
                       int timezoneOffset, long dateCreated, long lastUpdated) {
@@ -71,30 +84,7 @@ public class WatchEvent implements Serializable {
         mTimezoneOffset = timezoneOffset;
         mDateCreated = dateCreated;
         mLastUpdated = lastUpdated;
-        mTodoList = new ArrayList<WatchTodo>();
-        mAlertTimeStamp = startDate;
-    }
-
-    public WatchEvent(WatchEvent src) {
-        mId = src.mId;
-        mUserId = src.mUserId;
-        mKidId = src.mKidId;
-        mName = src.mName;
-        mStartDate = src.mStartDate;
-        mEndDate = src.mEndDate;
-        mColor = src.mColor;
-        mStatus = src.mStatus;
-        mDescription = src.mDescription;
-        mAlert = src.mAlert;
-        mCity = src.mCity;
-        mState = src.mState;
-        mRepeat = src.mRepeat;
-        mTimezoneOffset = src.mTimezoneOffset;
-        mDateCreated = src.mDateCreated;
-        mLastUpdated = src.mLastUpdated;
         mTodoList = new ArrayList<>();
-        for (WatchTodo todo : src.mTodoList)
-            mTodoList.add(new WatchTodo(todo));
-        mAlertTimeStamp = src.mAlertTimeStamp;
+        mAlertTimeStamp = startDate;
     }
 }

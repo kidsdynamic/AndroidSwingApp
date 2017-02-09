@@ -457,13 +457,13 @@ public class WatchOperator {
                     result.add(new WatchEvent(event));
                 }
                 switch(repeat) {
-                    case "DAILY":
+                    case WatchEvent.REPEAT_DAILY:
                         cal.add(Calendar.DATE, 1);
                         break;
-                    case "WEEKLY":
+                    case WatchEvent.REPEAT_WEEKLY:
                         cal.add(Calendar.DATE, 7);
                         break;
-                    case "MONTHLY":
+                    case WatchEvent.REPEAT_MONTHLY:
                         cal.add(Calendar.MONTH, 1);
                         break;
                 }

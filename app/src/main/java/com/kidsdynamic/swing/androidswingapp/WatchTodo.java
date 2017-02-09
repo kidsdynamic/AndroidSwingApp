@@ -17,8 +17,22 @@ public class WatchTodo implements Serializable {
     public long mDateCreated;
     public long mLastUpdated;
 
+    public WatchTodo() {
+        long now = System.currentTimeMillis();
+        init(0, 0, 0, 0, "", "", now, now);
+    }
+
     public WatchTodo(int id, int userId, int kidId, int eventId, String text, String status,
                      long dateCreated, long lastUpdated) {
+        init(id, userId, kidId, eventId, text, status, dateCreated, lastUpdated);
+    }
+
+    public WatchTodo(WatchTodo src) {
+        init(src.mId, src.mUserId, src.mKidId, src.mEventId, src.mText, src.mStatus, src.mDateCreated, src.mLastUpdated);
+    }
+
+    private void init(int id, int userId, int kidId, int eventId, String text, String status,
+                      long dateCreated, long lastUpdated) {
         mId = id;
         mUserId = userId;
         mKidId = kidId;
@@ -27,16 +41,5 @@ public class WatchTodo implements Serializable {
         mStatus = status;
         mDateCreated = dateCreated;
         mLastUpdated = lastUpdated;
-    }
-
-    public WatchTodo(WatchTodo src) {
-        mId = src.mId;
-        mUserId = src.mUserId;
-        mKidId = src.mKidId;
-        mEventId = src.mEventId;
-        mText = src.mText;
-        mStatus = src.mStatus;
-        mDateCreated = src.mDateCreated;
-        mLastUpdated = src.mLastUpdated;
     }
 }
