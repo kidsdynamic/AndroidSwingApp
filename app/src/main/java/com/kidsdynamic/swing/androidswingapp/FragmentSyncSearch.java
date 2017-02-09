@@ -165,7 +165,7 @@ public class FragmentSyncSearch extends ViewFragment {
     };
 
     private void bleSearchStart() {
-        mActivityMain.mBLEMachine.Search(mBleListener, mMacAddress);
+        mActivityMain.mBLEMachine.Search(mOnSearchListener, mMacAddress);
         mSearchResult = null;
     }
 
@@ -175,7 +175,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
     private void bleSyncStart() {
         if (mSearchResult != null)
-            mActivityMain.mBLEMachine.Sync(mBleListener, mSearchResult, mVoiceAlertList);
+            mActivityMain.mBLEMachine.Sync(mOnSyncListener, mSearchResult, mVoiceAlertList);
         mSyncFinish = false;
     }
 
@@ -261,7 +261,7 @@ public class FragmentSyncSearch extends ViewFragment {
         mViewProgress.setStrokeActive(false);
     }
 
-    BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
+    BLEMachine.onSearchListener mOnSearchListener = new BLEMachine.onSearchListener() {
         @Override
         public void onSearch(ArrayList<BLEMachine.Device> result) {
             for (BLEMachine.Device dev : result) {
@@ -271,7 +271,9 @@ public class FragmentSyncSearch extends ViewFragment {
                 }
             }
         }
+    };
 
+    BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
         @Override
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (resultCode == SYNC_RESULT_SUCCESS) {
@@ -297,7 +299,8 @@ public class FragmentSyncSearch extends ViewFragment {
         }
     };
 
-    private String rawString(byte[] b) {
+
+        private String rawString(byte[] b) {
         return String.format(Locale.getDefault(), "%s,%d,%s,%s,%s,%s",
                 byteToStr(b[0], b[1], b[2], b[3]),
                 b[4],

@@ -224,8 +224,8 @@ public class FragmentWatchProfile extends ViewFragment {
             if (mDevice.mProfile == null)
                 mDevice.mProfile = "";
 
-            mActivityMain.mBLEMachine.Sync(mBleListener, ServerMachine.getMacAddress(mDevice.mMacId));
-            //mActivityMain.mBLEMachine.Sync(mBleListener, mDevice.mLabel);
+            mActivityMain.mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mDevice.mMacId));
+            //mActivityMain.mBLEMachine.Sync(mOnSearchListener, mDevice.mLabel);
         }
 
         @Override
@@ -241,11 +241,7 @@ public class FragmentWatchProfile extends ViewFragment {
         }
     };
 
-    BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
-        @Override
-        public void onSearch(ArrayList<BLEMachine.Device> result) {
-        }
-
+    BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
         @Override
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (!mDevice.mProfile.equals("")) {

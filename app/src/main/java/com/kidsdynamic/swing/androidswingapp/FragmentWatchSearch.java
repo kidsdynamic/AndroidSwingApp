@@ -42,7 +42,7 @@ public class FragmentWatchSearch extends ViewFragment {
         mViewProgress.setStrokeBeginEnd(0, 0);
         mViewProgress.startProgress(250, -1, -1);
 
-        mActivityMain.mBLEMachine.Search(mBleListener, 10);
+        mActivityMain.mBLEMachine.Search(mOnSearchListener, 10);
 
         return mViewMain;
     }
@@ -59,7 +59,7 @@ public class FragmentWatchSearch extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    BLEMachine.onFinishListener mBleListener = new BLEMachine.onFinishListener() {
+    BLEMachine.onSearchListener mOnSearchListener = new BLEMachine.onSearchListener() {
         @Override
         public void onSearch(ArrayList<BLEMachine.Device> result) {
             mSearchResult = new ArrayList<>();
@@ -72,11 +72,6 @@ public class FragmentWatchSearch extends ViewFragment {
 
             if (!enumerateRegisteredMacId(true))
                 mActivityMain.selectFragment(FragmentWatchSorry.class.getName(), null);
-        }
-
-        @Override
-        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
-
         }
     };
 

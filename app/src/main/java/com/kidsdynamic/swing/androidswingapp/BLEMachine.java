@@ -16,7 +16,8 @@ import java.util.UUID;
 
 public class BLEMachine extends BLEControl {
     private Handler mHandler = new Handler();
-    private onFinishListener mOnFinishListener = null;
+    private onSearchListener mOnSearchListener = null;
+    private onSyncListener mOnSyncListener = null;
     private onBatteryListener mOnBatteryListener = null;
     private boolean mRunning = false;
 
@@ -105,12 +106,12 @@ public class BLEMachine extends BLEControl {
                     break;
 
                 case STATE_SCAN:
-                    if (--mRelationDevice.mAction.mScanTime == 0 || mOnFinishListener == null || mSearchAddressFound) {
+                    if (--mRelationDevice.mAction.mScanTime == 0 || mOnSearchListener == null || mSearchAddressFound) {
                         mState = STATE_INIT;
                         Scan(false);
 
-                        if (mOnFinishListener != null)
-                            mOnFinishListener.onSearch(mScanResult);
+                        if (mOnSearchListener != null)
+                            mOnSearchListener.onSearch(mScanResult);
 
                         resetSearchCondition();
                     }
@@ -199,9 +200,8 @@ public class BLEMachine extends BLEControl {
                             mRelationDevice.mAction.mSync = false;
                             Disconnect();
 
-                            if (mOnFinishListener != null) {
-                                mOnFinishListener.onSync(SYNC_RESULT_SUCCESS, mInOurDoors);
-                            }
+                            if (mOnSyncListener != null)
+                                mOnSyncListener.onSync(SYNC_RESULT_SUCCESS, mInOurDoors);
 
                             mState = STATE_INIT;
                         }
@@ -255,16 +255,20 @@ public class BLEMachine extends BLEControl {
 
     private void syncFailProcess() {
         mRelationDevice.resetFlag();
-        if (mOnFinishListener != null)
-            mOnFinishListener.onSync(mState, mInOurDoors);
+        if (mOnSyncListener != null)
+            mOnSyncListener.onSync(mState, mInOurDoors);
         mState = STATE_INIT;
     }
 
     public final static int SYNC_RESULT_SUCCESS = 0xFFFFFFFF;
 
-    public interface onFinishListener {
+    public interface onSearchListener {
         void onSearch(ArrayList<Device> result);
 
+        //void onSync(int resultCode, ArrayList<InOutDoor> result);
+    }
+
+    public interface onSyncListener {
         void onSync(int resultCode, ArrayList<InOutDoor> result);
     }
 
@@ -273,37 +277,37 @@ public class BLEMachine extends BLEControl {
     }
 
     private void resetSearchCondition() {
-        mOnFinishListener = null;
+        mOnSearchListener = null;
         mRelationDevice.mAction.mScanTime = 0;
         mSearchAddress = "";
         mSearchAddressFound = false;
     }
 
-    public int Search(onFinishListener listener) {
+    public int Search(onSearchListener listener) {
         if (listener == null) {
             resetSearchCondition();
         } else {
-            mOnFinishListener = listener;
+            mOnSearchListener = listener;
             mRelationDevice.mAction.mScanTime = 10 * 1000 / TRANSITION_GAP;
         }
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Search(onFinishListener listener, int second) {
+    public int Search(onSearchListener listener, int second) {
         if (listener == null) {
             resetSearchCondition();
         } else {
-            mOnFinishListener = listener;
+            mOnSearchListener = listener;
             mRelationDevice.mAction.mScanTime = second * 1000 / TRANSITION_GAP;
         }
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Search(onFinishListener listener, String address) {
+    public int Search(onSearchListener listener, String address) {
         if (listener == null) {
             resetSearchCondition();
         } else {
-            mOnFinishListener = listener;
+            mOnSearchListener = listener;
             mRelationDevice.mAction.mScanTime = 10 * 1000 / TRANSITION_GAP;
             mSearchAddress = address;
             mSearchAddressFound = false;
@@ -311,8 +315,8 @@ public class BLEMachine extends BLEControl {
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Sync(onFinishListener listener, Device device, List<VoiceAlert> alerts) {
-        mOnFinishListener = listener;
+    public int Sync(onSyncListener listener, Device device, List<VoiceAlert> alerts) {
+        mOnSyncListener = listener;
         mRelationDevice.Copy(device);
         mRelationDevice.resetFlag();
         mRelationDevice.mAction.mSync = true;
@@ -320,8 +324,8 @@ public class BLEMachine extends BLEControl {
         return 0;
     }
 
-    public int Sync(onFinishListener listener, String macAddress) {
-        mOnFinishListener = listener;
+    public int Sync(onSyncListener listener, String macAddress) {
+        mOnSyncListener = listener;
         mRelationDevice = new Device("Swing", macAddress, 0);
         mRelationDevice.mAction.mSync = true;
         mVoiceAlerts = new ArrayList<>();
