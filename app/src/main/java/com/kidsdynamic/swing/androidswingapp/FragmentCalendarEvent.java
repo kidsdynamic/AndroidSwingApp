@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 /**
  * Created by 03543 on 2017/2/5.
@@ -25,7 +26,6 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View mViewSave;
     private View mViewAdvance;
 
-    private ViewShape mViewColorLabel;
     private View mViewColorOption;
     private ViewShape mViewColorYellow;
     private ViewShape mViewColorBlue;
@@ -34,23 +34,23 @@ public class FragmentCalendarEvent extends ViewFragment {
     private ViewShape mViewcolorOrange;
     private ViewShape mViewColorGray;
 
+    private TextView mViewAlarmLabel;
+    private ViewShape mViewColorLabel;
+
     private long mDefaultDate = System.currentTimeMillis();
+    private WatchEvent mEvent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        if(getArguments()!= null) {
-            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_event, container, false);
 
-        mViewEventLine = mViewMain.findViewById(R.id.calendar_event_select_line);
+        mViewEventLine = mViewMain.findViewById(R.id.calendar_event_alarm_line);
         mViewEventLine.setOnClickListener(mEventListener);
 
         mViewAssignLine = mViewMain.findViewById(R.id.calendar_event_assign_line);
@@ -80,8 +80,6 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewAdvance = mViewMain.findViewById(R.id.calendar_event_advance);
         mViewAdvance.setOnClickListener(mAdvanceListener);
 
-        mViewColorLabel = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_label);
-
         mViewColorOption = mViewMain.findViewById(R.id.calendar_event_color_options);
 
         mViewColorYellow = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_yellow);
@@ -102,6 +100,9 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewColorGray = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_gray);
         mViewColorGray.setOnClickListener(mColorOptiontListener);
 
+        mViewAlarmLabel = (TextView) mViewMain.findViewById(R.id.calendar_event_alarm);
+        mViewColorLabel = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_label);
+
         return mViewMain;
     }
 
@@ -112,6 +113,21 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (getArguments() != null)
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+
+        if (!mActivityMain.mEventStack.isEmpty())
+            mEvent = mActivityMain.mEventStack.pop();
+        else
+            mEvent = new WatchEvent(mDefaultDate);
+
+        eventLoad();
+    }
+
+    @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
@@ -119,6 +135,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mEventListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            mActivityMain.mEventStack.push(mEvent);
             mActivityMain.selectFragment(FragmentCalendarAlarm.class.getName(), null);
         }
     };
@@ -188,7 +205,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mAdvanceListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)mViewSave.getLayoutParams();
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewSave.getLayoutParams();
             params.width = LinearLayout.LayoutParams.MATCH_PARENT;
             mViewSave.setLayoutParams(params);
 
@@ -206,4 +223,19 @@ public class FragmentCalendarEvent extends ViewFragment {
         }
     };
 
+    private void eventLoad() {
+        String alarmName = "";
+        for (FragmentCalendarAlarm.NoticeAlarm alarm : FragmentCalendarAlarm.NoticeAlarmList) {
+            if (alarm.mId == mEvent.mAlert)
+                alarmName = FragmentCalendarAlarm.findAlarmName(mEvent.mAlert);
+        }
+
+        if (alarmName.length() == 0 || mEvent.mAlert == 0)
+            alarmName = "App Only";
+        mViewAlarmLabel.setText(alarmName);
+    }
+
+    private void eventSave() {
+
+    }
 }

@@ -33,6 +33,8 @@ public class FragmentCalendarAlarm extends ViewFragment {
     private int mLineMarginStart = 10;
     private int mLineMarginEnd = 10;
 
+    private WatchEvent mEvent;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +74,25 @@ public class FragmentCalendarAlarm extends ViewFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mActivityMain.mEventStack.isEmpty())
+            mEvent = mActivityMain.mEventStack.pop();
+        else
+            mEvent = new WatchEvent();
+    }
+
+    @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Calendar", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
+    }
+
+    @Override
+    public void onToolbarAction1() {
+        mActivityMain.mEventStack.push(mEvent);
+        mActivityMain.popFragment();
     }
 
     private void addAlarm(NoticeAlarm alarm, View.OnClickListener listener) {
@@ -177,7 +195,10 @@ public class FragmentCalendarAlarm extends ViewFragment {
         @Override
         public void onClick(View view) {
             int id = (int) view.getTag();
-            Log.d("xxx", "id:" + id);
+            mEvent.mAlert = id;
+
+            mActivityMain.mEventStack.push(mEvent);
+            mActivityMain.popFragment();
         }
     };
 
@@ -194,7 +215,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
     }
 
     final static NoticeAlarm[] NoticeAlarmList = new NoticeAlarm[]{
-            new NoticeAlarm(255, "Agenda Reminders (Only for the App", 0),
+            new NoticeAlarm(0, "Agenda Reminders (Only for the App", 0),
             new NoticeAlarm(36, "Good Morning", R.mipmap.icon_alert),
             new NoticeAlarm(37, "Make Bed", R.mipmap.icon_sound),
             new NoticeAlarm(38, "Get Dress", R.mipmap.icon_sound),
@@ -225,4 +246,19 @@ public class FragmentCalendarAlarm extends ViewFragment {
             new NoticeAlarm(63, "Afternoon Snack Time", R.mipmap.icon_sound),
             new NoticeAlarm(64, "Review the Backpack", R.mipmap.icon_sound),
     };
+
+
+    public static String findAlarmName(int id) {
+        for (NoticeAlarm alarm : NoticeAlarmList)
+            if (alarm.mId == id)
+                return alarm.mName;
+        return "";
+    }
+
+    public static int findAlarmId(String name) {
+        for (NoticeAlarm alarm : NoticeAlarmList)
+            if (alarm.mName.equals(name))
+                return alarm.mId;
+        return -1;
+    }
 }
