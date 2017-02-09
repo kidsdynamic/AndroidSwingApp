@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.io.File;
@@ -83,6 +84,10 @@ public class FragmentProfileEditor extends ViewFragment {
     public void onPause() {
         super.onPause();
         profileSave();
+
+        InputMethodManager inputMethodManager = (InputMethodManager) mActivityMain
+                .getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
     }
 
     @Override
