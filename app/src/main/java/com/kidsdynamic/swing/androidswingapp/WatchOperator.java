@@ -242,8 +242,13 @@ public class WatchOperator {
         List<WatchContact.Kid> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS, null);
 
-        while (cursor.moveToNext())
-            result.add(cursorToKid(cursor));
+        while (cursor.moveToNext()) {
+            WatchContact.Kid kid = cursorToKid(cursor);
+            kid.mLabel = kid.mFirstName;
+            kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+
+            result.add(kid);
+        }
 
         cursor.close();
 
@@ -768,21 +773,7 @@ public class WatchOperator {
         while (cursor.moveToNext()) {
             WatchContact.Kid kid = cursorToKid(cursor);
             kid.mLabel = kid.mFirstName;
-            if (kid.mProfile.equals("")) {
-                switch (kid.mId % 3) {
-                    case 1:
-                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_green);
-                        break;
-                    case 2:
-                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_yellow);
-                        break;
-                    default:
-                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_purple);
-                        break;
-                }
-            } else {
-                kid.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
-            }
+            kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
             result.add(kid);
         }
 
@@ -800,21 +791,8 @@ public class WatchOperator {
         while (cursor.moveToNext()) {
             WatchContact.Kid kid = cursorToKid(cursor);
             kid.mLabel = kid.mFirstName;
-            if (kid.mProfile.equals("")) {
-                switch (kid.mId % 3) {
-                    case 1:
-                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_green);
-                        break;
-                    case 2:
-                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_yellow);
-                        break;
-                    default:
-                        kid.mPhoto = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.monster_purple);
-                        break;
-                }
-            } else {
-                kid.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
-            }
+            kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+
             result.add(kid);
         }
 

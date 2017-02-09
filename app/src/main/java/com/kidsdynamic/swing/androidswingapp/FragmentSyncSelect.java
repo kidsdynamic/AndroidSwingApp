@@ -34,27 +34,7 @@ public class FragmentSyncSelect extends ViewFragment {
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.sync_select_container);
 
         mDeviceList = mActivityMain.mOperator.KidGet();
-        for (WatchContact.Kid kid: mDeviceList) {
-            kid.mLabel = kid.mFirstName;
-
-            if (kid.mProfile.equals("")) {
-                switch (kid.mId % 3) {
-                    case 1:
-                        kid.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green);
-                        break;
-                    case 2:
-                        kid.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow);
-                        break;
-                    default:
-                        kid.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple);
-                        break;
-                }
-            } else {
-                kid.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
-            }
-        }
-
-        for (WatchContact.Kid device : mDeviceList)
+         for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
 
         // todo: select current focused kid
@@ -103,7 +83,6 @@ public class FragmentSyncSelect extends ViewFragment {
 
             setSelected(mDeviceList.indexOf(device));
 
-            // todo: attach device context to FragmentSyncSearch
             Bundle bundle = new Bundle();
             bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, device);
 
