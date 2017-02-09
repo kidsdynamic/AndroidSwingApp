@@ -36,7 +36,6 @@ public class FragmentWatchProfile extends ViewFragment {
 
     private ViewCircle mViewPhoto;
     private EditText mViewName;
-    private EditText mViewZip;
     private ImageView mViewBack;
 
     AlertDialog mDialog;
@@ -68,9 +67,6 @@ public class FragmentWatchProfile extends ViewFragment {
 
         mViewName = (EditText) mViewMain.findViewById(R.id.watch_profile_name);
         mViewName.setOnEditorActionListener(mEdittextActionListener);
-
-        mViewZip = (EditText) mViewMain.findViewById(R.id.watch_profile_zip);
-        mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -178,11 +174,10 @@ public class FragmentWatchProfile extends ViewFragment {
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
+            if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
                 mDevice.mFirstName = mViewName.getText().toString();
-                mDevice.mLastName = mViewZip.getText().toString();
 
-                if (!mDevice.mFirstName.equals("") && !mDevice.mLastName.equals("")) {
+                if (!mDevice.mFirstName.equals("")) {
                     mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
                     mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, macId);

@@ -56,8 +56,6 @@ public class FragmentProfileAdded extends ViewFragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable(ViewFragment.BUNDLE_KEY_CONTACT, mDevice);
 
-            // todo: Here, we registered a watch and should focus on it automatically.
-
             mActivityMain.selectFragment(FragmentProfileKid.class.getName(), bundle);
         }
     };

@@ -29,7 +29,7 @@ public class FragmentProfileKid extends ViewFragment {
     private View mViewMain;
     private ViewCircle mViewPhoto;
     private EditText mViewName;
-    private EditText mViewZip;
+    //private EditText mViewZip;
     private Button mViewRemove;
 
     AlertDialog mDialog;
@@ -61,7 +61,6 @@ public class FragmentProfileKid extends ViewFragment {
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_kid_photo);
 
         mViewName = (EditText)mViewMain.findViewById(R.id.profile_kid_name);
-        mViewZip = (EditText)mViewMain.findViewById(R.id.profile_kid_zip);
 
         mViewRemove = (Button)mViewMain.findViewById(R.id.profile_kid_remove);
         mViewRemove.setOnClickListener(mRemoveListener);
@@ -70,7 +69,6 @@ public class FragmentProfileKid extends ViewFragment {
         if(mKid != null) {
             mViewPhoto.setBitmap(mKid.mPhoto);
             mViewName.setText(mKid.mLabel);
-            mViewZip.setText(""); // todo: Where is ZIP?
 
             if(true) {    // todo: if Kid is belong to user
                 mViewPhoto.setFillDarker(true);
@@ -78,7 +76,6 @@ public class FragmentProfileKid extends ViewFragment {
                 mViewPhoto.setOnClickListener(mPhotoListener);
 
                 mViewName.setEnabled(true);
-                mViewZip.setEnabled(true);
             }
         }
 

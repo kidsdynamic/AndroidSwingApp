@@ -49,7 +49,7 @@
             android:enabled="false"
             android:hint="Name" />
     </LinearLayout>
-
+<!--
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -67,7 +67,7 @@
             android:enabled="false"
             android:hint="Zip" />
     </LinearLayout>
-
+-->
     <View
         android:layout_width="match_parent"
         android:layout_height="0dp"
