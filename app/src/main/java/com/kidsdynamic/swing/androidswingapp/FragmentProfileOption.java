@@ -73,7 +73,11 @@ public class FragmentProfileOption extends ViewFragment {
     private View.OnClickListener mLogoutListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // todo: logout system, reset database, reset config, select to FragmentSignupLogin
+            mActivityMain.mConfig.loadDefaultTable();
+            mActivityMain.mOperator.ResetDatabase();
+            mActivityMain.mServiceMachine.setAuthToken(null);
+            ServerMachine.ResetAvatar();
+            mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
         }
     };
 }
