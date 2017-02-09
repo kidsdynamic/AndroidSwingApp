@@ -46,9 +46,9 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         }
 
         // Test
-        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "purple", true));
-        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "green", true));
-        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "yellow", true));
+        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "purple"));
+        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "green"));
+        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "yellow"));
         //////////////
 
         updateCount();

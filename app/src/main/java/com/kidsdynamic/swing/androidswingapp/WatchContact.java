@@ -54,7 +54,7 @@ public class WatchContact implements Serializable {
             mBound = false;
         }
 
-        public Kid(Bitmap photo, String label, boolean bind) {
+        public Kid(Bitmap photo, String label) {
             super(photo, label);
             mId = 0;
             mFirstName = "";
@@ -63,8 +63,7 @@ public class WatchContact implements Serializable {
             mMacId = "";
             mUserId = 0;
             mProfile = "";
-
-            mBound = bind;
+            mBound = false;
         }
 
         public Kid(Bitmap photo, int id, String firstName, String lastName, long dateCreated, String macId, int parentId) {

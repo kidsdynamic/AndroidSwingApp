@@ -38,7 +38,7 @@ public class FragmentWatchRequest extends ViewFragment {
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
         // Test
-        addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster Purple", false));
+        addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Monster Purple"));
         //////////////
 
         return mViewMain;
