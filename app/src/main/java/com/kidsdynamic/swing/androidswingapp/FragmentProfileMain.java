@@ -1,9 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,7 +67,7 @@ public class FragmentProfileMain extends ViewFragment {
         for (WatchContact device : mActivityMain.mOperator.getSharedList())
             addContact(mViewSharedContainer, device, mContactListener);
 
-        for (WatchContact user : mActivityMain.mOperator.getRequestToUserList())
+        for (WatchContact user : mActivityMain.mOperator.getRequestToList())
             addContact(mViewRequestToContainer, user, null);
 
         for (WatchContact user : mActivityMain.mOperator.getRequestFromUserList())

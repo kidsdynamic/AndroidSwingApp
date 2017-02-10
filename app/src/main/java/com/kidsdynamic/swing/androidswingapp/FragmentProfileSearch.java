@@ -52,6 +52,7 @@ public class FragmentProfileSearch extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
+        mActivityMain.mBLEMachine.Search(null);
         mActivityMain.popFragment();
     }
 

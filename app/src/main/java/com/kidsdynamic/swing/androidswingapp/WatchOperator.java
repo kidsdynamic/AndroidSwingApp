@@ -685,12 +685,7 @@ public class WatchOperator {
         return new ArrayList<>();
     }
 
-    public ArrayList<WatchContact.User> getRequestToUserList() {
-        return new ArrayList<>();
-    }
-
-    public ArrayList<WatchContact.Kid> getRequestToKidList(WatchContact.User user) {
-        // If user is null, return all requested kid, else just user's kids
+    public ArrayList<WatchContact.User> getRequestToList() {
         return new ArrayList<>();
     }
 
