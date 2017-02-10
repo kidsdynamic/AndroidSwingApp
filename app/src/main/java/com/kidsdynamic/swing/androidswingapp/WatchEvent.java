@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -14,7 +13,7 @@ import java.util.Locale;
  */
 
 public class WatchEvent implements Serializable {
-    public final static String REPEAT_NONE = "";
+    public final static String REPEAT_NEVER = "";
     public final static String REPEAT_DAILY = "DAILY";
     public final static String REPEAT_WEEKLY = "WEEKLY";
     public final static String REPEAT_MONTHLY = "MONTHLY";
@@ -40,17 +39,17 @@ public class WatchEvent implements Serializable {
 
     public WatchEvent() {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", now, now, "#FF7231", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+        init(0, 0, 0, "", now, now, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", date, date, "#FF7231", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+        init(0, 0, 0, "", date, date, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+        init(0, 0, 0, "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, int kidId, String name, long startDate,

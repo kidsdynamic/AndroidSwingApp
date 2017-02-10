@@ -43,6 +43,10 @@ public class FragmentCalendarEvent extends ViewFragment {
     private LinearLayout mViewColorContainer;
 
     private View mViewRepeatLine;
+    private TextView mViewRepeat;
+    private View mViewRepeatOption;
+    private LinearLayout mViewRepeatContainer;
+
     private View mViewDescriptionLine;
     private View mViewTodoLine;
     private View mViewSave;
@@ -58,6 +62,8 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        int count;
+
         mViewMain = inflater.inflate(R.layout.fragment_calendar_event, container, false);
 
         // Line Alarm
@@ -90,13 +96,20 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewColorOption = mViewMain.findViewById(R.id.calendar_event_color_option);
         mViewColorContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_color_container);
 
-        int count = mViewColorContainer.getChildCount();
+        count = mViewColorContainer.getChildCount();
         for (int idx = 0; idx < count; idx++)
             mViewColorContainer.getChildAt(idx).setOnClickListener(mColorOptionListener);
 
         // Line Repeat
         mViewRepeatLine = mViewMain.findViewById(R.id.calendar_event_repeat_line);
         mViewRepeatLine.setOnClickListener(mRepeatListener);
+        mViewRepeat = (TextView) mViewMain.findViewById(R.id.calendar_event_repeat);
+        mViewRepeatOption = mViewMain.findViewById(R.id.calendar_event_repeat_option);
+        mViewRepeatContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_repeat_container);
+
+        count = mViewRepeatContainer.getChildCount();
+        for (int idx = 0; idx < count; idx++)
+            mViewRepeatContainer.getChildAt(idx).setOnClickListener(mRepeatOptionListener);
 
         // Line Description
         mViewDescriptionLine = mViewMain.findViewById(R.id.calendar_event_description_line);
@@ -197,7 +210,13 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mRepeatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewRepeatOption.getLayoutParams();
+            if (params.height == 0)
+                params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            else
+                params.height = 0;
 
+            mViewRepeatOption.setLayoutParams(params);
         }
     };
 
@@ -264,6 +283,26 @@ public class FragmentCalendarEvent extends ViewFragment {
             mEvent.mColor = WatchEvent.colorToString(mViewColor.getColor());
 
             mEvent.mColor = "";
+        }
+    };
+
+    private View.OnClickListener mRepeatOptionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            TextView viewRepeat = (TextView) view;
+            String repeat = viewRepeat.getText().toString();
+
+            mViewRepeat.setText(repeat);
+
+            repeat = repeat.toUpperCase();
+            if(repeat.contains(WatchEvent.REPEAT_DAILY))
+                mEvent.mRepeat = WatchEvent.REPEAT_DAILY;
+            else if(repeat.contains(WatchEvent.REPEAT_WEEKLY))
+                mEvent.mRepeat = WatchEvent.REPEAT_WEEKLY;
+            else if(repeat.contains(WatchEvent.REPEAT_MONTHLY))
+                mEvent.mRepeat = WatchEvent.REPEAT_MONTHLY;
+            else
+                mEvent.mRepeat = "";
         }
     };
 
