@@ -135,6 +135,13 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="Start" />
+
+                <TextView
+                    android:id="@+id/calendar_event_start"
+                    style="@style/textview_calendar_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end|center_vertical" />
             </LinearLayout>
 
             <LinearLayout
@@ -155,6 +162,13 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="End" />
+
+                <TextView
+                    android:id="@+id/calendar_event_end"
+                    style="@style/textview_calendar_hint"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="end|center_vertical" />
             </LinearLayout>
 
             <LinearLayout

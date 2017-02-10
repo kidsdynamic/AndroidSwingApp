@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/5.
@@ -29,7 +32,10 @@ public class FragmentCalendarEvent extends ViewFragment {
     private LinearLayout mViewAssignContainer;
 
     private View mViewStartLine;
+    private TextView mViewStart;
+
     private View mViewEndLine;
+    private TextView mViewEnd;
 
     private View mViewColorLine;
     private ViewShape mViewColor;
@@ -42,8 +48,6 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View mViewSave;
     private View mViewAdvance;
 
-
-    private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
 
     @Override
@@ -72,10 +76,12 @@ public class FragmentCalendarEvent extends ViewFragment {
         // Line Start
         mViewStartLine = mViewMain.findViewById(R.id.calendar_event_start_line);
         mViewStartLine.setOnClickListener(mStartListener);
+        mViewStart = (TextView) mViewMain.findViewById(R.id.calendar_event_start);
 
         // Line End
         mViewEndLine = mViewMain.findViewById(R.id.calendar_event_end_line);
         mViewEndLine.setOnClickListener(mEndListener);
+        mViewEnd = (TextView) mViewMain.findViewById(R.id.calendar_event_end);
 
         // Line Color
         mViewColorLine = mViewMain.findViewById(R.id.calendar_event_color_line);
@@ -120,13 +126,9 @@ public class FragmentCalendarEvent extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        if (getArguments() != null)
-            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
-
-        if (!mActivityMain.mEventStack.isEmpty())
-            mEvent = mActivityMain.mEventStack.pop();
-        else
-            mEvent = new WatchEvent(mDefaultDate);
+        mEvent = mActivityMain.mEventStack.pop();
+        if (mEvent == null)
+            mEvent = new WatchEvent(System.currentTimeMillis());
 
         loadWatchEvent();
     }
@@ -160,14 +162,22 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mStartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(BUNDLE_KEY_START_DATE, true);
 
+            mActivityMain.mEventStack.push(mEvent);
+            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
         }
     };
 
     private View.OnClickListener mEndListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(BUNDLE_KEY_START_DATE, false);
 
+            mActivityMain.mEventStack.push(mEvent);
+            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
         }
     };
 
@@ -313,9 +323,17 @@ public class FragmentCalendarEvent extends ViewFragment {
         }
     }
 
+    private void loadDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.US);
+
+        mViewStart.setText(simpleDateFormat.format(mEvent.mStartDate));
+        mViewEnd.setText(simpleDateFormat.format(mEvent.mEndDate));
+    }
+
     private void loadWatchEvent() {
         loadAlarm();
         loadAssign();
+        loadDate();
     }
 
     private void saveWatchEvent() {

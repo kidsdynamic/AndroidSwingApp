@@ -79,19 +79,14 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
     }
 
     @Override
-    public void setDate(long milli) {
-        super.setDate(milli);
+    public void setDate(long date) {
+        super.setDate(date);
         updateCellList(mViewCellList);
     }
 
     public void updateNameList(ViewCalendarCellWeekName[] list) {
         Calendar calc = ViewCalendar.getInstance();
         calc.setTimeInMillis(mDate);
-
-        calc.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
-        calc.clear(Calendar.MINUTE);
-        calc.clear(Calendar.SECOND);
-        calc.clear(Calendar.MILLISECOND);
 
         while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
             calc.add(Calendar.DAY_OF_MONTH, -1);
@@ -105,11 +100,6 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
     public void updateCellList(ViewCalendarCell[] list) {
         Calendar calc = ViewCalendar.getInstance();
         calc.setTimeInMillis(mDate);
-
-        calc.set(Calendar.HOUR_OF_DAY, 0); //clear would not reset the hour of day
-        calc.clear(Calendar.MINUTE);
-        calc.clear(Calendar.SECOND);
-        calc.clear(Calendar.MILLISECOND);
 
         while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
             calc.add(Calendar.DAY_OF_MONTH, -1);

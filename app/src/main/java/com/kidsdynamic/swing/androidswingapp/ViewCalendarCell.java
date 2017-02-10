@@ -29,8 +29,6 @@ public class ViewCalendarCell extends TextView {
     }
 
     private void init(Context context, AttributeSet attrs) {
-//        Typeface face=Typeface.createFromAsset(context.getAssets(), "Helvetica_Neue.ttf");
-//        setTypeface(face);
     }
 
     public void setDate(long mSecond) {
