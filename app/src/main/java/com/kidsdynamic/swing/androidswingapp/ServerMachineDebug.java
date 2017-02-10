@@ -205,7 +205,7 @@ public class ServerMachineDebug extends ServerMachine {
 
                 case CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO:
                     if (mExpectResponseCode == 200)
-                        ((eventRetrieveAllEventsWithTodoListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.event.retrieveEventsWithTodo.fromJson(mResponseString));
+                        ((eventRetrieveAllEventsWithTodoListener) mCurrentResponseListener).onSuccess(mExpectResponseCode, ServerGson.event.retrieveAllEventsWithTodo.fromJson(mResponseString));
                     else
                         ((eventRetrieveAllEventsWithTodoListener) mCurrentResponseListener).onFail(mExpectResponseCode);
                     break;
