@@ -62,12 +62,6 @@ public class FragmentCalendarPicker extends ViewFragment {
 
         mDate = mIsStartDate ? mEvent.mStartDate : mEvent.mEndDate;
 
-        {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
-            Log.d("xxx", "start:" + sdf.format(mEvent.mStartDate));
-            Log.d("xxx", "end:" + sdf.format(mEvent.mEndDate));
-        }
-
         mViewSelector.setDate(mDate);
         mViewCalendar.setDate(mDate);
 
@@ -100,12 +94,6 @@ public class FragmentCalendarPicker extends ViewFragment {
             mEvent.mStartDate = mDate;
         else
             mEvent.mEndDate = mDate;
-
-        {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
-            Log.d("xxx", "start:" + sdf.format(mEvent.mStartDate));
-            Log.d("xxx", "end:" + sdf.format(mEvent.mEndDate));
-        }
 
         mActivityMain.mEventStack.push(mEvent);
         mActivityMain.popFragment();

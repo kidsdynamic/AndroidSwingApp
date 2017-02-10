@@ -1,5 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,17 +38,17 @@ public class WatchEvent implements Serializable {
 
     public WatchEvent() {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", now, now, "", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+        init(0, 0, 0, "", now, now, "#FF7231", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
     }
 
     public WatchEvent(long date) {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", date, date, "", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+        init(0, 0, 0, "", date, date, "#FF7231", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", startDate, endDate, "", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
+        init(0, 0, 0, "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NONE, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, int kidId, String name, long startDate,
@@ -86,5 +89,37 @@ public class WatchEvent implements Serializable {
         mLastUpdated = lastUpdated;
         mTodoList = new ArrayList<>();
         mAlertTimeStamp = startDate;
+    }
+
+    static public String colorToString(int color) {
+        String string = "#000000";
+
+        if ((color & 0xFF000000) != 0x00)
+            return string;
+
+        try {
+            string = String.format("#%06X", color);
+        } catch (NumberFormatException e) {
+            Log.d("Swing", e.getMessage());
+        }
+
+        return string;
+    }
+
+    static public int stringToColor(String string) {
+        int color = 0;
+
+        if (string.length() < 6 || string.charAt(0) != '#')
+            return 0;
+
+        string = string.substring(1);
+        try {
+            color = Integer.parseInt(string, 16);
+            color |= 0xFF000000;
+        } catch (NumberFormatException e) {
+            Log.d("Swing", e.getMessage());
+        }
+
+        return color;
     }
 }

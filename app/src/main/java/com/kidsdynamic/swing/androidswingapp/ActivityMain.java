@@ -38,11 +38,13 @@ public class ActivityMain extends AppCompatActivity
     private class permission {
         String mName;
         int mResult;
+
         permission(String name, int result) {
             mName = name;
             mResult = result;
         }
     }
+
     private List<permission> mPermissionList;
 
     public Config mConfig;
@@ -315,7 +317,7 @@ public class ActivityMain extends AppCompatActivity
     }
 
     public void toolbarSetTitle(String title, boolean enableClick) {
-        if(enableClick) {
+        if (enableClick) {
             mViewTitle.setText(title + " ▼");        // &#x25BC;
             mViewTitle.setOnClickListener(mToolbarClickListener);
         } else {

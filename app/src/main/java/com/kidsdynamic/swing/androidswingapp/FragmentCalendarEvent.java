@@ -330,10 +330,15 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewEnd.setText(simpleDateFormat.format(mEvent.mEndDate));
     }
 
+    private void loadColor() {
+        mViewColor.setColor(WatchEvent.stringToColor(mEvent.mColor));
+    }
+
     private void loadWatchEvent() {
         loadAlarm();
         loadAssign();
         loadDate();
+        loadColor();
     }
 
     private void saveWatchEvent() {
