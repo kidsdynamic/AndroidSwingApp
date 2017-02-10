@@ -4,8 +4,10 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/10.
@@ -89,6 +91,32 @@ public class WatchEvent implements Serializable {
         mLastUpdated = lastUpdated;
         mTodoList = new ArrayList<>();
         mAlertTimeStamp = startDate;
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH/mm/ss", Locale.US);
+
+        return new StringBuilder()
+                .append("{mId:").append(mId)
+                .append(" mUserId:").append(mUserId)
+                .append(" mKidId:").append(mKidId)
+                .append(" mName:").append(mName)
+                .append(" mStartDate:").append(sdf.format(mStartDate))
+                .append(" mEndDate:").append(sdf.format(mEndDate))
+                .append(" mColor:").append(mColor)
+                .append(" mStatus:").append(mStatus)
+                .append(" mDescription:").append(mDescription)
+                .append(" mAlert:").append(mAlert)
+                .append(" mCity:").append(mCity)
+                .append(" mState:").append(mState)
+                .append(" mRepeat:").append(mRepeat)
+                .append(" mTimezoneOffset:").append(mTimezoneOffset)
+                .append(" mDateCreated:").append(sdf.format(mDateCreated))
+                .append(" mLastUpdated:").append(sdf.format(mLastUpdated))
+                .append(" mTodoList:").append(mTodoList.toString())
+                .append(" mAlertTimeStamp:").append(mAlertTimeStamp)
+                .append("}").toString();
     }
 
     static public String colorToString(int color) {

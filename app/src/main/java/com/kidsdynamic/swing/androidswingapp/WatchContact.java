@@ -12,6 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by 03543 on 2017/1/4.
@@ -29,6 +32,15 @@ public class WatchContact implements Serializable {
     public WatchContact(Bitmap photo, String label) {
         mPhoto = photo;
         mLabel = label;
+    }
+
+    @Override
+    public String toString() {
+
+        return new StringBuilder()
+                .append("{mPhoto:").append(mPhoto != null ? "Exist" : "null")
+                .append(" mLabel:").append(mLabel)
+                .append("}").toString();
     }
 
     public static class Kid extends WatchContact {
@@ -77,6 +89,23 @@ public class WatchContact implements Serializable {
             mUserId = parentId;
             mProfile = "";
             mBound = true;
+        }
+
+        @Override
+        public String toString() {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH/mm/ss", Locale.US);
+
+            return new StringBuilder()
+                    .append("{contact:").append(super.toString())
+                    .append(" mId:").append(mId)
+                    .append(" mFirstName:").append(mFirstName)
+                    .append(" mLastName:").append(mLastName)
+                    .append(" mDateCreated:").append(sdf.format(mDateCreated))
+                    .append(" mMacId").append(sdf.format(mMacId))
+                    .append(" mUserId:").append(mUserId)
+                    .append(" mProfile:").append(mProfile)
+                    .append(" mBound:").append(mBound)
+                    .append("}").toString();
         }
     }
 
@@ -141,6 +170,24 @@ public class WatchContact implements Serializable {
             mZipCode = zipCode;
             mPhoneNumber = phoneNumber;
             mProfile = "";
+        }
+
+        @Override
+        public String toString() {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH/mm/ss", Locale.US);
+
+            return new StringBuilder()
+                    .append("{contact:").append(super.toString())
+                    .append(" mId:").append(mId)
+                    .append(" mEmail:").append(mEmail)
+                    .append(" mFirstName:").append(mFirstName)
+                    .append(" mLastName:").append(mLastName)
+                    .append(" mLastUpdate:").append(sdf.format(mLastUpdate))
+                    .append(" mDateCreated:").append(sdf.format(mDateCreated))
+                    .append(" mZip").append(mZipCode)
+                    .append(" mPhoneNumber:").append(mPhoneNumber)
+                    .append(" mProfile:").append(mProfile)
+                    .append("}").toString();
         }
     }
 
