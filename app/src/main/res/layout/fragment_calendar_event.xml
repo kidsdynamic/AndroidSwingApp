@@ -43,7 +43,7 @@
                     style="@style/textview_calendar_hint"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"/>
+                    android:gravity="center_vertical|end" />
             </LinearLayout>
 
             <LinearLayout
@@ -55,23 +55,66 @@
                 android:layout_below="@+id/calendar_event_alarm_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp">
 
-                <TextView
-                    style="@style/textview_calendar_event"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:text="Assign to" />
-
-                <TextView
-                    style="@style/textview_calendar_event"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end"
-                    android:text="▼"
-                    android:textColor="@color/color_brown" />
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/textview_calendar_event"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:text="Assign to" />
+
+                    <TextView
+                        android:id="@+id/calendar_event_assign_name"
+                        style="@style/textview_calendar_hint"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="6"
+                        android:gravity="end|center_vertical" />
+
+                    <com.kidsdynamic.swing.androidswingapp.ViewCircle
+                        android:id="@+id/calendar_event_assign_photo"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:strokeColorNormal="@color/color_orange_main"
+                        app:strokeWidth="1dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/calendar_event_assign_option"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/color_gray_light" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/calendar_event_assign_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+                    </HorizontalScrollView>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -136,12 +179,12 @@
                         style="@style/textview_calendar_event"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="5"
+                        android:layout_weight="9"
                         android:gravity="center_vertical"
                         android:text="Color Label" />
 
                     <com.kidsdynamic.swing.androidswingapp.ViewShape
-                        android:id="@+id/calendar_event_color_label"
+                        android:id="@+id/calendar_event_color"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -151,7 +194,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/calendar_event_color_options"
+                    android:id="@+id/calendar_event_color_option"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:orientation="vertical">
@@ -164,6 +207,7 @@
                         android:background="@color/color_gray_light" />
 
                     <LinearLayout
+                        android:id="@+id/calendar_event_color_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -289,9 +333,9 @@
                 android:layout_alignStart="@+id/calendar_alarm_sponge"
                 android:layout_below="@+id/calendar_event_description_line"
                 android:layout_marginTop="10dp"
-                android:padding="10dp"
                 android:background="@drawable/contact_background"
                 android:orientation="horizontal"
+                android:padding="10dp"
                 android:visibility="invisible">
 
                 <TextView
@@ -316,8 +360,8 @@
                 android:layout_alignEnd="@+id/calendar_alarm_sponge"
                 android:layout_alignStart="@+id/calendar_alarm_sponge"
                 android:layout_below="@+id/calendar_event_todo_line"
-                android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -331,7 +375,7 @@
                 <View
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.1"/>
+                    android:layout_weight="0.1" />
 
                 <Button
                     android:id="@+id/calendar_event_advance"

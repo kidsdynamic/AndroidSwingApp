@@ -210,7 +210,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
         mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
-        mViewProgress.setStrokeActive(false);
+        mViewProgress.setActive(false);
     }
 
     private void viewSyncing() {
@@ -240,7 +240,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
         mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
-        mViewProgress.setStrokeActive(true);
+        mViewProgress.setActive(true);
     }
 
     private void viewNotFound() {
@@ -257,7 +257,7 @@ public class FragmentSyncSearch extends ViewFragment {
 
         mViewProgress.stopProgress();
         mViewProgress.setOnProgressListener(null);
-        mViewProgress.setStrokeActive(false);
+        mViewProgress.setActive(false);
     }
 
     BLEMachine.onSearchListener mOnSearchListener = new BLEMachine.onSearchListener() {

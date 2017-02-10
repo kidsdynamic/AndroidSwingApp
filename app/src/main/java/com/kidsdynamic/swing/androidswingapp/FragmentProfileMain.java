@@ -1,9 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -171,7 +169,7 @@ public class FragmentProfileMain extends ViewFragment {
             WatchContact.Kid kid1 = (WatchContact.Kid)contact;
             WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
             if (kid2!=null)
-                viewCircle.setStrokeActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
+                viewCircle.setActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
         }
 
         count = mViewSharedContainer.getChildCount();
@@ -180,7 +178,7 @@ public class FragmentProfileMain extends ViewFragment {
             WatchContact.Kid kid1 = (WatchContact.Kid)contact;
             WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
             if (kid2!=null)
-                viewCircle.setStrokeActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
+                viewCircle.setActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
         }
 
         if (!onCreate)
