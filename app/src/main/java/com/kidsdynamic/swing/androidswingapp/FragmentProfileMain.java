@@ -67,7 +67,7 @@ public class FragmentProfileMain extends ViewFragment {
         for (WatchContact device : mActivityMain.mOperator.getSharedList())
             addContact(mViewSharedContainer, device, mContactListener);
 
-        for (WatchContact user : mActivityMain.mOperator.getRequestToUserList())
+        for (WatchContact user : mActivityMain.mOperator.getRequestToList())
             addContact(mViewRequestToContainer, user, null);
 
         for (WatchContact user : mActivityMain.mOperator.getRequestFromUserList())

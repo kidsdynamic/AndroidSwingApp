@@ -1,6 +1,9 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +16,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by 03543 on 2017/1/28.
@@ -26,6 +33,9 @@ public class FragmentProfileRequestTo extends ViewFragment {
     private EditText mViewMail;
     private LinearLayout mViewUserContainer;
     private LinearLayout mViewPendingContainer;
+    private Dialog mProcessDialog = null;
+    private List<WatchContact.User> mRequestedUserList;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,15 +54,30 @@ public class FragmentProfileRequestTo extends ViewFragment {
         mViewPendingContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_request_to_pending_container);
 
         // Test
-        addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster"));
-        addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster"));
-        addPending(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster"));
+        //addPending(new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster"));
+        //addPending(new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster"));
+        //addPending(new WatchContact.User(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster"));
         ////////////
 
-        for (WatchContact.Kid kid : mActivityMain.mOperator.getRequestToKidList(null))
-            addPending(kid);
+        for (WatchContact.User user : mActivityMain.mOperator.getRequestToList())
+            addPending(user);
 
         return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+
+        mActivityMain.mServiceMachine.subHostList(mSubHostListListener, "PENDING");
+    }
+
+    @Override
+    public void onPause() {
+        if (mProcessDialog != null)
+            mProcessDialog.dismiss();
+        super.onPause();
     }
 
     @Override
@@ -66,6 +91,76 @@ public class FragmentProfileRequestTo extends ViewFragment {
         mActivityMain.popFragment();
     }
 
+    ServerMachine.subHostListListener mSubHostListListener = new ServerMachine.subHostListListener() {
+        @Override
+        public void onSuccess(int statusCode, List<ServerGson.hostData> response) {
+            mRequestedUserList = new ArrayList<>();
+            if (response!=null && !response.isEmpty()) {
+                for (ServerGson.hostData subHost : response) {
+                    WatchContact.User user = new WatchContact.User();
+                    user.mId = subHost.requestToUser.id;
+                    user.mEmail = subHost.requestToUser.email;
+                    user.mFirstName = subHost.requestToUser.firstName;
+                    user.mLastName = subHost.requestToUser.lastName;
+                    user.mProfile = subHost.requestToUser.profile;
+                    mRequestedUserList.add(user);
+                }
+                getUserAvatar(true);
+            } else {
+                mProcessDialog.dismiss();
+            }
+
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mProcessDialog.dismiss();
+        }
+    };
+
+    private int mUserAvatarCount;
+    private void getUserAvatarFinish() {
+        for (WatchContact.User user : mRequestedUserList)
+            addPending(user);
+        mProcessDialog.dismiss();
+
+    }
+
+    private void getUserAvatar(boolean start) {
+        if (start)
+            mUserAvatarCount = 0;
+        else
+            mUserAvatarCount++;
+
+        if (mUserAvatarCount >= mRequestedUserList.size()) {
+            getUserAvatarFinish();
+            return;
+        }
+
+        while (mRequestedUserList.get(mUserAvatarCount).mProfile.equals("")) {
+            mUserAvatarCount++;
+            if (mUserAvatarCount >= mRequestedUserList.size()) {
+                getUserAvatarFinish();
+                return;
+            }
+        }
+
+        mActivityMain.mServiceMachine.getAvatar(mGetUserAvatarListener, mRequestedUserList.get(mUserAvatarCount).mProfile);
+    }
+
+    ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
+        @Override
+        public void onSuccess(Bitmap avatar, String filename) {
+            ServerMachine.createAvatarFile(avatar, filename, "");
+            getUserAvatar(false);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            getUserAvatarFinish();
+        }
+    };
+
     public void addUser(WatchContact.User person) {
         View view = WatchContact.inflateButton(mActivityMain, person, "Send");
 
@@ -76,7 +171,7 @@ public class FragmentProfileRequestTo extends ViewFragment {
         mViewUserContainer.addView(view);
     }
 
-    public void addPending(WatchContact.Kid device) {
+    public void addPending(WatchContact.User device) {
         View view = WatchContact.inflateButton(mActivityMain, device, "Cancel");
 
         View button = view.findViewById(R.id.watch_contact_button_button);

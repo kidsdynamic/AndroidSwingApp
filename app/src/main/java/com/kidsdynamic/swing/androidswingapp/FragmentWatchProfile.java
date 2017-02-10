@@ -206,7 +206,7 @@ public class FragmentWatchProfile extends ViewFragment {
 
     ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
+        public void onSuccess(int statusCode, ServerGson.kidData response) {
             mDevice.mId = response.id;
             mDevice.mFirstName = response.name;
             mDevice.mLastName = "";

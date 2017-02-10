@@ -13,7 +13,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.File;
@@ -56,6 +55,7 @@ public class ServerMachine {
     final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
     final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
     final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
+    final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_BY_KID = SERVER_ADDRESS + "/event/retrieveAllEventsByKid";
 
     final static String CMD_EVENT_TODO_DONE = SERVER_ADDRESS + "/event/todo/done";
 
@@ -230,7 +230,7 @@ public class ServerMachine {
     }
 
     public interface kidsAddListener {
-        void onSuccess(int statusCode, ServerGson.kidDataWithParent response);
+        void onSuccess(int statusCode, ServerGson.kidData response);
 
         void onConflict(int statusCode);
 
@@ -381,7 +381,7 @@ public class ServerMachine {
     }
 
     public interface eventRetrieveAllEventsWithTodoListener {
-        void onSuccess(int statusCode, ServerGson.event.retrieveEventsWithTodo.response response);
+        void onSuccess(int statusCode, List<ServerGson.eventData> response);
 
         void onFail(int statusCode);
     }
@@ -389,6 +389,20 @@ public class ServerMachine {
     public void eventRetrieveAllEventsWithTodo(eventRetrieveAllEventsWithTodoListener listener) {
         Map<String, String> map = new HashMap<>();
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO, map, null), CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO, listener));
+    }
+
+    public interface eventRetrieveAllEventsByKidListener {
+        void onSuccess(int statusCode, List<ServerGson.eventData> response);
+
+        void onFail(int statusCode);
+    }
+
+    public void eventRetrieveAllEventsByKid(eventRetrieveAllEventsByKidListener listener, int kidId) {
+        Map<String, String> map = new HashMap<>();
+        String addressForGet = CMD_EVENT_RETRIEVE_EVENTS + "?";
+        addressForGet += "kidId=" + kidId;
+
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_EVENT_RETRIEVE_ALL_EVENTS_BY_KID, listener));
     }
 
     public interface eventTodoDoneListener {
@@ -442,7 +456,7 @@ public class ServerMachine {
     }
 
     public interface subHostListListener {
-        void onSuccess(int statusCode, ServerGson.subHost.list.response response);
+        void onSuccess(int statusCode, List<ServerGson.hostData> response);
 
         void onFail(int statusCode);
     }
@@ -669,9 +683,17 @@ public class ServerMachine {
 
                     case CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO:
                         if (responseCode == 200)
-                            ((eventRetrieveAllEventsWithTodoListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.event.retrieveEventsWithTodo.fromJson(responseString));
+                            ((eventRetrieveAllEventsWithTodoListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.event.retrieveAllEventsWithTodo.fromJson(responseString));
                         else
                             ((eventRetrieveAllEventsWithTodoListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
+                    case CMD_EVENT_RETRIEVE_ALL_EVENTS_BY_KID:
+                        if (responseCode == 200)
+                            ((eventRetrieveAllEventsByKidListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.event.retrieveAllEventsById.fromJson(responseString));
+                        else
+                            ((eventRetrieveAllEventsByKidListener) mCurrentTask.mResponseListener).onFail(responseCode);
+
                         break;
 
                     case CMD_EVENT_TODO_DONE:
@@ -823,6 +845,10 @@ public class ServerMachine {
                         ((eventRetrieveAllEventsWithTodoListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
+                    case CMD_EVENT_RETRIEVE_ALL_EVENTS_BY_KID:
+                        ((eventRetrieveAllEventsByKidListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
                     case CMD_EVENT_TODO_DONE:
                         ((eventTodoDoneListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
@@ -885,13 +911,13 @@ public class ServerMachine {
     }
 
     static String getMacAddress(String macId) {
-        if (macId.length()<12)
+        if (macId.length() < 12)
             return "00:00:00:00:00:00";
 
         return String.format("%c%c:%c%c:%c%c:%c%c:%c%c:%c%c",
-                macId.charAt(0),macId.charAt(1),macId.charAt(2),macId.charAt(3),
-                macId.charAt(4),macId.charAt(5),macId.charAt(6),macId.charAt(7),
-                macId.charAt(8),macId.charAt(9),macId.charAt(10),macId.charAt(11)
+                macId.charAt(0), macId.charAt(1), macId.charAt(2), macId.charAt(3),
+                macId.charAt(4), macId.charAt(5), macId.charAt(6), macId.charAt(7),
+                macId.charAt(8), macId.charAt(9), macId.charAt(10), macId.charAt(11)
         );
     }
 
@@ -904,7 +930,7 @@ public class ServerMachine {
         File dir = new File(GetAvatarFilePath());
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for(String child : children)
+            for (String child : children)
                 new File(dir, child).delete();
         }
     }
@@ -914,10 +940,10 @@ public class ServerMachine {
         FileOutputStream out = null;
         try {
             File dir = new File(GetAvatarFilePath());
-            if(dir.mkdirs())
+            if (dir.mkdirs())
                 Log.d("swing", "false");
 
-            avatarFilename = dir + "/"+ filename + extension;
+            avatarFilename = dir + "/" + filename + extension;
             out = new FileOutputStream(avatarFilename);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
