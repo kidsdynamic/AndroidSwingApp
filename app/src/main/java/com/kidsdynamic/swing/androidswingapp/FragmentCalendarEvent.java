@@ -1,10 +1,18 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/5.
@@ -14,93 +22,109 @@ public class FragmentCalendarEvent extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private View mViewEventLine;
+    private View mViewAlarmLine;
+    private TextView mViewAlarm;
+
     private View mViewAssignLine;
+    private TextView mViewAssignName;
+    private ViewCircle mViewAssignPhoto;
+    private View mViewAssignOption;
+    private LinearLayout mViewAssignContainer;
+
     private View mViewStartLine;
+    private TextView mViewStart;
+
     private View mViewEndLine;
+    private TextView mViewEnd;
+
     private View mViewColorLine;
+    private ViewShape mViewColor;
+    private View mViewColorOption;
+    private LinearLayout mViewColorContainer;
+
     private View mViewRepeatLine;
+    private TextView mViewRepeat;
+    private View mViewRepeatOption;
+    private LinearLayout mViewRepeatContainer;
+
     private View mViewDescriptionLine;
     private View mViewTodoLine;
     private View mViewSave;
     private View mViewAdvance;
 
-    private ViewShape mViewColorLabel;
-    private View mViewColorOption;
-    private ViewShape mViewColorYellow;
-    private ViewShape mViewColorBlue;
-    private ViewShape mViewColorGreen;
-    private ViewShape mViewColorPink;
-    private ViewShape mViewcolorOrange;
-    private ViewShape mViewColorGray;
-
-    private long mDefaultDate = System.currentTimeMillis();
+    private WatchEvent mEvent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        if(getArguments()!= null) {
-            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        int count;
+
         mViewMain = inflater.inflate(R.layout.fragment_calendar_event, container, false);
 
-        mViewEventLine = mViewMain.findViewById(R.id.calendar_event_select_line);
-        mViewEventLine.setOnClickListener(mEventListener);
+        // Line Alarm
+        mViewAlarmLine = mViewMain.findViewById(R.id.calendar_event_alarm_line);
+        mViewAlarmLine.setOnClickListener(mAlarmListener);
+        mViewAlarm = (TextView) mViewMain.findViewById(R.id.calendar_event_alarm);
 
+        // Line Assign
         mViewAssignLine = mViewMain.findViewById(R.id.calendar_event_assign_line);
         mViewAssignLine.setOnClickListener(mAssignListener);
+        mViewAssignName = (TextView) mViewMain.findViewById(R.id.calendar_event_assign_name);
+        mViewAssignPhoto = (ViewCircle) mViewMain.findViewById(R.id.calendar_event_assign_photo);
+        mViewAssignOption = mViewMain.findViewById(R.id.calendar_event_assign_option);
+        mViewAssignContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_assign_container);
 
+        // Line Start
         mViewStartLine = mViewMain.findViewById(R.id.calendar_event_start_line);
         mViewStartLine.setOnClickListener(mStartListener);
+        mViewStart = (TextView) mViewMain.findViewById(R.id.calendar_event_start);
 
+        // Line End
         mViewEndLine = mViewMain.findViewById(R.id.calendar_event_end_line);
         mViewEndLine.setOnClickListener(mEndListener);
+        mViewEnd = (TextView) mViewMain.findViewById(R.id.calendar_event_end);
 
+        // Line Color
         mViewColorLine = mViewMain.findViewById(R.id.calendar_event_color_line);
         mViewColorLine.setOnClickListener(mColorListener);
+        mViewColor = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color);
+        mViewColorOption = mViewMain.findViewById(R.id.calendar_event_color_option);
+        mViewColorContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_color_container);
 
+        count = mViewColorContainer.getChildCount();
+        for (int idx = 0; idx < count; idx++)
+            mViewColorContainer.getChildAt(idx).setOnClickListener(mColorOptionListener);
+
+        // Line Repeat
         mViewRepeatLine = mViewMain.findViewById(R.id.calendar_event_repeat_line);
         mViewRepeatLine.setOnClickListener(mRepeatListener);
+        mViewRepeat = (TextView) mViewMain.findViewById(R.id.calendar_event_repeat);
+        mViewRepeatOption = mViewMain.findViewById(R.id.calendar_event_repeat_option);
+        mViewRepeatContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_repeat_container);
 
+        count = mViewRepeatContainer.getChildCount();
+        for (int idx = 0; idx < count; idx++)
+            mViewRepeatContainer.getChildAt(idx).setOnClickListener(mRepeatOptionListener);
+
+        // Line Description
         mViewDescriptionLine = mViewMain.findViewById(R.id.calendar_event_description_line);
         mViewDescriptionLine.setOnClickListener(mDescriptionListener);
 
+        // Line To-Do
         mViewTodoLine = mViewMain.findViewById(R.id.calendar_event_todo_line);
         mViewTodoLine.setOnClickListener(mTodoListener);
 
+        // Line Button
         mViewSave = mViewMain.findViewById(R.id.calendar_event_save);
         mViewSave.setOnClickListener(mSaveListener);
 
         mViewAdvance = mViewMain.findViewById(R.id.calendar_event_advance);
         mViewAdvance.setOnClickListener(mAdvanceListener);
-
-        mViewColorLabel = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_label);
-
-        mViewColorOption = mViewMain.findViewById(R.id.calendar_event_color_options);
-
-        mViewColorYellow = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_yellow);
-        mViewColorYellow.setOnClickListener(mColorOptiontListener);
-
-        mViewColorBlue = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_blue);
-        mViewColorBlue.setOnClickListener(mColorOptiontListener);
-
-        mViewColorGreen = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_green);
-        mViewColorGreen.setOnClickListener(mColorOptiontListener);
-
-        mViewColorPink = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_pink);
-        mViewColorPink.setOnClickListener(mColorOptiontListener);
-
-        mViewcolorOrange = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_orange);
-        mViewcolorOrange.setOnClickListener(mColorOptiontListener);
-
-        mViewColorGray = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color_gray);
-        mViewColorGray.setOnClickListener(mColorOptiontListener);
 
         return mViewMain;
     }
@@ -112,13 +136,25 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        mEvent = mActivityMain.mEventStack.pop();
+        if (mEvent == null)
+            mEvent = new WatchEvent(System.currentTimeMillis());
+
+        loadWatchEvent();
+    }
+
+    @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
 
-    private View.OnClickListener mEventListener = new View.OnClickListener() {
+    private View.OnClickListener mAlarmListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            mActivityMain.mEventStack.push(mEvent);
             mActivityMain.selectFragment(FragmentCalendarAlarm.class.getName(), null);
         }
     };
@@ -126,21 +162,35 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mAssignListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewAssignOption.getLayoutParams();
+            if (params.height == 0)
+                params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            else
+                params.height = 0;
 
+            mViewAssignOption.setLayoutParams(params);
         }
     };
 
     private View.OnClickListener mStartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(BUNDLE_KEY_START_DATE, true);
 
+            mActivityMain.mEventStack.push(mEvent);
+            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
         }
     };
 
     private View.OnClickListener mEndListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(BUNDLE_KEY_START_DATE, false);
 
+            mActivityMain.mEventStack.push(mEvent);
+            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
         }
     };
 
@@ -160,7 +210,13 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mRepeatListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewRepeatOption.getLayoutParams();
+            if (params.height == 0)
+                params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+            else
+                params.height = 0;
 
+            mViewRepeatOption.setLayoutParams(params);
         }
     };
 
@@ -188,7 +244,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mAdvanceListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams)mViewSave.getLayoutParams();
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewSave.getLayoutParams();
             params.width = LinearLayout.LayoutParams.MATCH_PARENT;
             mViewSave.setLayoutParams(params);
 
@@ -198,12 +254,135 @@ public class FragmentCalendarEvent extends ViewFragment {
         }
     };
 
-    private View.OnClickListener mColorOptiontListener = new View.OnClickListener() {
+    private View.OnClickListener mAssignOptionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ViewShape shape = (ViewShape) view;
-            mViewColorLabel.setColor(shape.getColor());
+            WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
+
+            mViewAssignName.setText(kid.mLabel);
+            mViewAssignPhoto.setBitmap(kid.mPhoto);
+
+            mEvent.mKidId = kid.mId;
+
+            int count = mViewAssignContainer.getChildCount();
+            for (int idx = 0; idx < count; idx++) {
+                ViewCircle viewCircle = (ViewCircle) mViewAssignContainer.getChildAt(idx);
+                WatchContact.Kid contact = (WatchContact.Kid) viewCircle.getTag();
+
+                viewCircle.setActive(contact.mId == kid.mId);
+            }
         }
     };
 
+    private View.OnClickListener mColorOptionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ViewShape shape = (ViewShape) view;
+            mViewColor.setColor(shape.getColor());
+
+            mEvent.mColor = WatchEvent.colorToString(mViewColor.getColor());
+
+            mEvent.mColor = "";
+        }
+    };
+
+    private View.OnClickListener mRepeatOptionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            TextView viewRepeat = (TextView) view;
+            String repeat = viewRepeat.getText().toString();
+
+            mViewRepeat.setText(repeat);
+
+            repeat = repeat.toUpperCase();
+            if(repeat.contains(WatchEvent.REPEAT_DAILY))
+                mEvent.mRepeat = WatchEvent.REPEAT_DAILY;
+            else if(repeat.contains(WatchEvent.REPEAT_WEEKLY))
+                mEvent.mRepeat = WatchEvent.REPEAT_WEEKLY;
+            else if(repeat.contains(WatchEvent.REPEAT_MONTHLY))
+                mEvent.mRepeat = WatchEvent.REPEAT_MONTHLY;
+            else
+                mEvent.mRepeat = "";
+        }
+    };
+
+    private void loadAlarm() {
+        String alarmName = "";
+        for (FragmentCalendarAlarm.NoticeAlarm alarm : FragmentCalendarAlarm.NoticeAlarmList) {
+            if (alarm.mId == mEvent.mAlert)
+                alarmName = FragmentCalendarAlarm.findAlarmName(mEvent.mAlert);
+        }
+
+        if (alarmName.length() == 0) // Event is illegal, select first one
+            mEvent.mAlert = FragmentCalendarAlarm.NoticeAlarmList[0].mId;
+
+        if (mEvent.mAlert == 0)// simple name
+            alarmName = "App Only";
+        mViewAlarm.setText(alarmName);
+    }
+
+    private void loadAssign() {
+        ArrayList<WatchContact.Kid> list = new ArrayList<>();
+        WatchContact.Kid contact = null;
+
+        list.addAll(mActivityMain.mOperator.getDeviceList());
+        list.addAll(mActivityMain.mOperator.getSharedList());
+
+        if (list.size() == 0)
+            return;
+
+        if (mEvent.mId == 0)    // todo: does id == 0 indicate it is a new event?
+            mEvent.mId = mActivityMain.mOperator.getFocusKid() != null ?
+                    mActivityMain.mOperator.getFocusKid().mId : list.get(0).mId;
+
+        for (WatchContact.Kid kid : list)
+            if (kid.mId == mEvent.mId)
+                contact = kid;
+
+        mViewAssignName.setText(contact.mLabel);
+        mViewAssignPhoto.setBitmap(contact.mPhoto);
+
+        int size = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()));
+        int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+        for (WatchContact.Kid kid : list) {
+            ViewCircle viewCircle = new ViewCircle(mActivityMain);
+
+            viewCircle.setTag(kid);
+            viewCircle.setBitmap(kid.mPhoto);
+            viewCircle.setStrokeWidth(mViewAssignPhoto.getStrokeWidth());
+            viewCircle.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
+            viewCircle.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
+            viewCircle.setActive(kid.mId == contact.mId);
+            viewCircle.setOnClickListener(mAssignOptionListener);
+
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
+            layoutParams.setMarginStart(margin);
+            layoutParams.setMarginEnd(margin);
+            viewCircle.setLayoutParams(layoutParams);
+
+            mViewAssignContainer.addView(viewCircle);
+        }
+    }
+
+    private void loadDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.US);
+
+        mViewStart.setText(simpleDateFormat.format(mEvent.mStartDate));
+        mViewEnd.setText(simpleDateFormat.format(mEvent.mEndDate));
+    }
+
+    private void loadColor() {
+        mViewColor.setColor(WatchEvent.stringToColor(mEvent.mColor));
+    }
+
+    private void loadWatchEvent() {
+        loadAlarm();
+        loadAssign();
+        loadDate();
+        loadColor();
+    }
+
+    private void saveWatchEvent() {
+
+    }
 }

@@ -2,6 +2,8 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,14 +24,6 @@ public class ServerGson {
     }
 
     static final class kidData {
-        int id;
-        String name;
-        String dateCreated;
-        String macId;
-        String profile;
-    }
-
-    static final class kidDataWithParent {
         int id;
         String name;
         String dateCreated;
@@ -88,25 +82,27 @@ public class ServerGson {
         String lastUpdated;
     }
 
+    static final class requestUser {
+        int id;
+        String email;
+        String firstName;
+        String lastName;
+        String lastUpdate;
+        String dateCreated;
+        String zipCode;
+        String phoneNumber;
+        String profile;
+        String registrationId;
+    }
+
     static final class hostData {
         int id;
-        String macId;
-        int requestFromID;
-        int requestToID;
+        requestUser requestFromUser;
+        requestUser requestToUser;
         String status;
         String createdDate;
         String lastUpdated;
-        List<kidForHostData> kid;
-    }
-
-    static final class kidForHostData {
-        int id;
-        String firstName;
-        String lastName;
-        String dateCreated;
-        String macId;
-        String profile;
-        int ParentID;
+        List<kidData> kids;
     }
 
     public static class user {
@@ -224,7 +220,7 @@ public class ServerGson {
 
             public static class uploadKid {
                 static final class response {
-                    kidDataWithParent kid;
+                    kidData kid;
                 }
                 public static response fromJson(String json) {
                     return new Gson().fromJson(json, response.class);
@@ -249,8 +245,8 @@ public class ServerGson {
                 return new Gson().toJson(new c(pName, pMacId));
             }
 
-            public static kidDataWithParent fromJson(String json) {
-                return new Gson().fromJson(json, kidDataWithParent.class);
+            public static kidData fromJson(String json) {
+                return new Gson().fromJson(json, kidData.class);
             }
         }
 
@@ -272,7 +268,7 @@ public class ServerGson {
             }
 
             static final class response {
-                kidDataWithParent kid;
+                kidData kid;
             }
 
             public static response fromJson(String json) {
@@ -282,7 +278,7 @@ public class ServerGson {
 
         public static class whoRegisteredMacID {
             static final class response {
-                kidDataWithParent kid;
+                kidData kid;
             }
 
             public static response fromJson(String json) {
@@ -442,13 +438,19 @@ public class ServerGson {
             }
         }
 
-        public static class retrieveEventsWithTodo {
-            static final class response {
-                List<eventData> events;
-            }
+        public static class retrieveAllEventsWithTodo {
 
-            public static response fromJson(String json) {
-                return new Gson().fromJson(json, response.class);
+            public static List<eventData> fromJson(String json) {
+                eventData[] data = new Gson().fromJson(json, eventData[].class);
+                return new ArrayList<>(Arrays.asList(data));
+            }
+        }
+
+        public static class retrieveAllEventsById {
+
+            public static List<eventData> fromJson(String json) {
+                eventData[] data = new Gson().fromJson(json, eventData[].class);
+                return new ArrayList<>(Arrays.asList(data));
             }
         }
 
@@ -530,12 +532,10 @@ public class ServerGson {
         }
 
         public static class list {
-            static final class response {
-                List<hostData> hosts;
-            }
 
-            public static response fromJson(String json) {
-                return new Gson().fromJson(json, response.class);
+            public static List<hostData> fromJson(String json) {
+                hostData[] data = new Gson().fromJson(json, hostData[].class);
+                return new ArrayList<>(Arrays.asList(data));
             }
         }
     }

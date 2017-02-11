@@ -399,6 +399,8 @@ public class ViewCircle extends View {
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rectDst, rectSrc, paint);
+
+        invalidate();
     }
 
     public Bitmap getBitmap() {
@@ -480,7 +482,7 @@ public class ViewCircle extends View {
         invalidate();
     }
 
-    public void setStrokeActive(boolean active) {
+    public void setActive(boolean active) {
         if (active)
             setStrokeBeginEnd(-1, mStrokeCount);
         else

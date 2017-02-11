@@ -1,16 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
@@ -57,7 +49,7 @@ public class ViewPhotoContact extends LinearLayout {
     }
 
     public void setSelected(boolean selected) {
-        mViewPhoto.setStrokeActive(selected);
+        mViewPhoto.setActive(selected);
     }
 
     public void setName(String name) {

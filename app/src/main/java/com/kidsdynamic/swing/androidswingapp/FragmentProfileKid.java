@@ -239,7 +239,7 @@ public class FragmentProfileKid extends ViewFragment {
 
     ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.kidDataWithParent response) {
+        public void onSuccess(int statusCode, ServerGson.kidData response) {
             mKid.mId = response.id;
             mKid.mFirstName = response.name;
             mKid.mLastName = "";

@@ -156,8 +156,8 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
     }
 
     @Override
-    public void setDate(long milli) {
-        super.setDate(milli);
+    public void setDate(long date) {
+        super.setDate(date);
         updateText();
     }
 

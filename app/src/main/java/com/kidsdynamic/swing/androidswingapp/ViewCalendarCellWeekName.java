@@ -32,13 +32,13 @@ public class ViewCalendarCellWeekName extends ViewCalendarCell {
     static final String dayName[] = new String[]{"?", "S", "M", "T", "W", "T", "F", "S"};
 
     @Override
-    public void setDate(long milli) {
-        super.setDate(milli);
+    public void setDate(long date) {
+        super.setDate(date);
 
-        Calendar date = ViewCalendar.getInstance();
-        date.setTimeInMillis(mDate);
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(mDate);
 
-        int weekDay = date.get(Calendar.DAY_OF_WEEK);
+        int weekDay = calc.get(Calendar.DAY_OF_WEEK);
         setText(dayName[weekDay]);
     }
 }

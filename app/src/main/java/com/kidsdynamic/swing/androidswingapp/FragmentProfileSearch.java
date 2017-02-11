@@ -52,6 +52,7 @@ public class FragmentProfileSearch extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
+        mActivityMain.mBLEMachine.Search(null);
         mActivityMain.popFragment();
     }
 
@@ -93,6 +94,8 @@ public class FragmentProfileSearch extends ViewFragment {
         public void onSuccess(int statusCode, ServerGson.kids.whoRegisteredMacID.response response) {
             WatchContact.Kid device = (WatchContact.Kid) mSearchResult.get(mSearchResultIndex);
             device.mLabel = response.kid.parent.email;
+            device.mUserId = response.kid.parent.id;
+            device.mProfile = response.kid.profile;
             device.mBound = true;
             if (!enumerateRegisteredMacId(false))
                 gotoWatchSelect();

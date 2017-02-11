@@ -1,6 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/10.
@@ -41,5 +43,21 @@ public class WatchTodo implements Serializable {
         mStatus = status;
         mDateCreated = dateCreated;
         mLastUpdated = lastUpdated;
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH/mm/ss", Locale.US);
+
+        return new StringBuilder()
+                .append("{mId:").append(mId)
+                .append(" mUserId:").append(mUserId)
+                .append(" mKidId:").append(mKidId)
+                .append(" mEventId:").append(mEventId)
+                .append(" mText:").append(mText)
+                .append(" mStatus").append(mStatus)
+                .append(" mDateCreated").append(sdf.format(mDateCreated))
+                .append(" mLastUpdated").append(sdf.format(mLastUpdated))
+                .append("}").toString();
     }
 }

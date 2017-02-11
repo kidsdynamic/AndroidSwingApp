@@ -139,15 +139,7 @@ public class ViewCalendar extends TableLayout {
     }
 
     public void setDate(long date) {
-        Calendar calc = getInstance();
-
-        calc.setTimeInMillis(date);
-        calc.clear(Calendar.HOUR_OF_DAY);
-        calc.clear(Calendar.MINUTE);
-        calc.clear(Calendar.SECOND);
-        calc.clear(Calendar.MILLISECOND);
-
-        mDate = calc.getTimeInMillis();
+        mDate = date;
     }
 
     public long getDate() {
@@ -244,5 +236,17 @@ public class ViewCalendar extends TableLayout {
             return false;
 
         return true;
+    }
+
+    static public long stripTime(long date) {
+        Calendar calc = getInstance();
+
+        calc.setTimeInMillis(date);
+        calc.clear(Calendar.HOUR_OF_DAY);
+        calc.clear(Calendar.MINUTE);
+        calc.clear(Calendar.SECOND);
+        calc.clear(Calendar.MILLISECOND);
+
+        return calc.getTimeInMillis();
     }
 }

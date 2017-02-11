@@ -11,8 +11,9 @@ abstract public class ViewFragment extends Fragment {
 
     final static String BUNDLE_KEY_MAIL = "MAIL";
     final static String BUNDLE_KEY_PASSWORD = "PASSWORD";
-    final static String BUNDLE_KEY_AVATAR = "BUNDLE_KEY_AVATAR";
-    final static String BUNDLE_KEY_DATE = "BUNDLE_KEY_DATE";
+    final static String BUNDLE_KEY_AVATAR = "AVATAR";
+    final static String BUNDLE_KEY_DATE = "DATE";
+    final static String BUNDLE_KEY_START_DATE = "START_DATE";
 
     @Override
     public void onResume() {
