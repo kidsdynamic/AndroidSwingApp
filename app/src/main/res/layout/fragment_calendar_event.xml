@@ -394,12 +394,14 @@
                 android:padding="10dp"
                 android:visibility="invisible">
 
-                <TextView
-                    style="@style/textview_calendar_event"
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/calendar_event_description"
+                    style="@style/edittext_calendar"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:text="Description" />
+                    android:maxLength="64"
+                    android:hint="Description" />
             </LinearLayout>
 
             <RelativeLayout

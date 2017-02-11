@@ -2,11 +2,14 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -48,6 +51,8 @@ public class FragmentCalendarEvent extends ViewFragment {
     private LinearLayout mViewRepeatContainer;
 
     private View mViewDescriptionLine;
+    private EditText mViewDescription;
+
     private View mViewTodoLine;
     private View mViewSave;
     private View mViewAdvance;
@@ -114,6 +119,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         // Line Description
         mViewDescriptionLine = mViewMain.findViewById(R.id.calendar_event_description_line);
         mViewDescriptionLine.setOnClickListener(mDescriptionListener);
+        mViewDescription = (EditText)mViewMain.findViewById(R.id.calendar_event_description);
+        mViewDescription.addTextChangedListener(mDescriptionWatcher);
 
         // Line To-Do
         mViewTodoLine = mViewMain.findViewById(R.id.calendar_event_todo_line);
@@ -306,6 +313,23 @@ public class FragmentCalendarEvent extends ViewFragment {
         }
     };
 
+    private TextWatcher mDescriptionWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            mEvent.mDescription = s.toString();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
     private void loadAlarm() {
         String alarmName = "";
         for (WatchEvent.NoticeAlarm alarm : WatchEvent.NoticeAlarmList) {
@@ -387,12 +411,17 @@ public class FragmentCalendarEvent extends ViewFragment {
             mViewRepeat.setText("Never");
     }
 
+    private void loadDescription() {
+        mViewDescription.setText(mEvent.mDescription);
+    }
+
     private void loadWatchEvent() {
         loadAlarm();
         loadAssign();
         loadDate();
         loadColor();
         loadRepeat();
+        loadDescription();
     }
 
     private void saveWatchEvent() {

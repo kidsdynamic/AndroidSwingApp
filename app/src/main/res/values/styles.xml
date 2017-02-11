@@ -61,6 +61,15 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="edittext_calendar">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColorHint">@color/color_gray</item>
+        <item name="android:textColor">@color/color_gray</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
     <style name="button_main">
         <item name="android:textColor">@color/color_white</item>
         <item name="android:textSize">16sp</item>
