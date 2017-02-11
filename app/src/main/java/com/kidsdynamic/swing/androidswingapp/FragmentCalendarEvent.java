@@ -386,12 +386,12 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (list.size() == 0)
             return;
 
-        if (mEvent.mId == 0)    // todo: does id == 0 indicate it is a new event?
-            mEvent.mId = mActivityMain.mOperator.getFocusKid() != null ?
+        if (mEvent.mKidId == 0)    // todo: does id == 0 indicate it is a new event?
+            mEvent.mKidId = mActivityMain.mOperator.getFocusKid() != null ?
                     mActivityMain.mOperator.getFocusKid().mId : list.get(0).mId;
 
         for (WatchContact.Kid kid : list)
-            if (kid.mId == mEvent.mId)
+            if (kid.mId == mEvent.mKidId)
                 contact = kid;
 
         mViewAssignName.setText(contact.mLabel);
