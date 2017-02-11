@@ -37,6 +37,7 @@ public class ServerMachine {
     final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
     final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
     final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
+    final static String CMD_USER_FIND_BY_EMAIL = SERVER_ADDRESS + "/user/findByEmail";
 
     final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
     final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
@@ -66,6 +67,10 @@ public class ServerMachine {
 
     final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
 
+    final static String REQUEST_TAG = "SERVER_MACHINE";
+    final static String REQUEST_UPLOAD_TAG = "REQUEST_UPLOAD_TAG";
+
+    private String mTag = "";
     private RequestQueue mRequestQueue;
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
     private Handler mHandler = new Handler();
@@ -76,9 +81,10 @@ public class ServerMachine {
         Log.i("ServerMachine", msg);
     }
 
-    public ServerMachine(Context context) {
+    public ServerMachine(Context context, String tag) {
         mContext = context;
         mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        mTag = tag;
     }
 
     boolean Start() {
@@ -89,6 +95,7 @@ public class ServerMachine {
     }
 
     boolean Stop() {
+        mRequestQueue.cancelAll(REQUEST_TAG);
         mHandler.removeCallbacks(stateMachine);
         return true;
     }
@@ -119,7 +126,9 @@ public class ServerMachine {
     };
 
     private Request<NetworkResponse> NewRequest(int method, String address, Map<String, String> map, String filename) {
-        return new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename, mAuthToken);
+        Request<NetworkResponse> newRequest = new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename, mAuthToken);
+        newRequest.setTag(REQUEST_TAG);
+        return newRequest;
     }
 
     public void setAuthToken(String token) {
@@ -204,6 +213,19 @@ public class ServerMachine {
     public void userRetrieveUserProfile(userRetrieveUserProfileListener listener) {
         Map<String, String> map = new HashMap<>();
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, CMD_USER_RETRIEVE_USER_PROFILE, map, null), CMD_USER_RETRIEVE_USER_PROFILE, listener));
+    }
+
+    public interface userFindByEmailListener {
+        void onSuccess(int statusCode, ServerGson.userData response);
+
+        void onFail(int statusCode);
+    }
+
+    public void userFindByEmail(userFindByEmailListener listener, String email) {
+        Map<String, String> map = new HashMap<>();
+        String addressForGet = CMD_USER_FIND_BY_EMAIL + "?";
+        addressForGet += "email=" + email;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_USER_FIND_BY_EMAIL, listener));
     }
 
     public interface userAvatarUploadListener {
@@ -456,7 +478,7 @@ public class ServerMachine {
     }
 
     public interface subHostListListener {
-        void onSuccess(int statusCode, List<ServerGson.hostData> response);
+        void onSuccess(int statusCode, ServerGson.subHost.list.response response);
 
         void onFail(int statusCode);
     }
@@ -558,6 +580,13 @@ public class ServerMachine {
                             ((userRetrieveUserProfileListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         else
                             ((userRetrieveUserProfileListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
+                    case CMD_USER_FIND_BY_EMAIL:
+                        if (responseCode == 200)
+                            ((userFindByEmailListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.user.findByEmail.fromJson(responseString));
+                        else
+                            ((userFindByEmailListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_AVATAR_UPLOAD:
@@ -784,6 +813,10 @@ public class ServerMachine {
 
                     case CMD_USER_RETRIEVE_USER_PROFILE:
                         ((userRetrieveUserProfileListener) mCurrentTask.mResponseListener).onFail(responseCode);
+                        break;
+
+                    case CMD_USER_FIND_BY_EMAIL:
+                        ((userFindByEmailListener) mCurrentTask.mResponseListener).onFail(responseCode);
                         break;
 
                     case CMD_AVATAR_UPLOAD:

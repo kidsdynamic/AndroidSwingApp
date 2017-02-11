@@ -242,7 +242,7 @@ public class FragmentSignupProfile extends ViewFragment {
 
             mActivityMain.mOperator.ResetDatabase();
             ServerMachine.ResetAvatar();
-            mActivityMain.mOperator.UserAdd(
+            mActivityMain.mOperator.setUser(
                     new WatchContact.User(
                             null,
                             response.id,
@@ -282,13 +282,13 @@ public class FragmentSignupProfile extends ViewFragment {
     ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
-            WatchContact.User user = mActivityMain.mOperator.UserGet();
+            WatchContact.User user = mActivityMain.mOperator.getUser();
             File fileFrom = new File(mRegisterAvatarFilename);
             File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
             if(!fileFrom.renameTo(fileTo))
                 Log.d("swing", "Rename failed! " + mRegisterAvatarFilename + " to " + response.user.profile);
             user.mProfile = response.user.profile;
-            mActivityMain.mOperator.UserUpdate(user);
+            mActivityMain.mOperator.setUser(user);
 
             mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }

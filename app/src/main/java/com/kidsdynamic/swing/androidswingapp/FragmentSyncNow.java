@@ -51,7 +51,7 @@ public class FragmentSyncNow extends ViewFragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            WatchContact.Kid device = mActivityMain.mOperator.KidGetFocus();
+            WatchContact.Kid device = mActivityMain.mOperator.getFocusKid();
 
             if (device == null) {
                 Toast.makeText(mActivityMain, "There is no bound device", Toast.LENGTH_SHORT).show();

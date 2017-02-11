@@ -6,26 +6,28 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import static com.kidsdynamic.swing.androidswingapp.ServerMachine.REQUEST_UPLOAD_TAG;
+
 /**
  * Created by weichigio on 2017/2/1.
  */
 
 public class ServerPushService extends Service {
-    private WatchOperator mWatchOperator;
+    private WatchDatabase mWatchDatabase;
     private boolean token_available = false;
     public ServerMachine mServiceMachine;
     public Config mConfig;
     private Handler mHandler = new Handler();
 
-    private WatchOperator.Upload mUploadItem = null;
+    private WatchDatabase.Upload mUploadItem = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Log.d("ServiceUpload", "onCreate");
         mConfig = new Config(this, null);
-        mWatchOperator = new WatchOperator(this);
-        mServiceMachine = new ServerMachine(this);
+        mWatchDatabase = new WatchDatabase(this);
+        mServiceMachine = new ServerMachine(this, REQUEST_UPLOAD_TAG);
         mServiceMachine.Start();
     }
 
@@ -54,13 +56,13 @@ public class ServerPushService extends Service {
     ServerMachine.activityUploadRawDataListener mActivityUploadRawDataListener = new ServerMachine.activityUploadRawDataListener() {
         @Override
         public void onSuccess(int statusCode) {
-            mWatchOperator.UploadItemDelete(mUploadItem);
+            mWatchDatabase.UploadItemDelete(mUploadItem);
             mUploadItem = null;
         }
 
         @Override
         public void onConflict(int statusCode) {
-            mWatchOperator.UploadItemDelete(mUploadItem);
+            mWatchDatabase.UploadItemDelete(mUploadItem);
             mUploadItem = null;
         }
 
@@ -82,8 +84,8 @@ public class ServerPushService extends Service {
                     stop = true;
                 }
 
-            } else if (mUploadItem == null && mWatchOperator.UploadItemCount() > 0) {
-                mUploadItem = mWatchOperator.UploadItemGet();
+            } else if (mUploadItem == null && mWatchDatabase.UploadItemCount() > 0) {
+                mUploadItem = mWatchDatabase.UploadItemGet();
                 Log.d("PushService", " MAC " + mUploadItem.mMacId + " time " + mUploadItem.mTime);
                 mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoorActivity, mUploadItem.mOutdoorActivity, mUploadItem.mTime, mUploadItem.mMacId);
             }

@@ -55,7 +55,7 @@ public class FragmentProfileMain extends ViewFragment {
 
         mViewRequestFromContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_request_from_container);
 
-        WatchContact.User parent = mActivityMain.mOperator.UserGet();
+        WatchContact.User parent = mActivityMain.mOperator.getUser();
         mViewName.setText(parent.mLabel);
         if (parent.mPhoto != null) {
             mViewPhoto.setBitmap(parent.mPhoto);
@@ -81,7 +81,7 @@ public class FragmentProfileMain extends ViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        focusContact(mActivityMain.mOperator.KidGetFocus(), true);
+        focusContact(mActivityMain.mOperator.getFocusKid(), true);
     }
 
     @Override
@@ -182,7 +182,7 @@ public class FragmentProfileMain extends ViewFragment {
         }
 
         if (!onCreate)
-            mActivityMain.mOperator.KidSetFocus((WatchContact.Kid)contact);
+            mActivityMain.mOperator.setFocusKid((WatchContact.Kid)contact);
     }
 
     private void updateRequestFromTitle() {

@@ -1,8 +1,9 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
@@ -11,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -19,11 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
+
+import static com.kidsdynamic.swing.androidswingapp.ServerMachine.REQUEST_TAG;
 
 public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -54,7 +53,9 @@ public class ActivityMain extends AppCompatActivity
     public Stack<WatchEvent> mEventStack;
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
-    //public int mRequestingPermission = 0;
+    private Dialog mProcessDialog = null;
+    private List<WatchContact.Kid> mKidList;
+
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -115,13 +116,6 @@ public class ActivityMain extends AppCompatActivity
 
         mViewConsole = findViewById(R.id.main_console);
         mViewToolbar = findViewById(R.id.main_toolbar);
-
-        String fragmentName = FragmentBoot.class.getName();
-        Fragment fragment = Fragment.instantiate(this, fragmentName, null);
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_fragment, fragment, fragmentName)
-                .commit();
     }
 
     @Override
@@ -136,67 +130,167 @@ public class ActivityMain extends AppCompatActivity
             mBLEMachine = new BLEMachine(this);
 
         if (activeService && mServiceMachine == null)
-            mServiceMachine = new ServerMachine(this);
+            mServiceMachine = new ServerMachine(this, REQUEST_TAG);
 
         if (mBLEMachine != null)
             mBLEMachine.Start();
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
-        /*
-        mOperator.EventReset();
-        mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-31T06:20:00Z"), WatchOperator.getTimeStamp("2015-08-31T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(1, 6, "", WatchOperator.getTimeStamp("2015-08-30T09:20:00Z"), WatchOperator.getTimeStamp("2015-08-30T11:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(2, 5, "", WatchOperator.getTimeStamp("2015-09-01T05:20:00Z"), WatchOperator.getTimeStamp("2015-09-01T07:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(3, 4, "", WatchOperator.getTimeStamp("2015-08-01T08:20:00Z"), WatchOperator.getTimeStamp("2015-08-01T09:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(4, 3, "WEEKLY", WatchOperator.getTimeStamp("2015-08-31T13:00:00Z"), WatchOperator.getTimeStamp("2015-08-31T15:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(5, 2, "WEEKLY", WatchOperator.getTimeStamp("2015-09-01T16:00:00Z"), WatchOperator.getTimeStamp("2015-09-01T18:00:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(6, 1, "WEEKLY", WatchOperator.getTimeStamp("2015-08-30T12:00:00Z"), WatchOperator.getTimeStamp("2015-08-30T12:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(7, 0, "", WatchOperator.getTimeStamp("2015-07-10T08:20:00Z"), WatchOperator.getTimeStamp("2015-07-10T12:00:00Z")));
-        List<WatchOperator.Event> events = mOperator.EventGet(0, 0, WatchOperator.getTimeStamp("2015-08-29T08:20:00Z"), WatchOperator.getTimeStamp("2015-09-10T08:20:00Z"));
 
-        mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
-        WatchContact.User user = mOperator.UserGet();
-        Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
-        user.mFirstName = "TEST";
-        user.mProfile = "jpg";
-        mOperator.UserUpdate(user);
-        user = mOperator.UserGet();
-        Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
-        WatchContact.Kid focus = mOperator.KidGetFocus();
-        if (focus == null)
-            Log.d("TEST", "No focus item");
+        if (!mConfig.getString(Config.KEY_AUTH_TOKEN).equals("")) {
+            if (mProcessDialog == null) {
+                mProcessDialog = ProgressDialog.show(this, "Synchronize", "Please wait...", true);
 
-        mOperator.KidAdd(new WatchContact.Kid(null, 1, "Kid1", "last1", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 2, "Kid2", "last2", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 3, "Kid3", "last3", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 4, "Kid4", "last4", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 5, "Kid5", "last5", "ccc", "ddd", 3));
-        List<WatchContact.Kid> kids = mOperator.KidGet();
-        for (WatchContact.Kid kid : kids) {
-            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
-            kid.mProfile = kid.mFirstName+ "+profile";
-            mOperator.KidUpdate(kid);
+                mServiceMachine.userIsTokenValid(
+                        mUserIsTokenValidListener,
+                        mConfig.getString(Config.KEY_MAIL),
+                        mConfig.getString(Config.KEY_AUTH_TOKEN));
+            }
+        } else {
+            selectFragment(FragmentBoot.class.getName(), null);
         }
-        kids = mOperator.KidGet();
-        for (WatchContact.Kid kid : kids)
-            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
-
-        focus = new WatchContact.Kid(null, 6, "Kid6", "last6", "ccc", "ddd", 3);
-        mOperator.KidSetFocus(focus);
-        focus = mOperator.KidGetFocus();
-        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mUserId + " "+ focus.mProfile);
-*/
     }
 
     @Override
     public void onPause() {
-        if (mBLEMachine != null)
-            mBLEMachine.Stop();
-        if (mServiceMachine != null)
-            mServiceMachine.Stop();
+        if (mProcessDialog == null) {
+            if (mBLEMachine != null)
+                mBLEMachine.Stop();
+            if (mServiceMachine != null)
+                mServiceMachine.Stop();
+        }
         super.onPause();
     }
+
+    ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
+        @Override
+        public void onValidState(boolean valid) {
+            if (valid) {
+                mServiceMachine.setAuthToken(mConfig.getString(Config.KEY_AUTH_TOKEN));
+                mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+            } else {
+                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
+            }
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
+        }
+    };
+
+    ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+            mServiceMachine.setAuthToken(result.access_token);
+            mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(getApplicationContext(), "login failed!",Toast.LENGTH_SHORT).show();
+            selectFragment(FragmentBoot.class.getName(), null);
+        }
+    };
+
+    ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
+            ServerMachine.ResetAvatar();
+            mOperator.setUser(
+                    new WatchContact.User(
+                            null,
+                            response.user.id,
+                            response.user.email,
+                            response.user.firstName,
+                            response.user.lastName,
+                            WatchOperator.getTimeStamp(response.user.lastUpdate),
+                            WatchOperator.getTimeStamp(response.user.dateCreated),
+                            response.user.zipCode,
+                            response.user.phoneNumber,
+                            response.user.profile)
+            );
+
+            mKidList = new ArrayList<>();
+            for (ServerGson.kidData kidData : response.kids) {
+                WatchContact.Kid kid = new WatchContact.Kid();
+                kid.mId = kidData.id;
+                kid.mFirstName = kidData.name;
+                kid.mLastName = "";
+                kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
+                kid.mMacId = kidData.macId;
+                kid.mUserId = response.user.id;
+                kid.mProfile = kidData.profile;
+                kid.mBound = true;
+                mOperator.setKid(kid);
+                mKidList.add(kid);
+            }
+
+            if (!response.user.profile.equals(""))
+                mServiceMachine.getAvatar(mGetUserAvatarListener, response.user.profile);
+            else
+                getKidAvatar(true);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(getApplicationContext(), "Retrieve user profile failed!",Toast.LENGTH_SHORT).show();
+            selectFragment(FragmentBoot.class.getName(), null);
+        }
+    };
+
+    ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
+        @Override
+        public void onSuccess(Bitmap avatar, String filename) {
+            ServerMachine.createAvatarFile(avatar, filename, "");
+            getKidAvatar(true);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(getApplicationContext(), "Get user avatar failed!",Toast.LENGTH_SHORT).show();
+            selectFragment(FragmentBoot.class.getName(), null);
+        }
+    };
+
+    private int mProcessKidAvatar;
+    private void getKidAvatar(boolean start) {
+        if (start)
+            mProcessKidAvatar = 0;
+        else
+            mProcessKidAvatar++;
+
+        if (mProcessKidAvatar >= mKidList.size()) {
+            selectFragment(FragmentBoot.class.getName(), null);
+            return;
+        }
+
+        while (mKidList.get(mProcessKidAvatar).mProfile.equals("")) {
+            mProcessKidAvatar++;
+            if (mProcessKidAvatar >= mKidList.size()) {
+                selectFragment(FragmentBoot.class.getName(), null);
+                return;
+            }
+        }
+
+        mServiceMachine.getAvatar(mGetKidAvatarListener, mKidList.get(mProcessKidAvatar).mProfile);
+    }
+
+    ServerMachine.getAvatarListener mGetKidAvatarListener = new ServerMachine.getAvatarListener() {
+        @Override
+        public void onSuccess(Bitmap avatar, String filename) {
+            ServerMachine.createAvatarFile(avatar, filename, "");
+            getKidAvatar(false);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(getApplicationContext(), "Get kid avatar failed!",Toast.LENGTH_SHORT).show();
+            selectFragment(FragmentBoot.class.getName(), null);
+        }
+    };
 
     private void initPermissionList() {
         mPermissionList = new ArrayList<>();
@@ -239,6 +333,11 @@ public class ActivityMain extends AppCompatActivity
                 .replace(R.id.main_fragment, fragment, className)
                 .addToBackStack(null)
                 .commit();
+
+        if (mProcessDialog != null) {
+            mProcessDialog.dismiss();
+            mProcessDialog = null;
+        }
     }
 
     public ViewFragment getTopViewFragment() {
@@ -393,5 +492,52 @@ public class ActivityMain extends AppCompatActivity
         }
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void eventTest() {
+        /*
+        mOperator.EventReset();
+        mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-31T06:20:00Z"), WatchOperator.getTimeStamp("2015-08-31T08:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(1, 6, "", WatchOperator.getTimeStamp("2015-08-30T09:20:00Z"), WatchOperator.getTimeStamp("2015-08-30T11:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(2, 5, "", WatchOperator.getTimeStamp("2015-09-01T05:20:00Z"), WatchOperator.getTimeStamp("2015-09-01T07:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(3, 4, "", WatchOperator.getTimeStamp("2015-08-01T08:20:00Z"), WatchOperator.getTimeStamp("2015-08-01T09:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(4, 3, "WEEKLY", WatchOperator.getTimeStamp("2015-08-31T13:00:00Z"), WatchOperator.getTimeStamp("2015-08-31T15:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(5, 2, "WEEKLY", WatchOperator.getTimeStamp("2015-09-01T16:00:00Z"), WatchOperator.getTimeStamp("2015-09-01T18:00:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(6, 1, "WEEKLY", WatchOperator.getTimeStamp("2015-08-30T12:00:00Z"), WatchOperator.getTimeStamp("2015-08-30T12:20:00Z")));
+        mOperator.EventAdd(new WatchOperator.Event(7, 0, "", WatchOperator.getTimeStamp("2015-07-10T08:20:00Z"), WatchOperator.getTimeStamp("2015-07-10T12:00:00Z")));
+        List<WatchOperator.Event> events = mOperator.EventGet(0, 0, WatchOperator.getTimeStamp("2015-08-29T08:20:00Z"), WatchOperator.getTimeStamp("2015-09-10T08:20:00Z"));
+
+        mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
+        WatchContact.User user = mOperator.UserGet();
+        Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
+        user.mFirstName = "TEST";
+        user.mProfile = "jpg";
+        mOperator.UserUpdate(user);
+        user = mOperator.UserGet();
+        Log.d("TEST", user.mEmail + " " + user.mFirstName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
+        WatchContact.Kid focus = mOperator.KidGetFocus();
+        if (focus == null)
+            Log.d("TEST", "No focus item");
+
+        mOperator.KidAdd(new WatchContact.Kid(null, 1, "Kid1", "last1", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 2, "Kid2", "last2", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 3, "Kid3", "last3", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 4, "Kid4", "last4", "ccc", "ddd", 3));
+        mOperator.KidAdd(new WatchContact.Kid(null, 5, "Kid5", "last5", "ccc", "ddd", 3));
+        List<WatchContact.Kid> kids = mOperator.KidGet();
+        for (WatchContact.Kid kid : kids) {
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
+            kid.mProfile = kid.mFirstName+ "+profile";
+            mOperator.KidUpdate(kid);
+        }
+        kids = mOperator.KidGet();
+        for (WatchContact.Kid kid : kids)
+            Log.d("TEST", "name " + kid.mFirstName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
+
+        focus = new WatchContact.Kid(null, 6, "Kid6", "last6", "ccc", "ddd", 3);
+        mOperator.KidSetFocus(focus);
+        focus = mOperator.KidGetFocus();
+        Log.d("TEST", "name " + focus.mFirstName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mUserId + " "+ focus.mProfile);
+    */
     }
 }

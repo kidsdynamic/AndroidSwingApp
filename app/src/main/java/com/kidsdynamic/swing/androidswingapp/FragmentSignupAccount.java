@@ -151,7 +151,7 @@ public class FragmentSignupAccount extends ViewFragment {
         public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
             mActivityMain.mOperator.ResetDatabase();
             ServerMachine.ResetAvatar();
-            mActivityMain.mOperator.UserAdd(
+            mActivityMain.mOperator.setUser(
                     new WatchContact.User(
                             null,
                             response.user.id,
@@ -176,7 +176,7 @@ public class FragmentSignupAccount extends ViewFragment {
                 kid.mUserId = response.user.id;
                 kid.mProfile = kidData.profile;
                 kid.mBound = true;
-                mActivityMain.mOperator.KidSetFocus(kid);
+                mActivityMain.mOperator.setFocusKid(kid);
                 mKidList.add(kid);
             }
 
