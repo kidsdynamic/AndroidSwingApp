@@ -18,7 +18,7 @@ public class ServerMachineDebug extends ServerMachine {
 
 
     public ServerMachineDebug(Context context) {
-        super(context);
+        super(context, REQUEST_TAG);
     }
 
     public void setExceptResponse(int expect) {

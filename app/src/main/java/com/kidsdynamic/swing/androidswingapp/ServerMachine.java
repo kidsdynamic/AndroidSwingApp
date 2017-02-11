@@ -68,6 +68,9 @@ public class ServerMachine {
     final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
 
     final static String REQUEST_TAG = "SERVER_MACHINE";
+    final static String REQUEST_UPLOAD_TAG = "REQUEST_UPLOAD_TAG";
+
+    private String mTag = "";
     private RequestQueue mRequestQueue;
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
     private Handler mHandler = new Handler();
@@ -78,9 +81,10 @@ public class ServerMachine {
         Log.i("ServerMachine", msg);
     }
 
-    public ServerMachine(Context context) {
+    public ServerMachine(Context context, String tag) {
         mContext = context;
         mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        mTag = tag;
     }
 
     boolean Start() {
@@ -474,7 +478,7 @@ public class ServerMachine {
     }
 
     public interface subHostListListener {
-        void onSuccess(int statusCode, List<ServerGson.hostData> response);
+        void onSuccess(int statusCode, ServerGson.subHost.list.response response);
 
         void onFail(int statusCode);
     }

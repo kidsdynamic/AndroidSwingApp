@@ -28,20 +28,20 @@ public class WatchHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(WatchOperator.CREATE_USER_TABLE);
-        sqLiteDatabase.execSQL(WatchOperator.CREATE_KIDS_TABLE);
-        sqLiteDatabase.execSQL(WatchOperator.CREATE_UPLOAD_TABLE);
-        sqLiteDatabase.execSQL(WatchOperator.CREATE_EVENT_TABLE);
-        sqLiteDatabase.execSQL(WatchOperator.CREATE_TODO_TABLE);
+        sqLiteDatabase.execSQL(WatchDatabase.CREATE_USER_TABLE);
+        sqLiteDatabase.execSQL(WatchDatabase.CREATE_KIDS_TABLE);
+        sqLiteDatabase.execSQL(WatchDatabase.CREATE_UPLOAD_TABLE);
+        sqLiteDatabase.execSQL(WatchDatabase.CREATE_EVENT_TABLE);
+        sqLiteDatabase.execSQL(WatchDatabase.CREATE_TODO_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_USER);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_KIDS);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_UPLOAD);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_EVENT);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchOperator.TABLE_TODO);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_USER);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_KIDS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_UPLOAD);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_EVENT);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_TODO);
         onCreate(sqLiteDatabase);
     }
 }

@@ -86,10 +86,10 @@ public class FragmentProfileRequestTo extends ViewFragment {
 
     ServerMachine.subHostListListener mSubHostListListener = new ServerMachine.subHostListListener() {
         @Override
-        public void onSuccess(int statusCode, List<ServerGson.hostData> response) {
+        public void onSuccess(int statusCode, ServerGson.subHost.list.response response) {
             mRequestedUserList = new ArrayList<>();
-            if (response!=null && !response.isEmpty()) {
-                for (ServerGson.hostData subHost : response) {
+            if (response != null && response.requestTo != null) {
+                for (ServerGson.hostData subHost : response.requestTo) {
                     WatchContact.User user = new WatchContact.User();
                     user.mId = subHost.requestToUser.id;
                     user.mEmail = subHost.requestToUser.email;

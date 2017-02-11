@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,6 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+
+import static com.kidsdynamic.swing.androidswingapp.ServerMachine.REQUEST_TAG;
 
 public class ActivityMain extends AppCompatActivity
         implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -129,7 +130,7 @@ public class ActivityMain extends AppCompatActivity
             mBLEMachine = new BLEMachine(this);
 
         if (activeService && mServiceMachine == null)
-            mServiceMachine = new ServerMachine(this);
+            mServiceMachine = new ServerMachine(this, REQUEST_TAG);
 
         if (mBLEMachine != null)
             mBLEMachine.Start();
@@ -198,7 +199,7 @@ public class ActivityMain extends AppCompatActivity
         @Override
         public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
             ServerMachine.ResetAvatar();
-            mOperator.UserUpdate(
+            mOperator.setUser(
                     new WatchContact.User(
                             null,
                             response.user.id,
@@ -223,7 +224,7 @@ public class ActivityMain extends AppCompatActivity
                 kid.mUserId = response.user.id;
                 kid.mProfile = kidData.profile;
                 kid.mBound = true;
-                mOperator.KidUpdate(kid);
+                mOperator.setKid(kid);
                 mKidList.add(kid);
             }
 

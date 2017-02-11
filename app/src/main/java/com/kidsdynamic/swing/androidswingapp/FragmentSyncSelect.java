@@ -33,7 +33,7 @@ public class FragmentSyncSelect extends ViewFragment {
 
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.sync_select_container);
 
-        mDeviceList = mActivityMain.mOperator.KidGet();
+        mDeviceList = mActivityMain.mOperator.getKids();
         for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
 
@@ -79,7 +79,7 @@ public class FragmentSyncSelect extends ViewFragment {
             ViewPhotoContact contact = (ViewPhotoContact) view;
             WatchContact.Kid device = (WatchContact.Kid) contact.getItem();
 
-            mActivityMain.mOperator.KidSetFocus(device);
+            mActivityMain.mOperator.setFocusKid(device);
 
             setSelected(mDeviceList.indexOf(device));
 

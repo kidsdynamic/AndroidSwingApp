@@ -538,10 +538,13 @@ public class ServerGson {
         }
 
         public static class list {
+            static final class response {
+                List<hostData> requestFrom;
+                List<hostData> requestTo;
+            }
 
-            public static List<hostData> fromJson(String json) {
-                hostData[] data = new Gson().fromJson(json, hostData[].class);
-                return new ArrayList<>(Arrays.asList(data));
+            public static response fromJson(String json) {
+                return new Gson().fromJson(json, response.class);
             }
         }
     }

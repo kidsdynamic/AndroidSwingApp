@@ -213,7 +213,7 @@ public class FragmentWatchProfile extends ViewFragment {
             mDevice.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
             mDevice.mMacId = response.macId;
             mDevice.mUserId = response.parent.id;
-            mActivityMain.mOperator.KidSetFocus(mDevice);
+            mActivityMain.mOperator.setFocusKid(mDevice);
             if (mAvatarBitmap != null)
                 mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mFirstName + mDevice.mLastName, ".jpg");
             if (mDevice.mProfile == null)
@@ -258,7 +258,7 @@ public class FragmentWatchProfile extends ViewFragment {
                 Log.d("swing", "Rename failed! " + mDevice.mProfile + " to " + response.kid.profile);
             }
             mDevice.mProfile = response.kid.profile;
-            mActivityMain.mOperator.KidSetFocus(mDevice);
+            mActivityMain.mOperator.setFocusKid(mDevice);
 
             Bundle bundle = new Bundle();
             bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mDevice.mProfile);

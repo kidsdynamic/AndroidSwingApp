@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -220,16 +219,16 @@ public class FragmentProfileEditor extends ViewFragment {
     };
 
     private void profileLoad() {
-        WatchContact.User user = mActivityMain.mOperator.UserGet();
+        WatchContact.User user = mActivityMain.mOperator.getUser();
         mViewFirst.setText(user.mFirstName);
         mViewLast.setText(user.mLastName);
         mViewPhone.setText(user.mPhoneNumber);
         mViewZip.setText(user.mZipCode);
-        mUserAvatar = user.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
+        mUserAvatar = user.mPhoto;
     }
 
     private void profileSave() {
-        WatchContact.User user = mActivityMain.mOperator.UserGet();
+        WatchContact.User user = mActivityMain.mOperator.getUser();
         String first = mViewFirst.getText().toString();
         String last = mViewLast.getText().toString();
         String phone = mViewPhone.getText().toString();
@@ -252,7 +251,7 @@ public class FragmentProfileEditor extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.userData response) {
 
-            mActivityMain.mOperator.UserUpdate(
+            mActivityMain.mOperator.setUser(
                     new WatchContact.User(
                             null,
                             response.id,
@@ -283,13 +282,13 @@ public class FragmentProfileEditor extends ViewFragment {
     ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
-            WatchContact.User user = mActivityMain.mOperator.UserGet();
+            WatchContact.User user = mActivityMain.mOperator.getUser();
             File fileFrom = new File(mUserAvatarFilename);
             File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
             if(!fileFrom.renameTo(fileTo))
                 Log.d("swing", "Rename failed! " + mUserAvatarFilename + " to " + response.user.profile);
             user.mProfile = response.user.profile;
-            mActivityMain.mOperator.UserUpdate(user);
+            mActivityMain.mOperator.setUser(user);
 
             mActivityMain.popFragment();
         }

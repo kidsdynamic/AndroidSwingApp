@@ -61,12 +61,7 @@ public class FragmentSyncSearch extends ViewFragment {
                 new WatchContact.Kid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();
 
-        Calendar cal = Calendar.getInstance();
-        long startTimeStamp = cal.getTimeInMillis();
-        cal.add(Calendar.MONTH, 2);
-        long endTimeStamp = cal.getTimeInMillis();
-
-        List<WatchEvent> eventList = mActivityMain.mOperator.EventGet(mDevice, startTimeStamp, endTimeStamp);
+        List<WatchEvent> eventList = mActivityMain.mOperator.getEventsForSync(mDevice);
         mVoiceAlertList = new ArrayList<>();
         for (WatchEvent event : eventList)
             mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
@@ -277,14 +272,7 @@ public class FragmentSyncSearch extends ViewFragment {
         public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
             if (resultCode == SYNC_RESULT_SUCCESS) {
                 for (BLEMachine.InOutDoor res : result) {
-                    WatchOperator.Upload uploadItem = new WatchOperator.Upload();
-                    uploadItem.mMacId = mDevice.mMacId;
-                    uploadItem.mTime = byteToDec(res.mTime[0], res.mTime[1], res.mTime[2], res.mTime[3]);
-                    uploadItem.mOutdoorActivity = rawString(res.mData1);
-                    uploadItem.mIndoorActivity = rawString(res.mData2);
-
-                    //Log.d("TEST", "Add Time " + uploadItem.mTime);
-                    mActivityMain.mOperator.UploadItemAdd(uploadItem);
+                    mActivityMain.mOperator.pushUploadItem(mDevice.mMacId, res.mTime, res.mData1, res.mData2);
                 }
                 Intent intent = new Intent(mActivityMain, ServerPushService.class);
                 mActivityMain.startService(intent);
@@ -299,29 +287,4 @@ public class FragmentSyncSearch extends ViewFragment {
     };
 
 
-    private String rawString(byte[] b) {
-        return String.format(Locale.getDefault(), "%s,%d,%s,%s,%s,%s",
-                byteToStr(b[0], b[1], b[2], b[3]),
-                b[4],
-                byteToStr(b[5], b[6], b[7], b[8]),
-                byteToStr(b[9], b[10], b[11], b[12]),
-                byteToStr(b[13], b[14], b[15], b[16]),
-                byteToStr(b[17], b[18], b[19], b[20])
-        );
-    }
-
-    private int byteToDec(byte b0, byte b1, byte b2, byte b3) {
-        int dec;
-
-        dec = b0 & 0xFF;
-        dec |= (b1 << 8) & 0xFF00;
-        dec |= (b2 << 16) & 0xFF0000;
-        dec |= (b3 << 24) & 0xFF000000;
-
-        return dec;
-    }
-
-    private String byteToStr(byte b0, byte b1, byte b2, byte b3) {
-        return "" + byteToDec(b0, b1, b2, b3);
-    }
 }
