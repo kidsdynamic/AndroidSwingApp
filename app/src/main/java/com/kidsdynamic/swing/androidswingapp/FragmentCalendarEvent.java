@@ -376,11 +376,23 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewColor.setColor(WatchEvent.stringToColor(mEvent.mColor));
     }
 
+    private void loadRepeat() {
+        if(mEvent.mRepeat.equals(WatchEvent.REPEAT_DAILY))
+            mViewRepeat.setText(WatchEvent.REPEAT_DAILY);
+        else if( mEvent.mRepeat.equals(WatchEvent.REPEAT_WEEKLY))
+            mViewRepeat.setText(WatchEvent.REPEAT_WEEKLY);
+        else if(mEvent.mRepeat.equals(WatchEvent.REPEAT_MONTHLY))
+            mViewRepeat.setText(WatchEvent.REPEAT_MONTHLY);
+        else
+            mViewRepeat.setText("Never");
+    }
+
     private void loadWatchEvent() {
         loadAlarm();
         loadAssign();
         loadDate();
         loadColor();
+        loadRepeat();
     }
 
     private void saveWatchEvent() {
