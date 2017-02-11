@@ -118,7 +118,7 @@ public class WatchEvent implements Serializable {
                 .append("}").toString();
     }
 
-    static public String colorToString(int color) {
+    static String colorToString(int color) {
         String string = "#000000";
 
         if ((color & 0xFF000000) != 0x00)
@@ -133,10 +133,10 @@ public class WatchEvent implements Serializable {
         return string;
     }
 
-    static public int stringToColor(String string) {
+    static int stringToColor(String string) {
         int color = 0;
 
-        if (string.length() < 6 || string.charAt(0) != '#')
+        if (string.length() != 7 || string.charAt(0) != '#')
             return 0;
 
         string = string.substring(1);
@@ -148,5 +148,64 @@ public class WatchEvent implements Serializable {
         }
 
         return color;
+    }
+
+    static public class NoticeAlarm {
+        int mId;
+        String mName;
+        int mResource;
+
+        NoticeAlarm(int id, String name, int resource) {
+            mId = id;
+            mName = name;
+            mResource = resource;
+        }
+    }
+
+    final static NoticeAlarm[] NoticeAlarmList = new NoticeAlarm[]{
+            new NoticeAlarm(0, "Agenda Reminders (Only for the App", 0),
+            new NoticeAlarm(36, "Good Morning", R.mipmap.icon_alert),
+            new NoticeAlarm(37, "Make Bed", R.mipmap.icon_sound),
+            new NoticeAlarm(38, "Get Dress", R.mipmap.icon_sound),
+            new NoticeAlarm(39, "Eat Breakfast", R.mipmap.icon_sound),
+            new NoticeAlarm(40, "Brush Teeth", R.mipmap.icon_sound),
+            new NoticeAlarm(41, "Get Ready for School", R.mipmap.icon_sound),
+            new NoticeAlarm(42, "Put on Pajamas", R.mipmap.icon_sound),
+            new NoticeAlarm(43, "Story Time", R.mipmap.icon_sound),
+            new NoticeAlarm(44, "Good Night", R.mipmap.icon_sound),
+            new NoticeAlarm(45, "Collect Toys", R.mipmap.icon_sound),
+            new NoticeAlarm(46, "Set Table", R.mipmap.icon_sound),
+            new NoticeAlarm(47, "Feed Pet", R.mipmap.icon_sound),
+            new NoticeAlarm(48, "Water Plants", R.mipmap.icon_sound),
+            new NoticeAlarm(49, "Clean Table", R.mipmap.icon_sound),
+            new NoticeAlarm(50, "Clean Bedroom", R.mipmap.icon_sound),
+            new NoticeAlarm(51, "Homework Time", R.mipmap.icon_sound),
+            new NoticeAlarm(52, "Take a Nap", R.mipmap.icon_sound),
+            new NoticeAlarm(53, "Outdoor Play Time", R.mipmap.icon_sound),
+            new NoticeAlarm(54, "Fun time", R.mipmap.icon_sound),
+            new NoticeAlarm(55, "Exercise", R.mipmap.icon_sound),
+            new NoticeAlarm(56, "Practice Music", R.mipmap.icon_sound),
+            new NoticeAlarm(57, "Drawing Time", R.mipmap.icon_sound),
+            new NoticeAlarm(58, "Reading Time", R.mipmap.icon_sound),
+            new NoticeAlarm(59, "Take a Bath", R.mipmap.icon_sound),
+            new NoticeAlarm(60, "Family Time", R.mipmap.icon_sound),
+            new NoticeAlarm(61, "Lunch Time", R.mipmap.icon_sound),
+            new NoticeAlarm(62, "Dinner Time", R.mipmap.icon_sound),
+            new NoticeAlarm(63, "Afternoon Snack Time", R.mipmap.icon_sound),
+            new NoticeAlarm(64, "Review the Backpack", R.mipmap.icon_sound),
+    };
+
+    public static String findAlarmName(int id) {
+        for (NoticeAlarm alarm : NoticeAlarmList)
+            if (alarm.mId == id)
+                return alarm.mName;
+        return "";
+    }
+
+    public static int findAlarmId(String name) {
+        for (NoticeAlarm alarm : NoticeAlarmList)
+            if (alarm.mName.equals(name))
+                return alarm.mId;
+        return -1;
     }
 }

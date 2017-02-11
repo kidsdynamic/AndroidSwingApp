@@ -53,22 +53,22 @@ public class FragmentCalendarAlarm extends ViewFragment {
 
         addSeparator();
         addTitle("Agenda");
-        addAlarm(NoticeAlarmList[0], mLineListener);
+        addAlarm(0, "Agenda Reminders (Only for the App", 0, mLineListener);
         addTitle("Alarm Clock");
-        addAlarm(NoticeAlarmList[1], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[0], mLineListener);
         addRoutine("Morning Routine");
-        addAlarm(NoticeAlarmList[2], mLineListener);
-        addAlarm(NoticeAlarmList[3], mLineListener);
-        addAlarm(NoticeAlarmList[4], mLineListener);
-        addAlarm(NoticeAlarmList[5], mLineListener);
-        addAlarm(NoticeAlarmList[6], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[1], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[2], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[3], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[4], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[5], mLineListener);
         addRoutine("Bed Time Routine");
-        addAlarm(NoticeAlarmList[7], mLineListener);
-        addAlarm(NoticeAlarmList[8], mLineListener);
-        addAlarm(NoticeAlarmList[9], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[6], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[7], mLineListener);
+        addAlarm(WatchEvent.NoticeAlarmList[8], mLineListener);
         addRoutine("Activities");
-        for (int idx = 10; idx < NoticeAlarmList.length; idx++)
-            addAlarm(NoticeAlarmList[idx], mLineListener);
+        for (int idx = 9; idx < WatchEvent.NoticeAlarmList.length; idx++)
+            addAlarm(WatchEvent.NoticeAlarmList[idx], mLineListener);
 
         return mViewMain;
     }
@@ -95,7 +95,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private void addAlarm(NoticeAlarm alarm, View.OnClickListener listener) {
+    private void addAlarm(WatchEvent.NoticeAlarm alarm, View.OnClickListener listener) {
         addAlarm(alarm.mId, alarm.mName, alarm.mResource, listener);
     }
 
@@ -194,71 +194,10 @@ public class FragmentCalendarAlarm extends ViewFragment {
     private View.OnClickListener mLineListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            int id = (int) view.getTag();
-            mEvent.mAlert = id;
+            mEvent.mAlert = (int) view.getTag();
 
             mActivityMain.mEventStack.push(mEvent);
             mActivityMain.popFragment();
         }
     };
-
-    static public class NoticeAlarm {
-        int mId;
-        String mName;
-        int mResource;
-
-        NoticeAlarm(int id, String name, int resource) {
-            mId = id;
-            mName = name;
-            mResource = resource;
-        }
-    }
-
-    final static NoticeAlarm[] NoticeAlarmList = new NoticeAlarm[]{
-            new NoticeAlarm(0, "Agenda Reminders (Only for the App", 0),
-            new NoticeAlarm(36, "Good Morning", R.mipmap.icon_alert),
-            new NoticeAlarm(37, "Make Bed", R.mipmap.icon_sound),
-            new NoticeAlarm(38, "Get Dress", R.mipmap.icon_sound),
-            new NoticeAlarm(39, "Eat Breakfast", R.mipmap.icon_sound),
-            new NoticeAlarm(40, "Brush Teeth", R.mipmap.icon_sound),
-            new NoticeAlarm(41, "Get Ready for School", R.mipmap.icon_sound),
-            new NoticeAlarm(42, "Put on Pajamas", R.mipmap.icon_sound),
-            new NoticeAlarm(43, "Story Time", R.mipmap.icon_sound),
-            new NoticeAlarm(44, "Good Night", R.mipmap.icon_sound),
-            new NoticeAlarm(45, "Collect Toys", R.mipmap.icon_sound),
-            new NoticeAlarm(46, "Set Table", R.mipmap.icon_sound),
-            new NoticeAlarm(47, "Feed Pet", R.mipmap.icon_sound),
-            new NoticeAlarm(48, "Water Plants", R.mipmap.icon_sound),
-            new NoticeAlarm(49, "Clean Table", R.mipmap.icon_sound),
-            new NoticeAlarm(50, "Clean Bedroom", R.mipmap.icon_sound),
-            new NoticeAlarm(51, "Homework Time", R.mipmap.icon_sound),
-            new NoticeAlarm(52, "Take a Nap", R.mipmap.icon_sound),
-            new NoticeAlarm(53, "Outdoor Play Time", R.mipmap.icon_sound),
-            new NoticeAlarm(54, "Fun time", R.mipmap.icon_sound),
-            new NoticeAlarm(55, "Exercise", R.mipmap.icon_sound),
-            new NoticeAlarm(56, "Practice Music", R.mipmap.icon_sound),
-            new NoticeAlarm(57, "Drawing Time", R.mipmap.icon_sound),
-            new NoticeAlarm(58, "Reading Time", R.mipmap.icon_sound),
-            new NoticeAlarm(59, "Take a Bath", R.mipmap.icon_sound),
-            new NoticeAlarm(60, "Family Time", R.mipmap.icon_sound),
-            new NoticeAlarm(61, "Lunch Time", R.mipmap.icon_sound),
-            new NoticeAlarm(62, "Dinner Time", R.mipmap.icon_sound),
-            new NoticeAlarm(63, "Afternoon Snack Time", R.mipmap.icon_sound),
-            new NoticeAlarm(64, "Review the Backpack", R.mipmap.icon_sound),
-    };
-
-
-    public static String findAlarmName(int id) {
-        for (NoticeAlarm alarm : NoticeAlarmList)
-            if (alarm.mId == id)
-                return alarm.mName;
-        return "";
-    }
-
-    public static int findAlarmId(String name) {
-        for (NoticeAlarm alarm : NoticeAlarmList)
-            if (alarm.mName.equals(name))
-                return alarm.mId;
-        return -1;
-    }
 }
