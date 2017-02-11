@@ -207,6 +207,12 @@ public class ServerGson {
             }
         }
 
+        public static class findByEmail {
+            public static userData fromJson(String json) {
+                return new Gson().fromJson(json, userData.class);
+            }
+        }
+
         public static class avatar {
             public static class upload {
                 static final class response {
