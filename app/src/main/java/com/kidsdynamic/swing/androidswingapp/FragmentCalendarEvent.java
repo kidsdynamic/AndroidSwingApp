@@ -158,6 +158,16 @@ public class FragmentCalendarEvent extends ViewFragment {
         mActivityMain.popFragment();
     }
 
+    private void viewAdvance() {
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewSave.getLayoutParams();
+        params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        mViewSave.setLayoutParams(params);
+
+        mViewRepeatLine.setVisibility(View.VISIBLE);
+        mViewDescriptionLine.setVisibility(View.VISIBLE);
+        mViewTodoLine.setVisibility(View.VISIBLE);
+    }
+
     private View.OnClickListener mAlarmListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -251,13 +261,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mAdvanceListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mViewSave.getLayoutParams();
-            params.width = LinearLayout.LayoutParams.MATCH_PARENT;
-            mViewSave.setLayoutParams(params);
-
-            mViewRepeatLine.setVisibility(View.VISIBLE);
-            mViewDescriptionLine.setVisibility(View.VISIBLE);
-            mViewTodoLine.setVisibility(View.VISIBLE);
+            viewAdvance();
         }
     };
 
@@ -422,6 +426,10 @@ public class FragmentCalendarEvent extends ViewFragment {
         loadColor();
         loadRepeat();
         loadDescription();
+
+        if(mEvent.mRepeat.length()!= 0 ||
+                mEvent.mDescription.length() != 0)
+            viewAdvance();
     }
 
     private void saveWatchEvent() {
