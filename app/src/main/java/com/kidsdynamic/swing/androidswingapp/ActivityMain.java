@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -142,10 +143,7 @@ public class ActivityMain extends AppCompatActivity
             if (mProcessDialog == null) {
                 mProcessDialog = ProgressDialog.show(this, "Synchronize", "Please wait...", true);
 
-                mServiceMachine.userIsTokenValid(
-                        mUserIsTokenValidListener,
-                        mConfig.getString(Config.KEY_MAIL),
-                        mConfig.getString(Config.KEY_AUTH_TOKEN));
+                mOperator.sync(mSyncListener);
             }
         } else {
             selectFragment(FragmentBoot.class.getName(), null);
@@ -163,131 +161,11 @@ public class ActivityMain extends AppCompatActivity
         super.onPause();
     }
 
-    ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
+    WatchOperator.syncListener mSyncListener = new WatchOperator.syncListener() {
         @Override
-        public void onValidState(boolean valid) {
-            if (valid) {
-                mServiceMachine.setAuthToken(mConfig.getString(Config.KEY_AUTH_TOKEN));
-                mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
-            } else {
-                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
-            }
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
-        }
-    };
-
-    ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
-            mServiceMachine.setAuthToken(result.access_token);
-            mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            Toast.makeText(getApplicationContext(), "login failed!",Toast.LENGTH_SHORT).show();
-            selectFragment(FragmentBoot.class.getName(), null);
-        }
-    };
-
-    ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
-            ServerMachine.ResetAvatar();
-            mOperator.setUser(
-                    new WatchContact.User(
-                            null,
-                            response.user.id,
-                            response.user.email,
-                            response.user.firstName,
-                            response.user.lastName,
-                            WatchOperator.getTimeStamp(response.user.lastUpdate),
-                            WatchOperator.getTimeStamp(response.user.dateCreated),
-                            response.user.zipCode,
-                            response.user.phoneNumber,
-                            response.user.profile)
-            );
-
-            mKidList = new ArrayList<>();
-            for (ServerGson.kidData kidData : response.kids) {
-                WatchContact.Kid kid = new WatchContact.Kid();
-                kid.mId = kidData.id;
-                kid.mFirstName = kidData.name;
-                kid.mLastName = "";
-                kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
-                kid.mMacId = kidData.macId;
-                kid.mUserId = response.user.id;
-                kid.mProfile = kidData.profile;
-                kid.mBound = true;
-                mOperator.setKid(kid);
-                mKidList.add(kid);
-            }
-
-            if (!response.user.profile.equals(""))
-                mServiceMachine.getAvatar(mGetUserAvatarListener, response.user.profile);
-            else
-                getKidAvatar(true);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            Toast.makeText(getApplicationContext(), "Retrieve user profile failed!",Toast.LENGTH_SHORT).show();
-            selectFragment(FragmentBoot.class.getName(), null);
-        }
-    };
-
-    ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
-        @Override
-        public void onSuccess(Bitmap avatar, String filename) {
-            ServerMachine.createAvatarFile(avatar, filename, "");
-            getKidAvatar(true);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            Toast.makeText(getApplicationContext(), "Get user avatar failed!",Toast.LENGTH_SHORT).show();
-            selectFragment(FragmentBoot.class.getName(), null);
-        }
-    };
-
-    private int mProcessKidAvatar;
-    private void getKidAvatar(boolean start) {
-        if (start)
-            mProcessKidAvatar = 0;
-        else
-            mProcessKidAvatar++;
-
-        if (mProcessKidAvatar >= mKidList.size()) {
-            selectFragment(FragmentBoot.class.getName(), null);
-            return;
-        }
-
-        while (mKidList.get(mProcessKidAvatar).mProfile.equals("")) {
-            mProcessKidAvatar++;
-            if (mProcessKidAvatar >= mKidList.size()) {
-                selectFragment(FragmentBoot.class.getName(), null);
-                return;
-            }
-        }
-
-        mServiceMachine.getAvatar(mGetKidAvatarListener, mKidList.get(mProcessKidAvatar).mProfile);
-    }
-
-    ServerMachine.getAvatarListener mGetKidAvatarListener = new ServerMachine.getAvatarListener() {
-        @Override
-        public void onSuccess(Bitmap avatar, String filename) {
-            ServerMachine.createAvatarFile(avatar, filename, "");
-            getKidAvatar(false);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            Toast.makeText(getApplicationContext(), "Get kid avatar failed!",Toast.LENGTH_SHORT).show();
+        public void onSync(String msg) {
+            if (!msg.equals(""))
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             selectFragment(FragmentBoot.class.getName(), null);
         }
     };

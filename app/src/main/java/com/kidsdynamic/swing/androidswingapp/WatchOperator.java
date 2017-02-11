@@ -1,7 +1,9 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,10 +19,161 @@ import java.util.TimeZone;
 
 public class WatchOperator {
     private WatchDatabase mWatchDatabase;
+    private ActivityMain mActivity;
 
     WatchOperator(Context context) {
+        mActivity = (ActivityMain)context;
         mWatchDatabase = new WatchDatabase(context);
     }
+
+    //-------------------------------------------------------------------------
+    syncListener mSyncListener = null;
+    private List<WatchContact.Kid> mKidList;
+
+    interface syncListener {
+        void onSync(String msg);
+    }
+
+    void sync(syncListener listener) {
+        mSyncListener = listener;
+        mActivity.mServiceMachine.userIsTokenValid(
+                mUserIsTokenValidListener,
+                mActivity.mConfig.getString(Config.KEY_MAIL),
+                mActivity.mConfig.getString(Config.KEY_AUTH_TOKEN));
+    }
+
+    ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
+        @Override
+        public void onValidState(boolean valid) {
+            if (valid) {
+                mActivity.mServiceMachine.setAuthToken(mActivity.mConfig.getString(Config.KEY_AUTH_TOKEN));
+                mActivity.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+            } else {
+                mActivity.mServiceMachine.userLogin(mUserLoginListener, mActivity.mConfig.getString(Config.KEY_MAIL), mActivity.mConfig.getString(Config.KEY_PASSWORD));
+            }
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mActivity.mServiceMachine.userLogin(mUserLoginListener, mActivity.mConfig.getString(Config.KEY_MAIL), mActivity.mConfig.getString(Config.KEY_PASSWORD));
+        }
+    };
+
+    ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mActivity.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+            mActivity.mServiceMachine.setAuthToken(result.access_token);
+            mActivity.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            if (mSyncListener != null)
+                mSyncListener.onSync("login failed!");
+        }
+    };
+
+    ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
+            ServerMachine.ResetAvatar();
+            setUser(
+                    new WatchContact.User(
+                            null,
+                            response.user.id,
+                            response.user.email,
+                            response.user.firstName,
+                            response.user.lastName,
+                            WatchOperator.getTimeStamp(response.user.lastUpdate),
+                            WatchOperator.getTimeStamp(response.user.dateCreated),
+                            response.user.zipCode,
+                            response.user.phoneNumber,
+                            response.user.profile)
+            );
+
+            mKidList = new ArrayList<>();
+            for (ServerGson.kidData kidData : response.kids) {
+                WatchContact.Kid kid = new WatchContact.Kid();
+                kid.mId = kidData.id;
+                kid.mFirstName = kidData.name;
+                kid.mLastName = "";
+                kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
+                kid.mMacId = kidData.macId;
+                kid.mUserId = response.user.id;
+                kid.mProfile = kidData.profile;
+                kid.mBound = true;
+                setKid(kid);
+                mKidList.add(kid);
+            }
+
+            if (!response.user.profile.equals(""))
+                mActivity.mServiceMachine.getAvatar(mGetUserAvatarListener, response.user.profile);
+            else
+                getKidAvatar(true);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            if (mSyncListener != null)
+                mSyncListener.onSync("Retrieve user profile failed!");
+        }
+    };
+
+    ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
+        @Override
+        public void onSuccess(Bitmap avatar, String filename) {
+            ServerMachine.createAvatarFile(avatar, filename, "");
+            getKidAvatar(true);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            if (mSyncListener != null)
+                mSyncListener.onSync("Get user avatar failed!");
+        }
+    };
+
+    private int mProcessKidAvatar;
+    private void getKidAvatar(boolean start) {
+        if (start)
+            mProcessKidAvatar = 0;
+        else
+            mProcessKidAvatar++;
+
+        if (mProcessKidAvatar >= mKidList.size()) {
+            if (mSyncListener != null)
+                mSyncListener.onSync("");
+            return;
+        }
+
+        while (mKidList.get(mProcessKidAvatar).mProfile.equals("")) {
+            mProcessKidAvatar++;
+            if (mProcessKidAvatar >= mKidList.size()) {
+                if (mSyncListener != null)
+                    mSyncListener.onSync("");
+                return;
+            }
+        }
+
+        mActivity.mServiceMachine.getAvatar(mGetKidAvatarListener, mKidList.get(mProcessKidAvatar).mProfile);
+    }
+
+    ServerMachine.getAvatarListener mGetKidAvatarListener = new ServerMachine.getAvatarListener() {
+        @Override
+        public void onSuccess(Bitmap avatar, String filename) {
+            ServerMachine.createAvatarFile(avatar, filename, "");
+            getKidAvatar(false);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            if (mSyncListener != null)
+                mSyncListener.onSync("Get kid avatar failed!");
+        }
+    };
+
+    //-------------------------------------------------------------------------
 
     void ResetDatabase() {
         mWatchDatabase.ResetDatabase();
