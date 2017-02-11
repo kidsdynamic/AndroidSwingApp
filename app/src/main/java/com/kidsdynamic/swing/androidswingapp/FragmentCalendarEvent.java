@@ -318,8 +318,6 @@ public class FragmentCalendarEvent extends ViewFragment {
             mViewColor.setColor(shape.getColor());
 
             mEvent.mColor = WatchEvent.colorToString(mViewColor.getColor());
-
-            mEvent.mColor = "";
         }
     };
 

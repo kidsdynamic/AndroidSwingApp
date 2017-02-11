@@ -121,8 +121,7 @@ public class WatchEvent implements Serializable {
     static String colorToString(int color) {
         String string = "#000000";
 
-        if ((color & 0xFF000000) != 0x00)
-            return string;
+        color &= 0x00FFFFFF; // Format is argb, remove alpha value.
 
         try {
             string = String.format("#%06X", color);
