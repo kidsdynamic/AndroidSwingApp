@@ -47,14 +47,7 @@ public class FragmentBoot extends ViewFragment {
         return new ViewFragmentConfig("Boot", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
-/*
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
-        }
-    };
-*/
+
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
@@ -71,13 +64,6 @@ public class FragmentBoot extends ViewFragment {
                 if (mActivityMain.mConfig.getString(Config.KEY_AUTH_TOKEN).equals("")) {
                     name = FragmentSignupLogin.class.getName();
                 } else {
-                    /*
-                    mActivityMain.mServiceMachine.userIsTokenValid(
-                            mUserIsTokenValidListener,
-                            mActivityMain.mConfig.getString(Config.KEY_MAIL),
-                            mActivityMain.mConfig.getString(Config.KEY_AUTH_TOKEN));
-                    */
-
                     mActivityMain.mServiceMachine.userLogin(
                             mUserLoginListener,
                             mActivityMain.mConfig.getString(Config.KEY_MAIL),
@@ -103,25 +89,6 @@ public class FragmentBoot extends ViewFragment {
                 .replace(R.id.main_fragment, fragment, FragmentSyncNow.class.getName())
                 .commit();
     }
-
-    ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
-        @Override
-        public void onValidState(boolean valid) {
-            if (valid) {
-                mActivityMain.mServiceMachine.setAuthToken(mActivityMain.mConfig.getString(Config.KEY_AUTH_TOKEN));
-                gotoSyncNow();
-            } else {
-                mActivityMain.mServiceMachine.userLogin(mUserLoginListener, mActivityMain.mConfig.getString(Config.KEY_MAIL), mActivityMain.mConfig.getString(Config.KEY_PASSWORD));
-            }
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            //Log.d("FragmentBoot", "Offline.");
-            //gotoSyncNow();
-            mActivityMain.mServiceMachine.userLogin(mUserLoginListener, mActivityMain.mConfig.getString(Config.KEY_MAIL), mActivityMain.mConfig.getString(Config.KEY_PASSWORD));
-        }
-    };
 
     ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
         @Override

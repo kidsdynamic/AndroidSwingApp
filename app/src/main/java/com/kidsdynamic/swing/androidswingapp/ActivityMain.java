@@ -143,6 +143,13 @@ public class ActivityMain extends AppCompatActivity
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
+
+        if (!mConfig.getString(Config.KEY_AUTH_TOKEN).equals("")) {
+            mServiceMachine.userIsTokenValid(
+                    mUserIsTokenValidListener,
+                    mConfig.getString(Config.KEY_MAIL),
+                    mConfig.getString(Config.KEY_AUTH_TOKEN));
+        }
         /*
         mOperator.EventReset();
         mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-31T06:20:00Z"), WatchOperator.getTimeStamp("2015-08-31T08:20:00Z")));
@@ -197,6 +204,32 @@ public class ActivityMain extends AppCompatActivity
             mServiceMachine.Stop();
         super.onPause();
     }
+
+    ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
+        @Override
+        public void onValidState(boolean valid) {
+            if (!valid) {
+                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
+            }
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
+        }
+    };
+
+    ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            Toast.makeText(getApplicationContext(), "Login successful!",Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(getApplicationContext(), "Offline mode!",Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private void initPermissionList() {
         mPermissionList = new ArrayList<>();
