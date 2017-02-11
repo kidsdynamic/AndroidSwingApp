@@ -2,9 +2,12 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +35,14 @@ public class FragmentProfileEditor extends ViewFragment {
     private ViewCircle mViewPhoto;
     private EditText mViewFirst;
     private EditText mViewLast;
+    private EditText mViewPhone;
+    private EditText mViewZip;
+
+    private Bitmap mUserAvatar = null;
+    private String mUserAvatarFilename = null;
+    private boolean mUserAvatarChanged = false;
+
+    private Dialog processDialog = null;
 
     AlertDialog mDialog;
     private Uri mPhotoUri;
@@ -47,12 +59,17 @@ public class FragmentProfileEditor extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_profile_editor, container, false);
 
+        mViewFirst = (EditText) mViewMain.findViewById(R.id.profile_editor_first);
+        mViewLast = (EditText) mViewMain.findViewById(R.id.profile_editor_last);
+        mViewPhone = (EditText) mViewMain.findViewById(R.id.profile_editor_phone);
+        mViewZip = (EditText) mViewMain.findViewById(R.id.profile_editor_zip);
+
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_editor_photo);
         mViewPhoto.setOnClickListener(mPhotoListener);
 
-        mViewFirst = (EditText)
-                mViewMain.findViewById(R.id.profile_editor_first).
-                        findViewById(R.id.view_text_editor_textedit);
+        //mViewFirst = (EditText)
+        //        mViewMain.findViewById(R.id.profile_editor_first).
+        //                findViewById(R.id.view_text_editor_textedit);
 
         return mViewMain;
     }
@@ -65,25 +82,35 @@ public class FragmentProfileEditor extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.popFragment();
+        processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+        profileSave();
+
+        //mActivityMain.popFragment();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        mUserAvatar = null;
+        mUserAvatarChanged = false;
         if (!mActivityMain.mBitmapStack.isEmpty()) {
-            mViewPhoto.setBitmap(mActivityMain.mBitmapStack.pop());
+            mUserAvatar = mActivityMain.mBitmapStack.pop();
+            mUserAvatarChanged = true;
         } else {
             profileLoad();
         }
 
+        if (mUserAvatar != null)
+            mViewPhoto.setBitmap(mUserAvatar);
     }
 
     @Override
     public void onPause() {
+        if (processDialog != null)
+            processDialog.dismiss();
+
         super.onPause();
-        profileSave();
 
         InputMethodManager inputMethodManager = (InputMethodManager) mActivityMain
                 .getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -193,10 +220,85 @@ public class FragmentProfileEditor extends ViewFragment {
     };
 
     private void profileLoad() {
-
+        WatchContact.User user = mActivityMain.mOperator.UserGet();
+        mViewFirst.setText(user.mFirstName);
+        mViewLast.setText(user.mLastName);
+        mViewPhone.setText(user.mPhoneNumber);
+        mViewZip.setText(user.mZipCode);
+        mUserAvatar = user.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
     }
 
     private void profileSave() {
+        WatchContact.User user = mActivityMain.mOperator.UserGet();
+        String first = mViewFirst.getText().toString();
+        String last = mViewLast.getText().toString();
+        String phone = mViewPhone.getText().toString();
+        String zip = mViewZip.getText().toString();
 
+        if (!first.equals(user.mFirstName) ||
+                !last.equals(user.mLastName) ||
+                !phone.equals(user.mPhoneNumber) ||
+                !zip.equals(user.mZipCode)) {
+            mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, first, last, phone, zip);
+        } else if (mUserAvatar != null && mUserAvatarChanged) {
+            mUserAvatarFilename = ServerMachine.createAvatarFile(mUserAvatar, "User", ".jpg");
+            mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mUserAvatarFilename);
+        } else {
+            mActivityMain.popFragment();
+        }
     }
+
+    ServerMachine.userUpdateProfileListener mUpdateProfileListener = new ServerMachine.userUpdateProfileListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.userData response) {
+
+            mActivityMain.mOperator.UserUpdate(
+                    new WatchContact.User(
+                            null,
+                            response.id,
+                            response.email,
+                            response.firstName,
+                            response.lastName,
+                            WatchOperator.getTimeStamp(response.lastUpdate),
+                            WatchOperator.getTimeStamp(response.dateCreated),
+                            response.zipCode,
+                            response.phoneNumber,
+                            response.profile)
+            );
+
+            if (mUserAvatar != null && mUserAvatarChanged) {
+                mUserAvatarFilename = ServerMachine.createAvatarFile(mUserAvatar, "User", ".jpg");
+                mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mUserAvatarFilename);
+            } else {
+                mActivityMain.popFragment();
+            }
+        }
+
+        @Override
+        public void onFail(int statusCode, ServerGson.error.e1 error) {
+            mActivityMain.popFragment();
+        }
+    };
+
+    ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
+            WatchContact.User user = mActivityMain.mOperator.UserGet();
+            File fileFrom = new File(mUserAvatarFilename);
+            File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
+            if(!fileFrom.renameTo(fileTo))
+                Log.d("swing", "Rename failed! " + mUserAvatarFilename + " to " + response.user.profile);
+            user.mProfile = response.user.profile;
+            mActivityMain.mOperator.UserUpdate(user);
+
+            mActivityMain.popFragment();
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            Toast.makeText(mActivityMain, "Update avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            mActivityMain.popFragment();
+        }
+    };
+
 }
