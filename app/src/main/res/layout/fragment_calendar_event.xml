@@ -32,18 +32,21 @@
                 android:padding="10dp">
 
                 <TextView
-                    style="@style/textview_calendar_event"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:text="Select Event" />
-
-                <TextView
                     android:id="@+id/calendar_event_alarm"
-                    style="@style/textview_calendar_hint"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical|end" />
+                    style="@style/textview_calendar_event"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"/>
+
+                <com.kidsdynamic.swing.androidswingapp.ViewShape
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    app:color="@color/color_orange_main"
+                    app:desiredSize="14dp"
+                    app:shape="triangle_bottom" />
             </LinearLayout>
 
             <LinearLayout
@@ -400,11 +403,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:maxLength="64"
-                    android:hint="Description" />
+                    android:hint="Description"
+                    android:maxLength="64" />
             </LinearLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:id="@+id/calendar_event_todo_line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -413,25 +416,32 @@
                 android:layout_below="@+id/calendar_event_description_line"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/contact_background"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="10dp"
                 android:visibility="invisible">
 
-                <TextView
-                    style="@style/textview_calendar_event"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:text="To Do List" />
-
-                <ImageView
-                    style="@style/textview_calendar_event"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/iconbutton_add" />
-            </RelativeLayout>
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/textview_calendar_event"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="9"
+                        android:gravity="center_vertical"
+                        android:text="To Do List" />
+
+                    <ImageView
+                        style="@style/textview_calendar_event"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:src="@mipmap/iconbutton_add" />
+                </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

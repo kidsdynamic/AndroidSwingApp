@@ -53,7 +53,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
 
         addSeparator();
         addTitle("Agenda");
-        addAlarm(0, "Agenda Reminders (Only for the App", 0, mLineListener);
+        addAlarm(0, "Agenda Reminders (Only for the App)", 0, mLineListener);
         addTitle("Alarm Clock");
         addAlarm(WatchEvent.NoticeAlarmList[0], mLineListener);
         addRoutine("Morning Routine");

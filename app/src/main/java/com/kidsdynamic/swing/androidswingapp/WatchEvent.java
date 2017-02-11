@@ -163,7 +163,6 @@ public class WatchEvent implements Serializable {
     }
 
     final static NoticeAlarm[] NoticeAlarmList = new NoticeAlarm[]{
-            new NoticeAlarm(0, "Agenda Reminders (Only for the App", 0),
             new NoticeAlarm(36, "Good Morning", R.mipmap.icon_alert),
             new NoticeAlarm(37, "Make Bed", R.mipmap.icon_sound),
             new NoticeAlarm(38, "Get Dress", R.mipmap.icon_sound),
