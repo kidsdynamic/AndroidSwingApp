@@ -77,24 +77,24 @@ public class ViewShape extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-        mDesiredSize += Math.max(getPaddingTop() + getPaddingBottom(), getPaddingStart() + getPaddingEnd());
+        int size = mDesiredSize + Math.max(getPaddingTop() + getPaddingBottom(), getPaddingStart() + getPaddingEnd());
 
         int width, height;
 
         if (widthMode == MeasureSpec.EXACTLY) {
             width = widthSize;
         } else if (widthMode == MeasureSpec.AT_MOST) {
-            width = Math.min(mDesiredSize, widthSize);
+            width = Math.min(size, widthSize);
         } else {
-            width = mDesiredSize;
+            width = size;
         }
 
         if (heightMode == MeasureSpec.EXACTLY) {
             height = heightSize;
         } else if (heightMode == MeasureSpec.AT_MOST) {
-            height = Math.min(mDesiredSize, heightSize);
+            height = Math.min(size, heightSize);
         } else {
-            height = mDesiredSize;
+            height = size;
         }
 
         setMeasuredDimension(width, height);
@@ -180,7 +180,8 @@ public class ViewShape extends View {
 
         int centerX = ((width - getPaddingStart() - getPaddingEnd()) / 2) + getPaddingStart();
         int centerY = ((height - getPaddingTop() - getPaddingBottom()) / 2) + getPaddingTop();
-        int radius = (Math.min(width - getPaddingStart() - getPaddingEnd(), height - getPaddingTop() - getPaddingBottom())) / 2;
+        int radius = mDesiredSize / 2;
+//        int radius = (Math.min(width - getPaddingStart() - getPaddingEnd(), height - getPaddingTop() - getPaddingBottom())) / 2;
 
         mRect.set(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
     }
