@@ -119,6 +119,7 @@ public class WatchContact implements Serializable {
         public String mZipCode;
         public String mPhoneNumber;
         public String mProfile;
+        public int mSubHostId;
         public String mRequestStatus;
 
         public User() {

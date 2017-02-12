@@ -214,6 +214,7 @@ public class FragmentProfileKid extends ViewFragment {
         public void onClick(View view) {
             if (mKid == null)
                 return;
+
         }
     };
 

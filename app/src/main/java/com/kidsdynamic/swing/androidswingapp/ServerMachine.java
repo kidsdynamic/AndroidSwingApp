@@ -466,6 +466,7 @@ public class ServerMachine {
 
     public void subHostAccept(subHostAcceptListener listener, int subHostId, List<Integer> KidId) {
         Map<String, String> map = new HashMap<>();
+        Log.d("JSON", ServerGson.subHost.accept.toJson(subHostId, KidId));
         map.put("json", ServerGson.subHost.accept.toJson(subHostId, KidId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_ACCEPT, map, null), CMD_SUBHOST_ACCEPT, listener));
     }
