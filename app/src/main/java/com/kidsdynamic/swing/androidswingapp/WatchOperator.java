@@ -153,6 +153,7 @@ public class WatchOperator {
                             user.mLastName = subHost.requestToUser.lastName;
                             user.mProfile = subHost.requestToUser.profile;
                             user.mRequestStatus = subHost.status;
+                            user.mSubHostId = subHost.id;
                             user.mLabel = user.mFirstName + " " + user.mLastName;
                             mRequestToList.add(user);
                             if (!user.mProfile.equals(""))
@@ -170,6 +171,7 @@ public class WatchOperator {
                             user.mLastName = subHost.requestFromUser.lastName;
                             user.mProfile = subHost.requestFromUser.profile;
                             user.mRequestStatus = subHost.status;
+                            user.mSubHostId = subHost.id;
                             user.mLabel = user.mFirstName + " " + user.mLastName;
                             mRequestFromList.add(user);
                             if (!user.mProfile.equals(""))
@@ -274,6 +276,7 @@ public class WatchOperator {
                             user.mLastName = subHost.requestToUser.lastName;
                             user.mProfile = subHost.requestToUser.profile;
                             user.mRequestStatus = subHost.status;
+                            user.mSubHostId = subHost.id;
                             user.mLabel = user.mFirstName + " " + user.mLastName;
                             mRequestToList.add(user);
                             if (!user.mProfile.equals(""))
@@ -292,6 +295,7 @@ public class WatchOperator {
                             user.mProfile = subHost.requestFromUser.profile;
                             user.mRequestStatus = subHost.status;
                             user.mLabel = user.mFirstName + " " + user.mLastName;
+                            user.mSubHostId = subHost.id;
                             mRequestFromList.add(user);
                             if (!user.mProfile.equals(""))
                                 mAvatarToGet.add(user.mProfile);
@@ -453,12 +457,18 @@ public class WatchOperator {
     }
 
     WatchContact.Kid getFocusKid() {
-        return mWatchDatabase.KidGetFocus();
+        WatchContact.Kid kid = mWatchDatabase.KidGetFocus();
+        kid.mBound = true;
+        kid.mLabel = kid.mFirstName;
+        kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+
+        return kid;
     }
 
     List<WatchContact.Kid> getKids() {
         List<WatchContact.Kid> kids = mWatchDatabase.KidGet();
         for(WatchContact.Kid kid : kids) {
+            kid.mBound = true;
             kid.mLabel = kid.mFirstName;
             kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
         }

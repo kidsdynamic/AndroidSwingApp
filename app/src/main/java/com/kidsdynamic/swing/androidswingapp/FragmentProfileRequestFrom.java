@@ -71,7 +71,7 @@ public class FragmentProfileRequestFrom extends ViewFragment {
                 list.add(kid.mId);
         }
 
-        mActivityMain.mOperator.mResponseForRequestTo.start(mResponseForRequestToListener, mRequestFrom.mId, list);
+        mActivityMain.mOperator.mResponseForRequestTo.start(mResponseForRequestToListener, mRequestFrom.mSubHostId, list);
     }
 
     WatchOperator.responseForRequestToListener mResponseForRequestToListener = new WatchOperator.responseForRequestToListener() {
