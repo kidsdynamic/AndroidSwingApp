@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -168,8 +169,9 @@ public class FragmentProfileMain extends ViewFragment {
             ViewCircle viewCircle = (ViewCircle) mViewDeviceContainer.getChildAt(idx);
             WatchContact.Kid kid1 = (WatchContact.Kid)contact;
             WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
-            if (kid2!=null)
-                viewCircle.setActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
+
+            boolean focus = kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId;
+            viewCircle.setActive(focus);
         }
 
         count = mViewSharedContainer.getChildCount();
@@ -177,8 +179,8 @@ public class FragmentProfileMain extends ViewFragment {
             ViewCircle viewCircle = (ViewCircle) mViewSharedContainer.getChildAt(idx);
             WatchContact.Kid kid1 = (WatchContact.Kid)contact;
             WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
-            if (kid2!=null)
-                viewCircle.setActive(kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
+            boolean focus = (kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
+            viewCircle.setActive(focus);
         }
 
         if (!onCreate)
