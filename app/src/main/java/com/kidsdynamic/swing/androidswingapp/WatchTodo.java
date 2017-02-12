@@ -10,6 +10,9 @@ import java.util.Locale;
 
 public class WatchTodo implements Serializable {
 
+    public final static String STATUS_CHECKED = "CHECKED";
+    public final static String STATUS_OPEN = "";
+
     public int mId;
     public int mUserId;
     public int mKidId;

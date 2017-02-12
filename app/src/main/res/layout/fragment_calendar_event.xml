@@ -458,6 +458,7 @@
                         android:text="To Do List" />
 
                     <ImageView
+                        android:id="@+id/calendar_event_todo_add"
                         style="@style/textview_calendar_event"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

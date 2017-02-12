@@ -1,11 +1,14 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +24,10 @@ public class ViewTodo extends RelativeLayout {
     private ImageView mViewCheck;
     private EditText mViewText;
     private TextView mViewDelete;
+    private View mViewSeparator;
+
+    private ViewTodo mThis = this;
+    private OnEditListener mOnEditListener = null;
 
     public ViewTodo(Context context) {
         super(context);
@@ -44,12 +51,14 @@ public class ViewTodo extends RelativeLayout {
         mViewCheck.setOnClickListener(mCheckListener);
 
         mViewText = (EditText) findViewById(R.id.todo_text);
+        mViewText.addTextChangedListener(mTextWatch);
         mViewText.setOnFocusChangeListener(mFocusListener);
+        mViewText.setOnTouchListener(mOnTouchListener);
 
         mViewDelete = (TextView) findViewById(R.id.todo_delete);
         mViewDelete.setOnClickListener(mDeleteListener);
 
-        mViewText.setOnTouchListener(mOnTouchListener);
+        mViewSeparator = findViewById(R.id.todo_separator);
     }
 
     public void load(WatchTodo todo) {
@@ -57,32 +66,82 @@ public class ViewTodo extends RelativeLayout {
         mViewText.setText(todo.mText);
     }
 
-    public boolean isChecked() {
-        return mViewCheck.isSelected();
+    public void save(WatchTodo todo) {
+        todo.mStatus = isChecked() ? WatchTodo.STATUS_CHECKED : WatchTodo.STATUS_OPEN;
+        todo.mText = mViewText.getText().toString();
     }
 
-    public String getText() {
-        return mViewText.getText().toString();
+    public boolean isChecked() {
+        return mViewCheck.isSelected();
     }
 
     public void setChecked(boolean check) {
         mViewCheck.setSelected(check);
     }
 
+    public String getText() {
+        return mViewText.getText().toString();
+    }
+
     public void setText(String text) {
         mViewText.setText(text);
+    }
+
+    public void setSeparatorVisibility(int visible) {
+        mViewSeparator.setVisibility(visible);
+    }
+
+    public int getSeparatorVisibility() {
+        return mViewSeparator.getVisibility();
+    }
+
+    public interface OnEditListener {
+        void onDelete(ViewTodo viewTodo, View view);
+
+        void onCheck(ViewTodo viewTodo, View view, boolean checked);
+
+        void onText(ViewTodo viewTodo, View view, String text);
+    }
+
+    public void setOnEditListener(OnEditListener listener) {
+        mOnEditListener = listener;
+    }
+
+    public OnEditListener getOnEditListener() {
+        return mOnEditListener;
     }
 
     private View.OnClickListener mCheckListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            mViewCheck.setSelected(!mViewCheck.isSelected());
+            setChecked(!isChecked());
+            if (mOnEditListener != null)
+                mOnEditListener.onCheck(mThis, view, isChecked());
         }
     };
 
     private View.OnClickListener mDeleteListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (mOnEditListener != null)
+                mOnEditListener.onDelete(mThis, view);
+        }
+    };
+
+    private TextWatcher mTextWatch = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (mOnEditListener != null)
+                mOnEditListener.onText(mThis, mViewText, s.toString());
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
 
         }
     };

@@ -54,6 +54,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private EditText mViewDescription;
 
     private View mViewTodoLine;
+    private View mViewTodoAdd;
     private LinearLayout mViewTodoOption;
     private LinearLayout mViewTodoContainer;
 
@@ -126,7 +127,8 @@ public class FragmentCalendarEvent extends ViewFragment {
 
         // Line To-Do
         mViewTodoLine = mViewMain.findViewById(R.id.calendar_event_todo_line);
-        mViewTodoLine.setOnClickListener(mTodoListener);
+        mViewTodoAdd = mViewMain.findViewById(R.id.calendar_event_todo_add);
+        mViewTodoAdd.setOnClickListener(mTodoListener);
         mViewTodoOption = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_todo_option);
         mViewTodoContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_todo_container);
 
@@ -150,10 +152,9 @@ public class FragmentCalendarEvent extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        mEvent = mActivityMain.mEventStack.pop();
-        if (mEvent == null)
-            mEvent = new WatchEvent(System.currentTimeMillis());
-
+        mEvent = mActivityMain.mEventStack.isEmpty() ?
+                new WatchEvent(System.currentTimeMillis()) :
+                mActivityMain.mEventStack.pop();
         loadWatchEvent();
     }
 
@@ -170,14 +171,46 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewDescriptionLine.setVisibility(View.VISIBLE);
         mViewTodoLine.setVisibility(View.VISIBLE);
 
-        if (mEvent.mTodoList.size() != 0) {
-            viewTodoOption();
-        }
+        viewTodoList();
     }
 
-    private void viewTodoOption() {
-        mViewTodoOption.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+    private void viewTodoList() {
+        Log.d("xxx", "todo: " + mEvent.mTodoList.size());
+
+        if (mEvent.mTodoList.size() == 0) {
+            mViewTodoOption.getLayoutParams().height = 0;
+        } else {
+            mViewTodoOption.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+
+            int count = mViewTodoContainer.getChildCount();
+            for (int idx = 0; idx < count; idx++) {
+                ViewTodo viewTodo = (ViewTodo) mViewTodoContainer.getChildAt(idx);
+                viewTodo.setSeparatorVisibility(idx == (count - 1) ? View.INVISIBLE : View.VISIBLE);
+            }
+        }
+
         mViewTodoOption.requestLayout();
+    }
+
+    private void addTodoView(WatchTodo todo) {
+        ViewTodo viewTodo = new ViewTodo(mActivityMain);
+        viewTodo.setTag(todo);
+        viewTodo.load(todo);
+        viewTodo.setOnEditListener(mTodoEditListener);
+
+        int height = getResources().getDisplayMetrics().heightPixels / 15;
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
+
+        mViewTodoContainer.addView(viewTodo, layoutParams);
+
+        viewTodoList();
+    }
+
+    private void delTodoView(WatchTodo todo) {
+        ViewTodo viewTodo = (ViewTodo) mViewTodoContainer.findViewWithTag(todo);
+        mViewTodoContainer.removeView(viewTodo);
+
+        viewTodoList();
     }
 
     private View.OnClickListener mAlarmListener = new View.OnClickListener() {
@@ -252,28 +285,9 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mTodoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            LinearLayout.LayoutParams layoutParams;
-
-            viewTodoOption();
-
-            if (mViewTodoContainer.getChildCount() > 0) {
-                View separator = new View(mActivityMain);
-                separator.setBackgroundColor(ContextCompat.getColor(mActivityMain, R.color.color_gray_light));
-
-                int sph = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()));
-                layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, sph);
-
-                int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-                layoutParams.setMargins(margin, margin, margin, margin);
-
-                mViewTodoContainer.addView(separator, layoutParams);
-            }
-
-            ViewTodo viewTodo = new ViewTodo(mActivityMain);
-
-            int height = getResources().getDisplayMetrics().heightPixels / 15;
-            layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height);
-            mViewTodoContainer.addView(viewTodo, layoutParams);
+            WatchTodo todo = new WatchTodo();
+            mEvent.mTodoList.add(todo);
+            addTodoView(todo);
         }
     };
 
@@ -355,6 +369,27 @@ public class FragmentCalendarEvent extends ViewFragment {
         @Override
         public void afterTextChanged(Editable s) {
 
+        }
+    };
+
+    private ViewTodo.OnEditListener mTodoEditListener = new ViewTodo.OnEditListener() {
+        @Override
+        public void onDelete(ViewTodo viewTodo, View view) {
+            WatchTodo todo = (WatchTodo) viewTodo.getTag();
+            delTodoView(todo);
+            mEvent.mTodoList.remove(todo);
+        }
+
+        @Override
+        public void onCheck(ViewTodo viewTodo, View view, boolean checked) {
+            WatchTodo todo = (WatchTodo) viewTodo.getTag();
+            viewTodo.save(todo);
+        }
+
+        @Override
+        public void onText(ViewTodo viewTodo, View view, String text) {
+            WatchTodo todo = (WatchTodo) viewTodo.getTag();
+            viewTodo.save(todo);
         }
     };
 
@@ -443,6 +478,11 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewDescription.setText(mEvent.mDescription);
     }
 
+    private void loadTodo() {
+        for (WatchTodo todo : mEvent.mTodoList)
+            addTodoView(todo);
+    }
+
     private void loadWatchEvent() {
         loadAlarm();
         loadAssign();
@@ -450,9 +490,9 @@ public class FragmentCalendarEvent extends ViewFragment {
         loadColor();
         loadRepeat();
         loadDescription();
+        loadTodo();
 
-        if (mEvent.mRepeat.length() != 0 ||
-                mEvent.mDescription.length() != 0)
+        if (mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0)
             viewAdvance();
     }
 
