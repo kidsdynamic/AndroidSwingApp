@@ -58,6 +58,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private LinearLayout mViewTodoOption;
     private LinearLayout mViewTodoContainer;
 
+    private View mViewButtonLine;
     private View mViewSave;
     private View mViewAdvance;
 
@@ -133,9 +134,9 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewTodoContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_todo_container);
 
         // Line Button
+        mViewButtonLine = mViewMain.findViewById(R.id.calendar_event_button_line);
         mViewSave = mViewMain.findViewById(R.id.calendar_event_save);
         mViewSave.setOnClickListener(mSaveListener);
-
         mViewAdvance = mViewMain.findViewById(R.id.calendar_event_advance);
         mViewAdvance.setOnClickListener(mAdvanceListener);
 
