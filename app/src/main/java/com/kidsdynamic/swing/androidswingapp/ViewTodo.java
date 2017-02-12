@@ -177,13 +177,11 @@ public class ViewTodo extends RelativeLayout {
     private OnTouchListener mOnTouchListener = new OnSwipeTouchListener(getContext()) {
         @Override
         public void onSwipeRight() {
-            Toast.makeText(getContext(), "right", Toast.LENGTH_SHORT).show();
             setDeleteVisible(false);
         }
 
         @Override
         public void onSwipeLeft() {
-            Toast.makeText(getContext(), "left", Toast.LENGTH_SHORT).show();
             setDeleteVisible(true);
         }
 
