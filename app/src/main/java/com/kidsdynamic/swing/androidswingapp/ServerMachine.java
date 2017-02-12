@@ -7,10 +7,12 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
@@ -128,6 +130,9 @@ public class ServerMachine {
     private Request<NetworkResponse> NewRequest(int method, String address, Map<String, String> map, String filename) {
         Request<NetworkResponse> newRequest = new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename, mAuthToken);
         newRequest.setTag(REQUEST_TAG);
+        int socketTimeout = 30000;
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        newRequest.setRetryPolicy(policy);
         return newRequest;
     }
 

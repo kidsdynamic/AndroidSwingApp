@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -40,16 +41,10 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
         if (!mActivityMain.mContactStack.isEmpty()) {
             mRequestFrom = (WatchContact.User) mActivityMain.mContactStack.pop();
-            ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getRequestFromKidList(mRequestFrom);
+            ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getDeviceList();
             for (WatchContact.Kid kid : list)
                 addKid(kid);
         }
-
-        // Test
-        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "purple"));
-        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "green"));
-        addKid(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "yellow"));
-        //////////////
 
         updateCount();
 
@@ -64,25 +59,31 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.popFragment();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
         int count = mViewContainer.getChildCount();
+        List<Integer> list = new ArrayList<>();
+
         for (int idx = 0; idx < count; idx++) {
             View view = mViewContainer.getChildAt(idx);
             View check = view.findViewById(R.id.watch_contact_check_icon);
 
             WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
-
             if (check.isSelected())
-                allowRequest(kid);
-            else
-                denyRequest(kid);   // From KD flowchart, don't know how to remove kids has requested.
+                list.add(kid.mId);
         }
+
+        mActivityMain.mOperator.mResponseForRequestTo.start(mResponseForRequestToListener, mRequestFrom.mId, list);
+    }
+
+    WatchOperator.responseForRequestToListener mResponseForRequestToListener = new WatchOperator.responseForRequestToListener() {
+        @Override
+        public void onResponse(String msg) {
+            mActivityMain.popFragment();
+        }
+    };
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     private View.OnClickListener mDeviceListener = new View.OnClickListener() {
@@ -109,13 +110,4 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
         mViewCount.setText(string);
     }
-
-    private void allowRequest(WatchContact.Kid kid) {
-        // todo: allow the request form mRequestFrom to access kid
-    }
-
-    private void denyRequest(WatchContact.Kid kid) {
-        // todo: deny the request form mRequestFrom to access kid
-    }
-
 }
