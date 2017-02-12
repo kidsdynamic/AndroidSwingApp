@@ -30,7 +30,7 @@ public class FragmentCalendarMain extends ViewFragment {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
-        if(getArguments()!= null) {
+        if (getArguments() != null) {
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
         }
     }
@@ -93,10 +93,7 @@ public class FragmentCalendarMain extends ViewFragment {
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
-            Bundle bundle = new Bundle();
-            bundle.putLong(BUNDLE_KEY_DATE, date);
-
-            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
+            mViewCalendar.setDate(date);
         }
     };
 
