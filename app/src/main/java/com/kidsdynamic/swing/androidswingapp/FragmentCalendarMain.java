@@ -77,7 +77,10 @@ public class FragmentCalendarMain extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
-        mActivityMain.mEventStack.push(new WatchEvent(mViewCalendar.getDate()));
+        WatchEvent event = new WatchEvent(mViewCalendar.getDate());
+        event.mUserId = mActivityMain.mOperator.getUser().mId;
+
+        mActivityMain.mEventStack.push(event);
         mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
     }
 

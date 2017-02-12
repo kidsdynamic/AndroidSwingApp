@@ -50,17 +50,8 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
-                    android:layout_weight="6"
+                    android:layout_weight="7"
                     android:gravity="end|center_vertical" />
-
-                <com.kidsdynamic.swing.androidswingapp.ViewCircle
-                    android:id="@+id/calendar_event_user_photo"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:padding="1dp"
-                    app:strokeColorNormal="@color/color_orange_main"
-                    app:strokeWidth="1dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,6 +78,7 @@
                     android:paddingTop="10dp" />
 
                 <com.kidsdynamic.swing.androidswingapp.ViewShape
+                    android:id="@+id/calendar_event_alarm_icon"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

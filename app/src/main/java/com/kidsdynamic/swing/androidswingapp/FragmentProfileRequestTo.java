@@ -276,7 +276,6 @@ public class FragmentProfileRequestTo extends ViewFragment {
             View label = mViewPendingContainer.findViewWithTag(view.getTag());
             mViewPendingContainer.removeView(label);
 
-            Log.d("xxx", "Remove pending request: " + kid.mLabel);
             // todo: Remove request from Database or API
         }
     };

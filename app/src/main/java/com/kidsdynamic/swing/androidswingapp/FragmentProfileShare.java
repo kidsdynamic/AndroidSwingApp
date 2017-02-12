@@ -79,7 +79,6 @@ public class FragmentProfileShare extends ViewFragment {
         public void onClick(View view) {
             ArrayList<WatchContact.Kid> list = getSelectList();
             for (WatchContact.Kid kid : list) {
-                Log.d("xxx", "request:" + mRequestTo.mLabel + "," + kid.mLabel);
                 // Todo: emit request.
             }
 

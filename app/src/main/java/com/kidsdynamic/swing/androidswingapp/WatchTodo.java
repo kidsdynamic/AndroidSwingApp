@@ -10,8 +10,8 @@ import java.util.Locale;
 
 public class WatchTodo implements Serializable {
 
-    public final static String STATUS_CHECKED = "CHECKED";
-    public final static String STATUS_OPEN = "";
+    public final static String STATUS_DONE = "DONE";
+    public final static String STATUS_PENDING = "PENDING";
 
     public int mId;
     public int mUserId;

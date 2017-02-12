@@ -1,10 +1,10 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +25,12 @@ public class FragmentCalendarEvent extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
+    private View mViewUserLine;
+    private TextView mViewUserName;
+
     private View mViewAlarmLine;
     private TextView mViewAlarm;
+    private ViewShape mViewAlarmIcon;
 
     private View mViewAssignLine;
     private TextView mViewAssignName;
@@ -76,10 +80,15 @@ public class FragmentCalendarEvent extends ViewFragment {
 
         mViewMain = inflater.inflate(R.layout.fragment_calendar_event, container, false);
 
+        // Line Creator
+        mViewUserLine = mViewMain.findViewById(R.id.calendar_event_user_line);
+        mViewUserName = (TextView) mViewMain.findViewById(R.id.calendar_event_user_name);
+
         // Line Alarm
         mViewAlarmLine = mViewMain.findViewById(R.id.calendar_event_alarm_line);
         mViewAlarmLine.setOnClickListener(mAlarmListener);
         mViewAlarm = (TextView) mViewMain.findViewById(R.id.calendar_event_alarm);
+        mViewAlarmIcon = (ViewShape) mViewMain.findViewById(R.id.calendar_event_alarm_icon);
 
         // Line Assign
         mViewAssignLine = mViewMain.findViewById(R.id.calendar_event_assign_line);
@@ -164,6 +173,27 @@ public class FragmentCalendarEvent extends ViewFragment {
         mActivityMain.popFragment();
     }
 
+    private void viewEnabled(boolean enabled) {
+        mViewAlarmLine.setEnabled(enabled);
+        mViewAssignLine.setEnabled(enabled);
+        mViewStartLine.setEnabled(enabled);
+        mViewEndLine.setEnabled(enabled);
+        mViewColorLine.setEnabled(enabled);
+        mViewRepeatLine.setEnabled(enabled);
+        mViewDescription.setEnabled(enabled);
+        mViewTodoAdd.setEnabled(enabled);
+
+        int count = mViewTodoContainer.getChildCount();
+        for (int idx = 0; idx < count; idx++) {
+            ViewTodo viewTodo = (ViewTodo) mViewTodoContainer.getChildAt(idx);
+            viewTodo.setEnabled(enabled);
+        }
+
+        mViewAlarmIcon.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+        mViewTodoAdd.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+        mViewButtonLine.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+    }
+
     private void viewAdvance() {
         mViewSave.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
         mViewSave.requestLayout();
@@ -176,8 +206,6 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void viewTodoList() {
-        Log.d("xxx", "todo: " + mEvent.mTodoList.size());
-
         if (mEvent.mTodoList.size() == 0) {
             mViewTodoOption.getLayoutParams().height = 0;
         } else {
@@ -395,6 +423,11 @@ public class FragmentCalendarEvent extends ViewFragment {
         }
     };
 
+    private void loadUser() {
+        // todo: put enent owner's name
+        mViewUserName.setText("How to get name");
+    }
+
     private void loadAlarm() {
         String alarmName = "";
         for (WatchEvent.NoticeAlarm alarm : WatchEvent.NoticeAlarmList) {
@@ -486,6 +519,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void loadWatchEvent() {
+        loadUser();
         loadAlarm();
         loadAssign();
         loadDate();
@@ -496,6 +530,9 @@ public class FragmentCalendarEvent extends ViewFragment {
 
         if (mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0)
             viewAdvance();
+
+        WatchContact.User me = mActivityMain.mOperator.getUser();
+        viewEnabled(me.mId == mEvent.mUserId);
     }
 
 }

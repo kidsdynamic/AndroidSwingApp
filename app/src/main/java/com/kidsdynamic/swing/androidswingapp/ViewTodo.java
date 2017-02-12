@@ -4,14 +4,11 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,8 +64,22 @@ public class ViewTodo extends RelativeLayout {
     }
 
     public void save(WatchTodo todo) {
-        todo.mStatus = isChecked() ? WatchTodo.STATUS_CHECKED : WatchTodo.STATUS_OPEN;
+        todo.mStatus = isChecked() ? WatchTodo.STATUS_DONE : WatchTodo.STATUS_PENDING;
         todo.mText = mViewText.getText().toString();
+    }
+
+    @Override
+    public void setEnabled(boolean enabled) {
+        super.setEnabled(enabled);
+
+        mViewCheck.setEnabled(enabled);
+        mViewText.setEnabled(enabled);
+        mViewDelete.setEnabled(enabled);
+
+        if (enabled)
+            mViewText.setOnTouchListener(mOnTouchListener);
+        else
+            mViewText.setOnTouchListener(null);
     }
 
     public boolean isChecked() {
