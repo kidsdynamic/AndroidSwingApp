@@ -3,7 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.Toast;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,158 +20,399 @@ import java.util.TimeZone;
 public class WatchOperator {
     private WatchDatabase mWatchDatabase;
     private ActivityMain mActivity;
+    private List<WatchContact.User> mRequestToList;
+    private List<WatchContact.User> mRequestFromList;
+    public Sync mSync = new Sync();
+    public AddRequestTo mAddRequestTo = new AddRequestTo();
+    public ResponseForRequestTo mResponseForRequestTo = new ResponseForRequestTo();
 
     WatchOperator(Context context) {
         mActivity = (ActivityMain)context;
         mWatchDatabase = new WatchDatabase(context);
+        mRequestToList = new ArrayList<>();
+        mRequestFromList = new ArrayList<>();
     }
 
     //-------------------------------------------------------------------------
-    syncListener mSyncListener = null;
-    private List<WatchContact.Kid> mKidList;
-
     interface syncListener {
         void onSync(String msg);
     }
 
-    void sync(syncListener listener) {
-        mSyncListener = listener;
-        mActivity.mServiceMachine.userIsTokenValid(
-                mUserIsTokenValidListener,
-                mActivity.mConfig.getString(Config.KEY_MAIL),
-                mActivity.mConfig.getString(Config.KEY_AUTH_TOKEN));
-    }
+    public class Sync {
 
-    ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
-        @Override
-        public void onValidState(boolean valid) {
-            if (valid) {
-                mActivity.mServiceMachine.setAuthToken(mActivity.mConfig.getString(Config.KEY_AUTH_TOKEN));
-                mActivity.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+        private syncListener mSyncListener = null;
+        private List<String> mAvatarToGet;
+
+        void start(syncListener listener, String email, String password) {
+            mSyncListener = listener;
+            if (email.equals("") && password.equals("")) {
+                mActivity.mServiceMachine.userIsTokenValid(
+                        mUserIsTokenValidListener,
+                        mActivity.mConfig.getString(Config.KEY_MAIL),
+                        mActivity.mConfig.getString(Config.KEY_AUTH_TOKEN));
             } else {
+                mActivity.mConfig.setString(Config.KEY_MAIL, email);
+                mActivity.mConfig.setString(Config.KEY_PASSWORD, password);
+                mActivity.mServiceMachine.userLogin(mUserLoginListener, email, password);
+            }
+        }
+
+        private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
+            @Override
+            public void onValidState(boolean valid) {
+                if (valid) {
+                    mActivity.mServiceMachine.setAuthToken(mActivity.mConfig.getString(Config.KEY_AUTH_TOKEN));
+                    mActivity.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
+                } else {
+                    mActivity.mServiceMachine.userLogin(mUserLoginListener, mActivity.mConfig.getString(Config.KEY_MAIL), mActivity.mConfig.getString(Config.KEY_PASSWORD));
+                }
+            }
+
+            @Override
+            public void onFail(int statusCode) {
                 mActivity.mServiceMachine.userLogin(mUserLoginListener, mActivity.mConfig.getString(Config.KEY_MAIL), mActivity.mConfig.getString(Config.KEY_PASSWORD));
             }
-        }
+        };
 
-        @Override
-        public void onFail(int statusCode) {
-            mActivity.mServiceMachine.userLogin(mUserLoginListener, mActivity.mConfig.getString(Config.KEY_MAIL), mActivity.mConfig.getString(Config.KEY_PASSWORD));
-        }
-    };
-
-    ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            mActivity.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
-            mActivity.mServiceMachine.setAuthToken(result.access_token);
-            mActivity.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            if (mSyncListener != null)
-                mSyncListener.onSync("login failed!");
-        }
-    };
-
-    ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
-            ServerMachine.ResetAvatar();
-            setUser(
-                    new WatchContact.User(
-                            null,
-                            response.user.id,
-                            response.user.email,
-                            response.user.firstName,
-                            response.user.lastName,
-                            WatchOperator.getTimeStamp(response.user.lastUpdate),
-                            WatchOperator.getTimeStamp(response.user.dateCreated),
-                            response.user.zipCode,
-                            response.user.phoneNumber,
-                            response.user.profile)
-            );
-
-            mKidList = new ArrayList<>();
-            for (ServerGson.kidData kidData : response.kids) {
-                WatchContact.Kid kid = new WatchContact.Kid();
-                kid.mId = kidData.id;
-                kid.mFirstName = kidData.name;
-                kid.mLastName = "";
-                kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
-                kid.mMacId = kidData.macId;
-                kid.mUserId = response.user.id;
-                kid.mProfile = kidData.profile;
-                kid.mBound = true;
-                setKid(kid);
-                mKidList.add(kid);
+        private ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+                mActivity.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+                mActivity.mServiceMachine.setAuthToken(result.access_token);
+                mActivity.mServiceMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
             }
 
-            if (!response.user.profile.equals(""))
-                mActivity.mServiceMachine.getAvatar(mGetUserAvatarListener, response.user.profile);
-            else
-                getKidAvatar(true);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            if (mSyncListener != null)
-                mSyncListener.onSync("Retrieve user profile failed!");
-        }
-    };
-
-    ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
-        @Override
-        public void onSuccess(Bitmap avatar, String filename) {
-            ServerMachine.createAvatarFile(avatar, filename, "");
-            getKidAvatar(true);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            if (mSyncListener != null)
-                mSyncListener.onSync("Get user avatar failed!");
-        }
-    };
-
-    private int mProcessKidAvatar;
-    private void getKidAvatar(boolean start) {
-        if (start)
-            mProcessKidAvatar = 0;
-        else
-            mProcessKidAvatar++;
-
-        if (mProcessKidAvatar >= mKidList.size()) {
-            if (mSyncListener != null)
-                mSyncListener.onSync("");
-            return;
-        }
-
-        while (mKidList.get(mProcessKidAvatar).mProfile.equals("")) {
-            mProcessKidAvatar++;
-            if (mProcessKidAvatar >= mKidList.size()) {
+            @Override
+            public void onFail(int statusCode) {
                 if (mSyncListener != null)
-                    mSyncListener.onSync("");
-                return;
+                    mSyncListener.onSync("login failed!");
+            }
+        };
+
+        private ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
+                ServerMachine.ResetAvatar();
+                mAvatarToGet = new ArrayList<>();
+                setUser(
+                        new WatchContact.User(
+                                null,
+                                response.user.id,
+                                response.user.email,
+                                response.user.firstName,
+                                response.user.lastName,
+                                WatchOperator.getTimeStamp(response.user.lastUpdate),
+                                WatchOperator.getTimeStamp(response.user.dateCreated),
+                                response.user.zipCode,
+                                response.user.phoneNumber,
+                                response.user.profile)
+                );
+                if (!response.user.profile.equals(""))
+                    mAvatarToGet.add(response.user.profile);
+
+                for (ServerGson.kidData kidData : response.kids) {
+                    WatchContact.Kid kid = new WatchContact.Kid();
+                    kid.mId = kidData.id;
+                    kid.mFirstName = kidData.name;
+                    kid.mLastName = "";
+                    kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
+                    kid.mMacId = kidData.macId;
+                    kid.mUserId = response.user.id;
+                    kid.mProfile = kidData.profile;
+                    kid.mBound = true;
+                    setKid(kid);
+                    setFocusKid(kid);
+                    if (!kidData.profile.equals(""))
+                        mAvatarToGet.add(kidData.profile);
+                }
+
+                mActivity.mServiceMachine.subHostList(mSubHostListListener, "");
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                if (mSyncListener != null)
+                    mSyncListener.onSync("Retrieve user profile failed!");
+            }
+        };
+
+        ServerMachine.subHostListListener mSubHostListListener = new ServerMachine.subHostListListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.subHost.list.response response) {
+                mRequestToList = new ArrayList<>();
+                mRequestFromList = new ArrayList<>();
+
+                if (response != null) {
+                    if (response.requestTo != null) {
+                        for (ServerGson.hostData subHost : response.requestTo) {
+                            WatchContact.User user = new WatchContact.User();
+                            user.mPhoto = null;
+                            user.mId = subHost.requestToUser.id;
+                            user.mEmail = subHost.requestToUser.email;
+                            user.mFirstName = subHost.requestToUser.firstName;
+                            user.mLastName = subHost.requestToUser.lastName;
+                            user.mProfile = subHost.requestToUser.profile;
+                            user.mRequestStatus = subHost.status;
+                            user.mLabel = user.mFirstName + " " + user.mLastName;
+                            mRequestToList.add(user);
+                            if (!user.mProfile.equals(""))
+                                mAvatarToGet.add(user.mProfile);
+                        }
+                    }
+
+                    if (response.requestFrom != null) {
+                        for (ServerGson.hostData subHost : response.requestFrom) {
+                            WatchContact.User user = new WatchContact.User();
+                            user.mPhoto = null;
+                            user.mId = subHost.requestFromUser.id;
+                            user.mEmail = subHost.requestFromUser.email;
+                            user.mFirstName = subHost.requestFromUser.firstName;
+                            user.mLastName = subHost.requestFromUser.lastName;
+                            user.mProfile = subHost.requestFromUser.profile;
+                            user.mRequestStatus = subHost.status;
+                            user.mLabel = user.mFirstName + " " + user.mLastName;
+                            mRequestFromList.add(user);
+                            if (!user.mProfile.equals(""))
+                                mAvatarToGet.add(user.mProfile);
+                        }
+                    }
+                }
+
+                syncAvatar();
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                syncAvatar();
+            }
+        };
+
+        private void syncAvatar() {
+            if (mAvatarToGet.isEmpty()) {
+                mSyncListener.onSync("");
+            } else {
+                mActivity.mServiceMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
+                mAvatarToGet.remove(0);
             }
         }
 
-        mActivity.mServiceMachine.getAvatar(mGetKidAvatarListener, mKidList.get(mProcessKidAvatar).mProfile);
+        private ServerMachine.getAvatarListener mGetAvatarListener = new ServerMachine.getAvatarListener() {
+            @Override
+            public void onSuccess(Bitmap avatar, String filename) {
+                ServerMachine.createAvatarFile(avatar, filename, "");
+                syncAvatar();
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                syncAvatar();
+            }
+        };
+    }
+    //-------------------------------------------------------------------------
+
+    interface responseForRequestToListener {
+        void onResponse(String msg);
     }
 
-    ServerMachine.getAvatarListener mGetKidAvatarListener = new ServerMachine.getAvatarListener() {
-        @Override
-        public void onSuccess(Bitmap avatar, String filename) {
-            ServerMachine.createAvatarFile(avatar, filename, "");
-            getKidAvatar(false);
+    public class ResponseForRequestTo {
+        private responseForRequestToListener mListener = null;
+        private List<String> mAvatarToGet;
+
+        public void start(responseForRequestToListener listener, int subHostId, List<Integer> kidsId) {
+            mListener = listener;
+            if (kidsId == null)
+                kidsId = new ArrayList<>();
+
+            mAvatarToGet = new ArrayList<>();
+
+            if (kidsId.isEmpty())
+                mActivity.mServiceMachine.subHostDeny(mSubHostDenyListener, subHostId);
+            else
+                mActivity.mServiceMachine.subHostAccept(mSubHostAcceptListener, subHostId, kidsId);
         }
 
-        @Override
-        public void onFail(int statusCode) {
-            if (mSyncListener != null)
-                mSyncListener.onSync("Get kid avatar failed!");
+        ServerMachine.subHostAcceptListener mSubHostAcceptListener = new ServerMachine.subHostAcceptListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.hostData response) {
+                mActivity.mServiceMachine.subHostList(mSubHostListListener, "");
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                if (mListener != null)
+                    mListener.onResponse("subHostAccept failed " + statusCode);
+            }
+        };
+
+        ServerMachine.subHostDenyListener mSubHostDenyListener = new ServerMachine.subHostDenyListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.hostData response) {
+                mActivity.mServiceMachine.subHostList(mSubHostListListener, "");
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                if (mListener != null)
+                    mListener.onResponse("subHostDeny failed " + statusCode);
+            }
+        };
+        ServerMachine.subHostListListener mSubHostListListener = new ServerMachine.subHostListListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.subHost.list.response response) {
+                mRequestToList = new ArrayList<>();
+                mRequestFromList = new ArrayList<>();
+
+                if (response != null) {
+                    if (response.requestTo != null) {
+                        for (ServerGson.hostData subHost : response.requestTo) {
+                            WatchContact.User user = new WatchContact.User();
+                            user.mPhoto = null;
+                            user.mId = subHost.requestToUser.id;
+                            user.mEmail = subHost.requestToUser.email;
+                            user.mFirstName = subHost.requestToUser.firstName;
+                            user.mLastName = subHost.requestToUser.lastName;
+                            user.mProfile = subHost.requestToUser.profile;
+                            user.mRequestStatus = subHost.status;
+                            user.mLabel = user.mFirstName + " " + user.mLastName;
+                            mRequestToList.add(user);
+                            if (!user.mProfile.equals(""))
+                                mAvatarToGet.add(user.mProfile);
+                        }
+                    }
+
+                    if (response.requestFrom != null) {
+                        for (ServerGson.hostData subHost : response.requestFrom) {
+                            WatchContact.User user = new WatchContact.User();
+                            user.mPhoto = null;
+                            user.mId = subHost.requestFromUser.id;
+                            user.mEmail = subHost.requestFromUser.email;
+                            user.mFirstName = subHost.requestFromUser.firstName;
+                            user.mLastName = subHost.requestFromUser.lastName;
+                            user.mProfile = subHost.requestFromUser.profile;
+                            user.mRequestStatus = subHost.status;
+                            user.mLabel = user.mFirstName + " " + user.mLastName;
+                            mRequestFromList.add(user);
+                            if (!user.mProfile.equals(""))
+                                mAvatarToGet.add(user.mProfile);
+                        }
+                    }
+                }
+
+                syncAvatar();
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                syncAvatar();
+            }
+        };
+
+        private void syncAvatar() {
+            if (mAvatarToGet.isEmpty()) {
+                mListener.onResponse("");
+            } else {
+                mActivity.mServiceMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
+                mAvatarToGet.remove(0);
+            }
         }
-    };
+
+        private ServerMachine.getAvatarListener mGetAvatarListener = new ServerMachine.getAvatarListener() {
+            @Override
+            public void onSuccess(Bitmap avatar, String filename) {
+                ServerMachine.createAvatarFile(avatar, filename, "");
+                syncAvatar();
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                syncAvatar();
+            }
+        };
+
+
+    }
+
+    //-------------------------------------------------------------------------
+
+    interface addRequestToListener {
+        void onAddRequestTo(String msg, WatchContact.User user);
+    }
+
+    public class AddRequestTo {
+        private addRequestToListener mListener = null;
+
+        public void start(addRequestToListener listener, String mail) {
+            mListener = listener;
+            mActivity.mServiceMachine.userFindByEmail(mUserFindByEmailListener, mail);
+        }
+
+        ServerMachine.userFindByEmailListener mUserFindByEmailListener = new ServerMachine.userFindByEmailListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.userData response) {
+                mActivity.mServiceMachine.subHostAdd(mSubHostAddListener, response.id);
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                if (mListener != null)
+                    mListener.onAddRequestTo("Can't find user by the email.", null);
+            }
+        };
+
+        ServerMachine.subHostAddListener mSubHostAddListener = new ServerMachine.subHostAddListener() {
+            @Override
+            public void onSuccess(int statusCode, ServerGson.hostData response) {
+                WatchContact.User user = new WatchContact.User();
+                user.mPhoto = null;
+                user.mId = response.requestToUser.id;
+                user.mEmail = response.requestToUser.email;
+                user.mFirstName = response.requestToUser.firstName;
+                user.mLastName = response.requestToUser.lastName;
+                user.mProfile = response.requestToUser.profile;
+                user.mRequestStatus = response.status;
+                user.mLabel = user.mFirstName + " " + user.mLastName;
+                mRequestToList.add(user);
+                if (!user.mProfile.equals("")) {
+                    mActivity.mServiceMachine.getAvatar(mGetNewUserAvatarListener, user.mProfile);
+                } else {
+                    if (mListener != null)
+                        mListener.onAddRequestTo("", user);
+                }
+            }
+
+            @Override
+            public void onConflict(int statusCode) {
+                if (mListener != null)
+                    mListener.onAddRequestTo("The request is already exists.", null);
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                if (mListener != null)
+                    mListener.onAddRequestTo("Bad request.", null);
+            }
+        };
+
+        ServerMachine.getAvatarListener mGetNewUserAvatarListener = new ServerMachine.getAvatarListener() {
+            @Override
+            public void onSuccess(Bitmap avatar, String filename) {
+                ServerMachine.createAvatarFile(avatar, filename, "");
+                WatchContact.User user = mRequestToList.get(mRequestToList.size()-1);
+                user.mPhoto = avatar;
+
+                if (mListener != null)
+                    mListener.onAddRequestTo("", user);
+            }
+
+            @Override
+            public void onFail(int statusCode) {
+                if (mListener != null)
+                    mListener.onAddRequestTo("", mRequestToList.get(mRequestToList.size()-1));
+            }
+        };
+
+    }
 
     //-------------------------------------------------------------------------
 
@@ -321,8 +562,13 @@ public class WatchOperator {
         return rtn;
     }
 
-    public ArrayList<WatchContact.User> getRequestFromUserList() {
-        return new ArrayList<>();
+    public List<WatchContact.User> getRequestFromUserList() {
+        for (WatchContact.User user : mRequestFromList) {
+            if (user.mPhoto == null && !user.mProfile.equals(""))
+                user.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
+        }
+
+        return mRequestFromList;
     }
 
     public ArrayList<WatchContact.Kid> getRequestFromKidList(WatchContact.User user) {
@@ -330,7 +576,12 @@ public class WatchOperator {
         return new ArrayList<>();
     }
 
-    public ArrayList<WatchContact.User> getRequestToList() {
-        return new ArrayList<>();
+    public List<WatchContact.User> getRequestToList() {
+        for (WatchContact.User user : mRequestToList) {
+            if (user.mPhoto == null && !user.mProfile.equals(""))
+                user.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
+        }
+
+        return mRequestToList;
     }
 }

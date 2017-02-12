@@ -55,7 +55,7 @@ public class ActivityMain extends AppCompatActivity
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
     private Dialog mProcessDialog = null;
-    private List<WatchContact.Kid> mKidList;
+    private String mCurrentFragment = "";
 
 
     private View mViewDevice;
@@ -143,7 +143,7 @@ public class ActivityMain extends AppCompatActivity
             if (mProcessDialog == null) {
                 mProcessDialog = ProgressDialog.show(this, "Synchronize", "Please wait...", true);
 
-                mOperator.sync(mSyncListener);
+                mOperator.mSync.start(mSyncListener, "", "");
             }
         } else {
             selectFragment(FragmentBoot.class.getName(), null);
@@ -166,7 +166,10 @@ public class ActivityMain extends AppCompatActivity
         public void onSync(String msg) {
             if (!msg.equals(""))
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            selectFragment(FragmentBoot.class.getName(), null);
+            if (mCurrentFragment.equals(""))
+                selectFragment(FragmentBoot.class.getName(), null);
+            else
+                mProcessDialog.dismiss();
         }
     };
 
@@ -205,6 +208,7 @@ public class ActivityMain extends AppCompatActivity
 
     public void selectFragment(String className, Bundle args) {
         Fragment fragment = Fragment.instantiate(this, className, args);
+        mCurrentFragment = className;
 
         getFragmentManager()
                 .beginTransaction()

@@ -119,6 +119,7 @@ public class WatchContact implements Serializable {
         public String mZipCode;
         public String mPhoneNumber;
         public String mProfile;
+        public String mRequestStatus;
 
         public User() {
             super(null, "");
@@ -131,6 +132,7 @@ public class WatchContact implements Serializable {
             mZipCode = "";
             mPhoneNumber = "";
             mProfile = "";
+            mRequestStatus = "";
         }
 
         public User(Bitmap photo, String label) {
@@ -144,6 +146,7 @@ public class WatchContact implements Serializable {
             mZipCode = "";
             mPhoneNumber = "";
             mProfile = "";
+            mRequestStatus = "";
         }
 
         public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber, String profile) {
@@ -157,6 +160,7 @@ public class WatchContact implements Serializable {
             mZipCode = zipCode;
             mPhoneNumber = phoneNumber;
             mProfile = profile;
+            mRequestStatus = "";
         }
 
         public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber) {
@@ -170,6 +174,7 @@ public class WatchContact implements Serializable {
             mZipCode = zipCode;
             mPhoneNumber = phoneNumber;
             mProfile = "";
+            mRequestStatus = "";
         }
 
         @Override

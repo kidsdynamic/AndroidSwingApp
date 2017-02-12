@@ -34,7 +34,6 @@ public class FragmentProfileRequestTo extends ViewFragment {
     private LinearLayout mViewUserContainer;
     private LinearLayout mViewPendingContainer;
     private Dialog mProcessDialog = null;
-    private List<WatchContact.User> mRequestedUserList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,18 +51,19 @@ public class FragmentProfileRequestTo extends ViewFragment {
         mViewUserContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_request_to_user_container);
         mViewPendingContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_request_to_pending_container);
 
-        for (WatchContact.User user : mActivityMain.mOperator.getRequestToList())
-            addPending(user);
-
         return mViewMain;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
 
-        mActivityMain.mServiceMachine.subHostList(mSubHostListListener, "");
+        List<WatchContact.User> list = mActivityMain.mOperator.getRequestToList();
+        for (WatchContact.User user : list) {
+            if (user.mRequestStatus.equals("PENDING")) {
+                addPending(user);
+            }
+        }
     }
 
     @Override
@@ -83,76 +83,6 @@ public class FragmentProfileRequestTo extends ViewFragment {
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
-
-    ServerMachine.subHostListListener mSubHostListListener = new ServerMachine.subHostListListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.subHost.list.response response) {
-            mRequestedUserList = new ArrayList<>();
-            if (response != null && response.requestTo != null) {
-                for (ServerGson.hostData subHost : response.requestTo) {
-                    WatchContact.User user = new WatchContact.User();
-                    user.mId = subHost.requestToUser.id;
-                    user.mEmail = subHost.requestToUser.email;
-                    user.mFirstName = subHost.requestToUser.firstName;
-                    user.mLastName = subHost.requestToUser.lastName;
-                    user.mProfile = subHost.requestToUser.profile;
-                    mRequestedUserList.add(user);
-                }
-                getUserAvatar(true);
-            } else {
-                mProcessDialog.dismiss();
-            }
-
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mProcessDialog.dismiss();
-        }
-    };
-
-    private int mUserAvatarCount;
-    private void getUserAvatarFinish() {
-        for (WatchContact.User user : mRequestedUserList)
-            addPending(user);
-        mProcessDialog.dismiss();
-
-    }
-
-    private void getUserAvatar(boolean start) {
-        if (start)
-            mUserAvatarCount = 0;
-        else
-            mUserAvatarCount++;
-
-        if (mUserAvatarCount >= mRequestedUserList.size()) {
-            getUserAvatarFinish();
-            return;
-        }
-
-        while (mRequestedUserList.get(mUserAvatarCount).mProfile.equals("")) {
-            mUserAvatarCount++;
-            if (mUserAvatarCount >= mRequestedUserList.size()) {
-                getUserAvatarFinish();
-                return;
-            }
-        }
-
-        mActivityMain.mServiceMachine.getAvatar(mGetUserAvatarListener, mRequestedUserList.get(mUserAvatarCount).mProfile);
-    }
-
-    ServerMachine.getAvatarListener mGetUserAvatarListener = new ServerMachine.getAvatarListener() {
-        @Override
-        public void onSuccess(Bitmap avatar, String filename) {
-            mRequestedUserList.get(mUserAvatarCount).mPhoto = avatar;
-            getUserAvatar(false);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            getUserAvatarFinish();
-        }
-    };
 
     public void addUser(WatchContact.User person) {
         View view = WatchContact.inflateButton(mActivityMain, person, "Send");
@@ -189,72 +119,21 @@ public class FragmentProfileRequestTo extends ViewFragment {
 
             if (!mail.equals("")) {
                 mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
-                mActivityMain.mServiceMachine.userFindByEmail(mUserFindByEmailLintener, mail);
+                mActivityMain.mOperator.mAddRequestTo.start(mAddRequestToListener, mail);
             }
 
             return true;
         }
     };
 
-    ServerMachine.userFindByEmailListener mUserFindByEmailLintener = new ServerMachine.userFindByEmailListener() {
+    WatchOperator.addRequestToListener mAddRequestToListener = new WatchOperator.addRequestToListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.userData response) {
-            mActivityMain.mServiceMachine.subHostAdd(mSubHostAddListener, response.id);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
+        public void onAddRequestTo(String msg, WatchContact.User user) {
             mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Can't find user by the email.", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    ServerMachine.subHostAddListener mSubHostAddListener = new ServerMachine.subHostAddListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.hostData response) {
-            WatchContact.User user = new WatchContact.User();
-            user.mId = response.requestToUser.id;
-            user.mEmail = response.requestToUser.email;
-            user.mFirstName = response.requestToUser.firstName;
-            user.mLastName = response.requestToUser.lastName;
-            user.mProfile = response.requestToUser.profile;
-            mRequestedUserList.add(user);
-
-            if (user.mProfile.equals("")) {
+            if (!msg.equals(""))
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            if (user != null)
                 addPending(user);
-                mProcessDialog.dismiss();
-            } else {
-                mActivityMain.mServiceMachine.getAvatar(mGetNewUserAvatarListener, user.mProfile);
-            }
-        }
-
-        @Override
-        public void onConflict(int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "The request is already exists.", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Bad request.", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    ServerMachine.getAvatarListener mGetNewUserAvatarListener = new ServerMachine.getAvatarListener() {
-        @Override
-        public void onSuccess(Bitmap avatar, String filename) {
-            WatchContact.User user = mRequestedUserList.get(mRequestedUserList.size()-1);
-            user.mPhoto = avatar;
-            addPending(user);
-            mProcessDialog.dismiss();
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            WatchContact.User user = mRequestedUserList.get(mRequestedUserList.size()-1);
-            addPending(user);
-            mProcessDialog.dismiss();
         }
     };
 
