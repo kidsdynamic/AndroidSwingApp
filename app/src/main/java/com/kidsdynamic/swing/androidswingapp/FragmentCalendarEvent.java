@@ -512,14 +512,19 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void loadRepeat() {
+        String repeat = "NEVER";
+
         if (mEvent.mRepeat.equals(WatchEvent.REPEAT_DAILY))
-            mViewRepeat.setText(WatchEvent.REPEAT_DAILY);
+            repeat = WatchEvent.REPEAT_DAILY;
         else if (mEvent.mRepeat.equals(WatchEvent.REPEAT_WEEKLY))
-            mViewRepeat.setText(WatchEvent.REPEAT_WEEKLY);
+            repeat = WatchEvent.REPEAT_WEEKLY;
         else if (mEvent.mRepeat.equals(WatchEvent.REPEAT_MONTHLY))
-            mViewRepeat.setText(WatchEvent.REPEAT_MONTHLY);
-        else
-            mViewRepeat.setText("Never");
+            repeat = WatchEvent.REPEAT_MONTHLY;
+
+        repeat = repeat.toLowerCase();
+        repeat = repeat.substring(0, 1).toUpperCase() + repeat.substring(1);
+
+        mViewRepeat.setText(repeat);
     }
 
     private void loadDescription() {
