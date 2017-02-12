@@ -294,7 +294,8 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mSaveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            // todo: Save Event to database
+            mActivityMain.popFragment();
         }
     };
 
@@ -496,7 +497,4 @@ public class FragmentCalendarEvent extends ViewFragment {
             viewAdvance();
     }
 
-    private void saveWatchEvent() {
-
-    }
 }
