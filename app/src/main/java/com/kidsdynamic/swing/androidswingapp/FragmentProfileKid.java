@@ -104,7 +104,7 @@ public class FragmentProfileKid extends ViewFragment {
     @Override
     public void onToolbarAction2() {
         saveContact(mKid);
-        mActivityMain.popFragment();
+        //mActivityMain.popFragment();
     }
 
     @Override
@@ -215,6 +215,19 @@ public class FragmentProfileKid extends ViewFragment {
             if (mKid == null)
                 return;
 
+            mActivityMain.mServiceMachine.kidsDelete(mKidsDeleteListener, mKid.mId);
+        }
+    };
+
+    ServerMachine.kidsDeleteListener mKidsDeleteListener = new ServerMachine.kidsDeleteListener() {
+        @Override
+        public void onSuccess(int statusCode) {
+            mActivityMain.popFragment();
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mActivityMain.popFragment();
         }
     };
 
@@ -298,7 +311,10 @@ public class FragmentProfileKid extends ViewFragment {
             bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
 
             mProcessDialog.dismiss();
-            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
+            if (mKid.mBound)
+                mActivityMain.popFragment();
+            else
+                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
         }
 
         @Override
@@ -310,7 +326,10 @@ public class FragmentProfileKid extends ViewFragment {
             bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mKid.mProfile);
 
             mProcessDialog.dismiss();
-            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
+            if (mKid.mBound)
+                mActivityMain.popFragment();
+            else
+                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
         }
     };
 
@@ -350,5 +369,32 @@ public class FragmentProfileKid extends ViewFragment {
     private void saveContact(WatchContact.Kid kid) {
         if (mKid == null)
             return;
+        mKid.mFirstName = mViewName.getText().toString();
+        if (!mKid.mFirstName.equals("")) {
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mActivityMain.mServiceMachine.kidsUpdate(mKidsUpdateListener, mKid.mId, mKid.mFirstName);
+        } else {
+            mActivityMain.popFragment();
+        }
     }
+
+    ServerMachine.kidsUpdateListener mKidsUpdateListener = new ServerMachine.kidsUpdateListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.kids.update.response response) {
+            if (mAvatarBitmap != null) {
+                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mFirstName, ".jpg");
+                mActivityMain.mOperator.setFocusKid(mKid);
+                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
+            } else {
+                mProcessDialog.dismiss();
+                mActivityMain.popFragment();
+            }
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mProcessDialog.dismiss();
+            mActivityMain.popFragment();
+        }
+    };
 }

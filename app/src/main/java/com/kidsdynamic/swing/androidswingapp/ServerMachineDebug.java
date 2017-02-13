@@ -415,7 +415,7 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void kidsUpdate(kidsUpdateListener listener, String kidId, String firstName, String lastName) {
+    public void kidsUpdate(kidsUpdateListener listener, int kidId, String name) {
         mCurrentCommand = CMD_KIDS_UPDATE;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);
@@ -432,7 +432,7 @@ public class ServerMachineDebug extends ServerMachine {
     }
 
     @Override
-    public void kidsDelete(kidsDeleteListener listener, String kidId) {
+    public void kidsDelete(kidsDeleteListener listener, int kidId) {
         mCurrentCommand = CMD_KIDS_DELETE;
         mCurrentResponseListener = listener;
         mHandler.postDelayed(mRunnable, 1000);

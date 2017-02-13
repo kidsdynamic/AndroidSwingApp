@@ -94,6 +94,7 @@ public class WatchOperatorResumeSync {
             if (!response.user.profile.equals(""))
                 mAvatarToGet.add(response.user.profile);
 
+            mOperator.clearKids();
             for (ServerGson.kidData kidData : response.kids) {
                 WatchContact.Kid kid = new WatchContact.Kid();
                 kid.mId = kidData.id;

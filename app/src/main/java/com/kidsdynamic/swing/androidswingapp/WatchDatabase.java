@@ -199,6 +199,10 @@ public class WatchDatabase {
         return item;
     }
 
+    public void KidClear() {
+        mDatabase.execSQL("delete from "+ TABLE_KIDS);
+    }
+
     public long KidAdd(WatchContact.Kid kid) {
         ContentValues contentValues = new ContentValues();
 

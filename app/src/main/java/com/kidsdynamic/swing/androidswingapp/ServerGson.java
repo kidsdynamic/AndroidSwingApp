@@ -258,19 +258,17 @@ public class ServerGson {
 
         public static class update {
             private static class c {
-                String kidId;
-                String firstName;
-                String lastName;
+                int kidId;
+                String name;
 
-                c(String pKidId, String pFirstName, String pLastName) {
+                c(int pKidId, String pName) {
                     kidId = pKidId;
-                    firstName = pFirstName;
-                    lastName = pLastName;
+                    name = pName;
                 }
             }
 
-            public static String toJson(String pKidId, String pFirstName, String pLastName) {
-                return new Gson().toJson(new c(pKidId, pFirstName, pLastName));
+            public static String toJson(int pKidId, String pName) {
+                return new Gson().toJson(new c(pKidId, pName));
             }
 
             static final class response {

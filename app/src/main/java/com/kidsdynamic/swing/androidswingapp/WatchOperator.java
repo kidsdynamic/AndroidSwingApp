@@ -72,6 +72,10 @@ public class WatchOperator {
         return src;
     }
 
+    void clearKids() {
+        mWatchDatabase.KidClear();
+    }
+
     void setKid(WatchContact.Kid kid) {
         WatchContact.Kid src = mWatchDatabase.KidGet(kid);
         if (src == null)
