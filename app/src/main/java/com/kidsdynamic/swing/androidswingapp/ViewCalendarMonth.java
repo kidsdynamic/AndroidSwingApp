@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.provider.CalendarContract;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -87,11 +88,35 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         updateCellList(mViewCellList);
     }
 
+    @Override
+    public long getDateBegin() {
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(mDate);
+
+        calc.set(Calendar.DAY_OF_MONTH, 1);
+        calc.set(Calendar.HOUR_OF_DAY, 0);
+        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.SECOND, 0);
+        calc.set(Calendar.MILLISECOND, 0);
+
+        return calc.getTimeInMillis();
+    }
+
+    @Override
+    public long getDateEnd() {
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(getDateBegin());
+
+        calc.add(Calendar.MONTH, 1);
+
+        return calc.getTimeInMillis() - 1;
+    }
+
     public void updateNameList(ViewCalendarCellWeekName[] list) {
         Calendar calc = ViewCalendar.getInstance();
         calc.setTimeInMillis(mDate);
 
-        while(calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+        while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
             calc.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {
@@ -105,7 +130,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         calc.setTimeInMillis(mDate);
 
         calc.set(Calendar.DAY_OF_MONTH, 1);
-        while(calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+        while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
             calc.add(Calendar.DAY_OF_MONTH, -1);
 
         for (int idx = 0; idx < list.length; idx++) {

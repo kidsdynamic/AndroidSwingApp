@@ -161,6 +161,49 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         updateText();
     }
 
+    @Override
+    public long getDateBegin() {
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(mDate);
+
+        if (mMode == MODE_YEAR) {
+            calc.set(Calendar.DAY_OF_YEAR, 1);
+        } else if (mMode == MODE_MONTH) {
+            calc.set(Calendar.DAY_OF_MONTH, 1);
+        } else if (mMode == MODE_WEEK) {
+            while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
+                calc.add(Calendar.DAY_OF_MONTH, -1);
+        }
+
+        calc.set(Calendar.HOUR_OF_DAY, 0);
+        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.SECOND, 0);
+        calc.set(Calendar.MILLISECOND, 0);
+
+        return calc.getTimeInMillis();
+    }
+
+    @Override
+    public long getDateEnd() {
+        Calendar calc = ViewCalendar.getInstance();
+
+        if(mMode == MODE_YEAR) {
+            calc.setTimeInMillis(getDateBegin());
+            calc.add(Calendar.YEAR, 1);
+            return calc.getTimeInMillis() - 1;
+        } else if( mMode == MODE_MONTH) {
+            calc.setTimeInMillis(getDateBegin());
+            calc.add(Calendar.MONTH, 1);
+            return calc.getTimeInMillis() - 1;
+        } else if( mMode == MODE_WEEK) {
+            return getDateBegin() + 604800000 - 1; // 7 days
+        } else if( mMode == MODE_DAY) {
+            return getDateBegin() + 86400000 - 1;
+        }
+
+        return getDateBegin();
+    }
+
     private String makeDateString(int mode, long ms) {
         Date date = new Date(ms);
 

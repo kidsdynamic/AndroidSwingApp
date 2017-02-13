@@ -204,6 +204,14 @@ public class ViewCalendar extends TableLayout {
         return true;
     }
 
+    public long getDateBegin() {
+        return mDate;
+    }
+
+    public long getDateEnd() {
+        return mDate;
+    }
+
     static Calendar getInstance() {
         return Calendar.getInstance();
 //        return Calendar.getInstance(Locale.US);       // Force to use Sunday to be the first day of week

@@ -170,4 +170,14 @@ public class ViewCalendarDaily extends ViewCalendar {
             super(source);
         }
     }
+
+    @Override
+    public long getDateBegin() {
+        return mDate;
+    }
+
+    @Override
+    public long getDateEnd() {
+        return mDate;
+    }
 }
