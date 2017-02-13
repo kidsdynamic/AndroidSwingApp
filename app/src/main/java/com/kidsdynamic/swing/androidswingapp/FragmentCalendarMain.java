@@ -55,6 +55,7 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
         mViewAlert = (ViewCircle) mViewMain.findViewById(R.id.calendar_main_alert);
+        mViewAlert.setOnClickListener(mAlertListener);
         mViewAlertTime = (TextView) mViewMain.findViewById(R.id.calendar_main_alert_time);
         mViewAlertEvent = (TextView) mViewMain.findViewById(R.id.calendar_main_alert_event);
 
@@ -111,6 +112,8 @@ public class FragmentCalendarMain extends ViewFragment {
 
         setAlertMessage(event);
         setAlertClock(event);
+
+        mViewAlert.setTag(event);
     }
 
     private void setAlertMessage(WatchEvent event) {
@@ -178,9 +181,15 @@ public class FragmentCalendarMain extends ViewFragment {
         }
     };
 
-    private ViewCircle.OnProgressListener mAlertListener = new ViewCircle.OnProgressListener() {
+    private View.OnClickListener mAlertListener = new View.OnClickListener() {
         @Override
-        public void onProgress(ViewCircle view, int begin, int end) {
+        public void onClick(View view) {
+            WatchEvent event = (WatchEvent) view.getTag();
+            if (event == null)
+                return;
+
+            mActivityMain.mEventStack.push(event);
+            mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
         }
     };
 

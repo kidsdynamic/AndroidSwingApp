@@ -460,7 +460,7 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     private void loadAssign() {
         ArrayList<WatchContact.Kid> list = new ArrayList<>();
-        WatchContact.Kid contact = null;
+        WatchContact.Kid contact = new WatchContact.Kid();
 
         list.addAll(mActivityMain.mOperator.getDeviceList());
         list.addAll(mActivityMain.mOperator.getSharedList());
@@ -468,7 +468,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (list.size() == 0)
             return;
 
-        if (mEvent.mKidId == 0)    // todo: does id == 0 indicate it is a new event?
+        if (mEvent.mKidId == 0)
             mEvent.mKidId = mActivityMain.mOperator.getFocusKid() != null ?
                     mActivityMain.mOperator.getFocusKid().mId : list.get(0).mId;
 
