@@ -276,9 +276,9 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void kidsUpdate(kidsUpdateListener listener, String kidId, String firstName, String lastName) {
+    public void kidsUpdate(kidsUpdateListener listener, int kidId, String name) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.kids.update.toJson(kidId, firstName, lastName));
+        map.put("json", ServerGson.kids.update.toJson(kidId, name));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_KIDS_UPDATE, map, null), CMD_KIDS_UPDATE, listener));
     }
 
@@ -288,7 +288,7 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void kidsDelete(kidsDeleteListener listener, String kidId) {
+    public void kidsDelete(kidsDeleteListener listener, int kidId) {
         Map<String, String> map = new HashMap<>();
         String addressForGet = CMD_KIDS_DELETE + "?";
         addressForGet += "kidId=" + kidId;
@@ -978,11 +978,19 @@ public class ServerMachine {
         String avatarFilename = null;
         FileOutputStream out = null;
         try {
+            boolean result;
             File dir = new File(GetAvatarFilePath());
-            if (dir.mkdirs())
-                Log.d("swing", "false");
+            result = dir.mkdirs();
 
             avatarFilename = dir + "/" + filename + extension;
+
+            File myFile = new File(avatarFilename);
+            if(myFile.exists())
+                result = myFile.delete();
+
+            if (!result)
+                Log.d("swing", "delete() or mkdirs() failed");
+
             out = new FileOutputStream(avatarFilename);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 

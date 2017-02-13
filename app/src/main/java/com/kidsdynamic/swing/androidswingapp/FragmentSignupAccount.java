@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -118,7 +116,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
                 mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), bundle);
             } else {
-                mActivityMain.mOperator.mSync.start(mSyncListener, mMail, mPassword);
+                mActivityMain.mOperator.resumeSync(mFinishListener, mMail, mPassword);
             }
         }
 
@@ -129,9 +127,9 @@ public class FragmentSignupAccount extends ViewFragment {
         }
     };
 
-    WatchOperator.syncListener mSyncListener = new WatchOperator.syncListener() {
+    WatchOperatorResumeSync.finishListener mFinishListener = new WatchOperatorResumeSync.finishListener() {
         @Override
-        public void onSync(String msg) {
+        public void onFinish(String msg) {
             if (!msg.equals("")) {
                 mProcessDialog.dismiss();
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
