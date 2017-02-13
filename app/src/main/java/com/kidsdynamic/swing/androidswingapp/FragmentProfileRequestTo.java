@@ -119,16 +119,16 @@ public class FragmentProfileRequestTo extends ViewFragment {
 
             if (!mail.equals("")) {
                 mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
-                mActivityMain.mOperator.mAddRequestTo.start(mAddRequestToListener, mail);
+                mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mail);
             }
 
             return true;
         }
     };
 
-    WatchOperator.addRequestToListener mAddRequestToListener = new WatchOperator.addRequestToListener() {
+    WatchOperatorRequestToSubHost.finishListener mAddRequestToListener = new WatchOperatorRequestToSubHost.finishListener() {
         @Override
-        public void onAddRequestTo(String msg, WatchContact.User user) {
+        public void onFinish(String msg, WatchContact.User user) {
             mProcessDialog.dismiss();
             if (!msg.equals(""))
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();

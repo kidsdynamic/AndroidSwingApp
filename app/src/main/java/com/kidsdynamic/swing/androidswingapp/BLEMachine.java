@@ -265,7 +265,7 @@ public class BLEMachine extends BLEControl {
     public interface onSearchListener {
         void onSearch(ArrayList<Device> result);
 
-        //void onSync(int resultCode, ArrayList<InOutDoor> result);
+        //void onFinish(int resultCode, ArrayList<InOutDoor> result);
     }
 
     public interface onSyncListener {

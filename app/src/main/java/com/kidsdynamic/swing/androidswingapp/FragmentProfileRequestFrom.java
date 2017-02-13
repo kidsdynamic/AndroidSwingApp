@@ -71,12 +71,12 @@ public class FragmentProfileRequestFrom extends ViewFragment {
                 list.add(kid.mId);
         }
 
-        mActivityMain.mOperator.mResponseForRequestTo.start(mResponseForRequestToListener, mRequestFrom.mSubHostId, list);
+        mActivityMain.mOperator.replyToSubHost(mResponseForRequestToListener, mRequestFrom.mSubHostId, list);
     }
 
-    WatchOperator.responseForRequestToListener mResponseForRequestToListener = new WatchOperator.responseForRequestToListener() {
+    WatchOperatorReplyToSubHost.finishListener mResponseForRequestToListener = new WatchOperatorReplyToSubHost.finishListener() {
         @Override
-        public void onResponse(String msg) {
+        public void onFinish(String msg) {
             mActivityMain.popFragment();
         }
     };

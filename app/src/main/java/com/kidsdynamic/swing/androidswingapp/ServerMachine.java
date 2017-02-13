@@ -978,11 +978,19 @@ public class ServerMachine {
         String avatarFilename = null;
         FileOutputStream out = null;
         try {
+            boolean result;
             File dir = new File(GetAvatarFilePath());
-            if (dir.mkdirs())
-                Log.d("swing", "false");
+            result = dir.mkdirs();
 
             avatarFilename = dir + "/" + filename + extension;
+
+            File myFile = new File(avatarFilename);
+            if(myFile.exists())
+                result = myFile.delete();
+
+            if (!result)
+                Log.d("swing", "delete() or mkdirs() failed");
+
             out = new FileOutputStream(avatarFilename);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
 
