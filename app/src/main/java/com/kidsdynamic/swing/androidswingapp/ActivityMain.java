@@ -46,7 +46,7 @@ public class ActivityMain extends AppCompatActivity
 
     private List<permission> mPermissionList;
 
-    public Config mConfig;
+    public ActivityConfig mConfig;
     public WatchOperator mOperator;
     public Stack<Bitmap> mBitmapStack;
     public Stack<WatchContact> mContactStack;
@@ -82,7 +82,7 @@ public class ActivityMain extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        mConfig = new Config(this, null);
+        mConfig = new ActivityConfig(this, null);
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
         mContactStack = new Stack<>();
@@ -138,7 +138,7 @@ public class ActivityMain extends AppCompatActivity
         if (mServiceMachine != null)
             mServiceMachine.Start();
 
-        if (!mConfig.getString(Config.KEY_AUTH_TOKEN).equals("")) {
+        if (!mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
             if (mProcessDialog == null) {
                 mProcessDialog = ProgressDialog.show(this, "Synchronize", "Please wait...", true);
 

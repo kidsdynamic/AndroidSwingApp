@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,7 +40,7 @@ public class FragmentSignupLanguage extends ViewFragment {
         @Override
         public void onClick(View view) {
             // todo: Save default or language
-            mActivityMain.mConfig.setString(Config.KEY_LANGUAGE, "Default");
+            mActivityMain.mConfig.setString(ActivityConfig.KEY_LANGUAGE, "Default");
 
             mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
         }

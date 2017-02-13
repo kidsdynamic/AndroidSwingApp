@@ -13,7 +13,7 @@ public class WatchOperatorResumeSync {
 
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private Config mConfig;
+    private ActivityConfig mConfig;
     private finishListener mFinishListener = null;
     private List<String> mAvatarToGet;
     
@@ -32,11 +32,11 @@ public class WatchOperatorResumeSync {
         if (email.equals("") && password.equals("")) {
             mServerMachine.userIsTokenValid(
                     mUserIsTokenValidListener,
-                    mConfig.getString(Config.KEY_MAIL),
-                    mConfig.getString(Config.KEY_AUTH_TOKEN));
+                    mConfig.getString(ActivityConfig.KEY_MAIL),
+                    mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
         } else {
-            mConfig.setString(Config.KEY_MAIL, email);
-            mConfig.setString(Config.KEY_PASSWORD, password);
+            mConfig.setString(ActivityConfig.KEY_MAIL, email);
+            mConfig.setString(ActivityConfig.KEY_PASSWORD, password);
             mServerMachine.userLogin(mUserLoginListener, email, password);
         }
     }
@@ -45,23 +45,23 @@ public class WatchOperatorResumeSync {
         @Override
         public void onValidState(boolean valid) {
             if (valid) {
-                mServerMachine.setAuthToken(mConfig.getString(Config.KEY_AUTH_TOKEN));
+                mServerMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
                 mServerMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
             } else {
-                mServerMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
+                mServerMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
             }
         }
 
         @Override
         public void onFail(int statusCode) {
-            mServerMachine.userLogin(mUserLoginListener, mConfig.getString(Config.KEY_MAIL), mConfig.getString(Config.KEY_PASSWORD));
+            mServerMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
         }
     };
 
     private ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+            mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
             mServerMachine.setAuthToken(result.access_token);
             mServerMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
         }

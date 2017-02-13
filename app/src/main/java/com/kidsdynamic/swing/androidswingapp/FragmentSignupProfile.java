@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
@@ -221,7 +220,7 @@ public class FragmentSignupProfile extends ViewFragment {
     ServerMachine.userLoginListener mLoginListener = new ServerMachine.userLoginListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            mActivityMain.mConfig.setString(Config.KEY_AUTH_TOKEN, result.access_token);
+            mActivityMain.mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
             mActivityMain.mServiceMachine.setAuthToken(result.access_token);
             mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
         }
@@ -237,8 +236,8 @@ public class FragmentSignupProfile extends ViewFragment {
     ServerMachine.userUpdateProfileListener mUpdateProfileListener = new ServerMachine.userUpdateProfileListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.userData response) {
-            mActivityMain.mConfig.setString(Config.KEY_MAIL, mRegisterMail);
-            mActivityMain.mConfig.setString(Config.KEY_PASSWORD, mRegisterPassword);
+            mActivityMain.mConfig.setString(ActivityConfig.KEY_MAIL, mRegisterMail);
+            mActivityMain.mConfig.setString(ActivityConfig.KEY_PASSWORD, mRegisterPassword);
 
             mActivityMain.mOperator.ResetDatabase();
             ServerMachine.ResetAvatar();

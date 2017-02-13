@@ -47,10 +47,10 @@ public class FragmentBoot extends ViewFragment {
                 return;
             }
 
-            if (mActivityMain.mConfig.getString(Config.KEY_LANGUAGE).equals("")) {
+            if (mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE).equals("")) {
                 mActivityMain.selectFragment(FragmentSignupLanguage.class.getName(), null);
             } else {
-                if (mActivityMain.mConfig.getString(Config.KEY_AUTH_TOKEN).equals("")) {
+                if (mActivityMain.mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
                     mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
                 } else {
                     mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);

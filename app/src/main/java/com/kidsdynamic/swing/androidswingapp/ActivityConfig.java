@@ -11,12 +11,12 @@ import java.util.StringTokenizer;
  * Created by 03543 on 2017/1/1.
  */
 
-public class Config {
+public class ActivityConfig {
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.OnSharedPreferenceChangeListener mOnChangeListener = null;
     private Context mContext;
 
-    final static String DEF_APPNAME = "Config";
+    final static String DEF_APPNAME = "ActivityConfig";
     final static String DEF_APPVERSION = "0000-0000-0001";
     final static String PREFS_SPLIT = "__BPPS:__";
 
@@ -29,10 +29,10 @@ public class Config {
     public final static String KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN";
 
     private void LOG(String message) {
-        Log.d("Config", message);
+        Log.d("ActivityConfig", message);
     }
 
-    public Config(Context context, SharedPreferences.OnSharedPreferenceChangeListener onChangeListener) {
+    public ActivityConfig(Context context, SharedPreferences.OnSharedPreferenceChangeListener onChangeListener) {
         mContext = context;
         mSharedPreferences = mContext.getSharedPreferences("AndroidSwingApp", Context.MODE_PRIVATE);
 

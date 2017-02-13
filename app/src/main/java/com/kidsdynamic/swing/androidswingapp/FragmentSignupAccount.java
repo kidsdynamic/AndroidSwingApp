@@ -40,8 +40,8 @@ public class FragmentSignupAccount extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        String mail = mActivityMain.mConfig.getString(Config.KEY_MAIL);
-        String password = mActivityMain.mConfig.getString(Config.KEY_PASSWORD);
+        String mail = mActivityMain.mConfig.getString(ActivityConfig.KEY_MAIL);
+        String password = mActivityMain.mConfig.getString(ActivityConfig.KEY_PASSWORD);
 
         mViewMain = inflater.inflate(R.layout.fragment_signup_account, container, false);
 
