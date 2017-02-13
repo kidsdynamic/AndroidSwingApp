@@ -18,6 +18,7 @@
     <color name="color_red">#FF4040</color>
     <color name="color_red_light">#FF6060</color>
     <color name="color_red_deep">#FF2020</color>
+    <color name="color_red_main">#F54A7E</color>
 
     <color name="color_blue">#4040FF</color>
     <color name="color_blue_light">#6060FF</color>
@@ -43,7 +44,6 @@
     <color name="color_pink_light">#FFC0CB</color>
     <color name="color_pink">#FF69B4</color>
     <color name="color_pink_deep">#FF00FF</color>
-    <color name="color_pink_main">#F54A7E</color>
 
     <color name="color_brown">#8B4513</color>
 

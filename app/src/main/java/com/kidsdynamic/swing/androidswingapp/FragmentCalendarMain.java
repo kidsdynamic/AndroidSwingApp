@@ -7,6 +7,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.regex.Matcher;
+
 /**
  * Created by 03543 on 2016/12/19.
  */
@@ -18,12 +23,14 @@ public class FragmentCalendarMain extends ViewFragment {
     private ViewCalendarSelector mViewSelector;
     private ViewCalendarWeek mViewCalendar;
     private ViewCircle mViewAlert;
-    private TextView mViewTime;
-    private TextView mViewEvent;
+    private TextView mViewAlertTime;
+    private TextView mViewAlertEvent;
     private Button mViewToday;
     private Button mViewMonthly;
 
     private long mDefaultDate = System.currentTimeMillis();
+
+    private ArrayList<WatchEvent> mEventList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,9 +55,8 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
         mViewAlert = (ViewCircle) mViewMain.findViewById(R.id.calendar_main_alert);
-
-        mViewTime = (TextView) mViewMain.findViewById(R.id.calendar_main_time);
-        mViewEvent = (TextView) mViewMain.findViewById(R.id.calendar_main_event);
+        mViewAlertTime = (TextView) mViewMain.findViewById(R.id.calendar_main_alert_time);
+        mViewAlertEvent = (TextView) mViewMain.findViewById(R.id.calendar_main_alert_event);
 
         mViewToday = (Button) mViewMain.findViewById(R.id.calendar_main_today);
         mViewToday.setOnClickListener(mTodayListener);
@@ -77,6 +83,11 @@ public class FragmentCalendarMain extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
+        Calendar calc = Calendar.getInstance();
+        calc.clear(Calendar.MINUTE);
+        calc.clear(Calendar.SECOND);
+        calc.clear(Calendar.MILLISECOND);
+
         WatchEvent event = new WatchEvent(mViewCalendar.getDate());
         event.mUserId = mActivityMain.mOperator.getUser().mId;
 
@@ -91,6 +102,63 @@ public class FragmentCalendarMain extends ViewFragment {
         long date = mViewCalendar.getDate();
         loadCalendar(date, date + 86400 - 1);
         updateAlert();
+    }
+
+    private void updateAlert() {
+        Calendar cale = Calendar.getInstance();
+
+        WatchEvent event = WatchEvent.earliestInDay(cale.getTimeInMillis(), mEventList);
+
+        setAlertMessage(event);
+        setAlertClock(event);
+    }
+
+    private void setAlertMessage(WatchEvent event) {
+        String timeString;
+        String messageString;
+
+        if (event == null) {
+            timeString = "--:--";
+            messageString = "No incoming event";
+
+        } else {
+            Calendar cale = Calendar.getInstance();
+            cale.setTimeInMillis(event.mStartDate);
+            timeString = String.format(Locale.getDefault(), "%02d:%02d", cale.get(Calendar.HOUR_OF_DAY), cale.get(Calendar.MINUTE));
+            messageString = event.mDescription;
+        }
+
+        mViewAlertTime.setText(timeString);
+        mViewAlertEvent.setText(messageString);
+    }
+
+    private void setAlertClock(WatchEvent event) {
+
+        if (event == null) {
+            mViewAlert.setActive(false);
+        } else if ((event.mEndDate - event.mStartDate) >= 42480000) { // 11 Hours and 48 minute. if diff is bigger then it, active whole clock
+            mViewAlert.setActive(true);
+        } else {
+            Calendar startCale = Calendar.getInstance();
+            startCale.setTimeInMillis(event.mStartDate);
+
+            int startHour = startCale.get(Calendar.HOUR_OF_DAY);
+            int startMin = startCale.get(Calendar.MINUTE);
+
+            startHour = startHour >= 12 ? startHour - 12 : startHour;
+            int startActive = (int) (startHour * 5 + Math.floor(startMin / 12));
+
+            Calendar endCale = Calendar.getInstance();
+            endCale.setTimeInMillis(event.mEndDate);
+
+            int endHour = endCale.get(Calendar.HOUR_OF_DAY);
+            int endMin = endCale.get(Calendar.MINUTE);
+
+            endHour = endHour >= 12 ? endHour - 12 : endHour;
+            int endActive = (int) (endHour * 5 + Math.floor(endMin / 12));
+
+            mViewAlert.setStrokeBeginEnd(startActive, endActive);
+        }
     }
 
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
@@ -130,11 +198,41 @@ public class FragmentCalendarMain extends ViewFragment {
         }
     };
 
-    private void loadCalendar(long begin, long end) {
-        // todo: load events between "begin" and "end". (include begin and end)
+    private WatchEvent makeFakeEvent(int eventId, int userId, int kidId, int startHour, int startMin, int endHour, int endMin) {
+        WatchEvent event = new WatchEvent();
+
+        event.mId = eventId;
+        event.mUserId = userId;
+        event.mKidId = kidId;
+        event.mColor = WatchEvent.colorToString(WatchEvent.StockColorList[2].mColor);
+        event.mName = String.format(Locale.getDefault(), "Name(%d)", eventId);
+        event.mDescription = String.format(Locale.getDefault(), "Desc(%d)", eventId);
+        event.mRepeat = WatchEvent.REPEAT_NEVER;
+
+        Calendar calc = Calendar.getInstance();
+        calc.setTimeInMillis(event.mStartDate);
+
+        calc.set(Calendar.HOUR_OF_DAY, startHour);
+        calc.set(Calendar.MINUTE, startMin);
+        event.mStartDate = calc.getTimeInMillis();
+
+        calc.set(Calendar.HOUR_OF_DAY, endHour);
+        calc.set(Calendar.MINUTE, endMin);
+        event.mEndDate = calc.getTimeInMillis();
+
+        return event;
     }
 
-    private void updateAlert() {
-        // todo: load the first coming event
+    private void loadCalendar(long begin, long end) {
+        mEventList = new ArrayList<>();
+
+        // todo: load events between "begin" and "end". (include begin and end)
+
+        // Test
+        WatchContact.User me = mActivityMain.mOperator.getUser();
+        mEventList.add(makeFakeEvent(1, me.mId, 14, 7, 15, 12, 15));
+        mEventList.add(makeFakeEvent(2, me.mId, 11, 8, 0, 8, 30));
+        mEventList.add(makeFakeEvent(3, me.mId, 11, 9, 0, 9, 30));
+        //////////////
     }
 }

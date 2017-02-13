@@ -326,7 +326,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:padding="2dp"
-                            app:color="@color/color_pink_main"
+                            app:color="@color/color_red_main"
                             app:desiredSize="24dp"
                             app:shape="circle" />
 

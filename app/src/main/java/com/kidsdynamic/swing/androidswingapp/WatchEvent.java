@@ -1,10 +1,12 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -38,13 +40,38 @@ public class WatchEvent implements Serializable {
     public long mAlertTimeStamp;
 
     public WatchEvent() {
-        long now = System.currentTimeMillis();
-        init(0, 0, 0, "", now, now, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        Calendar calc = Calendar.getInstance();
+        long now = calc.getTimeInMillis();
+
+        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.SECOND, 0);
+        calc.set(Calendar.MILLISECOND, 0);
+
+        long start = calc.getTimeInMillis();
+
+        calc.add(Calendar.HOUR_OF_DAY, 1);
+        long end = calc.getTimeInMillis();
+
+        init(0, 0, 0, "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
-        long now = System.currentTimeMillis();
-        init(0, 0, 0, "", date, date, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        Calendar calc = Calendar.getInstance();
+        long now = calc.getTimeInMillis();
+        int hour = calc.get(Calendar.HOUR_OF_DAY);
+
+        calc.setTimeInMillis(date);
+        calc.set(Calendar.HOUR_OF_DAY, hour);
+        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.SECOND, 0);
+        calc.set(Calendar.MILLISECOND, 0);
+
+        long start = calc.getTimeInMillis();
+
+        calc.add(Calendar.HOUR_OF_DAY, 1);
+        long end = calc.getTimeInMillis();
+
+        init(0, 0, 0, "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
@@ -90,6 +117,8 @@ public class WatchEvent implements Serializable {
         mLastUpdated = lastUpdated;
         mTodoList = new ArrayList<>();
         mAlertTimeStamp = startDate;
+
+        sortDate();
     }
 
     @Override
@@ -101,8 +130,10 @@ public class WatchEvent implements Serializable {
                 .append(" mUserId:").append(mUserId)
                 .append(" mKidId:").append(mKidId)
                 .append(" mName:").append(mName)
-                .append(" mStartDate:").append(sdf.format(mStartDate))
-                .append(" mEndDate:").append(sdf.format(mEndDate))
+                .append(" mStartDate:").append(mStartDate)
+//                .append(" mStartDate:").append(sdf.format(mStartDate))
+                .append(" mEndDate:").append(mEndDate)
+//                .append(" mEndDate:").append(sdf.format(mEndDate))
                 .append(" mColor:").append(mColor)
                 .append(" mStatus:").append(mStatus)
                 .append(" mDescription:").append(mDescription)
@@ -116,6 +147,68 @@ public class WatchEvent implements Serializable {
                 .append(" mTodoList:").append(mTodoList.toString())
                 .append(" mAlertTimeStamp:").append(mAlertTimeStamp)
                 .append("}").toString();
+    }
+
+    private void sortDate() {
+        if (mStartDate <= mEndDate)
+            return;
+
+        long tmp = mStartDate;
+        mStartDate = mEndDate;
+        mEndDate = tmp;
+    }
+
+    public boolean overlapping(WatchEvent event) {
+        return !(mEndDate <= event.mStartDate || event.mEndDate <= mStartDate);
+    }
+
+    public boolean overlapping(ArrayList<WatchEvent> list) {
+        for (WatchEvent event : list)
+            if (overlapping(event))
+                return true;
+        return false;
+    }
+
+    static public WatchEvent earliestInDay(long after, ArrayList<WatchEvent> list) {
+        if (list.size() == 0)
+            return null;
+
+        WatchEvent earliest = null;
+        for (WatchEvent event : list) {
+            if (event.mStartDate < after)
+                continue;
+
+            if (earliest == null || earliest.mStartDate > event.mStartDate)
+                earliest = event;
+        }
+
+        return earliest;
+    }
+
+    static public WatchEvent earliestInDay(ArrayList<WatchEvent> list) {
+        if (list.size() == 0)
+            return null;
+
+        WatchEvent earliest = list.get(0);
+        for (WatchEvent event : list) {
+            if (event.mStartDate < earliest.mStartDate)
+                earliest = event;
+        }
+
+        return earliest;
+    }
+
+    static public WatchEvent lastInDay(ArrayList<WatchEvent> list) {
+        if (list.size() == 0)
+            return null;
+
+        WatchEvent last = list.get(0);
+        for (WatchEvent event : list) {
+            if (event.mStartDate > last.mStartDate)
+                last = event;
+        }
+
+        return last;
     }
 
     static String colorToString(int color) {
@@ -148,6 +241,25 @@ public class WatchEvent implements Serializable {
 
         return color;
     }
+
+    static public class StockColor {
+        int mColor;
+        String mText;
+
+        StockColor(int color, String text) {
+            mColor = color;
+            mText = text;
+        }
+    }
+
+    final static StockColor[] StockColorList = new StockColor[]{
+            new StockColor(0xFFFAD13E, "YELLOW"),
+            new StockColor(0xFF7572C1, "BLUE"),
+            new StockColor(0xFF00C4B3, "GREEN"),
+            new StockColor(0xFFF54A7E, "RED"),
+            new StockColor(0xFFFF7231, "ORANGE"),
+            new StockColor(0xFF9A989A, "GRAY"),
+    };
 
     static public class NoticeAlarm {
         int mId;

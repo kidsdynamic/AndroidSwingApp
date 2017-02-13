@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -332,7 +333,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mSaveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // todo: Save Event to database
+            saveWatchEvent();
             mActivityMain.popFragment();
         }
     };
@@ -550,4 +551,9 @@ public class FragmentCalendarEvent extends ViewFragment {
         viewEnabled(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
     }
 
+    private void saveWatchEvent() {
+        // todo: save event
+
+        Log.d("xxx", mEvent.toString());
+    }
 }
