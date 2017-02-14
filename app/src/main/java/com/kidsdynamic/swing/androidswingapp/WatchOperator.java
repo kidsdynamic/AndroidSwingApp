@@ -246,6 +246,8 @@ public class WatchOperator {
     }
 
     public List<WatchEvent> getEventList(long start, long end) {
+        List<WatchEvent> list = new ArrayList<>();
+
         return new ArrayList<>();
     }
 

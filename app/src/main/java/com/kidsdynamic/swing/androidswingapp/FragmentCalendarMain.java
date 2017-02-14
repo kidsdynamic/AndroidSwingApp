@@ -31,7 +31,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
     private long mDefaultDate = System.currentTimeMillis();
 
-    private ArrayList<WatchEvent> mEventList;
+    private List<WatchEvent> mEventList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,8 +101,43 @@ public class FragmentCalendarMain extends ViewFragment {
         super.onResume();
 
         long date = mViewCalendar.getDate();
-        loadCalendar(date, date + 86400 - 1);
+        mEventList = mActivityMain.mOperator.getEventList(date, date + 86400 - 1);
+
+        // Test
+        WatchContact.User me = mActivityMain.mOperator.getUser();
+        mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 12, 15));
+        mEventList.add(makeFakeEvent(2, me.mId, new ArrayList<Integer>(), 8, 0, 8, 30));
+        mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 9, 0, 9, 30));
+        //////////////
+
         updateAlert();
+    }
+
+
+    private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {
+        // for debug only!
+        WatchEvent event = new WatchEvent();
+
+        event.mId = eventId;
+        event.mUserId = userId;
+        event.mKids = kids;
+        event.mColor = WatchEvent.colorToString(WatchEvent.StockColorList[2].mColor);
+        event.mName = String.format(Locale.getDefault(), "Name(%d)", eventId);
+        event.mDescription = String.format(Locale.getDefault(), "Desc(%d)", eventId);
+        event.mRepeat = WatchEvent.REPEAT_NEVER;
+
+        Calendar calc = Calendar.getInstance();
+        calc.setTimeInMillis(event.mStartDate);
+
+        calc.set(Calendar.HOUR_OF_DAY, startHour);
+        calc.set(Calendar.MINUTE, startMin);
+        event.mStartDate = calc.getTimeInMillis();
+
+        calc.set(Calendar.HOUR_OF_DAY, endHour);
+        calc.set(Calendar.MINUTE, endMin);
+        event.mEndDate = calc.getTimeInMillis();
+
+        return event;
     }
 
     private void updateAlert() {
@@ -211,42 +246,4 @@ public class FragmentCalendarMain extends ViewFragment {
 
         }
     };
-
-    private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {
-        WatchEvent event = new WatchEvent();
-
-        event.mId = eventId;
-        event.mUserId = userId;
-        event.mKids = kids;
-        event.mColor = WatchEvent.colorToString(WatchEvent.StockColorList[2].mColor);
-        event.mName = String.format(Locale.getDefault(), "Name(%d)", eventId);
-        event.mDescription = String.format(Locale.getDefault(), "Desc(%d)", eventId);
-        event.mRepeat = WatchEvent.REPEAT_NEVER;
-
-        Calendar calc = Calendar.getInstance();
-        calc.setTimeInMillis(event.mStartDate);
-
-        calc.set(Calendar.HOUR_OF_DAY, startHour);
-        calc.set(Calendar.MINUTE, startMin);
-        event.mStartDate = calc.getTimeInMillis();
-
-        calc.set(Calendar.HOUR_OF_DAY, endHour);
-        calc.set(Calendar.MINUTE, endMin);
-        event.mEndDate = calc.getTimeInMillis();
-
-        return event;
-    }
-
-    private void loadCalendar(long begin, long end) {
-        mEventList = new ArrayList<>();
-
-        // todo: load events between "begin" and "end". (include begin and end)
-
-        // Test
-        WatchContact.User me = mActivityMain.mOperator.getUser();
-        mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 12, 15));
-        mEventList.add(makeFakeEvent(2, me.mId, new ArrayList<Integer>(), 8, 0, 8, 30));
-        mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 9, 0, 9, 30));
-        //////////////
-    }
 }

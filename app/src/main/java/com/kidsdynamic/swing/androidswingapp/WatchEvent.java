@@ -192,7 +192,7 @@ public class WatchEvent implements Serializable {
             mKids.add(position, id);
     }
 
-    static public WatchEvent earliestInDay(long after, ArrayList<WatchEvent> list) {
+    static public WatchEvent earliestInDay(long after, List<WatchEvent> list) {
         if (list.size() == 0)
             return null;
 
@@ -208,7 +208,7 @@ public class WatchEvent implements Serializable {
         return earliest;
     }
 
-    static public WatchEvent earliestInDay(ArrayList<WatchEvent> list) {
+    static public WatchEvent earliestInDay(List<WatchEvent> list) {
         if (list.size() == 0)
             return null;
 
@@ -221,7 +221,7 @@ public class WatchEvent implements Serializable {
         return earliest;
     }
 
-    static public WatchEvent lastInDay(ArrayList<WatchEvent> list) {
+    static public WatchEvent lastInDay(List<WatchEvent> list) {
         if (list.size() == 0)
             return null;
 

@@ -600,8 +600,8 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void saveWatchEvent() {
-        // todo: save event
+        // todo: check and find out is there any illegal field. then warning and reject.
 
-        Log.d("xxx", mEvent.toString());
+        mActivityMain.mOperator.setEvent(mEvent);
     }
 }
