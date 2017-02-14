@@ -532,9 +532,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (list.size() == 0)
             return;
 
-        WatchContact.Kid focusKid = mActivityMain.mOperator.getFocusKid();
-
         if (mEvent.mKids.size() == 0) { // assign is illegal
+            WatchContact.Kid focusKid = mActivityMain.mOperator.getFocusKid();
             if (focusKid == null)
                 mEvent.insertKid(list.get(0).mId, 0);
             else
@@ -543,6 +542,9 @@ public class FragmentCalendarEvent extends ViewFragment {
 
         setAssign(mEvent.mKids.get(0));
 
+        // Note: We create kids options here, to avoid
+        // some kids create during fragment paused.
+        mViewAssignContainer.removeAllViews();
         for (WatchContact.Kid kid : list)
             addKid(kid);
     }
