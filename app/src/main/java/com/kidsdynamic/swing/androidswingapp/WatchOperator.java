@@ -244,4 +244,16 @@ public class WatchOperator {
 
         return mRequestToList;
     }
+
+    public List<WatchEvent> getEventList(long start, long end) {
+        return new ArrayList<>();
+    }
+
+    public WatchEvent getEvent(int id) {
+        return new WatchEvent();
+    }
+
+    public boolean setEvent(WatchEvent event) {
+        return true;
+    }
 }
