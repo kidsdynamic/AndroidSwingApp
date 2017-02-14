@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,10 +116,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewColor = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color);
         mViewColorOption = mViewMain.findViewById(R.id.calendar_event_color_option);
         mViewColorContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_color_container);
-
-        count = mViewColorContainer.getChildCount();
-        for (int idx = 0; idx < count; idx++)
-            mViewColorContainer.getChildAt(idx).setOnClickListener(mColorOptionListener);
+        for (WatchEvent.StockColor color : WatchEvent.StockColorList)
+            addColor(color.mColor);
 
         // Line Repeat
         mViewRepeatLine = mViewMain.findViewById(R.id.calendar_event_repeat_line);
@@ -231,7 +230,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewTodoOption.requestLayout();
     }
 
-    private void addTodoView(WatchTodo todo) {
+    private View addTodoView(WatchTodo todo) {
         ViewTodo viewTodo = new ViewTodo(mActivityMain);
         viewTodo.setTag(todo);
         viewTodo.load(todo);
@@ -243,6 +242,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewTodoContainer.addView(viewTodo, layoutParams);
 
         viewTodoList(true);
+
+        return viewTodo;
     }
 
     private void delTodoView(WatchTodo todo) {
@@ -250,6 +251,28 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewTodoContainer.removeView(viewTodo);
 
         viewTodoList(mViewTodoContainer.getChildCount() != 0);
+    }
+
+    private View addColor(int color) {
+        ViewShape view = new ViewShape(mActivityMain);
+
+        int size = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
+
+        view.setColor(color);
+        view.setDesiredSize(size);
+        view.setShape(ViewShape.SHAPE_CIRCLE);
+
+        int padding = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()));
+        view.setPadding(padding, padding, padding, padding);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.weight = 1;
+        layoutParams.gravity = Gravity.CENTER;
+
+        view.setOnClickListener(mColorOptionListener);
+        mViewColorContainer.addView(view, layoutParams);
+
+        return view;
     }
 
     private View.OnClickListener mAlarmListener = new View.OnClickListener() {

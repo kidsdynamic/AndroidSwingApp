@@ -15,12 +15,12 @@ import android.view.View;
  */
 
 public class ViewShape extends View {
-    public final int SHAPE_CIRCLE = 0;
-    public final int SHAPE_RECTANGLE = 1;
-    public final int SHAPE_TRIANGLE_TOP = 2;
-    public final int SHAPE_TRIANGLE_BOTTOM = 3;
-    public final int SHAPE_TRIANGLE_LEFT = 4;
-    public final int SHAPE_TRIANGLE_RIGHT = 5;
+    public final static int SHAPE_CIRCLE = 0;
+    public final static int SHAPE_RECTANGLE = 1;
+    public final static int SHAPE_TRIANGLE_TOP = 2;
+    public final static int SHAPE_TRIANGLE_BOTTOM = 3;
+    public final static int SHAPE_TRIANGLE_LEFT = 4;
+    public final static int SHAPE_TRIANGLE_RIGHT = 5;
 
     private int mColor = Color.GRAY;
     private int mShape = SHAPE_CIRCLE;
