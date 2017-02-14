@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.graphics.Bitmap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +55,7 @@ public class WatchOperatorRequestToSubHost {
             user.mRequestStatus = response.status;
             user.mLabel = user.mFirstName + " " + user.mLastName;
             to.add(user);
-            mOperator.setRequestList(to, mOperator.getRequestFromUserList());
+            mOperator.setRequestList(to, mOperator.getRequestFromList());
 
             if (!user.mProfile.equals("")) {
                 mServerMachine.getAvatar(mGetNewUserAvatarListener, user.mProfile);

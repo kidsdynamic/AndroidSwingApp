@@ -2,7 +2,6 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +72,7 @@ public class FragmentProfileMain extends ViewFragment {
                 addContact(mViewRequestToContainer, user, null);
         }
 
-        for (WatchContact user : mActivityMain.mOperator.getRequestFromUserList()) {
+        for (WatchContact user : mActivityMain.mOperator.getRequestFromList()) {
             if (((WatchContact.User)user).mRequestStatus.equals("PENDING"))
                 addContact(mViewRequestFromContainer, user, mContactListener);
         }

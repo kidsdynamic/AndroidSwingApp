@@ -106,6 +106,8 @@ public class FragmentWatchProfile extends ViewFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        mActivityMain.mIgnoreSyncOnce = true;
+
         if (resultCode != Activity.RESULT_OK)
             return;
 
@@ -175,6 +177,7 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
+
                 mDevice.mName = mViewName.getText().toString();
 
                 if (!mDevice.mName.equals("")) {

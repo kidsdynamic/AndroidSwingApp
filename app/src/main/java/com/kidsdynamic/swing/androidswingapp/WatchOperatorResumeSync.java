@@ -94,7 +94,7 @@ public class WatchOperatorResumeSync {
             if (!response.user.profile.equals(""))
                 mAvatarToGet.add(response.user.profile);
 
-            List<WatchContact.Kid> removeList = mOperator.getKids();
+            List<WatchContact.Kid> removeList = mOperator.getDeviceList();
             for (ServerGson.kidData kidData : response.kids) {
                 WatchContact.Kid kid = new WatchContact.Kid();
                 kid.mId = kidData.id;
@@ -136,7 +136,7 @@ public class WatchOperatorResumeSync {
 
             if (response != null) {
                 if (response.requestTo != null) {
-                    List<WatchContact.Kid> sharedKids = mOperator.getKids();
+                    List<WatchContact.Kid> removeList = mOperator.getSharedList();
 
                     for (ServerGson.hostData subHost : response.requestTo) {
                         WatchContact.User user = new WatchContact.User();
@@ -166,9 +166,17 @@ public class WatchOperatorResumeSync {
                                 if (!kid.mProfile.equals(""))
                                     mAvatarToGet.add(kid.mProfile);
                                 mOperator.setKid(kid);
+
+                                for (int idx = 0; idx < removeList.size(); idx++) {
+                                    if (removeList.get(idx).mId == kid.mId && removeList.get(idx).mUserId == kid.mUserId) {
+                                        removeList.remove(idx);
+                                        break;
+                                    }
+                                }
                             }
                         }
                     }
+                    mOperator.deleteKids(removeList);
                 }
 
                 if (response.requestFrom != null) {
