@@ -222,18 +222,13 @@ public class WatchOperator {
         return rtn;
     }
 
-    public List<WatchContact.User> getRequestFromUserList() {
+    public List<WatchContact.User> getRequestFromList() {
         for (WatchContact.User user : mRequestFromList) {
             if (user.mPhoto == null && !user.mProfile.equals(""))
                 user.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
         }
 
         return mRequestFromList;
-    }
-
-    public ArrayList<WatchContact.Kid> getRequestFromKidList(WatchContact.User user) {
-        // If user is null, return all requested kid, else just user's requested
-        return new ArrayList<>();
     }
 
     public List<WatchContact.User> getRequestToList() {

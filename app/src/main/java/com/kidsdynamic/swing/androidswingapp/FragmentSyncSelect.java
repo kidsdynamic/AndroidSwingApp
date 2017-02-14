@@ -37,8 +37,13 @@ public class FragmentSyncSelect extends ViewFragment {
         for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
 
-        // todo: select current focused kid
-        setSelected(1);
+        WatchContact.Kid focusKid = mActivityMain.mOperator.getFocusKid();
+        for (int idx = 0; idx < mDeviceList.size(); idx++) {
+            if (focusKid.mId == mDeviceList.get(idx).mId && focusKid.mUserId == mDeviceList.get(idx).mUserId) {
+                setSelected(idx);
+                break;
+            }
+        }
 
         return mViewMain;
     }
