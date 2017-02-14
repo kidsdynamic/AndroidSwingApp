@@ -169,6 +169,29 @@ public class WatchEvent implements Serializable {
         return false;
     }
 
+    public boolean containsKid(int id) {
+        for (Integer kid : mKids)
+            if (kid == id)
+                return true;
+        return false;
+    }
+
+    public void removeKid(int id) {
+        int count = mKids.size();
+        for (int idx = 0; idx < count; idx++) {
+            if (mKids.get(idx) != id)
+                continue;
+
+            mKids.remove(idx);
+            count--;
+        }
+    }
+
+    public void insertKid(int id, int position) {
+        if (!containsKid(id))
+            mKids.add(position, id);
+    }
+
     static public WatchEvent earliestInDay(long after, ArrayList<WatchEvent> list) {
         if (list.size() == 0)
             return null;

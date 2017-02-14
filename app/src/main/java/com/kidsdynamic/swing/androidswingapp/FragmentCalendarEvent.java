@@ -253,6 +253,47 @@ public class FragmentCalendarEvent extends ViewFragment {
         viewTodoList(mViewTodoContainer.getChildCount() != 0);
     }
 
+    private void setAssign(int kid) {
+        setAssign(mActivityMain.mOperator.getKid(kid));
+    }
+
+    private void setAssign(WatchContact.Kid kid) {
+        if (kid == null) {
+            mViewAssignPhoto.setBitmap(null);
+            mViewAssignName.setText("");
+        } else {
+            mViewAssignPhoto.setBitmap(kid.mPhoto);
+            String name = kid.mLabel;
+            if (mEvent.mKids.size() > 1)
+                name += "...";
+            mViewAssignName.setText(name);
+        }
+    }
+
+    private View addKid(WatchContact.Kid kid) {
+        int size = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()));
+        int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
+
+        ViewCircle viewCircle = new ViewCircle(mActivityMain);
+
+        viewCircle.setTag(kid);
+        viewCircle.setBitmap(kid.mPhoto);
+        viewCircle.setStrokeWidth(mViewAssignPhoto.getStrokeWidth());
+        viewCircle.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
+        viewCircle.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
+        viewCircle.setActive(mEvent.containsKid(kid.mId));
+        viewCircle.setOnClickListener(mAssignOptionListener);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
+        layoutParams.setMarginStart(margin);
+        layoutParams.setMarginEnd(margin);
+        viewCircle.setLayoutParams(layoutParams);
+
+        mViewAssignContainer.addView(viewCircle);
+
+        return viewCircle;
+    }
+
     private View addColor(int color) {
         ViewShape view = new ViewShape(mActivityMain);
 
@@ -371,22 +412,21 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mAssignOptionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            ViewCircle viewCircle = (ViewCircle) view;
             WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
 
-            mViewAssignName.setText(kid.mLabel);
-            mViewAssignPhoto.setBitmap(kid.mPhoto);
+            if (viewCircle.getActive()) {
+                if (mEvent.mKids.size() <= 1)    // least one.
+                    return;
 
-            mEvent.mKids.clear();
-            mEvent.mKids.add(kid.mId);
-            // mEvent.mKidId = kid.mId;
-
-            int count = mViewAssignContainer.getChildCount();
-            for (int idx = 0; idx < count; idx++) {
-                ViewCircle viewCircle = (ViewCircle) mViewAssignContainer.getChildAt(idx);
-                WatchContact.Kid contact = (WatchContact.Kid) viewCircle.getTag();
-
-                viewCircle.setActive(contact.mId == kid.mId);
+                mEvent.removeKid(kid.mId);
+                viewCircle.setActive(false);
+            } else {
+                mEvent.insertKid(kid.mId, 0);
+                viewCircle.setActive(true);
             }
+
+            setAssign(mEvent.mKids.get(0));
         }
     };
 
@@ -485,7 +525,6 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     private void loadAssign() {
         ArrayList<WatchContact.Kid> list = new ArrayList<>();
-        //WatchContact.Kid contact = new WatchContact.Kid();
 
         list.addAll(mActivityMain.mOperator.getDeviceList());
         list.addAll(mActivityMain.mOperator.getSharedList());
@@ -493,37 +532,19 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (list.size() == 0)
             return;
 
-        //if (mEvent.mKidId == 0)
-        //    mEvent.mKidId = mActivityMain.mOperator.getFocusKid() != null ?
-        //            mActivityMain.mOperator.getFocusKid().mId : list.get(0).mId;
+        WatchContact.Kid focusKid = mActivityMain.mOperator.getFocusKid();
 
-        //for (WatchContact.Kid kid : list)
-        //    if (kid.mId == mEvent.mKidId)
-        //        contact = kid;
-
-        //mViewAssignName.setText(contact.mLabel);
-        //mViewAssignPhoto.setBitmap(contact.mPhoto);
-
-        int size = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()));
-        int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
-        for (WatchContact.Kid kid : list) {
-            ViewCircle viewCircle = new ViewCircle(mActivityMain);
-
-            viewCircle.setTag(kid);
-            viewCircle.setBitmap(kid.mPhoto);
-            viewCircle.setStrokeWidth(mViewAssignPhoto.getStrokeWidth());
-            viewCircle.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
-            viewCircle.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
-            //viewCircle.setActive(kid.mId == contact.mId);
-            viewCircle.setOnClickListener(mAssignOptionListener);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
-            layoutParams.setMarginStart(margin);
-            layoutParams.setMarginEnd(margin);
-            viewCircle.setLayoutParams(layoutParams);
-
-            mViewAssignContainer.addView(viewCircle);
+        if (mEvent.mKids.size() == 0) { // assign is illegal
+            if (focusKid == null)
+                mEvent.insertKid(list.get(0).mId, 0);
+            else
+                mEvent.insertKid(focusKid.mId, 0);
         }
+
+        setAssign(mEvent.mKids.get(0));
+
+        for (WatchContact.Kid kid : list)
+            addKid(kid);
     }
 
     private void loadDate() {

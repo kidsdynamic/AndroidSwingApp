@@ -471,11 +471,6 @@ public class ViewCircle extends View {
         return mStrokeEnd;
     }
 
-    public void setStrokeActive(int active) {
-        mStrokeBegin = mStrokeEnd = active;
-        invalidate();
-    }
-
     public void setStrokeBeginEnd(int begin, int end) {
         mStrokeBegin = begin;
         mStrokeEnd = end;
@@ -487,6 +482,14 @@ public class ViewCircle extends View {
             setStrokeBeginEnd(-1, mStrokeCount);
         else
             setStrokeBeginEnd(mStrokeCount, -1);
+        invalidate();
+    }
+
+    public boolean getActive() {
+        if(mStrokeBegin < 0 && mStrokeEnd >= mStrokeCount)
+            return true;
+
+        return false;
     }
 
     public void setCrossWidth(float width) {

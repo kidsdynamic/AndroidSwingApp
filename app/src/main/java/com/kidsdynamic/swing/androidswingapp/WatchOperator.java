@@ -22,7 +22,7 @@ public class WatchOperator {
     private List<WatchContact.User> mRequestFromList;
 
     WatchOperator(Context context) {
-        mActivity = (ActivityMain)context;
+        mActivity = (ActivityMain) context;
         mWatchDatabase = new WatchDatabase(context);
         mRequestToList = new ArrayList<>();
         mRequestFromList = new ArrayList<>();
@@ -100,7 +100,7 @@ public class WatchOperator {
 
     List<WatchContact.Kid> getKids() {
         List<WatchContact.Kid> kids = mWatchDatabase.KidGet();
-        for(WatchContact.Kid kid : kids) {
+        for (WatchContact.Kid kid : kids) {
             kid.mBound = true;
             kid.mLabel = kid.mName;
             kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
@@ -113,6 +113,16 @@ public class WatchOperator {
         for (WatchContact.Kid kid : kids) {
             mWatchDatabase.KidDelete(kid);
         }
+    }
+
+    WatchContact.Kid getKid(int id) {
+        List<WatchContact.Kid> kids = getKids();
+        for (WatchContact.Kid kid : kids) {
+            if (kid.mId == id)
+                return kid;
+        }
+
+        return null;
     }
 
     List<WatchEvent> getEventsForSync(WatchContact.Kid kid) {
@@ -160,6 +170,7 @@ public class WatchOperator {
     private String byteToStr(byte b0, byte b1, byte b2, byte b3) {
         return "" + byteToDec(b0, b1, b2, b3);
     }
+
     static long getTimeStamp(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
