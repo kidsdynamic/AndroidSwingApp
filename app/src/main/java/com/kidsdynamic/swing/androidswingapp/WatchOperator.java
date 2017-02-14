@@ -130,8 +130,14 @@ public class WatchOperator {
         long startTimeStamp = cal.getTimeInMillis();
         cal.add(Calendar.MONTH, 2);
         long endTimeStamp = cal.getTimeInMillis();
+        List<WatchEvent> list = mWatchDatabase.EventGet(startTimeStamp, endTimeStamp);
+        List<WatchEvent> rtn = new ArrayList<>();
+        for (WatchEvent watchEvent : list) {
+            if (watchEvent.containsKid(kid.mId))
+                rtn.add(watchEvent);
+        }
 
-        return mWatchDatabase.EventGet(kid, startTimeStamp, endTimeStamp);
+        return rtn;
     }
 
     void pushUploadItem(String macId, byte[] time, byte[] outdoor, byte[] indoor) {
@@ -241,16 +247,16 @@ public class WatchOperator {
     }
 
     public List<WatchEvent> getEventList(long start, long end) {
-        List<WatchEvent> list = new ArrayList<>();
-
-        return new ArrayList<>();
+        return mWatchDatabase.EventGet(start, end);
     }
 
     public WatchEvent getEvent(int id) {
-        return new WatchEvent();
+        return mWatchDatabase.EventGet(id);
     }
 
     public boolean setEvent(WatchEvent event) {
+        // Todo : upload to server
+        mWatchDatabase.EventAdd(event);
         return true;
     }
 }

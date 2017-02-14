@@ -21,6 +21,7 @@ public class WatchDatabase {
     public static final String TABLE_UPLOAD = "Upload";
     public static final String TABLE_EVENT = "Event";
     public static final String TABLE_TODO = "Todo";
+    public static final String TABLE_EVENT_KITS = "EventKits";
 
     public static String ID = "ID";
     public static String EMAIL = "EMAIL";
@@ -89,7 +90,6 @@ public class WatchDatabase {
             "CREATE TABLE " + TABLE_EVENT + " (" +
                     ID + " INTEGER NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
-                    KID_ID + " TEXT NOT NULL, " +
                     NAME + " TEXT NOT NULL, " +
                     START_DATE + " INTEGER NOT NULL, " +
                     END_DATE + " INTEGER NOT NULL, " +
@@ -108,12 +108,16 @@ public class WatchDatabase {
             "CREATE TABLE " + TABLE_TODO + " (" +
                     ID + " INTEGER NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
-                    KID_ID + " TEXT NOT NULL, " +
                     EVENT_ID + " INTEGER NOT NULL, " +
                     TEXT + " TEXT NOT NULL, " +
                     STATUS + " TEXT NOT NULL, " +
                     DATE_CREATED + " INTEGER NOT NULL, " +
                     LAST_UPDATE + " INTEGER NOT NULL)";
+
+    public static final String CREATE_EVENT_KIDS_TABLE =
+            "CREATE TABLE " + TABLE_EVENT_KITS + " (" +
+                    KID_ID + " INTEGER NOT NULL, " +
+                    EVENT_ID + " INTEGER NOT NULL)";
 
     private SQLiteDatabase mDatabase;
     private Context mContext;
@@ -130,12 +134,14 @@ public class WatchDatabase {
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_UPLOAD);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_KITS);
 
         mDatabase.execSQL(CREATE_USER_TABLE);
         mDatabase.execSQL(CREATE_KIDS_TABLE);
         mDatabase.execSQL(CREATE_UPLOAD_TABLE);
         mDatabase.execSQL(CREATE_EVENT_TABLE);
         mDatabase.execSQL(CREATE_TODO_TABLE);
+        mDatabase.execSQL(CREATE_EVENT_KIDS_TABLE);
     }
 
     public long UserAdd(WatchContact.User user) {
@@ -368,22 +374,58 @@ public class WatchDatabase {
         return item;
     }
 
-    public void EventReset() {
-        mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
-        mDatabase.execSQL(CREATE_EVENT_TABLE);
+    public class EventKid {
+        int mEventId;
+        int mKidId;
+        EventKid(int eventId, int kidId) {
+            mEventId = eventId;
+            mKidId = kidId;
+        }
+        EventKid() {
+            mEventId = 0;
+            mKidId = 0;
+        }
+    }
+
+    public long EventKidAdd(EventKid eventKid) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(KID_ID, eventKid.mKidId);
+        contentValues.put(EVENT_ID, eventKid.mEventId);
+        return mDatabase.insert(TABLE_EVENT_KITS, null, contentValues);
+    }
+
+    public List<EventKid> EventKidGetByEvent(int eventId) {
+        List<EventKid> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT_KITS + " WHERE " + EVENT_ID + "=" + eventId, null);
+
+        while (cursor.moveToNext())
+            result.add(cursorToEventKid(cursor));
+
+        cursor.close();
+
+        return result;
+    }
+
+    public long EventKidDeleteByEvent(int eventId) {
+        return mDatabase.delete(TABLE_EVENT_KITS, EVENT_ID + "=" + eventId, null);
+
+    }
+
+    private EventKid cursorToEventKid(Cursor cursor) {
+        EventKid item = new EventKid();
+
+        item.mKidId = cursor.getInt(0);
+        item.mEventId = cursor.getInt(1);
+
+        return item;
     }
 
     public long EventAdd(WatchEvent event) {
         long rtn;
         ContentValues contentValues = new ContentValues();
 
-        String kidIdString = "";
-        for (int kid : event.mKids)
-            kidIdString += "," + kid;
-
         contentValues.put(ID, event.mId);
         contentValues.put(USER_ID, event.mUserId);
-        contentValues.put(KID_ID, kidIdString);
         contentValues.put(NAME, event.mName);
         contentValues.put(START_DATE, event.mStartDate);
         contentValues.put(END_DATE, event.mEndDate);
@@ -400,10 +442,12 @@ public class WatchDatabase {
 
         rtn = mDatabase.insert(TABLE_EVENT, null, contentValues);
 
+        for (int kidId : event.mKids)
+            EventKidAdd(new EventKid(kidId, event.mId));
+
         for (WatchTodo todo : event.mTodoList) {
             todo.mEventId = event.mId;
             todo.mUserId = event.mUserId;
-            todo.mKids = event.mKids;
             TodoAdd(todo);
         }
 
@@ -415,7 +459,6 @@ public class WatchDatabase {
 
         contentValues.put(ID, event.mId);
         contentValues.put(USER_ID, event.mUserId);
-        contentValues.put(KID_ID, IntListToString(event.mKids));
         contentValues.put(NAME, event.mName);
         contentValues.put(START_DATE, event.mStartDate);
         contentValues.put(END_DATE, event.mEndDate);
@@ -430,15 +473,25 @@ public class WatchDatabase {
         contentValues.put(DATE_CREATED, event.mDateCreated);
         contentValues.put(LAST_UPDATE, event.mLastUpdated);
 
+        EventKidDeleteByEvent(event.mId);
+        TodoDelete(event.mId, event.mUserId);
+
+        for (int kidId : event.mKids)
+            EventKidAdd(new EventKid(kidId, event.mId));
+
+        for (WatchTodo todo : event.mTodoList) {
+            todo.mEventId = event.mId;
+            todo.mUserId = event.mUserId;
+            TodoAdd(todo);
+        }
+
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId, null);
     }
 
-    private List<WatchEvent>EventGetRepeat(int userId, int kidId, long startTimeStamp, long endTimeStamp, String repeat) {
+    private List<WatchEvent>EventGetRepeat(long startTimeStamp, long endTimeStamp, String repeat) {
         List<WatchEvent>repeatResult = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
                 " WHERE " +
-                USER_ID + "=" + userId + " AND " +
-                KID_ID + "=" + kidId + " AND " +
                 REPEAT + "='" + repeat + "'" + " AND " +
                 endTimeStamp + ">=" + START_DATE, null);
 
@@ -447,8 +500,13 @@ public class WatchDatabase {
 
         cursor.close();
 
-        for (WatchEvent event : repeatResult)
+        for (WatchEvent event : repeatResult) {
             event.mTodoList = TodoGet(event.mId, event.mUserId);
+            List<EventKid> eventKidList = EventKidGetByEvent(event.mId);
+            event.mKids = new ArrayList<>();
+            for (EventKid eventKid : eventKidList)
+                event.mKids.add(eventKid.mKidId);
+        }
 
         List<WatchEvent> result = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -477,10 +535,10 @@ public class WatchDatabase {
         return result;
     }
 
-    public List<WatchEvent> EventGet(int userId, int kidId, long startTimeStamp, long endTimeStamp) {
+    public List<WatchEvent> EventGet(long startTimeStamp, long endTimeStamp) {
         List<WatchEvent> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
-                " WHERE (" + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId + " AND " + REPEAT + "=''" + ") AND " +
+                " WHERE " + REPEAT + "=''" + " AND " +
                 "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
                 " (" + startTimeStamp + "<=" + START_DATE + " AND " + endTimeStamp + ">=" + END_DATE + ") OR" +
                 " (" + endTimeStamp + ">=" + START_DATE + " AND " + endTimeStamp + "<=" + END_DATE + "))", null);
@@ -491,12 +549,17 @@ public class WatchDatabase {
 
         cursor.close();
 
-        for (WatchEvent event : result)
+        for (WatchEvent event : result) {
             event.mTodoList = TodoGet(event.mId, event.mUserId);
+            List<EventKid> eventKidList = EventKidGetByEvent(event.mId);
+            event.mKids = new ArrayList<>();
+            for (EventKid eventKid : eventKidList)
+                event.mKids.add(eventKid.mKidId);
+        }
 
-        List<WatchEvent>dailyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "DAILY");
-        List<WatchEvent>weeklyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "WEEKLY");
-        List<WatchEvent>monthlyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "MONTHLY");
+        List<WatchEvent>dailyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "DAILY");
+        List<WatchEvent>weeklyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "WEEKLY");
+        List<WatchEvent>monthlyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "MONTHLY");
 
         for (WatchEvent event : dailyResult)
             result.add(event);
@@ -523,15 +586,26 @@ public class WatchDatabase {
         return result;
     }
 
-    public List<WatchEvent> EventGet(WatchContact.Kid kid, long startTimeStamp, long endTimeStamp) {
-        return EventGet(kid.mUserId, kid.mId, startTimeStamp, endTimeStamp);
+    public WatchEvent EventGet(int eventId) {
+        WatchEvent rtn = null;
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT + " WHERE " + ID + "=" + eventId, null);
+        if (cursor.moveToNext()) {
+            rtn = cursorToEvent(cursor);
+            rtn.mTodoList = TodoGet(rtn.mId, rtn.mUserId);
+            List<EventKid> eventKidList = EventKidGetByEvent(rtn.mId);
+            rtn.mKids = new ArrayList<>();
+            for (EventKid eventKid : eventKidList)
+                rtn.mKids.add(eventKid.mKidId);
+        }
+
+        return rtn;
     }
 
     private WatchEvent cursorToEvent(Cursor cursor) {
         return new WatchEvent(
                 cursor.getInt(0),
                 cursor.getInt(1),
-                stringToIntList(cursor.getString(2)),
+                new ArrayList<Integer>(),
                 cursor.getString(3),
                 cursor.getLong(4),
                 cursor.getLong(5),
@@ -553,7 +627,6 @@ public class WatchDatabase {
 
         contentValues.put(ID, todo.mId);
         contentValues.put(USER_ID, todo.mUserId);
-        contentValues.put(KID_ID, IntListToString(todo.mKids));
         contentValues.put(EVENT_ID, todo.mEventId);
         contentValues.put(TEXT, todo.mText);
         contentValues.put(STATUS, todo.mStatus);
@@ -563,19 +636,8 @@ public class WatchDatabase {
         return mDatabase.insert(TABLE_TODO, null, contentValues);
     }
 
-    public long TodoUpdate(WatchTodo todo) {
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(ID, todo.mId);
-        contentValues.put(USER_ID, todo.mUserId);
-        contentValues.put(KID_ID, IntListToString(todo.mKids));
-        contentValues.put(EVENT_ID, todo.mEventId);
-        contentValues.put(TEXT, todo.mText);
-        contentValues.put(STATUS, todo.mStatus);
-        contentValues.put(DATE_CREATED, todo.mDateCreated);
-        contentValues.put(LAST_UPDATE, todo.mLastUpdated);
-
-        return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId + " AND " + USER_ID + "=" + todo.mUserId + " AND " + KID_ID + "=" + todo.mKids + " AND " + EVENT_ID + "=" + todo.mEventId, null);
+    public long TodoDelete(int eventId, int userId) {
+        return mDatabase.delete(TABLE_TODO, EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId, null);
     }
 
     public List<WatchTodo> TodoGet() {
@@ -606,34 +668,11 @@ public class WatchDatabase {
         return new WatchTodo(
                 cursor.getInt(0),
                 cursor.getInt(1),
-                stringToIntList(cursor.getString(2)),
-                cursor.getInt(3),
+                cursor.getInt(2),
+                cursor.getString(3),
                 cursor.getString(4),
-                cursor.getString(5),
-                cursor.getLong(6),
-                cursor.getLong(7)
+                cursor.getLong(5),
+                cursor.getLong(6)
         );
     }
-
-    private String IntListToString(List<Integer> list) {
-        String rtn = "";
-        if (!list.isEmpty())
-            rtn += list.get(0).toString();
-
-        for (int idx = 1; idx < list.size(); idx++) {
-            rtn += "," + list.get(1).toString();
-        }
-        return rtn;
-    }
-
-    private List<Integer> stringToIntList(String string) {
-        String[] token = string.split(",");
-        List<Integer> rtn = new ArrayList<>();
-
-        for (String t : token)
-            rtn.add(Integer.valueOf(t));
-
-        return rtn;
-    }
-
 }

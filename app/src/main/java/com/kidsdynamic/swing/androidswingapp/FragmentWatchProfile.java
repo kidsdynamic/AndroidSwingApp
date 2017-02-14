@@ -176,7 +176,7 @@ public class FragmentWatchProfile extends ViewFragment {
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
 
                 mDevice.mName = mViewName.getText().toString();
 
