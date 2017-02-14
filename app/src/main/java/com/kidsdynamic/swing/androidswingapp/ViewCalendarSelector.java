@@ -64,6 +64,8 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
 
             typedArray.recycle();
         }
+
+        updateText();
     }
 
     @Override

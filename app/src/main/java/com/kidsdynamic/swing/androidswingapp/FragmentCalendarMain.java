@@ -47,11 +47,11 @@ public class FragmentCalendarMain extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_main, container, false);
 
-        mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_daily_selector);
+        mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_main_selector);
         mViewSelector.setDate(mDefaultDate);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
-        mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_daily_calendar);
+        mViewCalendar = (ViewCalendarWeek) mViewMain.findViewById(R.id.calendar_main_calendar);
         mViewCalendar.setDate(mDefaultDate);
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
@@ -112,7 +112,6 @@ public class FragmentCalendarMain extends ViewFragment {
 
         updateAlert();
     }
-
 
     private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {
         // for debug only!
