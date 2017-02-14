@@ -94,7 +94,7 @@ public class WatchOperatorResumeSync {
             if (!response.user.profile.equals(""))
                 mAvatarToGet.add(response.user.profile);
 
-            mOperator.clearKids();
+            List<WatchContact.Kid> removeList = mOperator.getKids();
             for (ServerGson.kidData kidData : response.kids) {
                 WatchContact.Kid kid = new WatchContact.Kid();
                 kid.mId = kidData.id;
@@ -107,7 +107,16 @@ public class WatchOperatorResumeSync {
                 mOperator.setKid(kid);
                 if (!kidData.profile.equals(""))
                     mAvatarToGet.add(kidData.profile);
+
+                for (int idx = 0; idx < removeList.size(); idx++) {
+                  if (removeList.get(idx).mId == kid.mId && removeList.get(idx).mUserId == kid.mUserId) {
+                      removeList.remove(idx);
+                      break;
+                  }
+                }
             }
+
+            mOperator.deleteKids(removeList);
 
             mServerMachine.subHostList(mSubHostListListener, "");
         }
@@ -127,6 +136,8 @@ public class WatchOperatorResumeSync {
 
             if (response != null) {
                 if (response.requestTo != null) {
+                    List<WatchContact.Kid> sharedKids = mOperator.getKids();
+
                     for (ServerGson.hostData subHost : response.requestTo) {
                         WatchContact.User user = new WatchContact.User();
                         user.mPhoto = null;
@@ -141,6 +152,22 @@ public class WatchOperatorResumeSync {
                         to.add(user);
                         if (!user.mProfile.equals(""))
                             mAvatarToGet.add(user.mProfile);
+
+                        if (subHost.status.equals("ACCEPTED")) {
+                            for (ServerGson.kidData kidData : subHost.kids) {
+                                WatchContact.Kid kid = new WatchContact.Kid();
+                                kid.mId = kidData.id;
+                                kid.mName = kidData.name;
+                                kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
+                                kid.mMacId = kidData.macId;
+                                kid.mUserId = subHost.requestToUser.id;
+                                kid.mProfile = kidData.profile;
+                                kid.mBound = true;
+                                if (!kid.mProfile.equals(""))
+                                    mAvatarToGet.add(kid.mProfile);
+                                mOperator.setKid(kid);
+                            }
+                        }
                     }
                 }
 

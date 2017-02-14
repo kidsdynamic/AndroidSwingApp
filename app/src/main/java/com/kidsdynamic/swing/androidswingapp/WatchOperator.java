@@ -82,8 +82,6 @@ public class WatchOperator {
         else
             mWatchDatabase.KidUpdate(kid);
 
-        if (mWatchDatabase.KidGetFocus() == null)
-            mWatchDatabase.KidSetFocus(kid);
     }
 
     void setFocusKid(WatchContact.Kid kid) {
@@ -109,6 +107,12 @@ public class WatchOperator {
         }
 
         return kids;
+    }
+
+    void deleteKids(List<WatchContact.Kid> kids) {
+        for (WatchContact.Kid kid : kids) {
+            mWatchDatabase.KidDelete(kid);
+        }
     }
 
     List<WatchEvent> getEventsForSync(WatchContact.Kid kid) {
