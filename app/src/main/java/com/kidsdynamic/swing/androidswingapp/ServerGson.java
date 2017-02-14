@@ -56,8 +56,8 @@ public class ServerGson {
 
     static final class eventData {
         int id;
-        int userId;
-        int kidId;
+        userData user;
+        List<kidData> kid;
         String name;
         String startDate;
         String endDate;
@@ -336,7 +336,7 @@ public class ServerGson {
     public static class event {
         public static class add {
             private static class c {
-                int kidId;
+                List<Integer> kidId;
                 String name;
                 String startDate;
                 String endDate;
@@ -349,7 +349,7 @@ public class ServerGson {
                 int timezoneOffset;
                 List<String> todo;
 
-                c(int pKidId, String pName, String pStartDate, String pEndDate,
+                c(List<Integer> pKidId, String pName, String pStartDate, String pEndDate,
                   String pColor, String pDescription, int pAlert, String pCity,
                   String pState, String pRepeat, int pTimezoneOffset, List<String> pTodo) {
                     kidId = pKidId;
@@ -367,7 +367,7 @@ public class ServerGson {
                 }
             }
 
-            public static String toJson(int pKidId, String pName, String pStartDate, String pEndDate,
+            public static String toJson(List<Integer> pKidId, String pName, String pStartDate, String pEndDate,
                                         String pColor, String pDescription, int pAlert, String pCity,
                                         String pState, String pRepeat, int pTimezoneOffset, List<String> pTodo) {
                 return new Gson().toJson(new c(pKidId, pName, pStartDate, pEndDate, pColor,

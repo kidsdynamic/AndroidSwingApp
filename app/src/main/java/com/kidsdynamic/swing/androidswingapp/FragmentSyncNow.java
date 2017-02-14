@@ -61,7 +61,7 @@ public class FragmentSyncNow extends ViewFragment {
                 } else {
                     device.mPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow);
                 }
-                device.mLabel = device.mFirstName + " " + device.mLastName;
+                device.mLabel = device.mName;
                 device.mBound = true;
 
                 mActivityMain.mContactStack.push(device);

@@ -2,6 +2,8 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -15,7 +17,7 @@ public class WatchTodo implements Serializable {
 
     public int mId;
     public int mUserId;
-    public int mKidId;
+    public List<Integer> mKids;
     public int mEventId;
     public String mText;
     public String mStatus;
@@ -24,23 +26,23 @@ public class WatchTodo implements Serializable {
 
     public WatchTodo() {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, 0, "", "", now, now);
+        init(0, 0, new ArrayList<Integer>(), 0, "", "", now, now);
     }
 
-    public WatchTodo(int id, int userId, int kidId, int eventId, String text, String status,
+    public WatchTodo(int id, int userId, List<Integer> kidId, int eventId, String text, String status,
                      long dateCreated, long lastUpdated) {
         init(id, userId, kidId, eventId, text, status, dateCreated, lastUpdated);
     }
 
     public WatchTodo(WatchTodo src) {
-        init(src.mId, src.mUserId, src.mKidId, src.mEventId, src.mText, src.mStatus, src.mDateCreated, src.mLastUpdated);
+        init(src.mId, src.mUserId, src.mKids, src.mEventId, src.mText, src.mStatus, src.mDateCreated, src.mLastUpdated);
     }
 
-    private void init(int id, int userId, int kidId, int eventId, String text, String status,
+    private void init(int id, int userId, List<Integer> kidId, int eventId, String text, String status,
                       long dateCreated, long lastUpdated) {
         mId = id;
         mUserId = userId;
-        mKidId = kidId;
+        mKids = kidId;
         mEventId = eventId;
         mText = text;
         mStatus = status;
@@ -55,7 +57,7 @@ public class WatchTodo implements Serializable {
         return new StringBuilder()
                 .append("{mId:").append(mId)
                 .append(" mUserId:").append(mUserId)
-                .append(" mKidId:").append(mKidId)
+                .append(" mKids:").append(mKids)
                 .append(" mEventId:").append(mEventId)
                 .append(" mText:").append(mText)
                 .append(" mStatus").append(mStatus)

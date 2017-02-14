@@ -22,7 +22,7 @@ public class WatchEvent implements Serializable {
 
     public int mId;
     public int mUserId;
-    public int mKidId;
+    public List<Integer> mKids;
     public String mName;
     public long mStartDate;
     public long mEndDate;
@@ -52,7 +52,7 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        init(0, 0, 0, "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -71,37 +71,37 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        init(0, 0, 0, "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
-        init(0, 0, 0, "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
-    public WatchEvent(int id, int userId, int kidId, String name, long startDate,
+    public WatchEvent(int id, int userId, List<Integer> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
                       int alert, String city, String state, String repeat,
                       int timezoneOffset, long dateCreated, long lastUpdated) {
-        init(id, userId, kidId, name, startDate, endDate, color, status, description,
+        init(id, userId, kids, name, startDate, endDate, color, status, description,
                 alert, city, state, repeat, timezoneOffset, dateCreated, lastUpdated);
     }
 
     public WatchEvent(WatchEvent src) {
-        init(src.mId, src.mUserId, src.mKidId, src.mName, src.mStartDate, src.mEndDate, src.mColor, src.mStatus, src.mDescription,
+        init(src.mId, src.mUserId, src.mKids, src.mName, src.mStartDate, src.mEndDate, src.mColor, src.mStatus, src.mDescription,
                 src.mAlert, src.mCity, src.mState, src.mRepeat, src.mTimezoneOffset, src.mDateCreated, src.mLastUpdated);
 
         for (WatchTodo todo : src.mTodoList)
             mTodoList.add(new WatchTodo(todo));
     }
 
-    private void init(int id, int userId, int kidId, String name, long startDate,
+    private void init(int id, int userId, List<Integer> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
                       int alert, String city, String state, String repeat,
                       int timezoneOffset, long dateCreated, long lastUpdated) {
         mId = id;
         mUserId = userId;
-        mKidId = kidId;
+        mKids = kids;
         mName = name;
         mStartDate = startDate;
         mEndDate = endDate;
@@ -128,7 +128,7 @@ public class WatchEvent implements Serializable {
         return new StringBuilder()
                 .append("{mId:").append(mId)
                 .append(" mUserId:").append(mUserId)
-                .append(" mKidId:").append(mKidId)
+                .append(" mKids:").append(mKids.toString())
                 .append(" mName:").append(mName)
                 .append(" mStartDate:").append(mStartDate)
 //                .append(" mStartDate:").append(sdf.format(mStartDate))

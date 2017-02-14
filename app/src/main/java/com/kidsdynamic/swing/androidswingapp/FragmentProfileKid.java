@@ -236,13 +236,13 @@ public class FragmentProfileKid extends ViewFragment {
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
                 if (!mKid.mBound) {
-                    mKid.mFirstName = mViewName.getText().toString();
+                    mKid.mName = mViewName.getText().toString();
 
-                    if (!mKid.mFirstName.equals("")) {
+                    if (!mKid.mName.equals("")) {
                         mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                         String macId = ServerMachine.getMacID(mKid.mLabel);
-                        mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mFirstName, macId);
-                        //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mFirstName, "AAAAAABBBB04");
+                        mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mName, macId);
+                        //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mName, "AAAAAABBBB04");
                     }
                 }
             }
@@ -255,14 +255,13 @@ public class FragmentProfileKid extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.kidData response) {
             mKid.mId = response.id;
-            mKid.mFirstName = response.name;
-            mKid.mLastName = "";
+            mKid.mName = response.name;
             mKid.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
             mKid.mMacId = response.macId;
             mKid.mUserId = response.parent.id;
             mActivityMain.mOperator.setFocusKid(mKid);
             if (mAvatarBitmap != null)
-                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mFirstName, ".jpg");
+                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mName, ".jpg");
             if (mKid.mProfile == null)
                 mKid.mProfile = "";
 
@@ -369,10 +368,10 @@ public class FragmentProfileKid extends ViewFragment {
     private void saveContact(WatchContact.Kid kid) {
         if (mKid == null)
             return;
-        mKid.mFirstName = mViewName.getText().toString();
-        if (!mKid.mFirstName.equals("")) {
+        mKid.mName = mViewName.getText().toString();
+        if (!mKid.mName.equals("")) {
             mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
-            mActivityMain.mServiceMachine.kidsUpdate(mKidsUpdateListener, mKid.mId, mKid.mFirstName);
+            mActivityMain.mServiceMachine.kidsUpdate(mKidsUpdateListener, mKid.mId, mKid.mName);
         } else {
             mActivityMain.popFragment();
         }
@@ -382,7 +381,7 @@ public class FragmentProfileKid extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.kids.update.response response) {
             if (mAvatarBitmap != null) {
-                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mFirstName, ".jpg");
+                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mName, ".jpg");
                 mActivityMain.mOperator.setFocusKid(mKid);
                 mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
             } else {

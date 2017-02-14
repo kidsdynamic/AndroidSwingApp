@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 
@@ -207,12 +208,12 @@ public class FragmentCalendarMain extends ViewFragment {
         }
     };
 
-    private WatchEvent makeFakeEvent(int eventId, int userId, int kidId, int startHour, int startMin, int endHour, int endMin) {
+    private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {
         WatchEvent event = new WatchEvent();
 
         event.mId = eventId;
         event.mUserId = userId;
-        event.mKidId = kidId;
+        event.mKids = kids;
         event.mColor = WatchEvent.colorToString(WatchEvent.StockColorList[2].mColor);
         event.mName = String.format(Locale.getDefault(), "Name(%d)", eventId);
         event.mDescription = String.format(Locale.getDefault(), "Desc(%d)", eventId);
@@ -239,9 +240,9 @@ public class FragmentCalendarMain extends ViewFragment {
 
         // Test
         WatchContact.User me = mActivityMain.mOperator.getUser();
-        mEventList.add(makeFakeEvent(1, me.mId, 14, 7, 15, 12, 15));
-        mEventList.add(makeFakeEvent(2, me.mId, 11, 8, 0, 8, 30));
-        mEventList.add(makeFakeEvent(3, me.mId, 11, 9, 0, 9, 30));
+        mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 12, 15));
+        mEventList.add(makeFakeEvent(2, me.mId, new ArrayList<Integer>(), 8, 0, 8, 30));
+        mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 9, 0, 9, 30));
         //////////////
     }
 }

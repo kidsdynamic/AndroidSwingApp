@@ -353,7 +353,9 @@ public class FragmentCalendarEvent extends ViewFragment {
             mViewAssignName.setText(kid.mLabel);
             mViewAssignPhoto.setBitmap(kid.mPhoto);
 
-            mEvent.mKidId = kid.mId;
+            mEvent.mKids.clear();
+            mEvent.mKids.add(kid.mId);
+            // mEvent.mKidId = kid.mId;
 
             int count = mViewAssignContainer.getChildCount();
             for (int idx = 0; idx < count; idx++) {
@@ -460,7 +462,7 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     private void loadAssign() {
         ArrayList<WatchContact.Kid> list = new ArrayList<>();
-        WatchContact.Kid contact = new WatchContact.Kid();
+        //WatchContact.Kid contact = new WatchContact.Kid();
 
         list.addAll(mActivityMain.mOperator.getDeviceList());
         list.addAll(mActivityMain.mOperator.getSharedList());
@@ -468,16 +470,16 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (list.size() == 0)
             return;
 
-        if (mEvent.mKidId == 0)
-            mEvent.mKidId = mActivityMain.mOperator.getFocusKid() != null ?
-                    mActivityMain.mOperator.getFocusKid().mId : list.get(0).mId;
+        //if (mEvent.mKidId == 0)
+        //    mEvent.mKidId = mActivityMain.mOperator.getFocusKid() != null ?
+        //            mActivityMain.mOperator.getFocusKid().mId : list.get(0).mId;
 
-        for (WatchContact.Kid kid : list)
-            if (kid.mId == mEvent.mKidId)
-                contact = kid;
+        //for (WatchContact.Kid kid : list)
+        //    if (kid.mId == mEvent.mKidId)
+        //        contact = kid;
 
-        mViewAssignName.setText(contact.mLabel);
-        mViewAssignPhoto.setBitmap(contact.mPhoto);
+        //mViewAssignName.setText(contact.mLabel);
+        //mViewAssignPhoto.setBitmap(contact.mPhoto);
 
         int size = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 32, getResources().getDisplayMetrics()));
         int margin = Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()));
@@ -489,7 +491,7 @@ public class FragmentCalendarEvent extends ViewFragment {
             viewCircle.setStrokeWidth(mViewAssignPhoto.getStrokeWidth());
             viewCircle.setStrokeColorActive(ContextCompat.getColor(mActivityMain, R.color.color_orange_main));
             viewCircle.setStrokeColorNormal(ContextCompat.getColor(mActivityMain, R.color.color_white));
-            viewCircle.setActive(kid.mId == contact.mId);
+            //viewCircle.setActive(kid.mId == contact.mId);
             viewCircle.setOnClickListener(mAssignOptionListener);
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);

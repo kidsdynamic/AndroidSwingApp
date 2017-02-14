@@ -98,15 +98,13 @@ public class WatchOperatorResumeSync {
             for (ServerGson.kidData kidData : response.kids) {
                 WatchContact.Kid kid = new WatchContact.Kid();
                 kid.mId = kidData.id;
-                kid.mFirstName = kidData.name;
-                kid.mLastName = "";
+                kid.mName = kidData.name;
                 kid.mDateCreated = WatchOperator.getTimeStamp(kidData.dateCreated);
                 kid.mMacId = kidData.macId;
                 kid.mUserId = response.user.id;
                 kid.mProfile = kidData.profile;
                 kid.mBound = true;
                 mOperator.setKid(kid);
-                mOperator.setFocusKid(kid);
                 if (!kidData.profile.equals(""))
                     mAvatarToGet.add(kidData.profile);
             }

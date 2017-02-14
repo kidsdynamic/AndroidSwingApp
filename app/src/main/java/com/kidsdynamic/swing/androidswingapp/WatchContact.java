@@ -14,7 +14,6 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * Created by 03543 on 2017/1/4.
@@ -45,8 +44,7 @@ public class WatchContact implements Serializable {
 
     public static class Kid extends WatchContact {
         public int mId;
-        public String mFirstName;
-        public String mLastName;
+        public String mName;
         public long mDateCreated;
         public String mMacId;
         public String mProfile;
@@ -56,8 +54,7 @@ public class WatchContact implements Serializable {
         public Kid() {
             super(null, "");
             mId = 0;
-            mFirstName = "";
-            mLastName = "";
+            mName = "";
             mDateCreated = 0;
             mMacId = "";
             mUserId = 0;
@@ -69,8 +66,7 @@ public class WatchContact implements Serializable {
         public Kid(Bitmap photo, String label) {
             super(photo, label);
             mId = 0;
-            mFirstName = "";
-            mLastName = "";
+            mName = "";
             mDateCreated = 0;
             mMacId = "";
             mUserId = 0;
@@ -82,8 +78,7 @@ public class WatchContact implements Serializable {
             super(photo, firstName + " " + lastName);
 
             mId = id;
-            mFirstName = firstName;
-            mLastName = lastName;
+            mName = firstName;
             mDateCreated = dateCreated;
             mMacId = macId;
             mUserId = parentId;
@@ -98,8 +93,7 @@ public class WatchContact implements Serializable {
             return new StringBuilder()
                     .append("{contact:").append(super.toString())
                     .append(" mId:").append(mId)
-                    .append(" mFirstName:").append(mFirstName)
-                    .append(" mLastName:").append(mLastName)
+                    .append(" mName:").append(mName)
                     .append(" mDateCreated:").append(sdf.format(mDateCreated))
                     .append(" mMacId").append(sdf.format(mMacId))
                     .append(" mUserId:").append(mUserId)
@@ -186,7 +180,7 @@ public class WatchContact implements Serializable {
                     .append("{contact:").append(super.toString())
                     .append(" mId:").append(mId)
                     .append(" mEmail:").append(mEmail)
-                    .append(" mFirstName:").append(mFirstName)
+                    .append(" mName:").append(mFirstName)
                     .append(" mLastName:").append(mLastName)
                     .append(" mLastUpdate:").append(sdf.format(mLastUpdate))
                     .append(" mDateCreated:").append(sdf.format(mDateCreated))

@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import java.text.SimpleDateFormat;
@@ -82,6 +81,9 @@ public class WatchOperator {
             mWatchDatabase.KidAdd(kid);
         else
             mWatchDatabase.KidUpdate(kid);
+
+        if (mWatchDatabase.KidGetFocus() == null)
+            mWatchDatabase.KidSetFocus(kid);
     }
 
     void setFocusKid(WatchContact.Kid kid) {
@@ -92,7 +94,7 @@ public class WatchOperator {
         WatchContact.Kid kid = mWatchDatabase.KidGetFocus();
         if (kid != null) {
             kid.mBound = true;
-            kid.mLabel = kid.mFirstName;
+            kid.mLabel = kid.mName;
             kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
         }
         return kid;
@@ -102,7 +104,7 @@ public class WatchOperator {
         List<WatchContact.Kid> kids = mWatchDatabase.KidGet();
         for(WatchContact.Kid kid : kids) {
             kid.mBound = true;
-            kid.mLabel = kid.mFirstName;
+            kid.mLabel = kid.mName;
             kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
         }
 

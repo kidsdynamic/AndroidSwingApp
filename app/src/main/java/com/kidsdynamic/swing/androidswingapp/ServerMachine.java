@@ -359,7 +359,7 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void eventAdd(eventAddListener listener, int kidId, String name, String startDate, String endDate,
+    public void eventAdd(eventAddListener listener, List<Integer> kidId, String name, String startDate, String endDate,
                          String color, String description, int alert, String city, String state, String repeat,
                          int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();

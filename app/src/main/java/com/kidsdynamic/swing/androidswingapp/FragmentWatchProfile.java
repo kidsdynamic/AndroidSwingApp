@@ -175,24 +175,24 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
-                mDevice.mFirstName = mViewName.getText().toString();
+                mDevice.mName = mViewName.getText().toString();
 
-                if (!mDevice.mFirstName.equals("")) {
+                if (!mDevice.mName.equals("")) {
                     mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
-                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, macId);
+                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, macId);
                     /*
                     switch(testCounter) {
                         case 0:
-                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, "AAAAAABBBB01");
+                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, "AAAAAABBBB01");
                             testCounter = 1;
                             break;
                         case 1:
-                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, "AAAAAABBBB02");
+                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, "AAAAAABBBB02");
                             testCounter = 2;
                             break;
                         case 2:
-                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mFirstName, "AAAAAABBBB03");
+                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, "AAAAAABBBB03");
                             testCounter = 0;
                             break;
                     }
@@ -208,14 +208,13 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public void onSuccess(int statusCode, ServerGson.kidData response) {
             mDevice.mId = response.id;
-            mDevice.mFirstName = response.name;
-            mDevice.mLastName = "";
+            mDevice.mName = response.name;
             mDevice.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
             mDevice.mMacId = response.macId;
             mDevice.mUserId = response.parent.id;
             mActivityMain.mOperator.setFocusKid(mDevice);
             if (mAvatarBitmap != null)
-                mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mFirstName + mDevice.mLastName, ".jpg");
+                mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mName, ".jpg");
             if (mDevice.mProfile == null)
                 mDevice.mProfile = "";
 

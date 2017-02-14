@@ -73,7 +73,6 @@ public class WatchDatabase {
             "CREATE TABLE " + TABLE_KIDS + " (" +
                     ID + " INTEGER NOT NULL, " +
                     FIRST_NAME + " TEXT NOT NULL, " +
-                    LAST_NAME + " TEXT NOT NULL, " +
                     DATE_CREATED + " INTEGER NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
@@ -90,7 +89,7 @@ public class WatchDatabase {
             "CREATE TABLE " + TABLE_EVENT + " (" +
                     ID + " INTEGER NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
-                    KID_ID + " INTEGER NOT NULL, " +
+                    KID_ID + " TEXT NOT NULL, " +
                     NAME + " TEXT NOT NULL, " +
                     START_DATE + " INTEGER NOT NULL, " +
                     END_DATE + " INTEGER NOT NULL, " +
@@ -109,7 +108,7 @@ public class WatchDatabase {
             "CREATE TABLE " + TABLE_TODO + " (" +
                     ID + " INTEGER NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
-                    KID_ID + " INTEGER NOT NULL, " +
+                    KID_ID + " TEXT NOT NULL, " +
                     EVENT_ID + " INTEGER NOT NULL, " +
                     TEXT + " TEXT NOT NULL, " +
                     STATUS + " TEXT NOT NULL, " +
@@ -207,8 +206,7 @@ public class WatchDatabase {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, kid.mId);
-        contentValues.put(FIRST_NAME, kid.mFirstName);
-        contentValues.put(LAST_NAME, kid.mLastName);
+        contentValues.put(FIRST_NAME, kid.mName);
         contentValues.put(DATE_CREATED, kid.mDateCreated);
         contentValues.put(MAC_ID, kid.mMacId);
         contentValues.put(USER_ID, kid.mUserId);
@@ -221,8 +219,7 @@ public class WatchDatabase {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, kid.mId);
-        contentValues.put(FIRST_NAME, kid.mFirstName);
-        contentValues.put(LAST_NAME, kid.mLastName);
+        contentValues.put(FIRST_NAME, kid.mName);
         contentValues.put(DATE_CREATED, kid.mDateCreated);
         contentValues.put(MAC_ID, kid.mMacId);
         contentValues.put(USER_ID, kid.mUserId);
@@ -294,12 +291,11 @@ public class WatchDatabase {
         WatchContact.Kid item = new WatchContact.Kid();
 
         item.mId = cursor.getInt(0);
-        item.mFirstName = cursor.getString(1);
-        item.mLastName = cursor.getString(2);
-        item.mDateCreated = cursor.getLong(3);
-        item.mMacId = cursor.getString(4);
-        item.mUserId = cursor.getInt(5);
-        item.mProfile = cursor.getString(6);
+        item.mName = cursor.getString(1);
+        item.mDateCreated = cursor.getLong(2);
+        item.mMacId = cursor.getString(3);
+        item.mUserId = cursor.getInt(4);
+        item.mProfile = cursor.getString(5);
 
         return item;
     }
@@ -377,9 +373,13 @@ public class WatchDatabase {
         long rtn;
         ContentValues contentValues = new ContentValues();
 
+        String kidIdString = "";
+        for (int kid : event.mKids)
+            kidIdString += "," + kid;
+
         contentValues.put(ID, event.mId);
         contentValues.put(USER_ID, event.mUserId);
-        contentValues.put(KID_ID, event.mKidId);
+        contentValues.put(KID_ID, kidIdString);
         contentValues.put(NAME, event.mName);
         contentValues.put(START_DATE, event.mStartDate);
         contentValues.put(END_DATE, event.mEndDate);
@@ -399,7 +399,7 @@ public class WatchDatabase {
         for (WatchTodo todo : event.mTodoList) {
             todo.mEventId = event.mId;
             todo.mUserId = event.mUserId;
-            todo.mKidId = event.mKidId;
+            todo.mKids = event.mKids;
             TodoAdd(todo);
         }
 
@@ -411,7 +411,7 @@ public class WatchDatabase {
 
         contentValues.put(ID, event.mId);
         contentValues.put(USER_ID, event.mUserId);
-        contentValues.put(KID_ID, event.mKidId);
+        contentValues.put(KID_ID, IntListToString(event.mKids));
         contentValues.put(NAME, event.mName);
         contentValues.put(START_DATE, event.mStartDate);
         contentValues.put(END_DATE, event.mEndDate);
@@ -426,7 +426,7 @@ public class WatchDatabase {
         contentValues.put(DATE_CREATED, event.mDateCreated);
         contentValues.put(LAST_UPDATE, event.mLastUpdated);
 
-        return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId + " AND " + KID_ID + "=" + event.mKidId, null);
+        return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId, null);
     }
 
     private List<WatchEvent>EventGetRepeat(int userId, int kidId, long startTimeStamp, long endTimeStamp, String repeat) {
@@ -444,7 +444,7 @@ public class WatchDatabase {
         cursor.close();
 
         for (WatchEvent event : repeatResult)
-            event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
+            event.mTodoList = TodoGet(event.mId, event.mUserId);
 
         List<WatchEvent> result = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
@@ -488,7 +488,7 @@ public class WatchDatabase {
         cursor.close();
 
         for (WatchEvent event : result)
-            event.mTodoList = TodoGet(event.mId, event.mUserId, event.mKidId);
+            event.mTodoList = TodoGet(event.mId, event.mUserId);
 
         List<WatchEvent>dailyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "DAILY");
         List<WatchEvent>weeklyResult = EventGetRepeat(userId, kidId, startTimeStamp, endTimeStamp, "WEEKLY");
@@ -527,7 +527,7 @@ public class WatchDatabase {
         return new WatchEvent(
                 cursor.getInt(0),
                 cursor.getInt(1),
-                cursor.getInt(2),
+                stringToIntList(cursor.getString(2)),
                 cursor.getString(3),
                 cursor.getLong(4),
                 cursor.getLong(5),
@@ -549,7 +549,7 @@ public class WatchDatabase {
 
         contentValues.put(ID, todo.mId);
         contentValues.put(USER_ID, todo.mUserId);
-        contentValues.put(KID_ID, todo.mKidId);
+        contentValues.put(KID_ID, IntListToString(todo.mKids));
         contentValues.put(EVENT_ID, todo.mEventId);
         contentValues.put(TEXT, todo.mText);
         contentValues.put(STATUS, todo.mStatus);
@@ -564,14 +564,14 @@ public class WatchDatabase {
 
         contentValues.put(ID, todo.mId);
         contentValues.put(USER_ID, todo.mUserId);
-        contentValues.put(KID_ID, todo.mKidId);
+        contentValues.put(KID_ID, IntListToString(todo.mKids));
         contentValues.put(EVENT_ID, todo.mEventId);
         contentValues.put(TEXT, todo.mText);
         contentValues.put(STATUS, todo.mStatus);
         contentValues.put(DATE_CREATED, todo.mDateCreated);
         contentValues.put(LAST_UPDATE, todo.mLastUpdated);
 
-        return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId + " AND " + USER_ID + "=" + todo.mUserId + " AND " + KID_ID + "=" + todo.mKidId + " AND " + EVENT_ID + "=" + todo.mEventId, null);
+        return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId + " AND " + USER_ID + "=" + todo.mUserId + " AND " + KID_ID + "=" + todo.mKids + " AND " + EVENT_ID + "=" + todo.mEventId, null);
     }
 
     public List<WatchTodo> TodoGet() {
@@ -586,9 +586,9 @@ public class WatchDatabase {
         return result;
     }
 
-    public List<WatchTodo> TodoGet(int eventId, int userId, int kidId) {
+    public List<WatchTodo> TodoGet(int eventId, int userId) {
         List<WatchTodo> result = new ArrayList<>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId + " AND " + KID_ID + "=" + kidId, null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId, null);
 
         while (cursor.moveToNext())
             result.add(cursorToTodo(cursor));
@@ -602,13 +602,34 @@ public class WatchDatabase {
         return new WatchTodo(
                 cursor.getInt(0),
                 cursor.getInt(1),
-                cursor.getInt(2),
+                stringToIntList(cursor.getString(2)),
                 cursor.getInt(3),
                 cursor.getString(4),
                 cursor.getString(5),
                 cursor.getLong(6),
                 cursor.getLong(7)
         );
+    }
+
+    private String IntListToString(List<Integer> list) {
+        String rtn = "";
+        if (!list.isEmpty())
+            rtn += list.get(0).toString();
+
+        for (int idx = 1; idx < list.size(); idx++) {
+            rtn += "," + list.get(1).toString();
+        }
+        return rtn;
+    }
+
+    private List<Integer> stringToIntList(String string) {
+        String[] token = string.split(",");
+        List<Integer> rtn = new ArrayList<>();
+
+        for (String t : token)
+            rtn.add(Integer.valueOf(t));
+
+        return rtn;
     }
 
 }
