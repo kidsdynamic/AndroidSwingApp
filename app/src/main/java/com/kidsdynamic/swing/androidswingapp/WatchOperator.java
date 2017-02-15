@@ -16,7 +16,7 @@ import java.util.TimeZone;
  */
 
 public class WatchOperator {
-    private WatchDatabase mWatchDatabase;
+    public WatchDatabase mWatchDatabase;
     private ActivityMain mActivity;
     private List<WatchContact.User> mRequestToList;
     private List<WatchContact.User> mRequestFromList;
@@ -254,9 +254,8 @@ public class WatchOperator {
         return mWatchDatabase.EventGet(id);
     }
 
-    public boolean setEvent(WatchEvent event) {
-        // Todo : upload to server
-        mWatchDatabase.EventAdd(event);
+    public boolean setEvent(WatchOperatorSetEvent.finishListener listener, WatchEvent event) {
+        new WatchOperatorSetEvent(mActivity).start(listener, event);
         return true;
     }
 }

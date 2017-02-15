@@ -420,6 +420,12 @@ public class WatchDatabase {
         return item;
     }
 
+    public void EventClear() {
+        mDatabase.execSQL("delete from "+ TABLE_EVENT);
+        mDatabase.execSQL("delete from "+ TABLE_TODO);
+        mDatabase.execSQL("delete from "+ TABLE_EVENT_KITS);
+    }
+
     public long EventAdd(WatchEvent event) {
         long rtn;
         ContentValues contentValues = new ContentValues();
