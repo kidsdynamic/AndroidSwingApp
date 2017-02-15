@@ -167,6 +167,8 @@ public class ActivityMain extends AppCompatActivity
     WatchOperatorResumeSync.finishListener mFinishListener = new WatchOperatorResumeSync.finishListener() {
         @Override
         public void onFinish(String msg) {
+            //eventTest();
+
             if (!msg.equals(""))
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             if (mCurrentFragment.equals(""))
@@ -380,6 +382,34 @@ public class ActivityMain extends AppCompatActivity
     }
 
     private void eventTest() {
+        mOperator.mWatchDatabase.EventClear();
+        WatchEvent watchEvent = new WatchEvent();
+        watchEvent.mId = 0;
+        watchEvent.mUserId = 70;
+        watchEvent.mKids.add(23);
+        watchEvent.mName = "TEST EVENT BY GIO";
+        watchEvent.mStartDate = 12345678;
+        watchEvent.mEndDate = 12349678;
+        watchEvent.mColor = "#F05D25";
+        watchEvent.mDescription = "TEST DESCRIPTION BY GIO";
+        watchEvent.mAlert = 40;
+        watchEvent.mCity = "New York";
+        watchEvent.mState = "New York";
+        watchEvent.mRepeat = "";
+        watchEvent.mTimezoneOffset = 0;
+        watchEvent.mTodoList.add(
+                new WatchTodo(
+                        0,
+                        70,
+                        0,
+                        "TEST TODO by GIO",
+                        "",
+                        12345678,
+                        12345678
+                )
+        );
+        mOperator.setEvent(null, watchEvent);
+
         /*
         mOperator.EventReset();
         mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-31T06:20:00Z"), WatchOperator.getTimeStamp("2015-08-31T08:20:00Z")));

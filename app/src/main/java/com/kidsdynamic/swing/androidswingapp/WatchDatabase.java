@@ -454,7 +454,10 @@ public class WatchDatabase {
         for (WatchTodo todo : event.mTodoList) {
             todo.mEventId = event.mId;
             todo.mUserId = event.mUserId;
-            TodoAdd(todo);
+            if (TodoGet(todo.mId) == null)
+                TodoAdd(todo);
+            else
+                TodoUpdate(todo);
         }
 
         return rtn;
@@ -488,7 +491,10 @@ public class WatchDatabase {
         for (WatchTodo todo : event.mTodoList) {
             todo.mEventId = event.mId;
             todo.mUserId = event.mUserId;
-            TodoAdd(todo);
+            if (TodoGet(todo.mId) == null)
+                TodoAdd(todo);
+            else
+                TodoUpdate(todo);
         }
 
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId, null);
@@ -642,6 +648,20 @@ public class WatchDatabase {
         return mDatabase.insert(TABLE_TODO, null, contentValues);
     }
 
+    public long TodoUpdate(WatchTodo todo) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(ID, todo.mId);
+        contentValues.put(USER_ID, todo.mUserId);
+        contentValues.put(EVENT_ID, todo.mEventId);
+        contentValues.put(TEXT, todo.mText);
+        contentValues.put(STATUS, todo.mStatus);
+        contentValues.put(DATE_CREATED, todo.mDateCreated);
+        contentValues.put(LAST_UPDATE, todo.mLastUpdated);
+
+        return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId, null);
+    }
+
     public long TodoDelete(int eventId, int userId) {
         return mDatabase.delete(TABLE_TODO, EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId, null);
     }
@@ -652,6 +672,18 @@ public class WatchDatabase {
 
         while (cursor.moveToNext())
             result.add(cursorToTodo(cursor));
+
+        cursor.close();
+
+        return result;
+    }
+
+    public WatchTodo TodoGet(int id) {
+        WatchTodo result = null;
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + ID + "=" + id, null);
+
+        if (cursor.moveToNext())
+            result = cursorToTodo(cursor);
 
         cursor.close();
 
