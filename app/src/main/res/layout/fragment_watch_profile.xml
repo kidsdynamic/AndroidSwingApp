@@ -64,7 +64,7 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:hint="Kid's Name"
-            android:imeOptions="actionNext"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:nextFocusForward="@+id/registration_info_last" />
 <!--

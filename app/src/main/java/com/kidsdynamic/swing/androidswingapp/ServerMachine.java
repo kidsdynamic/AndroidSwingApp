@@ -363,6 +363,7 @@ public class ServerMachine {
                          String color, String description, int alert, String city, String state, String repeat,
                          int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
+        Log.d("TEST", "JSON " + ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
         map.put("json", ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_EVENT_ADD, map, null), CMD_EVENT_ADD, listener));
     }

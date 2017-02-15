@@ -16,7 +16,7 @@ public class WatchOperatorResumeSync {
     private ActivityConfig mConfig;
     private finishListener mFinishListener = null;
     private List<String> mAvatarToGet;
-    
+
     WatchOperatorResumeSync(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
         mServerMachine = activityMain.mServiceMachine;
@@ -109,10 +109,10 @@ public class WatchOperatorResumeSync {
                     mAvatarToGet.add(kidData.profile);
 
                 for (int idx = 0; idx < removeList.size(); idx++) {
-                  if (removeList.get(idx).mId == kid.mId && removeList.get(idx).mUserId == kid.mUserId) {
-                      removeList.remove(idx);
-                      break;
-                  }
+                    if (removeList.get(idx).mId == kid.mId && removeList.get(idx).mUserId == kid.mUserId) {
+                        removeList.remove(idx);
+                        break;
+                    }
                 }
             }
 
@@ -198,6 +198,53 @@ public class WatchOperatorResumeSync {
                 }
             }
             mOperator.setRequestList(to, from);
+            mServerMachine.eventRetrieveAllEventsWithTodo(mEventRetrieveAllEventsWithTodoListener);
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+            mServerMachine.eventRetrieveAllEventsWithTodo(mEventRetrieveAllEventsWithTodoListener);
+        }
+    };
+
+    ServerMachine.eventRetrieveAllEventsWithTodoListener mEventRetrieveAllEventsWithTodoListener = new ServerMachine.eventRetrieveAllEventsWithTodoListener() {
+        @Override
+        public void onSuccess(int statusCode, List<ServerGson.eventData> response) {
+            mOperator.mWatchDatabase.EventClear();
+            for (ServerGson.eventData eventData : response) {
+                WatchEvent watchEvent = new WatchEvent();
+                watchEvent.mId = eventData.id;
+                watchEvent.mUserId = eventData.user.id;
+                for (ServerGson.kidData kidData : eventData.kid)
+                    watchEvent.mKids.add(kidData.id);
+                watchEvent.mName = eventData.name;
+                watchEvent.mStartDate = WatchOperator.getTimeStamp(eventData.startDate);
+                watchEvent.mEndDate = WatchOperator.getTimeStamp(eventData.endDate);
+                watchEvent.mColor = eventData.color;
+                watchEvent.mStatus = eventData.status;
+                watchEvent.mDescription = eventData.description;
+                watchEvent.mAlert = eventData.alert;
+                watchEvent.mCity = eventData.city;
+                watchEvent.mState = eventData.state;
+                watchEvent.mRepeat = eventData.repeat;
+                watchEvent.mTimezoneOffset = eventData.timezoneOffset;
+                watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);
+                watchEvent.mLastUpdated = WatchOperator.getTimeStamp(eventData.lastUpdated);
+                for (ServerGson.todoData todoData : eventData.todo) {
+                    watchEvent.mTodoList.add(
+                            new WatchTodo(
+                                    todoData.id,
+                                    eventData.user.id,
+                                    eventData.id,
+                                    todoData.text,
+                                    todoData.status,
+                                    WatchOperator.getTimeStamp(todoData.dateCreated),
+                                    WatchOperator.getTimeStamp(todoData.lastUpdated)
+                            )
+                    );
+                }
+                mOperator.mWatchDatabase.EventAdd(watchEvent);
+            }
             syncAvatar();
         }
 
