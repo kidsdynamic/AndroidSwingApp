@@ -20,6 +20,7 @@ public class FragmentCalendarDaily extends ViewFragment {
 
     private ViewCalendarSelector mViewSelector;
     private ViewCalendarWeek mViewCalendar;
+    private ViewCalendarDaily mViewSchedule;
 
     private long mDefaultDate = System.currentTimeMillis();
 
@@ -47,6 +48,8 @@ public class FragmentCalendarDaily extends ViewFragment {
         mViewCalendar.setDate(mDefaultDate);
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
+        mViewSchedule = (ViewCalendarDaily) mViewMain.findViewById(R.id.calendar_daily_schedule);
+
         return mViewMain;
     }
 
@@ -72,8 +75,11 @@ public class FragmentCalendarDaily extends ViewFragment {
         WatchContact.User me = mActivityMain.mOperator.getUser();
         mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 12, 15));
         mEventList.add(makeFakeEvent(2, me.mId, new ArrayList<Integer>(), 8, 0, 8, 30));
-        mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 9, 0, 9, 30));
+        mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 15, 0, 15, 30));
         //////////////
+
+        for (WatchEvent event : mEventList)
+            mViewSchedule.addEvent(event);
     }
 
     private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {

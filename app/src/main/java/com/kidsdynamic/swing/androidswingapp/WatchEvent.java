@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import java.io.Serializable;
@@ -158,13 +157,13 @@ public class WatchEvent implements Serializable {
         mEndDate = tmp;
     }
 
-    public boolean overlapping(WatchEvent event) {
+    public boolean overLapping(WatchEvent event) {
         return !(mEndDate <= event.mStartDate || event.mEndDate <= mStartDate);
     }
 
-    public boolean overlapping(ArrayList<WatchEvent> list) {
+    public boolean overLapping(List<WatchEvent> list) {
         for (WatchEvent event : list)
-            if (overlapping(event))
+            if (overLapping(event))
                 return true;
         return false;
     }
