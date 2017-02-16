@@ -446,7 +446,7 @@ public class ServerGson {
 
             public static List<eventData> fromJson(String json) {
                 eventData[] data = new Gson().fromJson(json, eventData[].class);
-                return new ArrayList<>(Arrays.asList(data));
+                return data == null ? null : new ArrayList<>(Arrays.asList(data));
             }
         }
 

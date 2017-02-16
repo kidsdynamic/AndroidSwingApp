@@ -211,39 +211,41 @@ public class WatchOperatorResumeSync {
         @Override
         public void onSuccess(int statusCode, List<ServerGson.eventData> response) {
             mOperator.mWatchDatabase.EventClear();
-            for (ServerGson.eventData eventData : response) {
-                WatchEvent watchEvent = new WatchEvent();
-                watchEvent.mId = eventData.id;
-                watchEvent.mUserId = eventData.user.id;
-                for (ServerGson.kidData kidData : eventData.kid)
-                    watchEvent.mKids.add(kidData.id);
-                watchEvent.mName = eventData.name;
-                watchEvent.mStartDate = WatchOperator.getTimeStamp(eventData.startDate);
-                watchEvent.mEndDate = WatchOperator.getTimeStamp(eventData.endDate);
-                watchEvent.mColor = eventData.color;
-                watchEvent.mStatus = eventData.status;
-                watchEvent.mDescription = eventData.description;
-                watchEvent.mAlert = eventData.alert;
-                watchEvent.mCity = eventData.city;
-                watchEvent.mState = eventData.state;
-                watchEvent.mRepeat = eventData.repeat;
-                watchEvent.mTimezoneOffset = eventData.timezoneOffset;
-                watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);
-                watchEvent.mLastUpdated = WatchOperator.getTimeStamp(eventData.lastUpdated);
-                for (ServerGson.todoData todoData : eventData.todo) {
-                    watchEvent.mTodoList.add(
-                            new WatchTodo(
-                                    todoData.id,
-                                    eventData.user.id,
-                                    eventData.id,
-                                    todoData.text,
-                                    todoData.status,
-                                    WatchOperator.getTimeStamp(todoData.dateCreated),
-                                    WatchOperator.getTimeStamp(todoData.lastUpdated)
-                            )
-                    );
+            if (response != null) {
+                for (ServerGson.eventData eventData : response) {
+                    WatchEvent watchEvent = new WatchEvent();
+                    watchEvent.mId = eventData.id;
+                    watchEvent.mUserId = eventData.user.id;
+                    for (ServerGson.kidData kidData : eventData.kid)
+                        watchEvent.mKids.add(kidData.id);
+                    watchEvent.mName = eventData.name;
+                    watchEvent.mStartDate = WatchOperator.getTimeStamp(eventData.startDate);
+                    watchEvent.mEndDate = WatchOperator.getTimeStamp(eventData.endDate);
+                    watchEvent.mColor = eventData.color;
+                    watchEvent.mStatus = eventData.status;
+                    watchEvent.mDescription = eventData.description;
+                    watchEvent.mAlert = eventData.alert;
+                    watchEvent.mCity = eventData.city;
+                    watchEvent.mState = eventData.state;
+                    watchEvent.mRepeat = eventData.repeat;
+                    watchEvent.mTimezoneOffset = eventData.timezoneOffset;
+                    watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);
+                    watchEvent.mLastUpdated = WatchOperator.getTimeStamp(eventData.lastUpdated);
+                    for (ServerGson.todoData todoData : eventData.todo) {
+                        watchEvent.mTodoList.add(
+                                new WatchTodo(
+                                        todoData.id,
+                                        eventData.user.id,
+                                        eventData.id,
+                                        todoData.text,
+                                        todoData.status,
+                                        WatchOperator.getTimeStamp(todoData.dateCreated),
+                                        WatchOperator.getTimeStamp(todoData.lastUpdated)
+                                )
+                        );
+                    }
+                    mOperator.mWatchDatabase.EventAdd(watchEvent);
                 }
-                mOperator.mWatchDatabase.EventAdd(watchEvent);
             }
             syncAvatar();
         }
