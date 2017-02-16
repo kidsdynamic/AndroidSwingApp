@@ -49,6 +49,7 @@ public class FragmentCalendarDaily extends ViewFragment {
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
         mViewSchedule = (ViewCalendarDaily) mViewMain.findViewById(R.id.calendar_daily_schedule);
+        mViewSchedule.setOnSelectListener(mScheduleListener);
 
         return mViewMain;
     }
@@ -122,4 +123,11 @@ public class FragmentCalendarDaily extends ViewFragment {
         }
     };
 
+    private ViewCalendarDaily.OnSelectListener mScheduleListener = new ViewCalendarDaily.OnSelectListener() {
+        @Override
+        public void OnSelect(View view, WatchEvent event) {
+            mActivityMain.mEventStack.push(event);
+            mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
+        }
+    };
 }

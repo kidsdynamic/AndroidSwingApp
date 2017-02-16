@@ -142,7 +142,6 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
 
     interface OnSelectListener {
         void OnSelect(View view, long offset, long date);
-
     }
 
     public void setOnSelectListener(OnSelectListener listener) {

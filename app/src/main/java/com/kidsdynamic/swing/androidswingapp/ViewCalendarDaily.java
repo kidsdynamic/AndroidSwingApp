@@ -3,12 +3,9 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -37,10 +34,10 @@ public class ViewCalendarDaily extends ViewGroup {
     private int mTextColor = 0xFFFFFFFF;
     private int mNowColor = 0;
 
-    private List<List<LayoutParams>> mLayoutMap;
-
     private Paint mPaint;
     private Rect mRect;
+
+    private OnSelectListener mSelectListener;
 
     public ViewCalendarDaily(Context context) {
         super(context);
@@ -85,16 +82,55 @@ public class ViewCalendarDaily extends ViewGroup {
         mRect = new Rect();
     }
 
-//    @Override
-//    public void onFillCell(Context context) {
-//    }
+    public ViewCalendarCellDaily addEvent(WatchEvent event) {
+
+        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+
+        Calendar cale = Calendar.getInstance();
+
+        cale.setTimeInMillis(event.mStartDate);
+        layoutParams.start_hour = cale.get(Calendar.HOUR_OF_DAY);
+        layoutParams.start_minute = cale.get(Calendar.MINUTE);
+
+        cale.setTimeInMillis(event.mEndDate);
+        layoutParams.end_hour = cale.get(Calendar.HOUR_OF_DAY);
+        layoutParams.end_minute = cale.get(Calendar.MINUTE);
+
+        ViewCalendarCellDaily cell = new ViewCalendarCellDaily(getContext());
+        cell.setEvent(event);
+        cell.setOnClickListener(mEventListener);
+        cell.setBackgroundColor(WatchEvent.stringToColor(event.mColor));
+        cell.setLayoutParams(layoutParams);
+
+        addView(cell);
+
+        return cell;
+    }
+
+    interface OnSelectListener {
+        void OnSelect(View view, WatchEvent event);
+    }
+
+    public void setOnSelectListener(OnSelectListener listener) {
+        mSelectListener = listener;
+    }
+
+    private View.OnClickListener mEventListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (mSelectListener == null)
+                return;
+
+            ViewCalendarCellDaily cell = (ViewCalendarCellDaily) view;
+            mSelectListener.OnSelect(cell, cell.getEvent());
+        }
+    };
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         final int count = getChildCount();
 
         buildLayoutMap();
-        dumpLayoutMap();
 
         for (int idx = 0; idx < count; idx++) {
             View child = getChildAt(idx);
@@ -105,10 +141,94 @@ public class ViewCalendarDaily extends ViewGroup {
             if (!checkLayoutParams(layoutParams))
                 return;
 
-            Rect rect = getLayoutRect(layoutParams);
+            Rect rect = layoutParams.rect;
 
             child.measure(MeasureSpec.makeMeasureSpec(rect.width(), MeasureSpec.AT_MOST), MeasureSpec.makeMeasureSpec(rect.height(), MeasureSpec.AT_MOST));
             child.layout(rect.left, rect.top, rect.right, rect.bottom);
+        }
+    }
+
+    public void buildLayoutMap() {
+        List<List<LayoutParams>> layoutMap = new ArrayList<>();
+        int count;
+
+        /**
+         * Assign children to a column, each child can't overlap in a column.
+         * If child can't find a free column, create one.
+         */
+        count = getChildCount();
+        for (int idx = 0; idx < count; idx++) {
+            View child = getChildAt(idx);
+            LayoutParams layoutParams = (LayoutParams) child.getLayoutParams();
+
+            if (child.getVisibility() == GONE)
+                continue;
+            if (!checkLayoutParams(layoutParams))
+                continue;
+
+            boolean added = false;
+            for (List<LayoutParams> list : layoutMap) {
+                if (!layoutParams.overLapping(list)) {
+                    added = list.add(layoutParams);
+                    break;
+                }
+            }
+
+            if (!added) {
+                List<LayoutParams> list = new ArrayList<>();
+                list.add(layoutParams);
+                layoutMap.add(list);
+            }
+        }
+
+        /**
+         * According map, vertical stretch all children in the column.
+         */
+        int width = getMeasuredWidth() - getPaddingStart() - getPaddingEnd() - mHourPadding - mHourMargin;
+        int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
+        int column_count = layoutMap.size();
+        int column_width = width / column_count;
+
+        count = getChildCount();
+        for (int idx = 0; idx < count; idx++) {
+            View child = getChildAt(idx);
+            LayoutParams layoutParams = (LayoutParams) child.getLayoutParams();
+
+            if (child.getVisibility() == GONE)
+                continue;
+            if (!checkLayoutParams(layoutParams))
+                continue;
+
+            for (int idy = 0; idy < column_count; idy++) {
+                List<LayoutParams> list = layoutMap.get(idy);
+                if (!list.contains(layoutParams))
+                    continue;
+
+                layoutParams.rect.left = getPaddingStart() + mHourPadding + mHourMargin + (column_width * idy);
+                layoutParams.rect.right = layoutParams.rect.left + column_width;
+            }
+
+            layoutParams.rect.top = layoutParams.getStartPos() * height / 1440;
+            layoutParams.rect.bottom = layoutParams.getEndPos() * height / 1440;
+        }
+
+        /**
+         * According map, horizontal stretch all children.
+         */
+        count = layoutMap.size();
+        for (int idx = 0; idx < count; idx++) {
+            List<LayoutParams> list = layoutMap.get(idx);
+
+            for (LayoutParams layoutParams : list) {
+                int idy = idx + 1;
+                while (idy < count) {
+                    if (layoutParams.overLapping(layoutMap.get(idy)))
+                        break;
+                    idy++;
+                }
+
+                layoutParams.rect.right = layoutParams.rect.left + (column_width * (idy - idx));
+            }
         }
     }
 
@@ -224,96 +344,6 @@ public class ViewCalendarDaily extends ViewGroup {
         canvas.drawLine(x, y, getMeasuredWidth(), y, mPaint);
     }
 
-    public void addEvent(WatchEvent event) {
-
-        LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
-        Calendar cale = Calendar.getInstance();
-
-        cale.setTimeInMillis(event.mStartDate);
-        layoutParams.start_hour = cale.get(Calendar.HOUR_OF_DAY);
-        layoutParams.start_minute = cale.get(Calendar.MINUTE);
-
-        cale.setTimeInMillis(event.mEndDate);
-        layoutParams.end_hour = cale.get(Calendar.HOUR_OF_DAY);
-        layoutParams.end_minute = cale.get(Calendar.MINUTE);
-
-        ViewCalendarCellDaily cell = new ViewCalendarCellDaily(getContext());
-        cell.setEvent(event);
-        cell.setBackgroundColor(WatchEvent.stringToColor(event.mColor));
-        cell.setLayoutParams(layoutParams);
-
-        addView(cell);
-    }
-
-    private Rect getLayoutRect(LayoutParams layoutParams) {
-        Rect rect = new Rect();
-        int width = getMeasuredWidth() - getPaddingStart() - getPaddingEnd() - mHourPadding - mHourMargin;
-        int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
-
-        int column_count = mLayoutMap.size();
-        int column_width = width / column_count;
-        int column;
-        for (column = 0; column < column_count; column++) {
-            List<LayoutParams> list = mLayoutMap.get(column);
-            if (!list.contains(layoutParams))
-                continue;
-
-            rect.left = getPaddingStart() + mHourPadding + mHourMargin + (column_width * column);
-            rect.right = rect.left + column_width;
-        }
-
-        rect.top = layoutParams.getStartPos() * height / 1440;
-        rect.bottom = layoutParams.getEndPos() * height / 1440;
-
-        return rect;
-    }
-
-    public void buildLayoutMap() {
-        mLayoutMap = new ArrayList<>();
-
-        int count = getChildCount();
-        for (int idx = 0; idx < count; idx++) {
-            View child = getChildAt(idx);
-            LayoutParams layoutParams = (LayoutParams) child.getLayoutParams();
-
-            // ignore child if invisible or layout param is not match
-            if (child.getVisibility() == GONE)
-                continue;
-            if (!checkLayoutParams(layoutParams))
-                continue;
-
-            // find a colume to add child
-            boolean added = false;
-            for (List<LayoutParams> list : mLayoutMap) {
-                if (!layoutParams.overLapping(list)) {
-                    added = list.add(layoutParams);
-                    break;
-                }
-            }
-
-            // add column if there is not space
-            if (!added) {
-                List<LayoutParams> list = new ArrayList<>();
-                list.add(layoutParams);
-                mLayoutMap.add(list);
-            }
-        }
-    }
-
-    public void dumpLayoutMap() {
-        Log.d("xxx", "colume count:" + mLayoutMap.size());
-
-        int count = mLayoutMap.size();
-        for (int idx = 0; idx < count; idx++) {
-            List<LayoutParams> colume = mLayoutMap.get(idx);
-            Log.d("xxx", "colume(" + idx + "):" + colume.size());
-
-            for (LayoutParams layout : colume)
-                Log.d("xxx", layout.toString());
-        }
-    }
-
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new LayoutParams(getContext(), attrs);
@@ -341,6 +371,7 @@ public class ViewCalendarDaily extends ViewGroup {
         public int start_minute = 0;
         public int end_hour = 0;
         public int end_minute = 0;
+        public Rect rect = new Rect();
 
         public LayoutParams(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -414,7 +445,7 @@ public class ViewCalendarDaily extends ViewGroup {
                     .append(" start_minute:").append(start_minute)
                     .append(" end_hour:").append(end_hour)
                     .append(" end_minute:").append(end_minute)
-                    .append(" gravity:").append(gravity)
+                    .append(" rect:").append(rect.toString())
                     .append("}").toString();
         }
     }
