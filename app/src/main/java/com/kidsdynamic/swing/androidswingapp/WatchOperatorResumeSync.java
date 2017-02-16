@@ -104,7 +104,13 @@ public class WatchOperatorResumeSync {
                 kid.mUserId = response.user.id;
                 kid.mProfile = kidData.profile;
                 kid.mBound = true;
-                mOperator.setKid(kid);
+
+                WatchContact.Kid src = mOperator.mWatchDatabase.KidGet(kid.mId);
+                if (src == null)
+                    mOperator.mWatchDatabase.KidAdd(kid);
+                else
+                    mOperator.mWatchDatabase.KidUpdate(kid);
+
                 if (!kidData.profile.equals(""))
                     mAvatarToGet.add(kidData.profile);
 
@@ -165,7 +171,12 @@ public class WatchOperatorResumeSync {
                                 kid.mBound = true;
                                 if (!kid.mProfile.equals(""))
                                     mAvatarToGet.add(kid.mProfile);
-                                mOperator.setKid(kid);
+
+                                WatchContact.Kid src = mOperator.mWatchDatabase.KidGet(kid.mId);
+                                if (src == null)
+                                    mOperator.mWatchDatabase.KidAdd(kid);
+                                else
+                                    mOperator.mWatchDatabase.KidUpdate(kid);
 
                                 for (int idx = 0; idx < removeList.size(); idx++) {
                                     if (removeList.get(idx).mId == kid.mId && removeList.get(idx).mUserId == kid.mUserId) {

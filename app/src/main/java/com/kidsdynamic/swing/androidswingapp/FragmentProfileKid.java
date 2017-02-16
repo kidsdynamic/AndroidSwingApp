@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by 03543 on 2017/1/24.
@@ -215,20 +214,20 @@ public class FragmentProfileKid extends ViewFragment {
         public void onClick(View view) {
             if (mKid == null)
                 return;
-
-            mActivityMain.mServiceMachine.kidsDelete(mKidsDeleteListener, mKid.mId);
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mActivityMain.mOperator.deleteKid(mDeleteKidListener, mKid.mId);
         }
     };
 
-    ServerMachine.kidsDeleteListener mKidsDeleteListener = new ServerMachine.kidsDeleteListener() {
+    WatchOperatorDeleteKid.finishListener mDeleteKidListener = new WatchOperatorDeleteKid.finishListener() {
         @Override
-        public void onSuccess(int statusCode) {
-            mActivityMain.popFragment();
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mActivityMain.popFragment();
+        public void onFinish(String msg) {
+            mProcessDialog.dismiss();
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            } else {
+                mActivityMain.popFragment();
+            }
         }
     };
 
@@ -242,8 +241,7 @@ public class FragmentProfileKid extends ViewFragment {
                     if (!mKid.mName.equals("")) {
                         mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                         String macId = ServerMachine.getMacID(mKid.mLabel);
-                        mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mName, macId);
-                        //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mKid.mName, "AAAAAABBBB04");
+                        mActivityMain.mOperator.setKid(mAddKidListener, mKid.mName, macId, mAvatarBitmap);
                     }
                 }
             }
@@ -252,87 +250,19 @@ public class FragmentProfileKid extends ViewFragment {
         }
     };
 
-    ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
+    WatchOperatorSetKid.finishListener mAddKidListener = new WatchOperatorSetKid.finishListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.kidData response) {
-            mKid.mId = response.id;
-            mKid.mName = response.name;
-            mKid.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
-            mKid.mMacId = response.macId;
-            mKid.mUserId = response.parent.id;
-            mActivityMain.mOperator.setFocusKid(mKid);
-            if (mAvatarBitmap != null)
-                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mName, ".jpg");
-            if (mKid.mProfile == null)
-                mKid.mProfile = "";
-
-            mActivityMain.mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mKid.mMacId));
-        }
-
-        @Override
-        public void onConflict(int statusCode) {
+        public void onFinish(String msg) {
             mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
-        @Override
-        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
-            if (!mKid.mProfile.equals("")) {
-                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             } else {
-                mProcessDialog.dismiss();
-                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
+                Bundle bundle = new Bundle();
+                bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
+                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
             }
         }
     };
-
-    ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {
-
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response) {
-
-            File fileFrom = new File(mKid.mProfile);
-            File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.kid.profile);
-            if (!fileFrom.renameTo(fileTo)) {
-                Log.d("swing", "Rename failed! " + mKid.mProfile + " to " + response.kid.profile);
-            }
-            mKid.mProfile = response.kid.profile;
-            mActivityMain.mOperator.setFocusKid(mKid);
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
-
-            mProcessDialog.dismiss();
-            if (mKid.mBound)
-                mActivityMain.popFragment();
-            else
-                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Upload kid avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mKid.mProfile);
-
-            mProcessDialog.dismiss();
-            if (mKid.mBound)
-                mActivityMain.popFragment();
-            else
-                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
-        }
-    };
-
 
     private void viewMyKid() {
         mViewPhoto.setBitmap(mKid.mPhoto);
@@ -372,28 +302,18 @@ public class FragmentProfileKid extends ViewFragment {
         mKid.mName = mViewName.getText().toString();
         if (!mKid.mName.equals("")) {
             mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
-            mActivityMain.mServiceMachine.kidsUpdate(mKidsUpdateListener, mKid.mId, mKid.mName);
+            mActivityMain.mOperator.setKid(mUpdateKidListener, mKid.mId, mKid.mName, mAvatarBitmap);
         } else {
             mActivityMain.popFragment();
         }
     }
 
-    ServerMachine.kidsUpdateListener mKidsUpdateListener = new ServerMachine.kidsUpdateListener() {
+    WatchOperatorSetKid.finishListener mUpdateKidListener = new WatchOperatorSetKid.finishListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.kids.update.response response) {
-            if (mAvatarBitmap != null) {
-                mKid.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mKid.mName, ".jpg");
-                mActivityMain.mOperator.setFocusKid(mKid);
-                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
-            } else {
-                mProcessDialog.dismiss();
-                mActivityMain.popFragment();
-            }
-        }
-
-        @Override
-        public void onFail(int statusCode) {
+        public void onFinish(String msg) {
             mProcessDialog.dismiss();
+            if (!msg.equals(""))
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             mActivityMain.popFragment();
         }
     };

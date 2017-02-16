@@ -174,7 +174,8 @@ public class ActivityMain extends AppCompatActivity
             if (mCurrentFragment.equals(""))
                 selectFragment(FragmentBoot.class.getName(), null);
             else
-                mProcessDialog.dismiss();
+                if (mProcessDialog!=null)
+                    mProcessDialog.dismiss();
         }
     };
 

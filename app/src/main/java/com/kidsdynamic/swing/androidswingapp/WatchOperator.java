@@ -47,6 +47,18 @@ public class WatchOperator {
     public void requestToSubHost(WatchOperatorRequestToSubHost.finishListener listener, String email) {
         new WatchOperatorRequestToSubHost(mActivity).start(listener, email);
     }
+
+    public void setKid(WatchOperatorSetKid.finishListener listener, String name, String macId, Bitmap avatar) {
+        new WatchOperatorSetKid(mActivity).start(listener, name, macId, avatar);
+    }
+
+    public void setKid(WatchOperatorSetKid.finishListener listener, int id, String name, Bitmap avatar) {
+        new WatchOperatorSetKid(mActivity).start(listener, id, name, avatar);
+    }
+
+    public void deleteKid(WatchOperatorDeleteKid.finishListener listener, int id) {
+        new WatchOperatorDeleteKid(mActivity).start(listener, id);
+    }
     //-------------------------------------------------------------------------
 
     void ResetDatabase() {
@@ -75,7 +87,7 @@ public class WatchOperator {
     void clearKids() {
         mWatchDatabase.KidClear();
     }
-
+/*
     void setKid(WatchContact.Kid kid) {
         WatchContact.Kid src = mWatchDatabase.KidGet(kid);
         if (src == null)
@@ -84,7 +96,7 @@ public class WatchOperator {
             mWatchDatabase.KidUpdate(kid);
 
     }
-
+*/
     void setFocusKid(WatchContact.Kid kid) {
         mWatchDatabase.KidSetFocus(kid);
     }
@@ -112,7 +124,7 @@ public class WatchOperator {
 
     void deleteKids(List<WatchContact.Kid> kids) {
         for (WatchContact.Kid kid : kids) {
-            mWatchDatabase.KidDelete(kid);
+            mWatchDatabase.KidDelete(kid.mId);
         }
     }
 

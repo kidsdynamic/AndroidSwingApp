@@ -234,13 +234,13 @@ public class WatchDatabase {
         return mDatabase.update(TABLE_KIDS, contentValues, ID + "=" + kid.mId + " AND " + USER_ID + "=" + kid.mUserId, null);
     }
 
-    public int KidDelete(WatchContact.Kid dist) {
-        return mDatabase.delete(TABLE_KIDS, ID + "=" + dist.mId + " AND " + USER_ID + "='" + dist.mUserId + "'", null);
+    public int KidDelete(int id) {
+        return mDatabase.delete(TABLE_KIDS, ID + "=" + id, null);
     }
 
-    public WatchContact.Kid KidGet(WatchContact.Kid dist) {
+    public WatchContact.Kid KidGet(int id) {
         WatchContact.Kid kid = null;
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + ID + "=" + dist.mId + " AND " + USER_ID + "=" + dist.mUserId + " LIMIT 1", null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + ID + "=" + id, null);
         if (cursor.moveToNext()) {
             kid = cursorToKid(cursor);
         }
