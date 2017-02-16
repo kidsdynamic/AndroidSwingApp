@@ -76,6 +76,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         layoutParams.end_minute = cale.get(Calendar.MINUTE);
 
         ViewCalendarCellDaily cell = new ViewCalendarCellDaily(getContext());
+        cell.setViewCalendar(this);
         cell.setEvent(event);
         cell.setOnClickListener(mEventListener);
         cell.setBackgroundColor(WatchEvent.stringToColor(event.mColor));

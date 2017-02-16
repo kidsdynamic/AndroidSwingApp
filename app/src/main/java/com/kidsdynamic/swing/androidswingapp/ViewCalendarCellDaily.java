@@ -1,7 +1,14 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 
 import java.util.Calendar;
 
@@ -11,6 +18,7 @@ import java.util.Calendar;
 
 public class ViewCalendarCellDaily extends ViewCalendarCell {
     private WatchEvent mEvent;
+    private Rect mRect;
 
     public ViewCalendarCellDaily(Context context) {
         super(context);
@@ -28,13 +36,37 @@ public class ViewCalendarCellDaily extends ViewCalendarCell {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        mRect = new Rect();
+
+        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                5, getResources().getDisplayMetrics());
+
+        setPadding(padding, 0, padding, 0);
+        setSingleLine();
+        setEllipsize(TextUtils.TruncateAt.END);
     }
 
     public void setEvent(WatchEvent event) {
         mEvent = event;
+        setText(event.mDescription);
     }
 
     public WatchEvent getEvent() {
         return mEvent;
     }
+
+    @Override
+    public void setViewCalendar(ViewCalendar calendar) {
+        mViewCalendar = calendar;
+
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, mViewCalendar.getTextSize() + 1);
+        setTypeface(getTypeface(), Typeface.BOLD);
+        setTextColor(Color.WHITE);
+    }
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+    }
+
 }

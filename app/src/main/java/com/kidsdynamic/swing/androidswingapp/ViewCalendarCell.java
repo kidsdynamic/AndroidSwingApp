@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class ViewCalendarCell extends TextView {
     protected long mDate;
-    protected ViewCalendar mCalendar = null;
+    protected ViewCalendar mViewCalendar = null;
 
     public ViewCalendarCell(Context context) {
         super(context);
@@ -52,11 +52,11 @@ public class ViewCalendarCell extends TextView {
         return null;
     }
 
-    public void setCalendar(ViewCalendar calendar) {
-        mCalendar = calendar;
+    public void setViewCalendar(ViewCalendar calendar) {
+        mViewCalendar = calendar;
     }
 
-    public ViewCalendar getCalendar() {
-        return mCalendar;
+    public ViewCalendar getViewCalendar() {
+        return mViewCalendar;
     }
 }

@@ -92,7 +92,7 @@ public class FragmentCalendarDaily extends ViewFragment {
         event.mKids = kids;
         event.mColor = WatchEvent.colorToString(WatchEvent.StockColorList[2].mColor);
         event.mName = String.format(Locale.getDefault(), "Name(%d)", eventId);
-        event.mDescription = String.format(Locale.getDefault(), "Desc(%d)", eventId);
+        event.mDescription = String.format(Locale.getDefault(), "Desc(%d) This is a Dog", eventId);
         event.mRepeat = WatchEvent.REPEAT_NEVER;
 
         Calendar calc = Calendar.getInstance();

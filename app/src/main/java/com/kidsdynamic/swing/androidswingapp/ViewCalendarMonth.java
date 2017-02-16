@@ -1,7 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
-import android.provider.CalendarContract;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -63,7 +62,7 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
 
             for (int idx = 0; idx < 7; idx++) {
                 mViewCellList[cidx] = new ViewCalendarCellMonth(context);
-                mViewCellList[cidx].setCalendar(this);
+                mViewCellList[cidx].setViewCalendar(this);
                 mViewCellList[cidx].setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
                 mViewCellList[cidx].setTypeface(mViewCellList[idx].getTypeface(), mTextStyle);
                 mViewCellList[cidx].setTextColor(mTextColor);
