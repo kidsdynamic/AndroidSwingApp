@@ -14,6 +14,8 @@ import java.util.Calendar;
 
 public class ViewCalendarCellMonth extends ViewCalendarCell {
 
+    private WatchEvent mEventList;
+
     public ViewCalendarCellMonth(Context context) {
         super(context);
         init(context, null);
@@ -30,6 +32,10 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
     }
 
     private void init(Context context, AttributeSet attrs) {
+    }
+
+    public void addEvent(WatchEvent event) {
+
     }
 
     @Override

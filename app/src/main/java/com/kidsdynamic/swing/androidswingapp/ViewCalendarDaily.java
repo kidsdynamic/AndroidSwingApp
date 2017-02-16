@@ -325,6 +325,29 @@ public class ViewCalendarDaily extends ViewCalendar {
     }
 
     @Override
+    public long getDateBegin() {
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(mDate);
+
+        calc.set(Calendar.HOUR_OF_DAY, 0);
+        calc.set(Calendar.MINUTE, 0);
+        calc.set(Calendar.SECOND, 0);
+        calc.set(Calendar.MILLISECOND, 0);
+
+        return calc.getTimeInMillis();
+    }
+
+    @Override
+    public long getDateEnd() {
+        Calendar calc = ViewCalendar.getInstance();
+        calc.setTimeInMillis(getDateBegin());
+
+        calc.add(Calendar.DAY_OF_MONTH, 1);
+
+        return calc.getTimeInMillis() - 1;
+    }
+
+    @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new LayoutParams(getContext(), attrs);
     }

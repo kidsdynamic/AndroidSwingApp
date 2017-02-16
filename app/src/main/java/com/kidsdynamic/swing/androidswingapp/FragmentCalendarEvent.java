@@ -163,8 +163,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         super.onResume();
 
         mEvent = mActivityMain.mEventStack.isEmpty() ?
-                new WatchEvent(System.currentTimeMillis()) :
-                mActivityMain.mEventStack.pop();
+                new WatchEvent(System.currentTimeMillis()) : mActivityMain.mEventStack.pop();
         loadWatchEvent();
     }
 

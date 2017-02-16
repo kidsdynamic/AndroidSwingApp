@@ -135,6 +135,11 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
         }
     }
 
+    public ViewCalendarCellMonth addEvent(WatchEvent event) {
+        // todo: find ViewCalendarCellMonth and add event
+        return null;
+    }
+
     @Override
     public void onClick(View view) {
         if (mSelectListener == null)
