@@ -34,12 +34,6 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
     }
 
     private void init(Context context, AttributeSet attrs) {
-        updateNameList(mViewNameList);
-        updateCellList(mViewCellList);
-    }
-
-    @Override
-    public void onFillCell(Context context) {
         TableRow tableRow;
 
         // Week Name
@@ -80,6 +74,9 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
             }
             addView(tableRow);
         }
+
+        updateNameList(mViewNameList);
+        updateCellList(mViewCellList);
     }
 
     @Override

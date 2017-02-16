@@ -32,13 +32,11 @@ public class ViewCalendar extends TableLayout {
     public ViewCalendar(Context context) {
         super(context);
         init(context, null);
-        onFillCell(context);
     }
 
     public ViewCalendar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
-        onFillCell(context);
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -69,25 +67,6 @@ public class ViewCalendar extends TableLayout {
 
             typedArray.recycle();
         }
-    }
-
-    public void onFillCell(Context context) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss", Locale.getDefault());
-
-        TableRow tableRow = new TableRow(context);
-        tableRow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
-
-        ViewCalendarCell tableCell = new ViewCalendarCell(context);
-        tableCell.setText(simpleDateFormat.format(mDate));
-        tableCell.setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
-        tableCell.setTypeface(tableCell.getTypeface(), mTextStyle);
-        tableCell.setTextColor(mTextColor);
-        tableCell.setGravity(Gravity.CENTER);
-        tableCell.setLayoutParams(new TableRow.LayoutParams(0, TableRow.LayoutParams.MATCH_PARENT, 1));
-
-        tableRow.addView(tableCell);
-
-        addView(tableRow);
     }
 
     public void setTextSize(int pixel) {

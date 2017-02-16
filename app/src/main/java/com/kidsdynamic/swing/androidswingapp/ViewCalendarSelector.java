@@ -65,11 +65,6 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
             typedArray.recycle();
         }
 
-        updateText();
-    }
-
-    @Override
-    public void onFillCell(Context context) {
         TableRow tableRow = new TableRow(context);
         tableRow.setLayoutParams(new TableLayout.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1));
 
@@ -103,6 +98,8 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         mViewPrev.setOnClickListener(this);
         mViewDate.setOnClickListener(this);
         mViewNext.setOnClickListener(this);
+
+        updateText();
     }
 
     @Override
