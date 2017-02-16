@@ -1,8 +1,10 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,9 +66,8 @@ public class WatchOperator {
 
         if (src != null) {
             src.mLabel = src.mFirstName + " " + src.mLastName;
-            if (!src.mProfile.equals("")) {
-                src.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + src.mProfile);
-            }
+            if (!src.mProfile.equals(""))
+                src.mPhoto = loadAvatar(src.mProfile);
         }
         return src;
     }
@@ -93,7 +94,7 @@ public class WatchOperator {
         if (kid != null) {
             kid.mBound = true;
             kid.mLabel = kid.mName;
-            kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+            kid.mPhoto = kid.mProfile.equals("") ? null : loadAvatar(kid.mProfile);
         }
         return kid;
     }
@@ -103,7 +104,7 @@ public class WatchOperator {
         for (WatchContact.Kid kid : kids) {
             kid.mBound = true;
             kid.mLabel = kid.mName;
-            kid.mPhoto = kid.mProfile.equals("") ? null : BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + kid.mProfile);
+            kid.mPhoto = kid.mProfile.equals("") ? null : loadAvatar(kid.mProfile);
         }
 
         return kids;
@@ -230,8 +231,9 @@ public class WatchOperator {
 
     public List<WatchContact.User> getRequestFromList() {
         for (WatchContact.User user : mRequestFromList) {
-            if (user.mPhoto == null && !user.mProfile.equals(""))
-                user.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
+            if (user.mPhoto == null && !user.mProfile.equals("")) {
+                user.mPhoto = loadAvatar(user.mProfile);
+            }
         }
 
         return mRequestFromList;
@@ -240,7 +242,7 @@ public class WatchOperator {
     public List<WatchContact.User> getRequestToList() {
         for (WatchContact.User user : mRequestToList) {
             if (user.mPhoto == null && !user.mProfile.equals(""))
-                user.mPhoto = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + user.mProfile);
+                user.mPhoto = loadAvatar(user.mProfile);
         }
 
         return mRequestToList;
@@ -257,5 +259,13 @@ public class WatchOperator {
     public boolean setEvent(WatchOperatorSetEvent.finishListener listener, WatchEvent event) {
         new WatchOperatorSetEvent(mActivity).start(listener, event);
         return true;
+    }
+
+    private Bitmap loadAvatar(String filename) {
+        File file = new File(ServerMachine.GetAvatarFilePath() + "/" + filename);
+        if (file.exists())
+            return BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + filename);
+
+        return null;
     }
 }
