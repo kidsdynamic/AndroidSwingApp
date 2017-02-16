@@ -68,12 +68,12 @@ public class FragmentProfileMain extends ViewFragment {
             addContact(mViewSharedContainer, device, mContactListener);
 
         for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
-            if (((WatchContact.User)user).mRequestStatus.equals("PENDING"))
+            if (((WatchContact.User) user).mRequestStatus.equals("PENDING"))
                 addContact(mViewRequestToContainer, user, null);
         }
 
         for (WatchContact user : mActivityMain.mOperator.getRequestFromList()) {
-            if (((WatchContact.User)user).mRequestStatus.equals("PENDING"))
+            if (((WatchContact.User) user).mRequestStatus.equals("PENDING"))
                 addContact(mViewRequestFromContainer, user, mContactListener);
         }
 
@@ -164,14 +164,30 @@ public class FragmentProfileMain extends ViewFragment {
         photo.setOnClickListener(listener);
     }
 
+    private void delContact(LinearLayout layout, WatchContact contact) {
+        int count = layout.getChildCount();
+        for (int idx = 0; idx < count; idx++) {
+            View child = layout.getChildAt(idx);
+            WatchContact someone = (WatchContact) child.getTag();
+            if (someone == contact) {
+                layout.removeViewAt(idx);
+                break;
+            }
+        }
+    }
+
+    private void delAllContact(LinearLayout layout) {
+        layout.removeAllViews();
+    }
+
     private void focusContact(WatchContact contact, boolean onCreate) {
         int count;
 
         count = mViewDeviceContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewDeviceContainer.getChildAt(idx);
-            WatchContact.Kid kid1 = (WatchContact.Kid)contact;
-            WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
+            WatchContact.Kid kid1 = (WatchContact.Kid) contact;
+            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag();
 
             boolean focus = kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId;
             viewCircle.setActive(focus);
@@ -180,14 +196,14 @@ public class FragmentProfileMain extends ViewFragment {
         count = mViewSharedContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewCircle viewCircle = (ViewCircle) mViewSharedContainer.getChildAt(idx);
-            WatchContact.Kid kid1 = (WatchContact.Kid)contact;
-            WatchContact.Kid kid2 = (WatchContact.Kid)viewCircle.getTag();
+            WatchContact.Kid kid1 = (WatchContact.Kid) contact;
+            WatchContact.Kid kid2 = (WatchContact.Kid) viewCircle.getTag();
             boolean focus = (kid1 != null && kid2 != null && kid1.mId == kid2.mId && kid1.mUserId == kid2.mUserId);
             viewCircle.setActive(focus);
         }
 
         if (!onCreate)
-            mActivityMain.mOperator.setFocusKid((WatchContact.Kid)contact);
+            mActivityMain.mOperator.setFocusKid((WatchContact.Kid) contact);
     }
 
     private void updateRequestFromTitle() {
