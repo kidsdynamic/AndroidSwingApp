@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,17 +23,13 @@ import java.util.Locale;
  * Created by 03543 on 2017/2/8.
  */
 
-public class ViewCalendarDaily extends ViewGroup {
+public class ViewCalendarDaily extends ViewCalendar {
 
     private int mDesiredWidth;
     private int mDesiredHeight;
 
     private int mHourPadding;
     private int mHourMargin;
-
-    private int mTextSize = 16;
-    private int mTextColor = 0xFFFFFFFF;
-    private int mNowColor = 0;
 
     private Paint mPaint;
     private Rect mRect;
@@ -50,24 +47,6 @@ public class ViewCalendarDaily extends ViewGroup {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        if (attrs != null) {
-            TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ViewCalendarDaily);
-
-            final int count = typedArray.getIndexCount();
-            for (int idx = 0; idx < count; idx++) {
-                final int attr = typedArray.getIndex(idx);
-
-                if (attr == R.styleable.ViewCalendarDaily_android_textSize) {
-                    mTextSize = typedArray.getDimensionPixelOffset(attr, mTextSize);
-                } else if (attr == R.styleable.ViewCalendarDaily_android_textColor) {
-                    mTextColor = typedArray.getColor(attr, mTextColor);
-                } else if (attr == R.styleable.ViewCalendarDaily_nowColor) {
-                    mNowColor = typedArray.getColor(attr, mNowColor);
-                }
-            }
-            typedArray.recycle();
-        }
-
         setWillNotDraw(false);
 
         mDesiredWidth = getResources().getDisplayMetrics().widthPixels;
@@ -268,7 +247,7 @@ public class ViewCalendarDaily extends ViewGroup {
             drawSeparator(canvas, idx);
         }
 
-        if (mNowColor != 0) {
+        if (mTodayColor != 0) {
             Calendar cale = Calendar.getInstance();
             drawNow(canvas, cale.get(Calendar.HOUR_OF_DAY));
         }
@@ -278,7 +257,7 @@ public class ViewCalendarDaily extends ViewGroup {
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mTextColor);
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mTextStyle));
         mPaint.setTextSize(mTextSize);
     }
 
@@ -297,7 +276,7 @@ public class ViewCalendarDaily extends ViewGroup {
         mPaint.reset();
 
         mPaint.setAntiAlias(true);
-        mPaint.setColor(mNowColor);
+        mPaint.setColor(mTodayColor);
         mPaint.setStyle(Paint.Style.STROKE);
 
         int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
@@ -364,7 +343,7 @@ public class ViewCalendarDaily extends ViewGroup {
         return layoutParams instanceof LayoutParams;
     }
 
-    public static class LayoutParams extends MarginLayoutParams {
+    public static class LayoutParams extends TableLayout.LayoutParams {
 
         public int gravity = Gravity.TOP | Gravity.START;
         public int start_hour = 0;

@@ -44,9 +44,6 @@
 
     <declare-styleable name="ViewCalendarDaily">
         <attr name="android:layout_gravity" />
-        <attr name="android:textSize" />
-        <attr name="android:textColor" />
-        <attr name="nowColor" format="color" />
         <attr name="start_hour" format="integer" />
         <attr name="start_minute" format="integer" />
         <attr name="end_hour" format="integer" />

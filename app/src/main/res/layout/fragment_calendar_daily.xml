@@ -72,6 +72,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_gray_main"
             android:textSize="16sp"
-            app:nowColor="@color/color_orange_main" />
+            app:todayColor="@color/color_orange_main" />
     </ScrollView>
 </LinearLayout>
