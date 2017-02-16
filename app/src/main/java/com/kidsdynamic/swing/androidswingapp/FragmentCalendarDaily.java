@@ -74,7 +74,7 @@ public class FragmentCalendarDaily extends ViewFragment {
 
         // Test
         WatchContact.User me = mActivityMain.mOperator.getUser();
-        mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 12, 15));
+        mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 8, 15));
         mEventList.add(makeFakeEvent(2, me.mId, new ArrayList<Integer>(), 8, 0, 8, 30));
         mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 15, 0, 15, 30));
         //////////////

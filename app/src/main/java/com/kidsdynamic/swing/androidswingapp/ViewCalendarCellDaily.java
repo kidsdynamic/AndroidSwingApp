@@ -3,9 +3,11 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -66,7 +68,11 @@ public class ViewCalendarCellDaily extends ViewCalendarCell {
 
     @Override
     public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+//        boolean isEllipsize = !((getLayout().getText().toString()).equals(mEvent.mDescription));
+
+        getPaint().getTextBounds(getText().toString(), 0, getText().length(), mRect);
+        if (mRect.height() < getMeasuredHeight())
+            super.onDraw(canvas);
     }
 
 }

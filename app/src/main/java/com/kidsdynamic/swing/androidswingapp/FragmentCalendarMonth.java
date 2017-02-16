@@ -26,10 +26,6 @@ public class FragmentCalendarMonth extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        if (getArguments() != null) {
-            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
-        }
     }
 
     @Override
@@ -67,6 +63,13 @@ public class FragmentCalendarMonth extends ViewFragment {
         bundle.putLong(BUNDLE_KEY_DATE, mViewCalendar.getDate());
 
         mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), bundle);
+    }
+
+    @Override
+    public void onResume() {
+        if (getArguments() != null) {
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+        }
     }
 
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
