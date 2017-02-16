@@ -55,6 +55,18 @@ public class FragmentProfileMain extends ViewFragment {
 
         mViewRequestFromContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_request_from_container);
 
+        return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mViewDeviceContainer.removeAllViews();
+        mViewSharedContainer.removeAllViews();
+        mViewRequestToContainer.removeAllViews();
+        mViewRequestFromContainer.removeAllViews();
+
         WatchContact.User parent = mActivityMain.mOperator.getUser();
         mViewName.setText(parent.mLabel);
         if (parent.mPhoto != null) {
@@ -79,12 +91,6 @@ public class FragmentProfileMain extends ViewFragment {
 
         updateRequestFromTitle();
 
-        return mViewMain;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         focusContact(mActivityMain.mOperator.getFocusKid(), true);
     }
 
@@ -174,10 +180,6 @@ public class FragmentProfileMain extends ViewFragment {
                 break;
             }
         }
-    }
-
-    private void delAllContact(LinearLayout layout) {
-        layout.removeAllViews();
     }
 
     private void focusContact(WatchContact contact, boolean onCreate) {
