@@ -62,10 +62,10 @@ public class FragmentProfileMain extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        mViewDeviceContainer.removeAllViews();
-        mViewSharedContainer.removeAllViews();
-        mViewRequestToContainer.removeAllViews();
-        mViewRequestFromContainer.removeAllViews();
+        delAllContact(mViewDeviceContainer);
+        delAllContact(mViewSharedContainer);
+        delAllContact(mViewRequestToContainer);
+        delAllContact(mViewRequestFromContainer);
 
         WatchContact.User parent = mActivityMain.mOperator.getUser();
         mViewName.setText(parent.mLabel);
@@ -180,6 +180,13 @@ public class FragmentProfileMain extends ViewFragment {
                 break;
             }
         }
+    }
+
+    private void delAllContact(LinearLayout layout) {
+        int remain = layout == mViewDeviceContainer || layout == mViewRequestToContainer ? 1 : 0;
+
+        while (layout.getChildCount() > remain)
+            layout.removeViewAt(layout.getChildCount() - 1);
     }
 
     private void focusContact(WatchContact contact, boolean onCreate) {
