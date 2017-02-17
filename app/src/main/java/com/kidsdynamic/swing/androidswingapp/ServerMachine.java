@@ -390,8 +390,9 @@ public class ServerMachine {
 
     public void eventDelete(eventDeleteListener listener, int eventId) {
         Map<String, String> map = new HashMap<>();
-        map.put("eventId", eventId + "");
-        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.DELETE, CMD_EVENT_DELETE, map, null), CMD_EVENT_DELETE, listener));
+        String addressForGet = CMD_EVENT_DELETE + "?";
+        addressForGet += "eventId=" + eventId;
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.DELETE, addressForGet, map, null), CMD_EVENT_DELETE, listener));
     }
 
     public interface eventRetrieveEventsListener {

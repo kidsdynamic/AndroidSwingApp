@@ -216,6 +216,25 @@ public class FragmentProfileKid extends ViewFragment {
                 return;
             mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
             mActivityMain.mOperator.deleteKid(mDeleteKidListener, mKid.mId);
+/*
+            switch(tester) {
+                case 0:
+                    Log.d("TEST", "1");
+                    mActivityMain.mOperator.setKid(null, mViewName.getText().toString(), "AAAAAABBBB0A", mAvatarBitmap);
+                    tester = 1;
+                    break;
+                case 1:
+                    Log.d("TEST", "2");
+                    mActivityMain.mOperator.setKid(null, mViewName.getText().toString(), "AAAAAABBBB0B", mAvatarBitmap);
+                    tester = 2;
+                    break;
+                case 2:
+                    Log.d("TEST", "3");
+                    mActivityMain.mOperator.setKid(null, mViewName.getText().toString(), "AAAAAABBBB0C", mAvatarBitmap);
+                    tester = 3;
+                    break;
+            }
+*/
         }
     };
 
