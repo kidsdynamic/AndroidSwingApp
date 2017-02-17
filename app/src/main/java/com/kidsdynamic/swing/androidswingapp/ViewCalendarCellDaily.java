@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 
 import java.util.Calendar;
@@ -20,7 +21,10 @@ import java.util.Calendar;
 
 public class ViewCalendarCellDaily extends ViewCalendarCell {
     private WatchEvent mEvent;
+
     private Rect mRect;
+    private Paint mPaint;
+    final private int mColor = Color.WHITE;
 
     public ViewCalendarCellDaily(Context context) {
         super(context);
@@ -39,13 +43,13 @@ public class ViewCalendarCellDaily extends ViewCalendarCell {
 
     private void init(Context context, AttributeSet attrs) {
         mRect = new Rect();
+        mPaint = new Paint();
 
         int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 5, getResources().getDisplayMetrics());
 
         setPadding(padding, 0, padding, 0);
         setSingleLine();
-        setEllipsize(TextUtils.TruncateAt.END);
     }
 
     public void setEvent(WatchEvent event) {
@@ -63,16 +67,46 @@ public class ViewCalendarCellDaily extends ViewCalendarCell {
 
         setTextSize(TypedValue.COMPLEX_UNIT_PX, mViewCalendar.getTextSize() + 1);
         setTypeface(getTypeface(), Typeface.BOLD);
-        setTextColor(Color.WHITE);
+        setTextColor(mColor);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
 //        boolean isEllipsize = !((getLayout().getText().toString()).equals(mEvent.mDescription));
+        if (getText().length() == 0)
+            return;
 
         getPaint().getTextBounds(getText().toString(), 0, getText().length(), mRect);
-        if (mRect.height() < getMeasuredHeight())
+
+        if (mRect.height() > getMeasuredHeight()) {
+            drawEllipsize(canvas, getMeasuredHeight() / 2);
+        } else if (mRect.width() > getMeasuredWidth()) {
             super.onDraw(canvas);
+            drawEllipsize(canvas, mRect.height() + getMeasuredHeight() / 2);
+        } else {
+            super.onDraw(canvas);
+        }
     }
 
+    private void drawEllipsize(Canvas canvas, int y) {
+        int gap = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                2, getResources().getDisplayMetrics());
+        int radius = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                2, getResources().getDisplayMetrics());
+        int centerY = y;
+        int centerX = getPaddingStart() + radius;
+
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(mColor);
+        mPaint.setStrokeWidth(0);
+        mPaint.setStyle(Paint.Style.FILL);
+
+        canvas.drawCircle(centerX, centerY, radius, mPaint);
+
+        centerX += gap + radius * 2;
+        canvas.drawCircle(centerX, centerY, radius, mPaint);
+
+        centerX += gap + radius * 2;
+        canvas.drawCircle(centerX, centerY, radius, mPaint);
+    }
 }

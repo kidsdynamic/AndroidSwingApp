@@ -127,7 +127,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
         if (event == null) {
             timeString = "--:--";
-            messageString = "No incoming event";
+            messageString = "No Incoming Event";
 
         } else {
             Calendar cale = Calendar.getInstance();

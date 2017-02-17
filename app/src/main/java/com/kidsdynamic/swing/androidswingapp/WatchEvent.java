@@ -78,6 +78,39 @@ public class WatchEvent implements Serializable {
         init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
     }
 
+    public WatchEvent(int id, int userId, String name,
+                      int startYear, int startMonth, int startDay, int startHour, int startMinute,
+                      int endYear, int endMonth, int endDay, int endHour, int endMinute,
+                      int color, String description, int alert, String repeat, int... kids) {
+        Calendar cale = Calendar.getInstance();
+        long now = cale.getTimeInMillis();
+
+        cale.set(Calendar.YEAR, startYear);
+        cale.set(Calendar.MONTH, startMonth);
+        cale.set(Calendar.DAY_OF_MONTH, startDay);
+        cale.set(Calendar.HOUR_OF_DAY, startHour);
+        cale.set(Calendar.MINUTE, startMinute);
+        cale.set(Calendar.SECOND, 0);
+        cale.set(Calendar.MILLISECOND, 0);
+        long start = cale.getTimeInMillis();
+
+        cale.set(Calendar.YEAR, endYear);
+        cale.set(Calendar.MONTH, endMonth);
+        cale.set(Calendar.DAY_OF_MONTH, endDay);
+        cale.set(Calendar.HOUR_OF_DAY, endHour);
+        cale.set(Calendar.MINUTE, endMinute);
+        cale.set(Calendar.SECOND, 0);
+        cale.set(Calendar.MILLISECOND, 0);
+        long end = cale.getTimeInMillis();
+
+        List<Integer> list = new ArrayList<>();
+        for (int kid : kids)
+            list.add(kid);
+
+        init(id, userId, list, name, start, end, colorToString(color), "",
+                description, alert, "", "", repeat, 0, now, now);
+    }
+
     public WatchEvent(int id, int userId, List<Integer> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
                       int alert, String city, String state, String repeat,

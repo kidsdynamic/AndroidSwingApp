@@ -92,7 +92,10 @@ public class FragmentCalendarDaily extends ViewFragment {
         @Override
         public void OnSelect(View view, WatchEvent event) {
             mActivityMain.mEventStack.push(event);
-            mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
+            if (event.mTodoList.size() > 0)
+                mActivityMain.selectFragment(FragmentCalendarTodo.class.getName(), null);
+            else
+                mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
         }
     };
 }

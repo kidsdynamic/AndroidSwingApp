@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -87,16 +88,17 @@ public class WatchOperator {
     void clearKids() {
         mWatchDatabase.KidClear();
     }
-/*
-    void setKid(WatchContact.Kid kid) {
-        WatchContact.Kid src = mWatchDatabase.KidGet(kid);
-        if (src == null)
-            mWatchDatabase.KidAdd(kid);
-        else
-            mWatchDatabase.KidUpdate(kid);
 
-    }
-*/
+    /*
+        void setKid(WatchContact.Kid kid) {
+            WatchContact.Kid src = mWatchDatabase.KidGet(kid);
+            if (src == null)
+                mWatchDatabase.KidAdd(kid);
+            else
+                mWatchDatabase.KidUpdate(kid);
+
+        }
+    */
     void setFocusKid(WatchContact.Kid kid) {
         mWatchDatabase.KidSetFocus(kid);
     }
@@ -261,7 +263,31 @@ public class WatchOperator {
     }
 
     public List<WatchEvent> getEventList(long start, long end) {
-        return mWatchDatabase.EventGet(start, end);
+        List<WatchEvent> list = mWatchDatabase.EventGet(start, end);
+        // Test
+        if (false) {
+            list.add(new WatchEvent(0, getUser().mId, "Name",
+                    2017, 2, 18, 8, 30, 2017, 2, 18, 9, 10, WatchEvent.StockColorList[0].mColor,
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+            list.add(new WatchEvent(0, getUser().mId, "Name",
+                    2017, 2, 18, 10, 0, 2017, 2, 18, 10, 50, WatchEvent.StockColorList[1].mColor,
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+            list.add(new WatchEvent(0, getUser().mId, "Name",
+                    2017, 2, 18, 8, 30, 2017, 2, 18, 11, 30, WatchEvent.StockColorList[2].mColor,
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+
+            list.add(new WatchEvent(0, getUser().mId, "Name",
+                    2017, 2, 18, 10, 30, 2017, 2, 18, 11, 10, WatchEvent.StockColorList[3].mColor,
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+            list.get(list.size() - 1).mKids = Arrays.asList(8);
+        }
+        //
+        return list;
     }
 
     public WatchEvent getEvent(int id) {

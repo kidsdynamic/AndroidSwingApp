@@ -167,7 +167,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         int width = getMeasuredWidth() - getPaddingStart() - getPaddingEnd() - mHourPadding - mHourMargin;
         int height = getMeasuredHeight() - getPaddingTop() - getPaddingBottom();
         int column_count = layoutMap.size();
-        int column_width = width / column_count;
+        int column_width = column_count == 0 ? width : (width / column_count);
 
         count = getChildCount();
         for (int idx = 0; idx < count; idx++) {
