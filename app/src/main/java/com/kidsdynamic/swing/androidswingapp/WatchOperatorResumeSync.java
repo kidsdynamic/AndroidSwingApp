@@ -242,18 +242,20 @@ public class WatchOperatorResumeSync {
                     watchEvent.mTimezoneOffset = eventData.timezoneOffset;
                     watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);
                     watchEvent.mLastUpdated = WatchOperator.getTimeStamp(eventData.lastUpdated);
-                    for (ServerGson.todoData todoData : eventData.todo) {
-                        watchEvent.mTodoList.add(
-                                new WatchTodo(
-                                        todoData.id,
-                                        eventData.user.id,
-                                        eventData.id,
-                                        todoData.text,
-                                        todoData.status,
-                                        WatchOperator.getTimeStamp(todoData.dateCreated),
-                                        WatchOperator.getTimeStamp(todoData.lastUpdated)
-                                )
-                        );
+                    if (eventData.todo != null) {
+                        for (ServerGson.todoData todoData : eventData.todo) {
+                            watchEvent.mTodoList.add(
+                                    new WatchTodo(
+                                            todoData.id,
+                                            eventData.user.id,
+                                            eventData.id,
+                                            todoData.text,
+                                            todoData.status,
+                                            WatchOperator.getTimeStamp(todoData.dateCreated),
+                                            WatchOperator.getTimeStamp(todoData.lastUpdated)
+                                    )
+                            );
+                        }
                     }
                     mOperator.mWatchDatabase.EventAdd(watchEvent);
                 }
