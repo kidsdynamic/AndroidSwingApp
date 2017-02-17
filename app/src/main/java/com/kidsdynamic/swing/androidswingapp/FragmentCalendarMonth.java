@@ -30,6 +30,8 @@ public class FragmentCalendarMonth extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        mEventList = new ArrayList<>();
     }
 
     @Override
@@ -77,15 +79,6 @@ public class FragmentCalendarMonth extends ViewFragment {
         mViewCalendar.setDate(mDefaultDate);
 
         mEventList = mActivityMain.mOperator.getEventList(mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
-
-        // Test
-/*
-        WatchContact.User me = mActivityMain.mOperator.getUser();
-        mEventList.add(makeFakeEvent(1, me.mId, new ArrayList<Integer>(), 7, 15, 8, 15));
-        mEventList.add(makeFakeEvent(2, me.mId, new ArrayList<Integer>(), 8, 0, 8, 30));
-        mEventList.add(makeFakeEvent(3, me.mId, new ArrayList<Integer>(), 15, 0, 15, 30));
-*/
-        //////////////
 
         for (WatchEvent event : mEventList) {
             mViewCalendar.addEvent(event);

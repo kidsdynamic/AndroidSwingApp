@@ -30,6 +30,7 @@ public class FragmentCalendarDaily extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
         mEventList = new ArrayList<>();
     }
 
@@ -58,6 +59,14 @@ public class FragmentCalendarDaily extends ViewFragment {
     @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
+    }
+
+    @Override
+    public void onToolbarAction2() {
+        Bundle bundle = new Bundle();
+        bundle.putLong(BUNDLE_KEY_DATE, mViewCalendar.getDate());
+
+        mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), bundle);
     }
 
     @Override

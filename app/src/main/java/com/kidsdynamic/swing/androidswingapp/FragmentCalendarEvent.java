@@ -66,6 +66,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View mViewSave;
     private View mViewAdvance;
 
+    private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
 
     @Override
@@ -160,8 +161,12 @@ public class FragmentCalendarEvent extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        if (getArguments() != null)
+            mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
+
         mEvent = mActivityMain.mEventStack.isEmpty() ?
-                new WatchEvent(System.currentTimeMillis()) : mActivityMain.mEventStack.pop();
+                new WatchEvent(mDefaultDate) : mActivityMain.mEventStack.pop();
+
         loadWatchEvent();
     }
 
