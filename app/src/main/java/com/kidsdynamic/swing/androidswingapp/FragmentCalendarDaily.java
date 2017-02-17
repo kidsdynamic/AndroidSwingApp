@@ -68,7 +68,9 @@ public class FragmentCalendarDaily extends ViewFragment {
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
 
-        mEventList = mActivityMain.mOperator.getEventList(mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
+        long start = ViewCalendar.stripTime(mViewCalendar.getDate());
+        long end = start + 86400000 - 1;
+        mEventList = mActivityMain.mOperator.getEventList(start, end);
 
         for (WatchEvent event : mEventList)
             mViewSchedule.addEvent(event);
