@@ -30,6 +30,7 @@ public class FragmentCalendarDaily extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+        mEventList = new ArrayList<>();
     }
 
     @Override
@@ -68,7 +69,14 @@ public class FragmentCalendarDaily extends ViewFragment {
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
 
-        long start = ViewCalendar.stripTime(mViewCalendar.getDate());
+        loadEventList(mDefaultDate);
+    }
+
+    private void loadEventList(long date) {
+        mEventList.clear();
+        mViewSchedule.clearEvent();
+
+        long start = ViewCalendar.stripTime(date);
         long end = start + 86400000 - 1;
         mEventList = mActivityMain.mOperator.getEventList(start, end);
 
@@ -80,6 +88,7 @@ public class FragmentCalendarDaily extends ViewFragment {
         @Override
         public void OnSelect(View view, long offset, long date) {
             mViewCalendar.setDate(date);
+            loadEventList(date);
         }
     };
 
@@ -87,6 +96,7 @@ public class FragmentCalendarDaily extends ViewFragment {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
             mViewSelector.setDate(cell.getDate());
+            loadEventList(cell.getDate());
         }
     };
 

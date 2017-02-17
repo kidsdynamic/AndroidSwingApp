@@ -87,6 +87,27 @@ public class ViewCalendarDaily extends ViewCalendar {
         return cell;
     }
 
+    public void delEvent(WatchEvent event) {
+        delEvent(event.mId);
+    }
+
+    public void delEvent(int id) {
+        int count = getChildCount();
+        for (int idx = 0; idx < count; idx++) {
+            ViewCalendarCellDaily cell = (ViewCalendarCellDaily) getChildAt(idx);
+
+            if (cell.getEvent().mId != id)
+                continue;
+
+            removeView(cell);
+            return;
+        }
+    }
+
+    public void clearEvent() {
+        removeAllViews();
+    }
+
     interface OnSelectListener {
         void OnSelect(View view, WatchEvent event);
     }
