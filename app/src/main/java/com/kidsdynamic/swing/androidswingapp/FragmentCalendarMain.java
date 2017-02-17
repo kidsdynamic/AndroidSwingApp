@@ -126,7 +126,7 @@ public class FragmentCalendarMain extends ViewFragment {
         String messageString;
 
         if (event == null) {
-            timeString = "--:--";
+            timeString = "";
             messageString = "No Incoming Event";
 
         } else {
@@ -201,14 +201,26 @@ public class FragmentCalendarMain extends ViewFragment {
     private View.OnClickListener mTodayListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Calendar cale = Calendar.getInstance();
+            long date = ViewCalendar.stripTime(cale.getTimeInMillis());
 
+            Bundle bundle = new Bundle();
+            bundle.putLong(BUNDLE_KEY_DATE, date);
+
+            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
         }
     };
 
     private View.OnClickListener mMonthlyListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            Calendar cale = Calendar.getInstance();
+            long date = ViewCalendar.stripTime(cale.getTimeInMillis());
 
+            Bundle bundle = new Bundle();
+            bundle.putLong(BUNDLE_KEY_DATE, date);
+
+            mActivityMain.selectFragment(FragmentCalendarMonth.class.getName(), bundle);
         }
     };
 }
