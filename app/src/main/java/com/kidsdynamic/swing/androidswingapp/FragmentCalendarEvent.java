@@ -1,11 +1,9 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -172,25 +170,35 @@ public class FragmentCalendarEvent extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private void viewEnabled(boolean enabled) {
-        mViewAlarmLine.setEnabled(enabled);
-        mViewAssignLine.setEnabled(enabled);
-        mViewStartLine.setEnabled(enabled);
-        mViewEndLine.setEnabled(enabled);
-        mViewColorLine.setEnabled(enabled);
-        mViewRepeatLine.setEnabled(enabled);
-        mViewDescription.setEnabled(enabled);
-        mViewTodoAdd.setEnabled(enabled);
+    @Override
+    public void onToolbarAction2() {
+        mActivityMain.mOperator.deleteEvent(null, mEvent.mId);
+        mActivityMain.popFragment();
+    }
+
+    private void viewEnable(boolean enable) {
+        mViewAlarmLine.setEnabled(enable);
+        mViewAssignLine.setEnabled(enable);
+        mViewStartLine.setEnabled(enable);
+        mViewEndLine.setEnabled(enable);
+        mViewColorLine.setEnabled(enable);
+        mViewRepeatLine.setEnabled(enable);
+        mViewDescription.setEnabled(enable);
+        mViewTodoAdd.setEnabled(enable);
 
         int count = mViewTodoContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewTodo viewTodo = (ViewTodo) mViewTodoContainer.getChildAt(idx);
-            viewTodo.setEnabled(enabled);
+            viewTodo.setEnabled(enable);
         }
 
-        mViewAlarmIcon.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
-        mViewTodoAdd.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
-        mViewButtonLine.setVisibility(enabled ? View.VISIBLE : View.INVISIBLE);
+        mViewAlarmIcon.setVisibility(enable ? View.VISIBLE : View.INVISIBLE);
+        mViewTodoAdd.setVisibility(enable ? View.VISIBLE : View.INVISIBLE);
+        mViewButtonLine.setVisibility(enable ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void ViewDelete(boolean enable) {
+        mActivityMain.toolbarSetIcon2(enable ? R.mipmap.icon_delete : ActivityMain.RESOURCE_HIDE);
     }
 
     private void viewAdvance(boolean visible) {
@@ -595,7 +603,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         loadTodo();
 
         viewAdvance(mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
-        viewEnabled(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
+        viewEnable(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
+        ViewDelete(mActivityMain.mOperator.getUser().mId == mEvent.mUserId && mEvent.mId != 0);
     }
 
     private void saveWatchEvent() {
