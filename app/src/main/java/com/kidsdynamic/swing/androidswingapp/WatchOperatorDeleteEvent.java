@@ -21,6 +21,7 @@ public class WatchOperatorDeleteEvent {
 
     public void start(finishListener listener, int eventId) {
         mId = eventId;
+        mListener = listener;
         mServerMachine.eventDelete(mEventDeleteListener, eventId);
     }
 
