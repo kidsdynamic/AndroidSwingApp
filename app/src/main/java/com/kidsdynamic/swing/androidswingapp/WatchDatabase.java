@@ -205,7 +205,7 @@ public class WatchDatabase {
     }
 
     public void KidClear() {
-        mDatabase.execSQL("delete from "+ TABLE_KIDS);
+        mDatabase.execSQL("delete from " + TABLE_KIDS);
     }
 
     public long KidAdd(WatchContact.Kid kid) {
@@ -280,7 +280,7 @@ public class WatchDatabase {
     public WatchContact.Kid KidGetFocus() {
         int id = 0;
         int pid = 0;
-        Cursor cursor = mDatabase.rawQuery("SELECT " + FOCUS_ID + "," + FOCUS_PID +" FROM " + TABLE_USER + " LIMIT 1", null);
+        Cursor cursor = mDatabase.rawQuery("SELECT " + FOCUS_ID + "," + FOCUS_PID + " FROM " + TABLE_USER + " LIMIT 1", null);
         if (cursor.moveToNext()) {
             id = cursor.getInt(0);
             pid = cursor.getInt(1);
@@ -377,10 +377,12 @@ public class WatchDatabase {
     public class EventKid {
         int mEventId;
         int mKidId;
+
         EventKid(int eventId, int kidId) {
             mEventId = eventId;
             mKidId = kidId;
         }
+
         EventKid() {
             mEventId = 0;
             mKidId = 0;
@@ -421,9 +423,9 @@ public class WatchDatabase {
     }
 
     public void EventClear() {
-        mDatabase.execSQL("delete from "+ TABLE_EVENT);
-        mDatabase.execSQL("delete from "+ TABLE_TODO);
-        mDatabase.execSQL("delete from "+ TABLE_EVENT_KITS);
+        mDatabase.execSQL("delete from " + TABLE_EVENT);
+        mDatabase.execSQL("delete from " + TABLE_TODO);
+        mDatabase.execSQL("delete from " + TABLE_EVENT_KITS);
     }
 
     public long EventAdd(WatchEvent event) {
@@ -500,8 +502,8 @@ public class WatchDatabase {
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId, null);
     }
 
-    private List<WatchEvent>EventGetRepeat(long startTimeStamp, long endTimeStamp, String repeat) {
-        List<WatchEvent>repeatResult = new ArrayList<>();
+    private List<WatchEvent> EventGetRepeat(long startTimeStamp, long endTimeStamp, String repeat) {
+        List<WatchEvent> repeatResult = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
                 " WHERE " +
                 REPEAT + "='" + repeat + "'" + " AND " +
@@ -523,13 +525,13 @@ public class WatchDatabase {
         List<WatchEvent> result = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
 
-        for(WatchEvent event : repeatResult) {
+        for (WatchEvent event : repeatResult) {
             cal.setTimeInMillis(event.mAlertTimeStamp);
             do {
                 if (event.mAlertTimeStamp >= startTimeStamp && event.mAlertTimeStamp <= endTimeStamp) {
                     result.add(new WatchEvent(event));
                 }
-                switch(repeat) {
+                switch (repeat) {
                     case WatchEvent.REPEAT_DAILY:
                         cal.add(Calendar.DATE, 1);
                         break;
@@ -541,7 +543,7 @@ public class WatchDatabase {
                         break;
                 }
                 event.mAlertTimeStamp = cal.getTimeInMillis();
-            } while(event.mAlertTimeStamp <= endTimeStamp);
+            } while (event.mAlertTimeStamp <= endTimeStamp);
         }
 
         return result;
@@ -569,9 +571,9 @@ public class WatchDatabase {
                 event.mKids.add(eventKid.mKidId);
         }
 
-        List<WatchEvent>dailyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "DAILY");
-        List<WatchEvent>weeklyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "WEEKLY");
-        List<WatchEvent>monthlyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "MONTHLY");
+        List<WatchEvent> dailyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "DAILY");
+        List<WatchEvent> weeklyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "WEEKLY");
+        List<WatchEvent> monthlyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "MONTHLY");
 
         for (WatchEvent event : dailyResult)
             result.add(event);
@@ -618,20 +620,19 @@ public class WatchDatabase {
                 cursor.getInt(0),
                 cursor.getInt(1),
                 new ArrayList<Integer>(),
-                cursor.getString(3),
+                cursor.getString(2),
+                cursor.getLong(3),
                 cursor.getLong(4),
-                cursor.getLong(5),
+                cursor.getString(5),
                 cursor.getString(6),
                 cursor.getString(7),
-                cursor.getString(8),
-                cursor.getInt(9),
+                cursor.getInt(8),
+                cursor.getString(9),
                 cursor.getString(10),
                 cursor.getString(11),
-                cursor.getString(12),
-                cursor.getInt(13),
-                cursor.getLong(14),
-                cursor.getLong(15)
-        );
+                cursor.getInt(12),
+                cursor.getLong(13),
+                cursor.getLong(14));
     }
 
     public long TodoAdd(WatchTodo todo) {
