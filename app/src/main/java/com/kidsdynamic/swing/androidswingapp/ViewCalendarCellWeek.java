@@ -38,7 +38,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
         ViewCalendar calendar = getViewCalendar();
         if (calendar != null) {
-            if (calendar.isInDay(mDate))
+            if (calendar.isSameDay(mDate))
                 setTextColor(calendar.getFocusColor());
             else if (ViewCalendar.isToday(mDate))
                 setTextColor(calendar.getTodayColor());
@@ -56,7 +56,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
     @Override
     protected void onDraw(Canvas canvas) {
         ViewCalendar calendar = getViewCalendar();
-        if (calendar != null && calendar.isInDay(mDate))
+        if (calendar != null && calendar.isSameDay(mDate))
             drawFocus(canvas, calendar.getFocusBackgroundColor());
 
         super.onDraw(canvas);

@@ -77,6 +77,7 @@ public class FragmentCalendarDaily extends ViewFragment {
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
+        mViewSchedule.setDate(mDefaultDate);
 
         loadEventList(mDefaultDate);
     }
@@ -97,6 +98,7 @@ public class FragmentCalendarDaily extends ViewFragment {
         @Override
         public void OnSelect(View view, long offset, long date) {
             mViewCalendar.setDate(date);
+            mViewSchedule.setDate(date);
             loadEventList(date);
         }
     };
@@ -105,6 +107,7 @@ public class FragmentCalendarDaily extends ViewFragment {
         @Override
         public void onSelect(ViewCalendarWeek calendar, ViewCalendarCellWeek cell) {
             mViewSelector.setDate(cell.getDate());
+            mViewSchedule.setDate(cell.getDate());
             loadEventList(cell.getDate());
         }
     };

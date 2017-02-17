@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -269,8 +268,8 @@ public class ViewCalendarDaily extends ViewCalendar {
             drawSeparator(canvas, idx);
         }
 
-        if (mTodayColor != 0) {
-            Calendar cale = Calendar.getInstance();
+        Calendar cale = Calendar.getInstance();
+        if (mTodayColor != 0 && isSameDay(cale.getTimeInMillis())) {
             drawNow(canvas, cale.get(Calendar.HOUR_OF_DAY));
         }
     }

@@ -45,11 +45,11 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
         ViewCalendar calendar = getViewCalendar();
 
         if (calendar != null) {
-            if (calendar.isInDay(mDate))
+            if (calendar.isSameDay(mDate))
                 setTextColor(calendar.getFocusColor());
             else if (ViewCalendar.isToday(mDate))
                 setTextColor(calendar.getTodayColor());
-            else if (calendar.isInMonth(mDate))
+            else if (calendar.isSameMonth(mDate))
                 setTextColor(calendar.getTextColor());
             else
                 setTextColor(calendar.getExceedColor());
@@ -65,7 +65,7 @@ public class ViewCalendarCellMonth extends ViewCalendarCell {
     @Override
     protected void onDraw(Canvas canvas) {
         ViewCalendar calendar = getViewCalendar();
-        if (calendar != null && calendar.isInDay(mDate))
+        if (calendar != null && calendar.isSameDay(mDate))
             drawFocus(canvas, calendar.getFocusBackgroundColor());
 
         super.onDraw(canvas);

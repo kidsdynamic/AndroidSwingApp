@@ -125,7 +125,7 @@ public class ViewCalendar extends TableLayout {
         return mDate;
     }
 
-    public boolean isInDay(long date) {
+    public boolean isSameDay(long date) {
         Calendar calcThis = getInstance();
         calcThis.setTimeInMillis(mDate);
 
@@ -140,7 +140,7 @@ public class ViewCalendar extends TableLayout {
         return true;
     }
 
-    public boolean isInWeek(long date) {
+    public boolean isSameWeek(long date) {
         Calendar calcThis = getInstance();
         calcThis.setTimeInMillis(mDate);
 
@@ -155,7 +155,7 @@ public class ViewCalendar extends TableLayout {
         return true;
     }
 
-    public boolean isInMonth(long date) {
+    public boolean isSameMonth(long date) {
         Calendar calcThis = getInstance();
         calcThis.setTimeInMillis(mDate);
 
@@ -170,7 +170,7 @@ public class ViewCalendar extends TableLayout {
         return true;
     }
 
-    public boolean isInYear(long date) {
+    public boolean isSameYear(long date) {
         Calendar calcThis = getInstance();
         calcThis.setTimeInMillis(mDate);
 
