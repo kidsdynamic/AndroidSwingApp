@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -171,11 +172,14 @@ public class ActivityMain extends AppCompatActivity
 
             if (!msg.equals(""))
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            if (mCurrentFragment.equals(""))
+            if (mCurrentFragment.equals("")) {
                 selectFragment(FragmentBoot.class.getName(), null);
-            else
-                if (mProcessDialog!=null)
+            } else {
+                if (mProcessDialog != null)
                     mProcessDialog.dismiss();
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                selectFragment(FragmentSyncNow.class.getName(), null);
+            }
         }
     };
 
