@@ -388,9 +388,9 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void eventDelete(eventDeleteListener listener, String eventId) {
+    public void eventDelete(eventDeleteListener listener, int eventId) {
         Map<String, String> map = new HashMap<>();
-        map.put("eventId", eventId);
+        map.put("eventId", eventId + "");
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.DELETE, CMD_EVENT_DELETE, map, null), CMD_EVENT_DELETE, listener));
     }
 

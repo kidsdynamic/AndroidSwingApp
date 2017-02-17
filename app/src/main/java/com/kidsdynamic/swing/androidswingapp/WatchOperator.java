@@ -299,6 +299,10 @@ public class WatchOperator {
         return true;
     }
 
+    public void deleteEvent(WatchOperatorDeleteEvent.finishListener listener, int eventId) {
+        new WatchOperatorDeleteEvent(mActivity).start(listener, eventId);
+    }
+
     private Bitmap loadAvatar(String filename) {
         File file = new File(ServerMachine.GetAvatarFilePath() + "/" + filename);
         if (file.exists())
