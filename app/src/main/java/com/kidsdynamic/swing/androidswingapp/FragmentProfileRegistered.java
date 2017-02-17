@@ -1,13 +1,17 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,6 +22,8 @@ import java.util.ArrayList;
 public class FragmentProfileRegistered extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
+    private Dialog mProcessDialog = null;
+
 
     private Button mButtonRequest;
     private Button mButtonContact;
@@ -64,8 +70,19 @@ public class FragmentProfileRegistered extends ViewFragment {
             for (WatchContact contact : mKidList)
                 mActivityMain.mContactStack.push(contact);
 
-            // Todo : make request
-            //mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mKidList.get(0).mLabel);
+        }
+    };
+
+    WatchOperatorRequestToSubHost.finishListener mAddRequestToListener = new WatchOperatorRequestToSubHost.finishListener() {
+        @Override
+        public void onFinish(String msg, WatchContact.User user) {
+            mProcessDialog.dismiss();
+            if (!msg.equals(""))
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            else
+                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
         }
     };
 
