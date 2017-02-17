@@ -50,7 +50,7 @@ public class FragmentCalendarMonth extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Calendar", true, true, false,
-                R.mipmap.city_florida, R.mipmap.icon_calendar, R.mipmap.icon_add);
+                R.mipmap.city_florida, R.mipmap.icon_left, R.mipmap.icon_add);
     }
 
     @Override
