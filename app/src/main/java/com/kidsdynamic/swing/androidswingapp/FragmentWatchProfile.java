@@ -183,7 +183,9 @@ public class FragmentWatchProfile extends ViewFragment {
                 if (!mDevice.mName.equals("")) {
                     mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
-                    mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, macId);
+                    mActivityMain.mOperator.setKid(mAddKidListener, mDevice.mName, macId, mAvatarBitmap);
+
+                    //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, macId);
                     /*
                     switch(testCounter) {
                         case 0:
@@ -207,76 +209,21 @@ public class FragmentWatchProfile extends ViewFragment {
         }
     };
 
-    ServerMachine.kidsAddListener mKidsAddListener = new ServerMachine.kidsAddListener() {
+    WatchOperatorSetKid.finishListener mAddKidListener = new WatchOperatorSetKid.finishListener() {
         @Override
-        public void onSuccess(int statusCode, ServerGson.kidData response) {
-            mDevice.mId = response.id;
-            mDevice.mName = response.name;
-            mDevice.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
-            mDevice.mMacId = response.macId;
-            mDevice.mUserId = response.parent.id;
-            mActivityMain.mOperator.setFocusKid(mDevice);
-            if (mAvatarBitmap != null)
-                mDevice.mProfile = ServerMachine.createAvatarFile(mAvatarBitmap, mDevice.mName, ".jpg");
-            if (mDevice.mProfile == null)
-                mDevice.mProfile = "";
-
-            mActivityMain.mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mDevice.mMacId));
-            //mActivityMain.mBLEMachine.Sync(mOnSearchListener, mDevice.mLabel);
-        }
-
-        @Override
-        public void onConflict(int statusCode) {
+        public void onFinish(String msg) {
             mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Add kid failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
-        @Override
-        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
-            if (!mDevice.mProfile.equals("")) {
-                mActivityMain.mServiceMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mDevice.mId, mDevice.mProfile);
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             } else {
-                mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
+                if (mDevice.mProfile.equals("")) {
+                    mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), null);
+                } else {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mDevice.mProfile);
+                    mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
+                }
             }
-        }
-    };
-
-    ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {
-
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.avatar.uploadKid.response response) {
-
-            File fileFrom = new File(mDevice.mProfile);
-            File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.kid.profile);
-            if (!fileFrom.renameTo(fileTo)) {
-                Log.d("swing", "Rename failed! " + mDevice.mProfile + " to " + response.kid.profile);
-            }
-            mDevice.mProfile = response.kid.profile;
-            mActivityMain.mOperator.setFocusKid(mDevice);
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mDevice.mProfile);
-
-            mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "Upload kid avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-
-            Bundle bundle = new Bundle();
-            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, mDevice.mProfile);
-
-            mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
         }
     };
 
