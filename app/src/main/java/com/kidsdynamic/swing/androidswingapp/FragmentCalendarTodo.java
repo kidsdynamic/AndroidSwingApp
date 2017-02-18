@@ -8,6 +8,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Created by 03543 on 2017/2/10.
  */
@@ -95,6 +98,20 @@ public class FragmentCalendarTodo extends ViewFragment {
         mViewDescription.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
         mViewContainerLine.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
         mViewButtonLine.setBackgroundColor(WatchEvent.stringToColor(mEvent.mColor));
+
+        Calendar cale = Calendar.getInstance();
+        cale.setTimeInMillis(mEvent.mStartDate);
+        int startHour = cale.get(Calendar.HOUR_OF_DAY);
+        int startMinute = cale.get(Calendar.MINUTE);
+        cale.setTimeInMillis(mEvent.mEndDate);
+        int endHour = cale.get(Calendar.HOUR_OF_DAY);
+        int endMinute = cale.get(Calendar.MINUTE);
+
+        String title = String.format(Locale.US, "%02d:%02d-%02d:%02d %s",
+                startHour, startMinute, endHour, endMinute, mEvent.mName);
+
+        mViewTitle.setText(title);
+        mViewDescription.setText(mEvent.mDescription);
 
         for (WatchTodo todo : mEvent.mTodoList)
             addTodo(todo);

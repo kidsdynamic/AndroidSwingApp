@@ -38,9 +38,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="2"
         android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:layout_weight="2">
+        android:paddingStart="10dp">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
             android:id="@+id/calendar_todo_calendar_sponge"
@@ -73,8 +73,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical|start"
         android:paddingEnd="25dp"
-        android:paddingStart="25dp"
-        android:text="10:20-11:30 Swimming" />
+        android:paddingStart="25dp" />
 
     <TextView
         android:id="@+id/calendar_todo_description"
@@ -86,8 +85,7 @@
         android:gravity="center_vertical|start"
         android:maxLines="2"
         android:paddingEnd="25dp"
-        android:paddingStart="25dp"
-        android:text="1 2 3 4 5 6 7 8 this is a test, 1 2 3 4 5 6 7 8 this is a test, 1 2 3 4 5 6 7 8 this is a test." />
+        android:paddingStart="25dp" />
 
     <ScrollView
         android:id="@+id/calendar_todo_container_line"
