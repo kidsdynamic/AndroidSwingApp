@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_blue_sky"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
             android:id="@+id/calendar_daily_selector_sponge"
@@ -36,7 +38,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
             android:id="@+id/calendar_daily_calendar_sponge"

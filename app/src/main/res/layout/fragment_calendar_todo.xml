@@ -9,10 +9,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
             android:id="@+id/calendar_todo_selector_sponge"
@@ -38,8 +38,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
         android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
@@ -47,7 +47,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="10dp"
             app:shrinkWidth="0.9" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewCalendarWeek
@@ -119,7 +118,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_margin="10dp"
             app:shrinkWidth="0.5" />
 
         <Button
