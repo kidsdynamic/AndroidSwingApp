@@ -38,7 +38,7 @@ public class BLEControl {
     private TaskQueue mTaskQueue = new TaskQueue();
 
     private void Log(String msg) {
-        Log.i("LeControl", msg);
+        Log.i("BLEControl", msg);
     }
 
 
@@ -318,6 +318,8 @@ public class BLEControl {
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            Log("onServicesDiscovered " + status);
+            /*
             List<BluetoothGattService> services = gatt.getServices();
             for (BluetoothGattService service : services) {
                 Log("Service - " + service.getUuid().toString());
@@ -330,6 +332,7 @@ public class BLEControl {
                     }
                 }
             }
+            */
             mDiscovering = false;
             if (mEventListener != null)
                 mEventListener.onServiceDiscovered();

@@ -25,7 +25,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private final int SEARCH_TIMEOUT = 15;  // 15 seconds
     private int mSearchTimeout;
 
-    private final int SYNC_TIMEOUT = 60;  // 8 seconds
+    private final int SYNC_TIMEOUT = 400;  // 100 seconds
     private int mSyncTimeout;
 
     private ActivityMain mActivityMain;
@@ -164,7 +164,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void bleSearchCancel() {
-        mActivityMain.mBLEMachine.Search(null);
+        mActivityMain.mBLEMachine.Search(null, "");
     }
 
     private void bleSyncStart() {
