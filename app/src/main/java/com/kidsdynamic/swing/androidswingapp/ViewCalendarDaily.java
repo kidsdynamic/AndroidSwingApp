@@ -91,19 +91,20 @@ public class ViewCalendarDaily extends ViewCalendar {
     }
 
     public void delEvent(int id) {
-        int count = getChildCount();
-        for (int idx = 0; idx < count; idx++) {
-            ViewCalendarCellDaily cell = (ViewCalendarCellDaily) getChildAt(idx);
-
-            if (cell.getEvent().mId != id)
-                continue;
-
-            removeView(cell);
-            return;
+        while (true) {
+            int idx, count = getChildCount();
+            for (idx = 0; idx < count; idx++) {
+                ViewCalendarCellDaily cell = (ViewCalendarCellDaily) getChildAt(idx);
+                if (cell.getEvent().mId == id)
+                    break;
+            }
+            if (idx >= count)
+                break;
+            removeViewAt(idx);
         }
     }
 
-    public void clearEvent() {
+    public void delAllEvent() {
         removeAllViews();
     }
 
@@ -346,25 +347,13 @@ public class ViewCalendarDaily extends ViewCalendar {
 
     @Override
     public long getDateBegin() {
-        Calendar calc = ViewCalendar.getInstance();
-        calc.setTimeInMillis(mDate);
-
-        calc.set(Calendar.HOUR_OF_DAY, 0);
-        calc.set(Calendar.MINUTE, 0);
-        calc.set(Calendar.SECOND, 0);
-        calc.set(Calendar.MILLISECOND, 0);
-
-        return calc.getTimeInMillis();
+        return stripTime(mDate);
     }
 
     @Override
     public long getDateEnd() {
-        Calendar calc = ViewCalendar.getInstance();
-        calc.setTimeInMillis(getDateBegin());
-
-        calc.add(Calendar.DAY_OF_MONTH, 1);
-
-        return calc.getTimeInMillis() - 1;
+        long date = stripTime(mDate);
+        return date + 86400000 - 1;
     }
 
     @Override

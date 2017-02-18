@@ -55,9 +55,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:exceedColor="@color/color_gray_light"
-            app:todayColor="@color/color_orange_main"
-            app:focusColor="@color/color_white"
-            app:focusBackgroundColor="@color/color_orange_main"/>
+            app:todayColor="@color/color_orange_main" />
 
     </RelativeLayout>
 

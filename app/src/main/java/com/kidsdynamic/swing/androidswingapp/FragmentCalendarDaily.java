@@ -5,10 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/10.
@@ -24,14 +21,10 @@ public class FragmentCalendarDaily extends ViewFragment {
 
     private long mDefaultDate = System.currentTimeMillis();
 
-    private List<WatchEvent> mEventList;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        mEventList = new ArrayList<>();
     }
 
     @Override
@@ -83,14 +76,13 @@ public class FragmentCalendarDaily extends ViewFragment {
     }
 
     private void loadEventList(long date) {
-        mEventList.clear();
-        mViewSchedule.clearEvent();
+        mViewSchedule.delAllEvent();
 
         long start = ViewCalendar.stripTime(date);
         long end = start + 86400000 - 1;
-        mEventList = mActivityMain.mOperator.getEventList(start, end);
+        List<WatchEvent> list = mActivityMain.mOperator.getEventList(start, end);
 
-        for (WatchEvent event : mEventList)
+        for (WatchEvent event : list)
             mViewSchedule.addEvent(event);
     }
 

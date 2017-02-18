@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -38,7 +39,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
 
         ViewCalendar calendar = getViewCalendar();
         if (calendar != null) {
-            if (calendar.isSameDay(mDate))
+            if (calendar.isSameDay(mDate) && calendar.getFocusColor() != Color.TRANSPARENT)
                 setTextColor(calendar.getFocusColor());
             else if (ViewCalendar.isToday(mDate))
                 setTextColor(calendar.getTodayColor());
@@ -56,7 +57,7 @@ public class ViewCalendarCellWeek extends ViewCalendarCell {
     @Override
     protected void onDraw(Canvas canvas) {
         ViewCalendar calendar = getViewCalendar();
-        if (calendar != null && calendar.isSameDay(mDate))
+        if (calendar != null && calendar.getFocusBackgroundColor() != Color.TRANSPARENT && calendar.isSameDay(mDate))
             drawFocus(canvas, calendar.getFocusBackgroundColor());
 
         super.onDraw(canvas);

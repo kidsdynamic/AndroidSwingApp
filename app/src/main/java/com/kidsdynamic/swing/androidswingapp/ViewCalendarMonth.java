@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -86,26 +87,13 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
 
     @Override
     public long getDateBegin() {
-        Calendar calc = ViewCalendar.getInstance();
-        calc.setTimeInMillis(mDate);
-
-        calc.set(Calendar.DAY_OF_MONTH, 1);
-        calc.set(Calendar.HOUR_OF_DAY, 0);
-        calc.set(Calendar.MINUTE, 0);
-        calc.set(Calendar.SECOND, 0);
-        calc.set(Calendar.MILLISECOND, 0);
-
-        return calc.getTimeInMillis();
+        return stripTime(mViewCellList[0].getDate());
     }
 
     @Override
     public long getDateEnd() {
-        Calendar calc = ViewCalendar.getInstance();
-        calc.setTimeInMillis(getDateBegin());
-
-        calc.add(Calendar.MONTH, 1);
-
-        return calc.getTimeInMillis() - 1;
+        long date = stripTime(mViewCellList[41].getDate());
+        return date + 86400000 - 1;
     }
 
     public void updateNameList(ViewCalendarCellWeekName[] list) {
@@ -136,8 +124,28 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
     }
 
     public ViewCalendarCellMonth addEvent(WatchEvent event) {
-        // todo: find ViewCalendarCellMonth and add event
+        for (ViewCalendarCellMonth cell : mViewCellList) {
+            if (cell.isSameDay(event.mStartDate)) {
+                cell.addEvent(event);
+                return cell;
+            }
+        }
+
         return null;
+    }
+
+    public void delEvent(WatchEvent event) {
+        delEvent(event.mId);
+    }
+
+    public void delEvent(int id) {
+        for (ViewCalendarCellMonth cell : mViewCellList)
+            cell.delEvent(id);
+    }
+
+    public void delAllEvent() {
+        for (ViewCalendarCellMonth cell : mViewCellList)
+            cell.delAllEvent();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -21,11 +22,11 @@ public class ViewCalendar extends TableLayout {
 
     protected int mTextSize = 20;
     protected int mTextStyle = Typeface.BOLD;
-    protected int mTextColor = 0x000000;
-    protected int mTodayColor = 0xFFFFFF;
-    protected int mFocusColor = 0xFFFFFF;
-    protected int mFocusBackgroundColor = 0xA00000;
-    protected int mExceedColor = 0x666666;
+    protected int mTextColor = Color.BLACK;
+    protected int mTodayColor = Color.WHITE;
+    protected int mFocusColor = Color.TRANSPARENT;
+    protected int mFocusBackgroundColor = Color.TRANSPARENT;
+    protected int mExceedColor = Color.LTGRAY;
 
     protected long mDate = System.currentTimeMillis();
 

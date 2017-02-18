@@ -4,10 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -24,14 +21,11 @@ public class FragmentCalendarMonth extends ViewFragment {
     private ViewCalendarMonth mViewCalendar;
 
     private long mDefaultDate = System.currentTimeMillis();
-    private List<WatchEvent> mEventList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        mEventList = new ArrayList<>();
     }
 
     @Override
@@ -78,11 +72,16 @@ public class FragmentCalendarMonth extends ViewFragment {
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
 
-        mEventList = mActivityMain.mOperator.getEventList(mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
+        loadEventList(mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
+    }
 
-        for (WatchEvent event : mEventList) {
+    private void loadEventList(long start, long end) {
+        mViewCalendar.delAllEvent();
+
+        List<WatchEvent> list = mActivityMain.mOperator.getEventList(start, end);
+
+        for (WatchEvent event : list)
             mViewCalendar.addEvent(event);
-        }
     }
 
     private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {

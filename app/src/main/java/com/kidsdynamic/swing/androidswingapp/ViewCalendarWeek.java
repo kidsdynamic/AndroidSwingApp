@@ -83,23 +83,13 @@ public class ViewCalendarWeek extends ViewCalendar implements View.OnClickListen
 
     @Override
     public long getDateBegin() {
-        Calendar calc = ViewCalendar.getInstance();
-        calc.setTimeInMillis(mDate);
-
-        while (calc.get(Calendar.DAY_OF_WEEK) != calc.getFirstDayOfWeek())
-            calc.add(Calendar.DAY_OF_MONTH, -1);
-
-        calc.set(Calendar.HOUR_OF_DAY, 0);
-        calc.set(Calendar.MINUTE, 0);
-        calc.set(Calendar.SECOND, 0);
-        calc.set(Calendar.MILLISECOND, 0);
-
-        return calc.getTimeInMillis();
+        return stripTime(mViewCellList[0].getDate());
     }
 
     @Override
     public long getDateEnd() {
-        return getDateBegin() + 604800000 - 1; // 7 days
+        long date = stripTime(mViewCellList[6].getDate());
+        return date + 86400000 - 1;
     }
 
     public void updateNameList(ViewCalendarCellWeekName[] list) {
