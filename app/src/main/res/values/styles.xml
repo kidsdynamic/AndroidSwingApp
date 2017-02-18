@@ -72,6 +72,11 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>
     </style>
+    
+    <style name="dashboard_today">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 
     <style name="edittext_calendar">
         <item name="android:background">@android:color/transparent</item>

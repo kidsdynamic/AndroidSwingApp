@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -67,6 +68,7 @@ public class ActivityMain extends AppCompatActivity
     private TextView mViewTitle;
     private View mViewConsole;
     private View mViewToolbar;
+    private ImageView mViewBackground;
 
     private int mControlHeight;
     private int mToolbarHeight;
@@ -117,6 +119,8 @@ public class ActivityMain extends AppCompatActivity
 
         mViewConsole = findViewById(R.id.main_console);
         mViewToolbar = findViewById(R.id.main_toolbar);
+
+        mViewBackground = (ImageView)findViewById(R.id.main_background);
     }
 
     @Override
@@ -347,9 +351,10 @@ public class ActivityMain extends AppCompatActivity
             return;
 
         if (resource == RESOURCE_HIDE) {
-            // todo: set background in primary color (light blue)
+            mViewBackground.setImageDrawable(null);
+            mViewBackground.setBackgroundColor(Color.WHITE);
         } else {
-            // todo: change background resource
+            mViewBackground.setImageResource(resource);
         }
 
         mBackgroundRes = resource;

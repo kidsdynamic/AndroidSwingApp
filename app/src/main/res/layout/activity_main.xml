@@ -12,8 +12,8 @@
         android:layout_above="@+id/main_console"
         android:adjustViewBounds="false"
         android:cropToPadding="true"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/city_newyork" />
+        android:src="@mipmap/city_newyork"
+        android:scaleType="center" />
 
     <RelativeLayout
         android:id="@+id/main_toolbar"

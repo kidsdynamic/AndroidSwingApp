@@ -32,7 +32,7 @@ public class FragmentDashboardSync extends ViewFragment {
         mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.dashboard_sync_progress);
         mViewProgress.setOnProgressListener(mProgressListener);
 
-        mViewMessage = (TextView)mViewMain.findViewById(R.id.dashboard_sync_message);
+        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_sync_message);
 
         return mViewMain;
     }
@@ -40,7 +40,7 @@ public class FragmentDashboardSync extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("Dashboard", true, true, false,
-                R.mipmap.city_florida, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
+                ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override
@@ -71,9 +71,13 @@ public class FragmentDashboardSync extends ViewFragment {
     private ViewCircle.OnProgressListener mProgressListener = new ViewCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewCircle view, int begin, int end) {
+            // TEST
             debug_count_down--;
-            if(debug_count_down == 0)
+            if (debug_count_down == 0) {
                 mViewProgress.stopProgress();
+                mActivityMain.selectFragment(FragmentDashboardToday.class.getName(), null);
+            }
+            /////////////////
         }
     };
 
