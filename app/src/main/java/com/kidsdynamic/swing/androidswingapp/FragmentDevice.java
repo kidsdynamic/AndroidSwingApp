@@ -20,7 +20,6 @@ public class FragmentDevice extends ViewFragment {
 
     private TextView mViewCapacity;
     private ViewCircle mViewProgress;
-    private WatchContact.Kid mKid;
 
     private Handler mHandler;
     private boolean mPause = false;
@@ -53,7 +52,6 @@ public class FragmentDevice extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        mKid = mActivityMain.mOperator.getFocusKid();
         mPause = false;
         mHandler.postDelayed(mRunnable, 1000);
     }
@@ -80,9 +78,12 @@ public class FragmentDevice extends ViewFragment {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            if(mPause)
+            if (mPause)
                 return;
-            mActivityMain.mBLEMachine.Battery(mOnBatteryListener, ServerMachine.getMacAddress(mKid.mMacId));
+
+            WatchContact.Kid kid = mActivityMain.mOperator.getFocusKid();
+            if (kid != null)
+                mActivityMain.mBLEMachine.Battery(mOnBatteryListener, ServerMachine.getMacAddress(kid.mMacId));
         }
     };
 
@@ -92,7 +93,7 @@ public class FragmentDevice extends ViewFragment {
             if (value == (byte)0xFF) {
                 // Todo : can't find watch.
             } else {
-                setTitle(mKid.mName);
+                setTitle(mActivityMain.mOperator.getFocusKid().mName);
                 setCapacity(value);
             }
             mHandler.postDelayed(mRunnable, 10000);

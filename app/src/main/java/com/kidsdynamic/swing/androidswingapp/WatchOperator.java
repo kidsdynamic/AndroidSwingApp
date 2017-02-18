@@ -95,6 +95,14 @@ public class WatchOperator {
 
     WatchContact.Kid getFocusKid() {
         WatchContact.Kid kid = mWatchDatabase.KidGetFocus();
+        if (kid == null) {
+            List<WatchContact.Kid> kids = mWatchDatabase.KidGet();
+            if (!kids.isEmpty()) {
+                kid = kids.get(0);
+                mWatchDatabase.KidSetFocus(kid);
+            }
+        }
+
         if (kid != null) {
             kid.mBound = true;
             kid.mLabel = kid.mName;
