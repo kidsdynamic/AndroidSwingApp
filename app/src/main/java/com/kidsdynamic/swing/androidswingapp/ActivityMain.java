@@ -352,7 +352,6 @@ public class ActivityMain extends AppCompatActivity
 
         if (resource == RESOURCE_HIDE) {
             mViewBackground.setImageDrawable(null);
-            mViewBackground.setBackgroundColor(Color.WHITE);
         } else {
             mViewBackground.setImageResource(resource);
         }
