@@ -12,7 +12,7 @@ import android.widget.TextView;
  * Created by 03543 on 2017/2/19.
  */
 
-public class FragmentDashboardHello extends ViewFragment {
+public class FragmentDashboardEmotion extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -28,11 +28,11 @@ public class FragmentDashboardHello extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_dashboard_hello, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_dashboard_emotion, container, false);
 
-        mViewHello = (TextView) mViewMain.findViewById(R.id.dashboard_hello_hello);
-        mViewMonster = (ImageView) mViewMain.findViewById(R.id.dashboard_hello_monster);
-        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_hello_message);
+        mViewHello = (TextView) mViewMain.findViewById(R.id.dashboard_emotion_hello);
+        mViewMonster = (ImageView) mViewMain.findViewById(R.id.dashboard_emotion_monster);
+        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_emotion_message);
 
         mViewMonster.setOnClickListener(mMonsterListener);
 

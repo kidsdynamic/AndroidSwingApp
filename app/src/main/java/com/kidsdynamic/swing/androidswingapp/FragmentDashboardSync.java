@@ -75,7 +75,7 @@ public class FragmentDashboardSync extends ViewFragment {
             debug_count_down--;
             if (debug_count_down == 0) {
                 mViewProgress.stopProgress();
-                mActivityMain.selectFragment(FragmentDashboardHello.class.getName(), null);
+                mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
             }
             /////////////////
         }
