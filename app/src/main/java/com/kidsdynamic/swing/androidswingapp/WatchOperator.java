@@ -265,7 +265,7 @@ public class WatchOperator {
     public List<WatchEvent> getEventList(long start, long end) {
         List<WatchEvent> list = mWatchDatabase.EventGet(start, end);
         // Test
-        if (true) {
+        if (false) {
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 8, 30, 2017, 2, 18, 9, 10, WatchEvent.StockColorList[0].mColor,
                     "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
