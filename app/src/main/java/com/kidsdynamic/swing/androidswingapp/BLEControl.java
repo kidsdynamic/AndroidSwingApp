@@ -132,6 +132,7 @@ public class BLEControl {
                 if (name == null || address == null)
                     return;
 
+                Log("onLeScan Name " + name + " Address " + address);
                 mEventListener.onScanResult(name, address, device.getBondState() == BluetoothDevice.BOND_BONDED, rssi);
             }
         }
