@@ -34,6 +34,8 @@ public class FragmentDashboardHello extends ViewFragment {
         mViewMonster = (ImageView) mViewMain.findViewById(R.id.dashboard_hello_monster);
         mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_hello_message);
 
+        mViewMonster.setOnClickListener(mMonsterListener);
+
         return mViewMain;
     }
 
@@ -79,4 +81,11 @@ public class FragmentDashboardHello extends ViewFragment {
         mViewMonster.setImageResource(R.mipmap.monster_yellow);
         mViewMessage.setText("Excellent!");
     }
+
+    private View.OnClickListener mMonsterListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentDashboardToday.class.getName(), null);
+        }
+    };
 }
