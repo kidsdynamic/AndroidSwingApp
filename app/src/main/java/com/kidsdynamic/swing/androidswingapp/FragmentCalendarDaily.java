@@ -1,11 +1,14 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/10.

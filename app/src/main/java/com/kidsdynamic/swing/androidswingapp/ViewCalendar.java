@@ -230,7 +230,7 @@ public class ViewCalendar extends TableLayout {
         Calendar calc = getInstance();
 
         calc.setTimeInMillis(date);
-        calc.clear(Calendar.HOUR_OF_DAY);
+        calc.set(Calendar.HOUR_OF_DAY, 0);
         calc.clear(Calendar.MINUTE);
         calc.clear(Calendar.SECOND);
         calc.clear(Calendar.MILLISECOND);

@@ -84,32 +84,6 @@ public class FragmentCalendarMonth extends ViewFragment {
             mViewCalendar.addEvent(event);
     }
 
-    private WatchEvent makeFakeEvent(int eventId, int userId, List<Integer> kids, int startHour, int startMin, int endHour, int endMin) {
-        // for debug only!
-        WatchEvent event = new WatchEvent();
-
-        event.mId = eventId;
-        event.mUserId = userId;
-        event.mKids = kids;
-        event.mColor = WatchEvent.colorToString(WatchEvent.StockColorList[2].mColor);
-        event.mName = String.format(Locale.getDefault(), "Name(%d)", eventId);
-        event.mDescription = String.format(Locale.getDefault(), "Desc(%d) This is a Dog", eventId);
-        event.mRepeat = WatchEvent.REPEAT_NEVER;
-
-        Calendar calc = Calendar.getInstance();
-        calc.setTimeInMillis(event.mStartDate);
-
-        calc.set(Calendar.HOUR_OF_DAY, startHour);
-        calc.set(Calendar.MINUTE, startMin);
-        event.mStartDate = calc.getTimeInMillis();
-
-        calc.set(Calendar.HOUR_OF_DAY, endHour);
-        calc.set(Calendar.MINUTE, endMin);
-        event.mEndDate = calc.getTimeInMillis();
-
-        return event;
-    }
-
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
@@ -120,7 +94,10 @@ public class FragmentCalendarMonth extends ViewFragment {
     private ViewCalendarMonth.OnSelectListener mCalendarListener = new ViewCalendarMonth.OnSelectListener() {
         @Override
         public void onSelect(ViewCalendarMonth calendar, ViewCalendarCellMonth cell) {
-            mViewSelector.setDate(cell.getDate());
+            Bundle bundle = new Bundle();
+            bundle.putLong(BUNDLE_KEY_DATE, cell.getDate());
+
+            mActivityMain.selectFragment(FragmentCalendarDaily.class.getName(), bundle);
         }
     };
 }
