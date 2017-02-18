@@ -296,9 +296,8 @@ public class WatchOperator {
         return mWatchDatabase.EventGet(id);
     }
 
-    public boolean setEvent(WatchOperatorSetEvent.finishListener listener, WatchEvent event) {
+    public void setEvent(WatchOperatorSetEvent.finishListener listener, WatchEvent event) {
         new WatchOperatorSetEvent(mActivity).start(listener, event);
-        return true;
     }
 
     public void deleteEvent(WatchOperatorDeleteEvent.finishListener listener, int eventId) {
@@ -313,7 +312,7 @@ public class WatchOperator {
         return null;
     }
 
-    public void todoDone(int eventId, int todoId) {
-
+    public void todoDone(WatchOperatorTodoDone.finishListener listener, List<WatchTodo> todos) {
+        new WatchOperatorTodoDone(mActivity).start(listener, todos);
     }
 }

@@ -159,11 +159,8 @@ public class FragmentCalendarTodo extends ViewFragment {
                 viewTodo.save(todo);
             }
 
-            for (WatchTodo todo : mEvent.mTodoList) {
-                if (todo.mStatus.equals(WatchTodo.STATUS_DONE))
-                    mActivityMain.mOperator.todoDone(mEvent.mId, todo.mId);
-            }
-
+            // Todo : show processing dialog
+            mActivityMain.mOperator.todoDone(null, mEvent.mTodoList);
             //mActivityMain.mOperator.setEvent(null, mEvent);
         }
     };
