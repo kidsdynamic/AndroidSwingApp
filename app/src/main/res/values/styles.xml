@@ -73,7 +73,7 @@
         <item name="android:textStyle">normal</item>
     </style>
     
-    <style name="dashboard_today">
+    <style name="dashboard_hello">
         <item name="android:textSize">28sp</item>
         <item name="android:textStyle">bold</item>
     </style>
