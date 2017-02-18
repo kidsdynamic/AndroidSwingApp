@@ -49,7 +49,10 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, REPEAT_NEVER, 0, now, now);
+        NoticeAlarm alarm = NoticeAlarmList[0];
+        StockColor color = StockColorList[4];
+
+        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, color.mText, "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -68,12 +71,19 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, REPEAT_NEVER, 0, now, now);
+        NoticeAlarm alarm = NoticeAlarmList[0];
+        StockColor color = StockColorList[4];
+
+        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, color.mText, "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
-        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, "#FF7231", "", "", 0, REPEAT_NEVER, 0, now, now);
+
+        NoticeAlarm alarm = NoticeAlarmList[0];
+        StockColor color = StockColorList[4];
+
+        init(0, 0, new ArrayList<Integer>(), alarm.mName, startDate, endDate, color.mText, "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, String name,

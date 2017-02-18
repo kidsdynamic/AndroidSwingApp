@@ -59,10 +59,11 @@ public class FragmentCalendarDaily extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
-        Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_KEY_DATE, mViewCalendar.getDate());
+        WatchEvent event = new WatchEvent(mViewCalendar.getDate());
+        event.mUserId = mActivityMain.mOperator.getUser().mId;
 
-        mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), bundle);
+        mActivityMain.mEventStack.push(event);
+        mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), null);
     }
 
     @Override

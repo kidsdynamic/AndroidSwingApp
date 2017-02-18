@@ -532,6 +532,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (mEvent.mAlert == 0)// simple name
             alarmName = "App Only";
 
+        mEvent.mName = alarmName;   // multi-dependence issue, cause from KD.
         mViewAlarm.setText(alarmName);
     }
 

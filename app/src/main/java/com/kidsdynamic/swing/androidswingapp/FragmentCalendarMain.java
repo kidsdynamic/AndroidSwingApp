@@ -78,11 +78,6 @@ public class FragmentCalendarMain extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
-        Calendar calc = Calendar.getInstance();
-        calc.clear(Calendar.MINUTE);
-        calc.clear(Calendar.SECOND);
-        calc.clear(Calendar.MILLISECOND);
-
         WatchEvent event = new WatchEvent(mViewCalendar.getDate());
         event.mUserId = mActivityMain.mOperator.getUser().mId;
 
