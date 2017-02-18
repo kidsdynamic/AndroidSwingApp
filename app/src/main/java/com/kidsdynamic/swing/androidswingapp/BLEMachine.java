@@ -91,7 +91,7 @@ public class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mFoundSearchAddress = false;
                         Scan(true);
 
-                    } else if ((mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) && !mRelationDevice.mAddress.equals("")) {
+                    } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
                         mInOurDoors = new ArrayList<>();
                         mRelationDevice.mState.mTick = 150;
                         if (GetBondState(mRelationDevice.mAddress)) {

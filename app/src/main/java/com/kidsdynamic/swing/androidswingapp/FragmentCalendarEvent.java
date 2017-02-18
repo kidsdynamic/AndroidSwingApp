@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,6 +68,8 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View mViewButtonLine;
     private View mViewSave;
     private View mViewAdvance;
+
+    private Dialog mProcessDialog = null;
 
     private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
@@ -171,14 +176,21 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     @Override
+    public void onPause() {
+        if (mProcessDialog != null)
+            mProcessDialog.dismiss();
+        super.onPause();
+    }
+
+    @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
 
     @Override
     public void onToolbarAction2() {
-        mActivityMain.mOperator.deleteEvent(null, mEvent.mId);
-        mActivityMain.popFragment();
+        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+        mActivityMain.mOperator.deleteEvent(mDeleteEventListener, mEvent.mId);
     }
 
     private void viewEnable(boolean enable) {
@@ -413,8 +425,8 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mSaveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            saveWatchEvent();
-            mActivityMain.popFragment();
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mActivityMain.mOperator.setEvent(mSetEventListener, mEvent);
         }
     };
 
@@ -617,9 +629,27 @@ public class FragmentCalendarEvent extends ViewFragment {
         ViewDelete(mActivityMain.mOperator.getUser().mId == mEvent.mUserId && mEvent.mId != 0);
     }
 
-    private void saveWatchEvent() {
-        // todo: check and find out is there any illegal field. then warning and reject.
-        // todo: add listener below
-        mActivityMain.mOperator.setEvent(null, mEvent);
-    }
+    WatchOperatorSetEvent.finishListener mSetEventListener = new WatchOperatorSetEvent.finishListener() {
+        @Override
+        public void onFinish(String msg) {
+            mProcessDialog.dismiss();
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            } else {
+                mActivityMain.popFragment();
+            }
+        }
+    };
+
+    WatchOperatorDeleteEvent.finishListener mDeleteEventListener = new WatchOperatorDeleteEvent.finishListener() {
+        @Override
+        public void onFinish(String msg) {
+            mProcessDialog.dismiss();
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            } else {
+                mActivityMain.popFragment();
+            }
+        }
+    };
 }

@@ -449,14 +449,8 @@ public class WatchDatabase {
         for (int kidId : event.mKids)
             EventKidAdd(new EventKid(kidId, event.mId));
 
-        for (WatchTodo todo : event.mTodoList) {
-            todo.mEventId = event.mId;
-            todo.mUserId = event.mUserId;
-            if (TodoGet(todo.mId) == null)
-                TodoAdd(todo);
-            else
-                TodoUpdate(todo);
-        }
+        for (WatchTodo todo : event.mTodoList)
+            TodoAdd(todo);
 
         return rtn;
     }
@@ -484,14 +478,8 @@ public class WatchDatabase {
         for (int kidId : event.mKids)
             EventKidAdd(new EventKid(kidId, event.mId));
 
-        for (WatchTodo todo : event.mTodoList) {
-            todo.mEventId = event.mId;
-            todo.mUserId = event.mUserId;
-            if (TodoGet(todo.mId) == null)
-                TodoAdd(todo);
-            else
-                TodoUpdate(todo);
-        }
+        for (WatchTodo todo : event.mTodoList)
+            TodoAdd(todo);
 
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId, null);
     }
@@ -518,7 +506,7 @@ public class WatchDatabase {
         cursor.close();
 
         for (WatchEvent event : repeatResult) {
-            event.mTodoList = TodoGet(event.mId, event.mUserId);
+            event.mTodoList = TodoGetByUser(event.mId, event.mUserId);
             List<EventKid> eventKidList = EventKidGet(event.mId);
             event.mKids = new ArrayList<>();
             for (EventKid eventKid : eventKidList)
@@ -567,7 +555,7 @@ public class WatchDatabase {
         cursor.close();
 
         for (WatchEvent event : result) {
-            event.mTodoList = TodoGet(event.mId, event.mUserId);
+            event.mTodoList = TodoGetByUser(event.mId, event.mUserId);
             List<EventKid> eventKidList = EventKidGet(event.mId);
             event.mKids = new ArrayList<>();
             for (EventKid eventKid : eventKidList)
@@ -608,7 +596,7 @@ public class WatchDatabase {
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT + " WHERE " + ID + "=" + eventId, null);
         if (cursor.moveToNext()) {
             rtn = cursorToEvent(cursor);
-            rtn.mTodoList = TodoGet(rtn.mId, rtn.mUserId);
+            rtn.mTodoList = TodoGetByUser(rtn.mId, rtn.mUserId);
             List<EventKid> eventKidList = EventKidGet(rtn.mId);
             rtn.mKids = new ArrayList<>();
             for (EventKid eventKid : eventKidList)
@@ -668,21 +656,9 @@ public class WatchDatabase {
         return mDatabase.delete(TABLE_TODO, EVENT_ID + "=" + eventId, null);
     }
 
-    public List<WatchTodo> TodoGet() {
-        List<WatchTodo> result = new ArrayList<>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO, null);
-
-        while (cursor.moveToNext())
-            result.add(cursorToTodo(cursor));
-
-        cursor.close();
-
-        return result;
-    }
-
-    public WatchTodo TodoGet(int id) {
+    public WatchTodo TodoGet(int eventId, int todoId) {
         WatchTodo result = null;
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + ID + "=" + id, null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + ID + "=" + todoId + " AND " + EVENT_ID + "=" + eventId, null);
 
         if (cursor.moveToNext())
             result = cursorToTodo(cursor);
@@ -692,7 +668,7 @@ public class WatchDatabase {
         return result;
     }
 
-    public List<WatchTodo> TodoGet(int eventId, int userId) {
+    public List<WatchTodo> TodoGetByUser(int eventId, int userId) {
         List<WatchTodo> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId, null);
 

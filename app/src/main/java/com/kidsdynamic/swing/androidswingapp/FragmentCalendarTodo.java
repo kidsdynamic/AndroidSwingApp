@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -29,6 +32,8 @@ public class FragmentCalendarTodo extends ViewFragment {
     private View mViewButtonLine;
     private View mViewSave;
     private View mViewDelete;
+
+    private Dialog mProcessDialog = null;
 
     private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
@@ -118,6 +123,14 @@ public class FragmentCalendarTodo extends ViewFragment {
             addTodo(todo);
     }
 
+    @Override
+    public void onPause() {
+        if (mProcessDialog != null)
+            mProcessDialog.dismiss();
+
+        super.onPause();
+    }
+
     private void addTodo(WatchTodo todo) {
         ViewTodo viewTodo = new ViewTodo(mActivityMain);
         viewTodo.setTag(todo);
@@ -159,11 +172,8 @@ public class FragmentCalendarTodo extends ViewFragment {
                 viewTodo.save(todo);
             }
 
-            for (WatchTodo todo : mEvent.mTodoList) {
-                if (todo.mStatus.equals(WatchTodo.STATUS_DONE))
-                    mActivityMain.mOperator.todoDone(mEvent.mId, todo.mId);
-            }
-
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mActivityMain.mOperator.todoDone(mTodoDoneListener, mEvent.mTodoList);
             //mActivityMain.mOperator.setEvent(null, mEvent);
         }
     };
@@ -171,7 +181,28 @@ public class FragmentCalendarTodo extends ViewFragment {
     private View.OnClickListener mDeleteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.mOperator.deleteEvent(null, mEvent.mId);
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mActivityMain.mOperator.deleteEvent(mDeleteEventListener, mEvent.mId);
+        }
+    };
+
+    WatchOperatorTodoDone.finishListener mTodoDoneListener = new WatchOperatorTodoDone.finishListener() {
+        @Override
+        public void onFinish(String msg) {
+            mProcessDialog.dismiss();
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    WatchOperatorDeleteEvent.finishListener mDeleteEventListener = new WatchOperatorDeleteEvent.finishListener() {
+        @Override
+        public void onFinish(String msg) {
+            mProcessDialog.dismiss();
+            if (!msg.equals("")) {
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }
