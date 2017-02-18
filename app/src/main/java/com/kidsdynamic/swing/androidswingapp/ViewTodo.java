@@ -1,6 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -65,23 +67,17 @@ public class ViewTodo extends RelativeLayout {
         todo.mText = mViewText.getText().toString();
     }
 
-    @Override
-    public void setEnabled(boolean enabled) {
-        super.setEnabled(enabled);
+    public void setEditMode() {
+        mViewCheck.setEnabled(true);
+        mViewText.setEnabled(true);
+        mViewDelete.setEnabled(true);
 
-        mViewCheck.setEnabled(enabled);
-        mViewText.setEnabled(enabled);
-        mViewDelete.setEnabled(enabled);
+        mViewText.setTypeface(mViewText.getTypeface(), Typeface.NORMAL);
+        mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_gray_deep));
 
-        if (enabled) {
-            mViewCheck.setOnClickListener(mCheckListener);
-            mViewText.setOnTouchListener(mOnTouchListener);
-            mViewDelete.setOnClickListener(mDeleteListener);
-        } else {
-            mViewCheck.setOnClickListener(null);
-            mViewText.setOnTouchListener(null);
-            mViewDelete.setOnClickListener(null);
-        }
+        mViewCheck.setOnClickListener(mCheckListener);
+        mViewText.setOnTouchListener(mOnTouchListener);
+        mViewDelete.setOnClickListener(mDeleteListener);
     }
 
     public void setCheckMode() {
@@ -89,7 +85,23 @@ public class ViewTodo extends RelativeLayout {
         mViewText.setEnabled(false);
         mViewDelete.setEnabled(false);
 
+        mViewText.setTypeface(mViewText.getTypeface(), Typeface.BOLD);
+        mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_white));
+
         mViewCheck.setOnClickListener(mCheckListener);
+        mViewText.setOnTouchListener(null);
+        mViewDelete.setOnClickListener(null);
+    }
+
+    public void setLockMode() {
+        mViewCheck.setEnabled(false);
+        mViewText.setEnabled(false);
+        mViewDelete.setEnabled(false);
+
+        mViewText.setTypeface(mViewText.getTypeface(), Typeface.NORMAL);
+        mViewText.setTextColor(ContextCompat.getColor(getContext(), R.color.color_gray_light));
+
+        mViewCheck.setOnClickListener(null);
         mViewText.setOnTouchListener(null);
         mViewDelete.setOnClickListener(null);
     }

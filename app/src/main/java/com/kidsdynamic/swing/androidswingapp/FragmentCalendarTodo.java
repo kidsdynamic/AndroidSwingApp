@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +122,10 @@ public class FragmentCalendarTodo extends ViewFragment {
         ViewTodo viewTodo = new ViewTodo(mActivityMain);
         viewTodo.setTag(todo);
         viewTodo.load(todo);
-        viewTodo.setCheckMode();
+        if (todo.mStatus.equals(WatchTodo.STATUS_DONE))
+            viewTodo.setLockMode();
+        else
+            viewTodo.setCheckMode();
         viewTodo.setOnEditListener(null);
 
         int height = getResources().getDisplayMetrics().heightPixels / 15;
@@ -147,14 +151,27 @@ public class FragmentCalendarTodo extends ViewFragment {
     private View.OnClickListener mSaveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            int count = mViewContainer.getChildCount();
+            for (int idx = 0; idx < count; idx++) {
+                ViewTodo viewTodo = (ViewTodo) mViewContainer.getChildAt(idx);
+                WatchTodo todo = (WatchTodo) viewTodo.getTag();
 
+                viewTodo.save(todo);
+            }
+
+            for (WatchTodo todo : mEvent.mTodoList) {
+                if (todo.mStatus.equals(WatchTodo.STATUS_DONE))
+                    mActivityMain.mOperator.todoDone(mEvent.mId, todo.mId);
+            }
+
+            //mActivityMain.mOperator.setEvent(null, mEvent);
         }
     };
 
     private View.OnClickListener mDeleteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
+            mActivityMain.mOperator.deleteEvent(null, mEvent.mId);
         }
     };
 }

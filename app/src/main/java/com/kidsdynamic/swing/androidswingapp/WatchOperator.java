@@ -304,4 +304,8 @@ public class WatchOperator {
 
         return null;
     }
+
+    public void todoDone(int eventId, int todoId) {
+
+    }
 }

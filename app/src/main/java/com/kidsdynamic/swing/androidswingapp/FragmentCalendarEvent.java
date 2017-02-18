@@ -194,7 +194,10 @@ public class FragmentCalendarEvent extends ViewFragment {
         int count = mViewTodoContainer.getChildCount();
         for (int idx = 0; idx < count; idx++) {
             ViewTodo viewTodo = (ViewTodo) mViewTodoContainer.getChildAt(idx);
-            viewTodo.setEnabled(enable);
+            if (enable)
+                viewTodo.setEditMode();
+            else
+                viewTodo.setLockMode();
         }
 
         mViewAlarmIcon.setVisibility(enable ? View.VISIBLE : View.INVISIBLE);
@@ -246,6 +249,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         ViewTodo viewTodo = new ViewTodo(mActivityMain);
         viewTodo.setTag(todo);
         viewTodo.load(todo);
+        viewTodo.setEditMode();
         viewTodo.setOnEditListener(mTodoEditListener);
 
         int height = getResources().getDisplayMetrics().heightPixels / 15;

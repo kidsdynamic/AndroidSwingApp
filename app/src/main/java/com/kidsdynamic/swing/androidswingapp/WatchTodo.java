@@ -65,9 +65,9 @@ public class WatchTodo implements Serializable {
                 .append(" mUserId:").append(mUserId)
                 .append(" mEventId:").append(mEventId)
                 .append(" mText:").append(mText)
-                .append(" mStatus").append(mStatus)
-                .append(" mDateCreated").append(sdf.format(mDateCreated))
-                .append(" mLastUpdated").append(sdf.format(mLastUpdated))
+                .append(" mStatus:").append(mStatus)
+                .append(" mDateCreated:").append(sdf.format(mDateCreated))
+                .append(" mLastUpdated:").append(sdf.format(mLastUpdated))
                 .append("}").toString();
     }
 }
