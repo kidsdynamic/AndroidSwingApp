@@ -265,11 +265,15 @@ public class WatchOperator {
     public List<WatchEvent> getEventList(long start, long end) {
         List<WatchEvent> list = mWatchDatabase.EventGet(start, end);
         // Test
-        if (false) {
+        if (true) {
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 8, 30, 2017, 2, 18, 9, 10, WatchEvent.StockColorList[0].mColor,
                     "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
+            list.get(list.size() - 1).mTodoList = Arrays.asList(
+                    new WatchTodo(1, getUser().mId, 0, "1 Todo todo todo todo", WatchTodo.STATUS_DONE),
+                    new WatchTodo(2, getUser().mId, 0, "2 Todo todo todo todo", WatchTodo.STATUS_PENDING)
+                    );
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 10, 0, 2017, 2, 18, 10, 50, WatchEvent.StockColorList[1].mColor,

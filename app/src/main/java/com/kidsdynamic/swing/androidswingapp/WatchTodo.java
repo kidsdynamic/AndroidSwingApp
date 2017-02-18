@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +27,13 @@ public class WatchTodo implements Serializable {
     public WatchTodo() {
         long now = System.currentTimeMillis();
         init(0, 0, 0, "", "", now, now);
+    }
+
+    public WatchTodo(int id, int userId, int eventId, String text, String status) {
+        Calendar calc = Calendar.getInstance();
+        long now = calc.getTimeInMillis();
+
+        init(id, userId, eventId, text, status, now, now);
     }
 
     public WatchTodo(int id, int userId, int eventId, String text, String status,

@@ -61,6 +61,18 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="textview_calendar_todo_title">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="textview_calendar_todo_description">
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
     <style name="edittext_calendar">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textColorHint">@color/color_gray</item>

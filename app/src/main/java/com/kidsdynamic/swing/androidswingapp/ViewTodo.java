@@ -45,21 +45,18 @@ public class ViewTodo extends RelativeLayout {
         inflate(getContext(), R.layout.view_todo, this);
 
         mViewCheck = (ImageView) findViewById(R.id.todo_check);
-        mViewCheck.setOnClickListener(mCheckListener);
 
         mViewText = (EditText) findViewById(R.id.todo_text);
         mViewText.addTextChangedListener(mTextWatch);
         mViewText.setOnFocusChangeListener(mFocusListener);
-        mViewText.setOnTouchListener(mOnTouchListener);
 
         mViewDelete = (TextView) findViewById(R.id.todo_delete);
-        mViewDelete.setOnClickListener(mDeleteListener);
 
         mViewSeparator = findViewById(R.id.todo_separator);
     }
 
     public void load(WatchTodo todo) {
-        mViewCheck.setSelected(todo.mStatus.length() != 0);
+        mViewCheck.setSelected(todo.mStatus.equals(WatchTodo.STATUS_DONE));
         mViewText.setText(todo.mText);
     }
 
@@ -76,10 +73,25 @@ public class ViewTodo extends RelativeLayout {
         mViewText.setEnabled(enabled);
         mViewDelete.setEnabled(enabled);
 
-        if (enabled)
+        if (enabled) {
+            mViewCheck.setOnClickListener(mCheckListener);
             mViewText.setOnTouchListener(mOnTouchListener);
-        else
+            mViewDelete.setOnClickListener(mDeleteListener);
+        } else {
+            mViewCheck.setOnClickListener(null);
             mViewText.setOnTouchListener(null);
+            mViewDelete.setOnClickListener(null);
+        }
+    }
+
+    public void setCheckMode() {
+        mViewCheck.setEnabled(true);
+        mViewText.setEnabled(false);
+        mViewDelete.setEnabled(false);
+
+        mViewCheck.setOnClickListener(mCheckListener);
+        mViewText.setOnTouchListener(null);
+        mViewDelete.setOnClickListener(null);
     }
 
     public boolean isChecked() {
