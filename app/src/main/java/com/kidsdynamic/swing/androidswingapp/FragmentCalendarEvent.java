@@ -521,7 +521,7 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     private void loadAlarm() {
         String alarmName = "";
-        for (WatchEvent.NoticeAlarm alarm : WatchEvent.NoticeAlarmList) {
+        for (WatchEvent.Alarm alarm : WatchEvent.AlarmList) {
             if (alarm.mId == mEvent.mAlert)
                 alarmName = WatchEvent.findAlarmName(mEvent.mAlert);
         }

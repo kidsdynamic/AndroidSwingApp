@@ -49,7 +49,7 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        NoticeAlarm alarm = NoticeAlarmList[0];
+        Alarm alarm = AlarmList[0];
         int color = ColorList[4];
 
         init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
@@ -71,7 +71,7 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        NoticeAlarm alarm = NoticeAlarmList[0];
+        Alarm alarm = AlarmList[0];
         int color = ColorList[4];
 
         init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
@@ -80,7 +80,7 @@ public class WatchEvent implements Serializable {
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
 
-        NoticeAlarm alarm = NoticeAlarmList[0];
+        Alarm alarm = AlarmList[0];
         int color = ColorList[4];
 
         init(0, 0, new ArrayList<Integer>(), alarm.mName, startDate, endDate, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
@@ -302,59 +302,59 @@ public class WatchEvent implements Serializable {
     final static int[] ColorList = new int[]{
             0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFFFF7231, 0xFF9A989A};
 
-    static public class NoticeAlarm {
+    static public class Alarm {
         int mId;
         String mName;
         int mResource;
 
-        NoticeAlarm(int id, String name, int resource) {
+        Alarm(int id, String name, int resource) {
             mId = id;
             mName = name;
             mResource = resource;
         }
     }
 
-    final static NoticeAlarm[] NoticeAlarmList = new NoticeAlarm[]{
-            new NoticeAlarm(36, "Good Morning", R.mipmap.icon_alert),
-            new NoticeAlarm(37, "Make Bed", R.mipmap.icon_sound),
-            new NoticeAlarm(38, "Get Dress", R.mipmap.icon_sound),
-            new NoticeAlarm(39, "Eat Breakfast", R.mipmap.icon_sound),
-            new NoticeAlarm(40, "Brush Teeth", R.mipmap.icon_sound),
-            new NoticeAlarm(41, "Get Ready for School", R.mipmap.icon_sound),
-            new NoticeAlarm(42, "Put on Pajamas", R.mipmap.icon_sound),
-            new NoticeAlarm(43, "Story Time", R.mipmap.icon_sound),
-            new NoticeAlarm(44, "Good Night", R.mipmap.icon_sound),
-            new NoticeAlarm(45, "Collect Toys", R.mipmap.icon_sound),
-            new NoticeAlarm(46, "Set Table", R.mipmap.icon_sound),
-            new NoticeAlarm(47, "Feed Pet", R.mipmap.icon_sound),
-            new NoticeAlarm(48, "Water Plants", R.mipmap.icon_sound),
-            new NoticeAlarm(49, "Clean Table", R.mipmap.icon_sound),
-            new NoticeAlarm(50, "Clean Bedroom", R.mipmap.icon_sound),
-            new NoticeAlarm(51, "Homework Time", R.mipmap.icon_sound),
-            new NoticeAlarm(52, "Take a Nap", R.mipmap.icon_sound),
-            new NoticeAlarm(53, "Outdoor Play Time", R.mipmap.icon_sound),
-            new NoticeAlarm(54, "Fun time", R.mipmap.icon_sound),
-            new NoticeAlarm(55, "Exercise", R.mipmap.icon_sound),
-            new NoticeAlarm(56, "Practice Music", R.mipmap.icon_sound),
-            new NoticeAlarm(57, "Drawing Time", R.mipmap.icon_sound),
-            new NoticeAlarm(58, "Reading Time", R.mipmap.icon_sound),
-            new NoticeAlarm(59, "Take a Bath", R.mipmap.icon_sound),
-            new NoticeAlarm(60, "Family Time", R.mipmap.icon_sound),
-            new NoticeAlarm(61, "Lunch Time", R.mipmap.icon_sound),
-            new NoticeAlarm(62, "Dinner Time", R.mipmap.icon_sound),
-            new NoticeAlarm(63, "Afternoon Snack Time", R.mipmap.icon_sound),
-            new NoticeAlarm(64, "Review the Backpack", R.mipmap.icon_sound),
+    final static Alarm[] AlarmList = new Alarm[]{
+            new Alarm(36, "Good Morning", R.mipmap.icon_alert),
+            new Alarm(37, "Make Bed", R.mipmap.icon_sound),
+            new Alarm(38, "Get Dress", R.mipmap.icon_sound),
+            new Alarm(39, "Eat Breakfast", R.mipmap.icon_sound),
+            new Alarm(40, "Brush Teeth", R.mipmap.icon_sound),
+            new Alarm(41, "Get Ready for School", R.mipmap.icon_sound),
+            new Alarm(42, "Put on Pajamas", R.mipmap.icon_sound),
+            new Alarm(43, "Story Time", R.mipmap.icon_sound),
+            new Alarm(44, "Good Night", R.mipmap.icon_sound),
+            new Alarm(45, "Collect Toys", R.mipmap.icon_sound),
+            new Alarm(46, "Set Table", R.mipmap.icon_sound),
+            new Alarm(47, "Feed Pet", R.mipmap.icon_sound),
+            new Alarm(48, "Water Plants", R.mipmap.icon_sound),
+            new Alarm(49, "Clean Table", R.mipmap.icon_sound),
+            new Alarm(50, "Clean Bedroom", R.mipmap.icon_sound),
+            new Alarm(51, "Homework Time", R.mipmap.icon_sound),
+            new Alarm(52, "Take a Nap", R.mipmap.icon_sound),
+            new Alarm(53, "Outdoor Play Time", R.mipmap.icon_sound),
+            new Alarm(54, "Fun time", R.mipmap.icon_sound),
+            new Alarm(55, "Exercise", R.mipmap.icon_sound),
+            new Alarm(56, "Practice Music", R.mipmap.icon_sound),
+            new Alarm(57, "Drawing Time", R.mipmap.icon_sound),
+            new Alarm(58, "Reading Time", R.mipmap.icon_sound),
+            new Alarm(59, "Take a Bath", R.mipmap.icon_sound),
+            new Alarm(60, "Family Time", R.mipmap.icon_sound),
+            new Alarm(61, "Lunch Time", R.mipmap.icon_sound),
+            new Alarm(62, "Dinner Time", R.mipmap.icon_sound),
+            new Alarm(63, "Afternoon Snack Time", R.mipmap.icon_sound),
+            new Alarm(64, "Review the Backpack", R.mipmap.icon_sound),
     };
 
     public static String findAlarmName(int id) {
-        for (NoticeAlarm alarm : NoticeAlarmList)
+        for (Alarm alarm : AlarmList)
             if (alarm.mId == id)
                 return alarm.mName;
         return "";
     }
 
     public static int findAlarmId(String name) {
-        for (NoticeAlarm alarm : NoticeAlarmList)
+        for (Alarm alarm : AlarmList)
             if (alarm.mName.equals(name))
                 return alarm.mId;
         return -1;

@@ -3,8 +3,6 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
@@ -55,20 +49,20 @@ public class FragmentCalendarAlarm extends ViewFragment {
         addTitle("Agenda");
         addAlarm(0, "Agenda Reminders (Only for the App)", 0, mLineListener);
         addTitle("Alarm Clock");
-        addAlarm(WatchEvent.NoticeAlarmList[0], mLineListener);
+        addAlarm(WatchEvent.AlarmList[0], mLineListener);
         addRoutine("Morning Routine");
-        addAlarm(WatchEvent.NoticeAlarmList[1], mLineListener);
-        addAlarm(WatchEvent.NoticeAlarmList[2], mLineListener);
-        addAlarm(WatchEvent.NoticeAlarmList[3], mLineListener);
-        addAlarm(WatchEvent.NoticeAlarmList[4], mLineListener);
-        addAlarm(WatchEvent.NoticeAlarmList[5], mLineListener);
+        addAlarm(WatchEvent.AlarmList[1], mLineListener);
+        addAlarm(WatchEvent.AlarmList[2], mLineListener);
+        addAlarm(WatchEvent.AlarmList[3], mLineListener);
+        addAlarm(WatchEvent.AlarmList[4], mLineListener);
+        addAlarm(WatchEvent.AlarmList[5], mLineListener);
         addRoutine("Bed Time Routine");
-        addAlarm(WatchEvent.NoticeAlarmList[6], mLineListener);
-        addAlarm(WatchEvent.NoticeAlarmList[7], mLineListener);
-        addAlarm(WatchEvent.NoticeAlarmList[8], mLineListener);
+        addAlarm(WatchEvent.AlarmList[6], mLineListener);
+        addAlarm(WatchEvent.AlarmList[7], mLineListener);
+        addAlarm(WatchEvent.AlarmList[8], mLineListener);
         addRoutine("Activities");
-        for (int idx = 9; idx < WatchEvent.NoticeAlarmList.length; idx++)
-            addAlarm(WatchEvent.NoticeAlarmList[idx], mLineListener);
+        for (int idx = 9; idx < WatchEvent.AlarmList.length; idx++)
+            addAlarm(WatchEvent.AlarmList[idx], mLineListener);
 
         return mViewMain;
     }
@@ -95,7 +89,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         mActivityMain.popFragment();
     }
 
-    private void addAlarm(WatchEvent.NoticeAlarm alarm, View.OnClickListener listener) {
+    private void addAlarm(WatchEvent.Alarm alarm, View.OnClickListener listener) {
         addAlarm(alarm.mId, alarm.mName, alarm.mResource, listener);
     }
 

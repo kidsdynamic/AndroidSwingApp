@@ -258,7 +258,7 @@ public class WatchOperator {
         if (false) {
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 8, 30, 2017, 2, 18, 9, 10, WatchEvent.ColorList[0],
-                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
             list.get(list.size() - 1).mTodoList = Arrays.asList(
                     new WatchTodo(1, getUser().mId, 0, "1 Todo todo todo todo", WatchTodo.STATUS_DONE),
@@ -267,17 +267,17 @@ public class WatchOperator {
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 10, 0, 2017, 2, 18, 10, 50, WatchEvent.ColorList[1],
-                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 8, 30, 2017, 2, 18, 11, 30, WatchEvent.ColorList[2],
-                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 10, 30, 2017, 2, 18, 11, 10, WatchEvent.ColorList[3],
-                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
+                    "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.AlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
         }
         //
