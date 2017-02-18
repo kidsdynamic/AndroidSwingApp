@@ -58,7 +58,7 @@ public class FragmentCalendarMonth extends ViewFragment {
     @Override
     public void onToolbarAction2() {
         Bundle bundle = new Bundle();
-        bundle.putLong(BUNDLE_KEY_DATE, mViewCalendar.getDate());
+        bundle.putLong(BUNDLE_KEY_DATE, System.currentTimeMillis());
 
         mActivityMain.selectFragment(FragmentCalendarEvent.class.getName(), bundle);
     }
