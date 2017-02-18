@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.Locale;
 
 /**
@@ -15,9 +17,15 @@ import java.util.Locale;
  */
 
 public class FragmentDevice extends ViewFragment {
+    private final static int STATUS_SEARCH = 0;
+    private final static int STATUS_NOTFOUND = 1;
+    private final static int STATUS_FOUND = 2;
+    private final static int STATUS_NOKID = 3;
+
     private ActivityMain mActivityMain;
     private View mViewMain;
 
+    private TextView mViewStatus;
     private TextView mViewCapacity;
     private ViewCircle mViewProgress;
 
@@ -34,8 +42,10 @@ public class FragmentDevice extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_device, container, false);
 
+        mViewStatus = (TextView) mViewMain.findViewById(R.id.device_status);
         mViewCapacity = (TextView) mViewMain.findViewById(R.id.device_capacity);
-        mViewProgress = (ViewCircle)mViewMain.findViewById(R.id.device_battery);
+        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.device_battery);
+        mViewProgress.setOnProgressListener(mProgressListener);
 
         mHandler = new Handler();
 
@@ -54,14 +64,39 @@ public class FragmentDevice extends ViewFragment {
 
         mPause = false;
         mHandler.postDelayed(mRunnable, 1000);
+
+        if (mActivityMain.mOperator.getFocusKid() != null) {
+            setStatus(STATUS_SEARCH);
+            setTitle(mActivityMain.mOperator.getFocusKid().mName);
+
+            mViewProgress.setStrokeBeginEnd(0, 10);
+            mViewProgress.startProgress(30, -1, -1);
+        } else {
+            setStatus(STATUS_NOKID);
+            mViewProgress.setActive(false);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
+        mViewProgress.stopProgress();
+
         mHandler.removeCallbacksAndMessages(null);
         mPause = true;
+    }
+
+    private void setStatus(int status) {
+        if (status == STATUS_SEARCH) {
+            mViewStatus.setText("Searching...");
+        } else if (status == STATUS_NOTFOUND) {
+            mViewStatus.setText("Not Found");
+        } else if (status == STATUS_FOUND){
+            mViewStatus.setText("Battery");
+        } else if( status == STATUS_NOKID) {
+            mViewStatus.setText("Please Select Your Watch First");
+        }
     }
 
     private void setTitle(String name) {
@@ -90,13 +125,23 @@ public class FragmentDevice extends ViewFragment {
     BLEMachine.onBatteryListener mOnBatteryListener = new BLEMachine.onBatteryListener() {
         @Override
         public void onBattery(byte value) {
-            if (value == (byte)0xFF) {
+            mViewProgress.stopProgress();
+
+            if (value == (byte) 0xFF) {
                 // Todo : can't find watch.
+                setStatus(STATUS_NOTFOUND);
+                mViewProgress.setActive(false);
             } else {
-                setTitle(mActivityMain.mOperator.getFocusKid().mName);
+                setStatus(STATUS_FOUND);
                 setCapacity(value);
             }
             mHandler.postDelayed(mRunnable, 10000);
+        }
+    };
+
+    private ViewCircle.OnProgressListener mProgressListener = new ViewCircle.OnProgressListener() {
+        @Override
+        public void onProgress(ViewCircle view, int begin, int end) {
         }
     };
 }
