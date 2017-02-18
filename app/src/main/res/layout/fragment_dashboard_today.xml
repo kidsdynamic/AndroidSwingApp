@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/dashboard_today_dot_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.3" />
+
+        <com.kidsdynamic.swing.androidswingapp.ViewDotIndicator
+            android:id="@+id/dashboard_today_dot"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/dashboard_today_dot_sponge"
+            android:layout_alignStart="@+id/dashboard_today_dot_sponge"
+            app:dotColorOff="@color/color_gray_light"
+            app:dotColorOn="@color/color_gray_deep"
+            app:dotCount="4"
+            app:dotPosition="0"
+            app:dotSize="6dp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="11" />
 
 </LinearLayout>
