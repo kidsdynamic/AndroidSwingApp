@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +25,8 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
     private TextView mViewCount;
     private LinearLayout mViewContainer;
+    private Dialog mProcessDialog = null;
+
 
     WatchContact.User mRequestFrom;
 
@@ -42,8 +46,18 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         if (!mActivityMain.mContactStack.isEmpty()) {
             mRequestFrom = (WatchContact.User) mActivityMain.mContactStack.pop();
             ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getDeviceList();
-            for (WatchContact.Kid kid : list)
-                addKid(kid);
+            for (WatchContact.Kid kid : list) {
+                boolean isCheck = false;
+                if (mRequestFrom.mRequestStatus.equals("ACCEPTED")) {
+                    for (WatchContact.Kid accepted : mRequestFrom.mRequestKids) {
+                        if (accepted.mId == kid.mId) {
+                            isCheck = true;
+                            break;
+                        }
+                    }
+                }
+                addKid(kid, isCheck);
+            }
         }
 
         updateCount();
@@ -59,6 +73,7 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
+        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
         int count = mViewContainer.getChildCount();
         List<Integer> list = new ArrayList<>();
 
@@ -77,6 +92,7 @@ public class FragmentProfileRequestFrom extends ViewFragment {
     WatchOperatorReplyToSubHost.finishListener mResponseForRequestToListener = new WatchOperatorReplyToSubHost.finishListener() {
         @Override
         public void onFinish(String msg) {
+            mProcessDialog.dismiss();
             mActivityMain.popFragment();
         }
     };
@@ -97,8 +113,8 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         }
     };
 
-    private void addKid(WatchContact.Kid kid) {
-        View view = WatchContact.inflateCheck(mActivityMain, kid, false);
+    private void addKid(WatchContact.Kid kid, boolean isCheck) {
+        View view = WatchContact.inflateCheck(mActivityMain, kid, isCheck);
         view.setOnClickListener(mDeviceListener);
 
         mViewContainer.addView(view);

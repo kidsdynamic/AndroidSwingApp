@@ -97,8 +97,6 @@ public class WatchDatabase {
                     STATUS + " TEXT NOT NULL, " +
                     DESCRIPTION + " TEXT NOT NULL, " +
                     ALERT + " INTEGER NOT NULL, " +
-                    CITY + " TEXT NOT NULL, " +
-                    STATE + " TEXT NOT NULL, " +
                     REPEAT + " TEXT NOT NULL, " +
                     TIMEZONE_OFFSET + " INTEGER NOT NULL, " +
                     DATE_CREATED + " INTEGER NOT NULL, " +
@@ -441,8 +439,6 @@ public class WatchDatabase {
         contentValues.put(STATUS, event.mStatus);
         contentValues.put(DESCRIPTION, event.mDescription);
         contentValues.put(ALERT, event.mAlert);
-        contentValues.put(CITY, event.mCity);
-        contentValues.put(STATE, event.mState);
         contentValues.put(REPEAT, event.mRepeat);
         contentValues.put(TIMEZONE_OFFSET, event.mTimezoneOffset);
         contentValues.put(DATE_CREATED, event.mDateCreated);
@@ -477,8 +473,6 @@ public class WatchDatabase {
         contentValues.put(STATUS, event.mStatus);
         contentValues.put(DESCRIPTION, event.mDescription);
         contentValues.put(ALERT, event.mAlert);
-        contentValues.put(CITY, event.mCity);
-        contentValues.put(STATE, event.mState);
         contentValues.put(REPEAT, event.mRepeat);
         contentValues.put(TIMEZONE_OFFSET, event.mTimezoneOffset);
         contentValues.put(DATE_CREATED, event.mDateCreated);
@@ -637,11 +631,9 @@ public class WatchDatabase {
                 cursor.getString(7),
                 cursor.getInt(8),
                 cursor.getString(9),
-                cursor.getString(10),
-                cursor.getString(11),
-                cursor.getInt(12),
-                cursor.getLong(13),
-                cursor.getLong(14));
+                cursor.getInt(10),
+                cursor.getLong(11),
+                cursor.getLong(12));
     }
 
     public long TodoAdd(WatchTodo todo) {

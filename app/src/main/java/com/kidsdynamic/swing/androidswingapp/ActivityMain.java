@@ -398,8 +398,6 @@ public class ActivityMain extends AppCompatActivity
         watchEvent.mColor = "#F05D25";
         watchEvent.mDescription = "TEST DESCRIPTION BY GIO";
         watchEvent.mAlert = 40;
-        watchEvent.mCity = "New York";
-        watchEvent.mState = "New York";
         watchEvent.mRepeat = "";
         watchEvent.mTimezoneOffset = 0;
         watchEvent.mTodoList.add(

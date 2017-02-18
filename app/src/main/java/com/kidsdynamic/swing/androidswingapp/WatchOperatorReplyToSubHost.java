@@ -14,6 +14,8 @@ public class WatchOperatorReplyToSubHost {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private finishListener mListener = null;
+    private int mSubHostId;
+    private List<Integer> mKidsId;
     private List<String> mAvatarToGet;
     
     WatchOperatorReplyToSubHost(ActivityMain activityMain) {
@@ -27,15 +29,11 @@ public class WatchOperatorReplyToSubHost {
     
     public void start(finishListener listener, int subHostId, List<Integer> kidsId) {
         mListener = listener;
-        if (kidsId == null)
-            kidsId = new ArrayList<>();
-
+        mSubHostId = subHostId;
+        mKidsId = kidsId;
         mAvatarToGet = new ArrayList<>();
 
-        if (kidsId.isEmpty())
-            mServerMachine.subHostDeny(mSubHostDenyListener, subHostId);
-        else
-            mServerMachine.subHostAccept(mSubHostAcceptListener, subHostId, kidsId);
+        mServerMachine.subHostDeny(mSubHostDenyListener, subHostId);
     }
 
     ServerMachine.subHostAcceptListener mSubHostAcceptListener = new ServerMachine.subHostAcceptListener() {
@@ -54,13 +52,18 @@ public class WatchOperatorReplyToSubHost {
     ServerMachine.subHostDenyListener mSubHostDenyListener = new ServerMachine.subHostDenyListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.hostData response) {
-            mServerMachine.subHostList(mSubHostListListener, "");
+            if (!mKidsId.isEmpty())
+                mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
+            else
+                mServerMachine.subHostList(mSubHostListListener, "");
         }
 
         @Override
         public void onFail(int statusCode) {
-            if (mListener != null)
-                mListener.onFinish("subHostDeny failed " + statusCode);
+            if (!mKidsId.isEmpty())
+                mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
+            else
+                mServerMachine.subHostList(mSubHostListListener, "");
         }
     };
 
@@ -86,6 +89,7 @@ public class WatchOperatorReplyToSubHost {
                         to.add(user);
                         if (!user.mProfile.equals(""))
                             mAvatarToGet.add(user.mProfile);
+
                     }
                 }
 
@@ -101,6 +105,15 @@ public class WatchOperatorReplyToSubHost {
                         user.mRequestStatus = subHost.status;
                         user.mLabel = user.mFirstName + " " + user.mLastName;
                         user.mSubHostId = subHost.id;
+                        for (ServerGson.kidData kidData : subHost.kids) {
+                            WatchContact.Kid kid = new WatchContact.Kid();
+                            kid.mLabel = kidData.name;
+                            kid.mId = kidData.id;
+                            kid.mName = kidData.name;
+                            kid.mMacId = kidData.macId;
+                            kid.mProfile = kidData.profile;
+                            user.mRequestKids.add(kid);
+                        }
                         from.add(user);
                         if (!user.mProfile.equals(""))
                             mAvatarToGet.add(user.mProfile);

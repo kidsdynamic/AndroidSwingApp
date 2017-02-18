@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -115,6 +117,7 @@ public class WatchContact implements Serializable {
         public String mProfile;
         public int mSubHostId;
         public String mRequestStatus;
+        public List<Kid> mRequestKids;
 
         public User() {
             super(null, "");
@@ -128,6 +131,7 @@ public class WatchContact implements Serializable {
             mPhoneNumber = "";
             mProfile = "";
             mRequestStatus = "";
+            mRequestKids = new ArrayList<>();
         }
 
         public User(Bitmap photo, String label) {
@@ -142,6 +146,7 @@ public class WatchContact implements Serializable {
             mPhoneNumber = "";
             mProfile = "";
             mRequestStatus = "";
+            mRequestKids = new ArrayList<>();
         }
 
         public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber, String profile) {
@@ -156,6 +161,7 @@ public class WatchContact implements Serializable {
             mPhoneNumber = phoneNumber;
             mProfile = profile;
             mRequestStatus = "";
+            mRequestKids = new ArrayList<>();
         }
 
         public User(Bitmap photo, int id, String email, String firstName, String lastName, long lastUpdate, long dateCreated, String zipCode, String phoneNumber) {
@@ -170,6 +176,7 @@ public class WatchContact implements Serializable {
             mPhoneNumber = phoneNumber;
             mProfile = "";
             mRequestStatus = "";
+            mRequestKids = new ArrayList<>();
         }
 
         @Override

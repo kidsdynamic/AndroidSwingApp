@@ -180,7 +180,8 @@ public class ServerMachine {
         addressForGet += "email=" + email;
         addressForGet += "&token=" + token;
 
-//        map.put("json", ServerGson.user.isTokenValid.toJson(email, token));
+        Log.d("ServerMachine", "userIsTokenValid " + email + " " + token);
+        //map.put("JSON", ServerGson.user.isTokenValid.toJson(email, token));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_USER_IS_TOKEN_VALID, listener));
     }
 
@@ -360,11 +361,11 @@ public class ServerMachine {
     }
 
     public void eventAdd(eventAddListener listener, List<Integer> kidId, String name, String startDate, String endDate,
-                         String color, String description, int alert, String city, String state, String repeat,
+                         String color, String description, int alert, String repeat,
                          int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        Log.d("TEST", "JSON " + ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
-        map.put("json", ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
+        Log.d("TEST", "JSON " + ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, repeat, timezoneOffset, todo));
+        map.put("json", ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_EVENT_ADD, map, null), CMD_EVENT_ADD, listener));
     }
 
@@ -375,10 +376,10 @@ public class ServerMachine {
     }
 
     public void eventUpdate(eventUpdateListener listener, int eventId, String name, String startDate, String endDate,
-                            String color, String description, int alert, String city, String state, String repeat,
+                            String color, String description, int alert, String repeat,
                             int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        map.put("json", ServerGson.event.update.toJson(eventId, name, startDate, endDate, color, description, alert, city, state, repeat, timezoneOffset, todo));
+        map.put("json", ServerGson.event.update.toJson(eventId, name, startDate, endDate, color, description, alert, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_EVENT_UPDATE, map, null), CMD_EVENT_UPDATE, listener));
     }
 

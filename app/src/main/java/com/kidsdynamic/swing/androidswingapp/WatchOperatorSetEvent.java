@@ -37,8 +37,6 @@ public class WatchOperatorSetEvent {
                     event.mColor,
                     event.mDescription,
                     event.mAlert,
-                    event.mCity,
-                    event.mState,
                     event.mRepeat,
                     0,
                     todos);
@@ -52,8 +50,6 @@ public class WatchOperatorSetEvent {
                     event.mColor,
                     event.mDescription,
                     event.mAlert,
-                    event.mCity,
-                    event.mState,
                     event.mRepeat,
                     0,
                     todos);
@@ -77,8 +73,6 @@ public class WatchOperatorSetEvent {
             watchEvent.mStatus = eventData.status;
             watchEvent.mDescription = eventData.description;
             watchEvent.mAlert = eventData.alert;
-            watchEvent.mCity = eventData.city;
-            watchEvent.mState = eventData.state;
             watchEvent.mRepeat = eventData.repeat;
             watchEvent.mTimezoneOffset = eventData.timezoneOffset;
             watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);
@@ -127,8 +121,6 @@ public class WatchOperatorSetEvent {
             watchEvent.mStatus = eventData.status;
             watchEvent.mDescription = eventData.description;
             watchEvent.mAlert = eventData.alert;
-            watchEvent.mCity = eventData.city;
-            watchEvent.mState = eventData.state;
             watchEvent.mRepeat = eventData.repeat;
             watchEvent.mTimezoneOffset = eventData.timezoneOffset;
             watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);

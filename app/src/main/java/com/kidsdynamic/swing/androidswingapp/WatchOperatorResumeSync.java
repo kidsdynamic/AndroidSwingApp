@@ -202,6 +202,15 @@ public class WatchOperatorResumeSync {
                         user.mRequestStatus = subHost.status;
                         user.mSubHostId = subHost.id;
                         user.mLabel = user.mFirstName + " " + user.mLastName;
+                        for (ServerGson.kidData kidData : subHost.kids) {
+                            WatchContact.Kid kid = new WatchContact.Kid();
+                            kid.mLabel = kidData.name;
+                            kid.mId = kidData.id;
+                            kid.mName = kidData.name;
+                            kid.mMacId = kidData.macId;
+                            kid.mProfile = kidData.profile;
+                            user.mRequestKids.add(kid);
+                        }
                         from.add(user);
                         if (!user.mProfile.equals(""))
                             mAvatarToGet.add(user.mProfile);
@@ -236,8 +245,6 @@ public class WatchOperatorResumeSync {
                     watchEvent.mStatus = eventData.status;
                     watchEvent.mDescription = eventData.description;
                     watchEvent.mAlert = eventData.alert;
-                    watchEvent.mCity = eventData.city;
-                    watchEvent.mState = eventData.state;
                     watchEvent.mRepeat = eventData.repeat;
                     watchEvent.mTimezoneOffset = eventData.timezoneOffset;
                     watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);

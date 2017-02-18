@@ -228,6 +228,7 @@ public class ServerGson {
                 static final class response {
                     kidData kid;
                 }
+
                 public static response fromJson(String json) {
                     return new Gson().fromJson(json, response.class);
                 }
@@ -343,15 +344,13 @@ public class ServerGson {
                 String color;
                 String description;
                 int alert;
-                String city;
-                String state;
                 String repeat;
                 int timezoneOffset;
                 List<String> todo;
 
                 c(List<Integer> pKidId, String pName, String pStartDate, String pEndDate,
-                  String pColor, String pDescription, int pAlert, String pCity,
-                  String pState, String pRepeat, int pTimezoneOffset, List<String> pTodo) {
+                  String pColor, String pDescription, int pAlert, String pRepeat,
+                  int pTimezoneOffset, List<String> pTodo) {
                     kidId = pKidId;
                     name = pName;
                     startDate = pStartDate;
@@ -359,8 +358,6 @@ public class ServerGson {
                     color = pColor;
                     description = pDescription;
                     alert = pAlert;
-                    city = pCity;
-                    state = pState;
                     repeat = pRepeat;
                     timezoneOffset = pTimezoneOffset;
                     todo = pTodo;
@@ -368,10 +365,10 @@ public class ServerGson {
             }
 
             public static String toJson(List<Integer> pKidId, String pName, String pStartDate, String pEndDate,
-                                        String pColor, String pDescription, int pAlert, String pCity,
-                                        String pState, String pRepeat, int pTimezoneOffset, List<String> pTodo) {
+                                        String pColor, String pDescription, int pAlert, String pRepeat,
+                                        int pTimezoneOffset, List<String> pTodo) {
                 return new Gson().toJson(new c(pKidId, pName, pStartDate, pEndDate, pColor,
-                        pDescription, pAlert, pCity, pState, pRepeat, pTimezoneOffset, pTodo));
+                        pDescription, pAlert, pRepeat, pTimezoneOffset, pTodo));
             }
 
             static final class response {
@@ -392,14 +389,12 @@ public class ServerGson {
                 String color;
                 String description;
                 int alert;
-                String city;
-                String state;
                 String repeat;
                 int timezoneOffset;
                 List<String> todo;
 
                 c(int pEventId, String pName, String pStartDate, String pEndDate, String pColor,
-                  String pDescription, int pAlert, String pCity, String pState, String pRepeat,
+                  String pDescription, int pAlert, String pRepeat,
                   int pTimezoneOffset, List<String> pTodo) {
                     eventId = pEventId;
                     name = pName;
@@ -408,8 +403,6 @@ public class ServerGson {
                     color = pColor;
                     description = pDescription;
                     alert = pAlert;
-                    city = pCity;
-                    state = pState;
                     repeat = pRepeat;
                     timezoneOffset = pTimezoneOffset;
                     todo = pTodo;
@@ -417,10 +410,10 @@ public class ServerGson {
             }
 
             public static String toJson(int pEventId, String pName, String pStartDate, String pEndDate,
-                                        String pColor, String pDescription, int pAlert, String pCity,
-                                        String pState, String pRepeat, int pTimezoneOffset, List<String> pTodo) {
+                                        String pColor, String pDescription, int pAlert, String pRepeat,
+                                        int pTimezoneOffset, List<String> pTodo) {
                 return new Gson().toJson(new c(pEventId, pName, pStartDate, pEndDate, pColor,
-                        pDescription, pAlert, pCity, pState, pRepeat, pTimezoneOffset, pTodo));
+                        pDescription, pAlert, pRepeat, pTimezoneOffset, pTodo));
             }
 
             static final class response {

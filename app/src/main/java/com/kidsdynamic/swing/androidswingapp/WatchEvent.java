@@ -29,8 +29,6 @@ public class WatchEvent implements Serializable {
     public String mStatus;
     public String mDescription;
     public int mAlert;
-    public String mCity;
-    public String mState;
     public String mRepeat;
     public int mTimezoneOffset;
     public long mDateCreated;
@@ -51,7 +49,7 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -70,12 +68,12 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, "#FF7231", "", "", 0, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
-        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, "#FF7231", "", "", 0, "", "", REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, "#FF7231", "", "", 0, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, String name,
@@ -108,20 +106,19 @@ public class WatchEvent implements Serializable {
             list.add(kid);
 
         init(id, userId, list, name, start, end, colorToString(color), "",
-                description, alert, "", "", repeat, 0, now, now);
+                description, alert, repeat, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, List<Integer> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
-                      int alert, String city, String state, String repeat,
-                      int timezoneOffset, long dateCreated, long lastUpdated) {
+                      int alert, String repeat, int timezoneOffset, long dateCreated, long lastUpdated) {
         init(id, userId, kids, name, startDate, endDate, color, status, description,
-                alert, city, state, repeat, timezoneOffset, dateCreated, lastUpdated);
+                alert, repeat, timezoneOffset, dateCreated, lastUpdated);
     }
 
     public WatchEvent(WatchEvent src) {
         init(src.mId, src.mUserId, src.mKids, src.mName, src.mStartDate, src.mEndDate, src.mColor, src.mStatus, src.mDescription,
-                src.mAlert, src.mCity, src.mState, src.mRepeat, src.mTimezoneOffset, src.mDateCreated, src.mLastUpdated);
+                src.mAlert, src.mRepeat, src.mTimezoneOffset, src.mDateCreated, src.mLastUpdated);
 
         for (WatchTodo todo : src.mTodoList)
             mTodoList.add(new WatchTodo(todo));
@@ -129,8 +126,7 @@ public class WatchEvent implements Serializable {
 
     private void init(int id, int userId, List<Integer> kids, String name, long startDate,
                       long endDate, String color, String status, String description,
-                      int alert, String city, String state, String repeat,
-                      int timezoneOffset, long dateCreated, long lastUpdated) {
+                      int alert, String repeat, int timezoneOffset, long dateCreated, long lastUpdated) {
         mId = id;
         mUserId = userId;
         mKids = kids;
@@ -141,8 +137,6 @@ public class WatchEvent implements Serializable {
         mStatus = status;
         mDescription = description;
         mAlert = alert;
-        mCity = city;
-        mState = state;
         mRepeat = repeat;
         mTimezoneOffset = timezoneOffset;
         mDateCreated = dateCreated;
@@ -170,8 +164,6 @@ public class WatchEvent implements Serializable {
                 .append(" mStatus:").append(mStatus)
                 .append(" mDescription:").append(mDescription)
                 .append(" mAlert:").append(mAlert)
-                .append(" mCity:").append(mCity)
-                .append(" mState:").append(mState)
                 .append(" mRepeat:").append(mRepeat)
                 .append(" mTimezoneOffset:").append(mTimezoneOffset)
                 .append(" mDateCreated:").append(sdf.format(mDateCreated))
