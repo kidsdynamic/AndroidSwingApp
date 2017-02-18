@@ -86,4 +86,11 @@
         <attr name="dotPosition" format="integer" />
         <attr name="dotSize" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ViewListSelector">
+        <attr name="android:textSize" />
+        <attr name="android:textStyle" />
+        <attr name="android:textColor" />
+        <attr name="selectorColor" format="color" />
+    </declare-styleable>
 </resources>
