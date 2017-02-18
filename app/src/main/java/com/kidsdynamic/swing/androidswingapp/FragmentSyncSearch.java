@@ -10,9 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
 
@@ -146,7 +144,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private Button.OnClickListener mExitListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
     };
 

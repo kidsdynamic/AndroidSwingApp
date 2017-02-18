@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -279,7 +278,7 @@ public class ActivityMain extends AppCompatActivity
             else if (view == mViewCalendar)
                 selectFragment(FragmentCalendarMain.class.getName(), null);
             else if (view == mViewDashboard)
-                selectFragment(FragmentDashboard.class.getName(), null);
+                selectFragment(FragmentDashboardSync.class.getName(), null);
             else if (view == mViewProfile)
                 selectFragment(FragmentProfileMain.class.getName(), null);
         }

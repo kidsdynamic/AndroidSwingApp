@@ -76,7 +76,7 @@ public class FragmentSyncNow extends ViewFragment {
             mActivityMain.consoleSelect(null);
             mActivityMain.consoleShow(true);
             mActivityMain.toolbarShow(true);
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
     };
 

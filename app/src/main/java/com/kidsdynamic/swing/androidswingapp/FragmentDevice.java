@@ -95,7 +95,7 @@ public class FragmentDevice extends ViewFragment {
         } else if (status == STATUS_FOUND){
             mViewStatus.setText("Battery");
         } else if( status == STATUS_NOKID) {
-            mViewStatus.setText("Please Select Your Watch First");
+            mViewStatus.setText("You Haven't Any Watch");
         }
     }
 

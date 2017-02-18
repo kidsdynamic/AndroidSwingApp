@@ -3,14 +3,12 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -127,7 +125,7 @@ public class FragmentWatchRequest extends ViewFragment {
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
     };
 
@@ -153,17 +151,17 @@ public class FragmentWatchRequest extends ViewFragment {
     ServerMachine.subHostAddListener mSubHostAddListener = new ServerMachine.subHostAddListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.hostData response) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
 
         @Override
         public void onConflict(int statusCode) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
 
         @Override
         public void onFail(int statusCode) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
     };
 }

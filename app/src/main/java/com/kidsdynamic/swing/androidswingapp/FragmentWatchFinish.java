@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 /**
@@ -83,7 +82,7 @@ public class FragmentWatchFinish extends ViewFragment {
     private View.OnClickListener mDashboardOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboard.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
         }
     };
 
