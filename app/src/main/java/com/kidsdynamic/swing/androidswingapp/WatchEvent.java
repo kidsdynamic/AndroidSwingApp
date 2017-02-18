@@ -50,9 +50,9 @@ public class WatchEvent implements Serializable {
         long end = calc.getTimeInMillis();
 
         NoticeAlarm alarm = NoticeAlarmList[0];
-        StockColor color = StockColorList[4];
+        int color = ColorList[4];
 
-        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, color.mText, "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -72,18 +72,18 @@ public class WatchEvent implements Serializable {
         long end = calc.getTimeInMillis();
 
         NoticeAlarm alarm = NoticeAlarmList[0];
-        StockColor color = StockColorList[4];
+        int color = ColorList[4];
 
-        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, color.mText, "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
 
         NoticeAlarm alarm = NoticeAlarmList[0];
-        StockColor color = StockColorList[4];
+        int color = ColorList[4];
 
-        init(0, 0, new ArrayList<Integer>(), alarm.mName, startDate, endDate, color.mText, "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), alarm.mName, startDate, endDate, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, String name,
@@ -299,24 +299,8 @@ public class WatchEvent implements Serializable {
         return color;
     }
 
-    static public class StockColor {
-        int mColor;
-        String mText;
-
-        StockColor(int color, String text) {
-            mColor = color;
-            mText = text;
-        }
-    }
-
-    final static StockColor[] StockColorList = new StockColor[]{
-            new StockColor(0xFFFAD13E, "YELLOW"),
-            new StockColor(0xFF7572C1, "BLUE"),
-            new StockColor(0xFF00C4B3, "GREEN"),
-            new StockColor(0xFFF54A7E, "RED"),
-            new StockColor(0xFFFF7231, "ORANGE"),
-            new StockColor(0xFF9A989A, "GRAY"),
-    };
+    final static int[] ColorList = new int[]{
+            0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFFFF7231, 0xFF9A989A};
 
     static public class NoticeAlarm {
         int mId;

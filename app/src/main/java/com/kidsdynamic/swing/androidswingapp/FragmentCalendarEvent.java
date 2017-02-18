@@ -115,8 +115,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewColor = (ViewShape) mViewMain.findViewById(R.id.calendar_event_color);
         mViewColorOption = mViewMain.findViewById(R.id.calendar_event_color_option);
         mViewColorContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_color_container);
-        for (WatchEvent.StockColor color : WatchEvent.StockColorList)
-            addColor(color.mColor);
+        for (int color : WatchEvent.ColorList)
+            addColor(color);
 
         // Line Repeat
         mViewRepeatLine = mViewMain.findViewById(R.id.calendar_event_repeat_line);

@@ -257,7 +257,7 @@ public class WatchOperator {
         // Test
         if (false) {
             list.add(new WatchEvent(0, getUser().mId, "Name",
-                    2017, 2, 18, 8, 30, 2017, 2, 18, 9, 10, WatchEvent.StockColorList[0].mColor,
+                    2017, 2, 18, 8, 30, 2017, 2, 18, 9, 10, WatchEvent.ColorList[0],
                     "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
             list.get(list.size() - 1).mTodoList = Arrays.asList(
@@ -266,17 +266,17 @@ public class WatchOperator {
                     );
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
-                    2017, 2, 18, 10, 0, 2017, 2, 18, 10, 50, WatchEvent.StockColorList[1].mColor,
+                    2017, 2, 18, 10, 0, 2017, 2, 18, 10, 50, WatchEvent.ColorList[1],
                     "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
-                    2017, 2, 18, 8, 30, 2017, 2, 18, 11, 30, WatchEvent.StockColorList[2].mColor,
+                    2017, 2, 18, 8, 30, 2017, 2, 18, 11, 30, WatchEvent.ColorList[2],
                     "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
-                    2017, 2, 18, 10, 30, 2017, 2, 18, 11, 10, WatchEvent.StockColorList[3].mColor,
+                    2017, 2, 18, 10, 30, 2017, 2, 18, 11, 10, WatchEvent.ColorList[3],
                     "Deacription 1234567890 abcdefghijklmnopqrstuvwxyz", WatchEvent.NoticeAlarmList[0].mId, WatchEvent.REPEAT_NEVER));
             list.get(list.size() - 1).mKids = Arrays.asList(8);
         }
