@@ -70,15 +70,14 @@ public class BLEMachine extends BLEControl {
     public static final int STATE_GET_TIME = 9;
     public static final int STATE_GET_DATA1 = 10;
     public static final int STATE_GET_DATA2 = 11;
+    public static final int STATE_GET_BATTERY = 12;
 
     private Device mRelationDevice = new Device();
     private int mState;
     private ArrayList<Device> mScanResult;
-    private String mSearchAddress = "";
-    private boolean mSearchAddressFound = false;
+
     private List<VoiceAlert> mVoiceAlerts = new ArrayList<>();
     private int mVoiceAlertCount = 0;
-
 
     private Runnable stateTransition = new Runnable() {
 
@@ -89,8 +88,10 @@ public class BLEMachine extends BLEControl {
                     if (mRelationDevice.mAction.mScanTime != 0) {
                         mState = STATE_SCAN;
                         mScanResult = new ArrayList<>();
+                        mRelationDevice.mState.mFoundSearchAddress = false;
                         Scan(true);
-                    } else if (mRelationDevice.mAction.mSync && !mRelationDevice.mAddress.equals("")) {
+
+                    } else if ((mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) && !mRelationDevice.mAddress.equals("")) {
                         mInOurDoors = new ArrayList<>();
                         mRelationDevice.mState.mTick = 150;
                         if (GetBondState(mRelationDevice.mAddress)) {
@@ -106,14 +107,16 @@ public class BLEMachine extends BLEControl {
                     break;
 
                 case STATE_SCAN:
-                    if (--mRelationDevice.mAction.mScanTime == 0 || mOnSearchListener == null || mSearchAddressFound) {
+                    if (--mRelationDevice.mAction.mScanTime == 0 ||
+                            mOnSearchListener == null ||
+                            mRelationDevice.mState.mFoundSearchAddress ) {
                         mState = STATE_INIT;
                         Scan(false);
 
                         if (mOnSearchListener != null)
                             mOnSearchListener.onSearch(mScanResult);
 
-                        resetSearchCondition();
+                        mRelationDevice.mAction.mScanTime = 0;
                     }
                     break;
 
@@ -137,11 +140,17 @@ public class BLEMachine extends BLEControl {
 
                 case STATE_DISCOVERY:
                     if (mRelationDevice.mState.mDiscovered) {
-                        int currentTime = (int)(getCurrentTime()/1000);
-                        byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
-                        mState = STATE_SET_TIME;
-                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
-                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
+                        if (mRelationDevice.mAction.mBattery) {
+                            mState = STATE_GET_BATTERY;
+                            mRelationDevice.mState.mBatteryUpdated = false;
+                            Read(BLECustomAttributes.BATTERY_SERVICE, BLECustomAttributes.BATTERY_LEVEL);
+                        } else {
+                            int currentTime = (int) (getCurrentTime() / 1000);
+                            byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
+                            mState = STATE_SET_TIME;
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
+                        }
                     } else if (!mRelationDevice.mState.mConnected) {
                         syncFailProcess();
                     }
@@ -246,6 +255,15 @@ public class BLEMachine extends BLEControl {
                     }
 
                     break;
+
+                case STATE_GET_BATTERY:
+                    if (mRelationDevice.mState.mBatteryUpdated) {
+                        mRelationDevice.mAction.mBattery = false;
+                        if (mOnBatteryListener != null)
+                            mOnBatteryListener.onBattery(mRelationDevice.mState.mBattery);
+                        mState = STATE_INIT;
+                    }
+                    break;
             }
 
             if (mHandler != null)
@@ -254,9 +272,15 @@ public class BLEMachine extends BLEControl {
     };
 
     private void syncFailProcess() {
-        mRelationDevice.resetFlag();
-        if (mOnSyncListener != null)
+
+        if (mRelationDevice.mAction.mSync && mOnSyncListener != null)
             mOnSyncListener.onSync(mState, mInOurDoors);
+
+        if (mRelationDevice.mAction.mBattery && mOnBatteryListener != null)
+            mOnBatteryListener.onBattery((byte)0xFF);
+
+        mRelationDevice.resetFlag();
+
         mState = STATE_INIT;
     }
 
@@ -276,28 +300,13 @@ public class BLEMachine extends BLEControl {
         void onBattery(byte value);
     }
 
-    private void resetSearchCondition() {
-        mOnSearchListener = null;
-        mRelationDevice.mAction.mScanTime = 0;
-        mSearchAddress = "";
-        mSearchAddressFound = false;
-    }
-
-    public int Search(onSearchListener listener) {
-        if (listener == null) {
-            resetSearchCondition();
-        } else {
-            mOnSearchListener = listener;
-            mRelationDevice.mAction.mScanTime = 10 * 1000 / TRANSITION_GAP;
-        }
-        return mRelationDevice.mAction.mScanTime;
-    }
-
     public int Search(onSearchListener listener, int second) {
         if (listener == null) {
-            resetSearchCondition();
+            mOnSearchListener = null;
+            mRelationDevice.mAction.mScanTime = 0;
         } else {
             mOnSearchListener = listener;
+            mRelationDevice = new Device("Swing", "", 0);
             mRelationDevice.mAction.mScanTime = second * 1000 / TRANSITION_GAP;
         }
         return mRelationDevice.mAction.mScanTime;
@@ -305,20 +314,19 @@ public class BLEMachine extends BLEControl {
 
     public int Search(onSearchListener listener, String address) {
         if (listener == null) {
-            resetSearchCondition();
+            mOnSearchListener = null;
+            mRelationDevice.mAction.mScanTime = 0;
         } else {
             mOnSearchListener = listener;
+            mRelationDevice = new Device("Swing", address, 0);
             mRelationDevice.mAction.mScanTime = 10 * 1000 / TRANSITION_GAP;
-            mSearchAddress = address;
-            mSearchAddressFound = false;
         }
         return mRelationDevice.mAction.mScanTime;
     }
 
     public int Sync(onSyncListener listener, Device device, List<VoiceAlert> alerts) {
         mOnSyncListener = listener;
-        mRelationDevice.Copy(device);
-        mRelationDevice.resetFlag();
+        mRelationDevice = new Device(device.mName, device.mAddress, 0);
         mRelationDevice.mAction.mSync = true;
         mVoiceAlerts = alerts;
         return 0;
@@ -386,6 +394,8 @@ public class BLEMachine extends BLEControl {
             byte[] mTime;
             byte[] mData1;
             byte[] mData2;
+            boolean mFoundSearchAddress;
+            boolean mBatteryUpdated;
             byte mBattery;
         }
 
@@ -443,7 +453,7 @@ public class BLEMachine extends BLEControl {
                 }
             }
             mScanResult.add(new Device(name, address, rssi));
-            mSearchAddressFound = address.equals(mSearchAddress);
+            mRelationDevice.mState.mFoundSearchAddress = address.equals(mRelationDevice.mAddress);
         }
 
         @Override
@@ -498,6 +508,11 @@ public class BLEMachine extends BLEControl {
                             }
                         }
                         break;
+                }
+            } else if (service.toString().equals(BLECustomAttributes.BATTERY_SERVICE)) {
+                if (characteristic.toString().equals(BLECustomAttributes.BATTERY_LEVEL)) {
+                    mRelationDevice.mState.mBattery = value[0];
+                    mRelationDevice.mState.mBatteryUpdated = true;
                 }
             }
         }
