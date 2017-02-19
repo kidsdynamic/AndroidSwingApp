@@ -24,6 +24,12 @@ public class WatchOperator {
     private List<WatchContact.User> mRequestToList;
     private List<WatchContact.User> mRequestFromList;
 
+    private int mWatchActivityKidId = 0;
+    private WatchActivity mDailyActivity = new WatchActivity();
+    private WatchActivity mWeeklyActivity = new WatchActivity();
+    private WatchActivity mMonthlyActivity = new WatchActivity();
+    private WatchActivity mYearlyActivity = new WatchActivity();
+
     WatchOperator(Context context) {
         mActivity = (ActivityMain) context;
         mWatchDatabase = new WatchDatabase(context);
@@ -34,6 +40,24 @@ public class WatchOperator {
     public void setRequestList(List<WatchContact.User> to, List<WatchContact.User> from) {
         mRequestToList = to;
         mRequestFromList = from;
+    }
+
+    public void setActivity(int kidId, String period, WatchActivity activity) {
+        mWatchActivityKidId = kidId;
+        switch (period) {
+            case WatchActivity.DAILY:
+                mDailyActivity = new WatchActivity(activity);
+                break;
+            case WatchActivity.WEEKLY:
+                mWeeklyActivity = new WatchActivity(activity);
+                break;
+            case WatchActivity.MONTHLY:
+                mMonthlyActivity = new WatchActivity(activity);
+                break;
+            case WatchActivity.YEARLY:
+                mYearlyActivity = new WatchActivity(activity);
+                break;
+        }
     }
 
     //-------------------------------------------------------------------------
@@ -315,4 +339,23 @@ public class WatchOperator {
     public void todoDone(WatchOperatorTodoDone.finishListener listener, List<WatchTodo> todos) {
         new WatchOperatorTodoDone(mActivity).start(listener, todos);
     }
+
+    public void updateActivity(WatchOperatorUpdateActivity.finishListener listener, int kid) {
+        new WatchOperatorUpdateActivity(mActivity).start(listener, kid);
+    }
+
+    public WatchActivity getActivity(String period) {
+        switch (period) {
+            case WatchActivity.DAILY:
+                return mDailyActivity;
+            case WatchActivity.WEEKLY:
+                return mWeeklyActivity;
+            case WatchActivity.MONTHLY:
+                return mMonthlyActivity;
+            case WatchActivity.YEARLY:
+                return mYearlyActivity;
+        }
+        return null;
+    }
+
 }
