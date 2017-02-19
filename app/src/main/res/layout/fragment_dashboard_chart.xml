@@ -121,9 +121,9 @@
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:borderColor="@color/color_white"
+                app:borderColor="@color/color_blue_main"
                 app:borderWidth="3dp"
-                app:floorColor="@color/color_blue_main" />
+                app:floorColor="@color/color_white" />
 
             <com.kidsdynamic.swing.androidswingapp.ViewBorderButton
                 android:id="@+id/dashboard_chart_outdoor"
@@ -134,9 +134,9 @@
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:borderColor="@color/color_white"
+                app:borderColor="@color/color_blue_main"
                 app:borderWidth="3dp"
-                app:floorColor="@color/color_blue_main" />
+                app:floorColor="@color/color_white" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

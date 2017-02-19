@@ -21,6 +21,9 @@ public class FragmentDashboardChart extends ViewFragment {
     private static final int EMOTION_ALMOST = 1;
     private static final int EMOTION_EXCELLENT = 2;
 
+    private static final int INDOOR = 0;
+    private static final int OUTDOOR = 1;
+
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -85,8 +88,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewIndicator.setDotCount(mViewSelector.getCount());
         mViewIndicator.setDotPosition(0);
 
-        mViewIndoor.setSelected(true);
-        mViewOutdoor.setSelected(false);
+        setDoor(INDOOR);
     }
 
     @Override
@@ -140,16 +142,24 @@ public class FragmentDashboardChart extends ViewFragment {
         mEmotion = emotion;
     }
 
+    private void setDoor(int door) {
+        if (door == INDOOR) {
+            mViewIndoor.setSelected(true);
+            mViewIndoor.setOnClickListener(null);
+            mViewOutdoor.setSelected(false);
+            mViewOutdoor.setOnClickListener(mDoorListener);
+        } else {
+            mViewIndoor.setSelected(false);
+            mViewIndoor.setOnClickListener(mDoorListener);
+            mViewOutdoor.setSelected(true);
+            mViewOutdoor.setOnClickListener(null);
+        }
+    }
+
     private View.OnClickListener mDoorListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (view == mViewIndoor) {
-                mViewIndoor.setSelected(true);
-                mViewOutdoor.setSelected(false);
-            } else {
-                mViewIndoor.setSelected(false);
-                mViewOutdoor.setSelected(true);
-            }
+            setDoor(view == mViewIndoor ? INDOOR : OUTDOOR);
         }
     };
 }
