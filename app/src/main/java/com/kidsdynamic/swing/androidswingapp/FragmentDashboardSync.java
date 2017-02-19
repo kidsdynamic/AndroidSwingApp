@@ -71,11 +71,11 @@ public class FragmentDashboardSync extends ViewFragment {
     private ViewCircle.OnProgressListener mProgressListener = new ViewCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewCircle view, int begin, int end) {
-            // TEST
+            // TEST, change timeout by when sync ready
             debug_count_down--;
             if (debug_count_down == 0) {
                 mViewProgress.stopProgress();
-                mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
+                mActivityMain.selectFragment(FragmentDashboardChart.class.getName(), null);
             }
             /////////////////
         }

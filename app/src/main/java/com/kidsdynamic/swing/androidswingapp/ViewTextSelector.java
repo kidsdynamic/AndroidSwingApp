@@ -174,4 +174,32 @@ public class ViewTextSelector extends LinearLayout {
         mSelectListener = listener;
     }
 
+    public void setTextColor(int color) {
+        mTextColor = color;
+        mViewList.setTextColor(color);
+    }
+
+    public int getTextColor() {
+        return mTextColor;
+    }
+
+    public void setTextSize(int size) {
+        mTextSize = size;
+        mViewList.setTextSize(size);
+    }
+
+    public int getTextSize() {
+        return mTextSize;
+    }
+
+    public void setSelectorColor(int color) {
+        mSelectorColor = color;
+
+        mViewPrev.setTextColor(color);
+        mViewNext.setTextColor(color);
+    }
+
+    public int getSelectorColor() {
+        return mSelectorColor;
+    }
 }
