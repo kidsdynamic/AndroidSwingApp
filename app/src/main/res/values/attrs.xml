@@ -99,4 +99,21 @@
         <attr name="borderColor" format="color" />
         <attr name="borderWidth" format="dimension" />
     </declare-styleable>
+
+    <declare-styleable name="ViewChart">
+        <attr name="chartColor" format="color" />
+        <attr name="chartWidth" format="dimension" />
+        <attr name="chartTextColor" format="color" />
+        <attr name="chartTextSize" format="dimension" />
+        <attr name="chartTextStyle" format="integer" />
+        <attr name="nodeColor" format="color" />
+        <attr name="nodeSize" format="dimension" />
+        <attr name="axisColor" format="color" />
+        <attr name="axisWidth" format="dimension" />
+        <attr name="axisTextSize" format="dimension" />
+        <attr name="axisTextColor" format="color" />
+        <attr name="axisTextStyle" format="integer" />
+        <attr name="axisHEnabled" format="boolean" />
+        <attr name="axisVEnabled" format="boolean" />
+    </declare-styleable>
 </resources>
