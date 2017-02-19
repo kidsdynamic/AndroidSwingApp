@@ -114,6 +114,7 @@
             android:orientation="horizontal">
 
             <com.kidsdynamic.swing.androidswingapp.ViewBorderButton
+                android:id="@+id/dashboard_chart_indoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Indoor"
@@ -125,6 +126,7 @@
                 app:floorColor="@color/color_blue_main" />
 
             <com.kidsdynamic.swing.androidswingapp.ViewBorderButton
+                android:id="@+id/dashboard_chart_outdoor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -132,9 +134,9 @@
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:borderColor="@color/color_blue_main"
-                app:borderWidth="0dp"
-                app:floorColor="@color/color_white" />
+                app:borderColor="@color/color_white"
+                app:borderWidth="3dp"
+                app:floorColor="@color/color_blue_main" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

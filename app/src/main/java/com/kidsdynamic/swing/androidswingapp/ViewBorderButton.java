@@ -63,25 +63,38 @@ public class ViewBorderButton extends Button {
         makeAppearance(mFloorColor, mBorderColor, mBorderWidth);
     }
 
-    public void makeAppearance(int floorColor, int borderColor, int strokeWidth) {
+    public void makeAppearance(int floorColor, int borderColor, int borderWidth) {
         StateListDrawable background = new StateListDrawable();
 
-        background.addState(new int[]{android.R.attr.state_pressed}, new BackgroundDrawable(borderColor, floorColor, strokeWidth));
-        background.addState(new int[]{}, new BackgroundDrawable(floorColor, borderColor, strokeWidth));
+        background.addState(new int[]{android.R.attr.state_pressed}, new BackgroundDrawable(borderColor, floorColor, borderWidth));
+        background.addState(new int[]{android.R.attr.state_selected}, new BackgroundDrawable(borderColor, floorColor, borderWidth));
+        background.addState(new int[]{}, new BackgroundDrawable(floorColor, borderColor, borderWidth));
 
         setBackground(background);
 
         int[][] states = new int[][]{
-                new int[]{android.R.attr.state_pressed},
+                new int[]{android.R.attr.state_pressed, android.R.attr.state_selected},
+                new int[]{android.R.attr.state_pressed, -android.R.attr.state_selected},
+                new int[]{android.R.attr.state_selected},
                 new int[]{}
         };
 
         int[] colors = new int[]{
                 Color.GRAY,
+                Color.GRAY,
+                floorColor,
                 borderColor,
         };
 
         setTextColor(new ColorStateList(states, colors));
+    }
+
+    public void setAppearance(int floorColor, int borderColor, int borderWidth) {
+        mFloorColor = floorColor;
+        mBorderColor = borderColor;
+        mBorderWidth = borderWidth;
+
+        makeAppearance(mFloorColor, mBorderColor, mBorderWidth);
     }
 
     public void setFloorColor(int color) {

@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,8 +30,11 @@ public class FragmentDashboardChart extends ViewFragment {
     private ImageView mViewEmotionImage;
     private TextView mViewEmotionTitle;
     private TextView mViewEmotionMessage;
+    private ViewBorderButton mViewIndoor;
+    private ViewBorderButton mViewOutdoor;
 
     private int mEmotion;
+    private int mEmotionColor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,9 +51,15 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewSelector = (ViewTextSelector) mViewMain.findViewById(R.id.dashboard_chart_selector);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
-        mViewEmotionImage = (ImageView)mViewMain.findViewById(R.id.dashboard_chart_emotion_image);
-        mViewEmotionTitle = (TextView)mViewMain.findViewById(R.id.dashboard_chart_emotion_title);
-        mViewEmotionMessage = (TextView)mViewMain.findViewById(R.id.dashboard_chart_emotion_message);
+        mViewEmotionImage = (ImageView) mViewMain.findViewById(R.id.dashboard_chart_emotion_image);
+        mViewEmotionTitle = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_title);
+        mViewEmotionMessage = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_message);
+
+        mViewIndoor = (ViewBorderButton) mViewMain.findViewById(R.id.dashboard_chart_indoor);
+        mViewIndoor.setOnClickListener(mDoorListener);
+
+        mViewOutdoor = (ViewBorderButton) mViewMain.findViewById(R.id.dashboard_chart_outdoor);
+        mViewOutdoor.setOnClickListener(mDoorListener);
 
         return mViewMain;
     }
@@ -65,13 +75,18 @@ public class FragmentDashboardChart extends ViewFragment {
         super.onResume();
 
         // todo: load emotion here.
-        setEmotion(EMOTION_EXCELLENT);
+        int emotion = EMOTION_EXCELLENT;
+
+        setEmotion(emotion);
 
         mViewSelector.clear();
         mViewSelector.add(Arrays.asList("Today", "This Week", "This Month", "This Year"));
 
         mViewIndicator.setDotCount(mViewSelector.getCount());
         mViewIndicator.setDotPosition(0);
+
+        mViewIndoor.setSelected(true);
+        mViewOutdoor.setSelected(false);
     }
 
     @Override
@@ -87,11 +102,9 @@ public class FragmentDashboardChart extends ViewFragment {
     };
 
     private void setEmotion(int emotion) {
-        int color = Color.BLACK;
-
-        switch(emotion) {
+        switch (emotion) {
             case EMOTION_LOW:
-                color = ContextCompat.getColor(mActivityMain, R.color.color_blue_main);
+                mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_blue_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster01);
                 mViewEmotionImage.setImageResource(R.mipmap.monster_face_blue);
@@ -100,7 +113,7 @@ public class FragmentDashboardChart extends ViewFragment {
                 break;
 
             case EMOTION_ALMOST:
-                color = ContextCompat.getColor(mActivityMain, R.color.color_green_main);
+                mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_green_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster02);
                 mViewEmotionImage.setImageResource(R.mipmap.monster_face_green);
@@ -109,7 +122,7 @@ public class FragmentDashboardChart extends ViewFragment {
                 break;
 
             default:
-                color = ContextCompat.getColor(mActivityMain, R.color.color_orange_main);
+                mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_orange_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster03);
                 mViewEmotionImage.setImageResource(R.mipmap.monster_face_yellow);
@@ -118,13 +131,25 @@ public class FragmentDashboardChart extends ViewFragment {
                 break;
         }
 
-        mViewIndicator.setDotColorOn(color);
-        mViewSelector.setTextColor(color);
-        mViewSelector.setSelectorColor(color);
-        mViewEmotionTitle.setTextColor(color);
-        mViewEmotionMessage.setTextColor(color);
+        mViewIndicator.setDotColorOn(mEmotionColor);
+        mViewSelector.setTextColor(mEmotionColor);
+        mViewSelector.setSelectorColor(mEmotionColor);
+        mViewEmotionTitle.setTextColor(mEmotionColor);
+        mViewEmotionMessage.setTextColor(mEmotionColor);
 
         mEmotion = emotion;
     }
 
+    private View.OnClickListener mDoorListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (view == mViewIndoor) {
+                mViewIndoor.setSelected(true);
+                mViewOutdoor.setSelected(false);
+            } else {
+                mViewIndoor.setSelected(false);
+                mViewOutdoor.setSelected(true);
+            }
+        }
+    };
 }
