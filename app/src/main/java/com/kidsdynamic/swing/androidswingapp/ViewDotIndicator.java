@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -103,6 +104,7 @@ public class ViewDotIndicator extends View {
     protected void onDraw(Canvas canvas) {
         mPaint.reset();
         mPaint.setAntiAlias(true);
+        mPaint.setStrokeWidth(0);
         mPaint.setStyle(Paint.Style.FILL);
 
         mRect.top = ((getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) - mDotSize) / 2;
@@ -110,7 +112,7 @@ public class ViewDotIndicator extends View {
         mRect.left = getPaddingStart();
         mRect.right = (getMeasuredWidth() - getPaddingStart() - getPaddingEnd()) / mDotCount;
 
-        int radius = mDesiredSize / 2;
+        int radius = Math.round(mDotSize / 2);
         for (int idx = 0; idx < mDotCount; idx++) {
             mPaint.setColor(idx == mDotPosition ? mDotColorOn : mDotColorOff);
 

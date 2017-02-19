@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="0.5">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
             android:id="@+id/dashboard_today_dot_sponge"
@@ -18,16 +18,16 @@
             app:shrinkWidth="0.3" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewDotIndicator
-            android:id="@+id/dashboard_today_dot"
+            android:id="@+id/dashboard_today_indicator"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/dashboard_today_dot_sponge"
             android:layout_alignStart="@+id/dashboard_today_dot_sponge"
             app:dotColorOff="@color/color_gray_light"
-            app:dotColorOn="@color/color_gray_deep"
+            app:dotColorOn="@color/color_gray"
             app:dotCount="4"
             app:dotPosition="0"
-            app:dotSize="6dp" />
+            app:dotSize="10dp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -42,8 +42,8 @@
             android:layout_centerInParent="true"
             app:shrinkWidth="0.6" />
 
-        <com.kidsdynamic.swing.androidswingapp.ViewListSelector
-            android:id="@+id/dashboard_today_list"
+        <com.kidsdynamic.swing.androidswingapp.ViewTextSelector
+            android:id="@+id/dashboard_today_selector"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/dashboard_today_list_sponge"
@@ -55,6 +55,6 @@
     <View
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="10" />
+        android:layout_weight="10.5" />
 
 </LinearLayout>
