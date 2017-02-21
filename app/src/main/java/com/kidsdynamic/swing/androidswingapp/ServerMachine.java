@@ -321,6 +321,7 @@ public class ServerMachine {
 
     public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, String time, String macId) {
         Map<String, String> map = new HashMap<>();
+        Log.d("JSON", ServerGson.activity.uploadRawData.toJson(indoorActivity, outdoorActivity, time, macId));
         map.put("json", ServerGson.activity.uploadRawData.toJson(indoorActivity, outdoorActivity, time, macId));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_ACTIVITY_UPLOAD_RAW_DATA, map, null), CMD_ACTIVITY_UPLOAD_RAW_DATA, listener));
     }

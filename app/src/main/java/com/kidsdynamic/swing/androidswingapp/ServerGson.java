@@ -50,7 +50,6 @@ public class ServerGson {
         String kidId;
         String type;
         int steps;
-        int distance;
         String receivedDate;
     }
 
@@ -65,8 +64,6 @@ public class ServerGson {
         String status;
         String description;
         int alert;
-        String city;
-        String state;
         String repeat;
         int timezoneOffset;
         String dateCreated;
@@ -299,12 +296,14 @@ public class ServerGson {
                 String outdoorActivity;
                 String time;
                 String macId;
+                int timeZoneOffset;
 
                 c(String pIndoorActivity, String pOutdoorActivity, String pTime, String pMacId) {
                     indoorActivity = pIndoorActivity;
                     outdoorActivity = pOutdoorActivity;
                     time = pTime;
                     macId = pMacId;
+                    timeZoneOffset = 0;
                 }
             }
 

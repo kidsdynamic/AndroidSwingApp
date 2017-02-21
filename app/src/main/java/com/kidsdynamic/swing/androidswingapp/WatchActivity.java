@@ -7,14 +7,9 @@ import java.io.Serializable;
  */
 
 public class WatchActivity implements Serializable {
-    public final static String DAILY = "DAILY";
-    public final static String WEEKLY = "WEEKLY";
-    public final static String MONTHLY = "MONTHLY";
-    public final static String YEARLY = "YEARLY";
-    public final static String END = "END";
-
     Act mIndoor = new Act();
     Act mOutdoor = new Act();
+    long mTimestamp;
 
     public class Act {
         int mId;
@@ -24,7 +19,23 @@ public class WatchActivity implements Serializable {
     }
 
     WatchActivity() {
-        init(0, "", "", 0, 0, "", "", 0);
+        init(0, "", "", 0, 0, "", "", 0, 0);
+    }
+
+    WatchActivity(int kidId, long timestamp) {
+        init(0, "", kidId + "", 0, 0, "", kidId + "", 0, timestamp);
+    }
+
+    WatchActivity(WatchActivity src) {
+        init(src.mIndoor.mId,
+                src.mIndoor.mMacId,
+                src.mIndoor.mKidId,
+                src.mIndoor.mSteps,
+                src.mOutdoor.mId,
+                src.mOutdoor.mMacId,
+                src.mOutdoor.mKidId,
+                src.mOutdoor.mSteps,
+                0);
     }
 
     private void init(
@@ -35,7 +46,8 @@ public class WatchActivity implements Serializable {
             int outdoorId,
             String outdoorMacId,
             String outdoorKidId,
-            int outdoorSteps) {
+            int outdoorSteps,
+            long timestamp) {
 
         mIndoor.mId = indoorId;
         mIndoor.mMacId = indoorMacId;
@@ -45,17 +57,7 @@ public class WatchActivity implements Serializable {
         mOutdoor.mMacId = outdoorMacId;
         mOutdoor.mKidId = outdoorKidId;
         mOutdoor.mSteps = outdoorSteps;
-    }
-
-    WatchActivity(WatchActivity src) {
-        init( src.mIndoor.mId,
-            src.mIndoor.mMacId,
-            src.mIndoor.mKidId,
-            src.mIndoor.mSteps,
-            src.mOutdoor.mId,
-            src.mOutdoor.mMacId,
-            src.mOutdoor.mKidId,
-            src.mOutdoor.mSteps);
+        mTimestamp = timestamp;
     }
 
     @Override
