@@ -297,10 +297,10 @@ public class ServerGson {
             private static class c {
                 String indoorActivity;
                 String outdoorActivity;
-                int time;
+                String time;
                 String macId;
 
-                c(String pIndoorActivity, String pOutdoorActivity, int pTime, String pMacId) {
+                c(String pIndoorActivity, String pOutdoorActivity, String pTime, String pMacId) {
                     indoorActivity = pIndoorActivity;
                     outdoorActivity = pOutdoorActivity;
                     time = pTime;
@@ -308,7 +308,7 @@ public class ServerGson {
                 }
             }
 
-            public static String toJson(String pIndoorActivity, String pOutdoorActivity, int pTime, String pMacId) {
+            public static String toJson(String pIndoorActivity, String pOutdoorActivity, String pTime, String pMacId) {
                 return new Gson().toJson(new c(pIndoorActivity, pOutdoorActivity, pTime, pMacId));
             }
         }

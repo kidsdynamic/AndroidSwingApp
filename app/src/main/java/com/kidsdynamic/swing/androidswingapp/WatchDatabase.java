@@ -81,7 +81,7 @@ public class WatchDatabase {
 
     public static final String CREATE_UPLOAD_TABLE =
             "CREATE TABLE " + TABLE_UPLOAD + " (" +
-                    TIME + " INTEGER NOT NULL, " +
+                    TIME + " TEXT NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
                     INDOOR_ACTIVITY + " TEXT NOT NULL, " +
                     OUTDOOR_ACTIVITY + " TEXT NOT NULL)";
@@ -308,23 +308,23 @@ public class WatchDatabase {
         return item;
     }
 
-    public long UploadItemAdd(Upload item) {
+    public long UploadItemAdd(WatchActivityRaw item) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(TIME, item.mTime);
         contentValues.put(MAC_ID, item.mMacId);
-        contentValues.put(INDOOR_ACTIVITY, item.mIndoorActivity);
-        contentValues.put(OUTDOOR_ACTIVITY, item.mOutdoorActivity);
+        contentValues.put(INDOOR_ACTIVITY, item.mIndoor);
+        contentValues.put(OUTDOOR_ACTIVITY, item.mOutdoor);
 
         return mDatabase.insert(TABLE_UPLOAD, null, contentValues);
     }
 
-    public int UploadItemDelete(Upload item) {
-        return mDatabase.delete(TABLE_UPLOAD, TIME + "=" + item.mTime + " AND " + MAC_ID + "='" + item.mMacId + "'", null);
+    public int UploadItemDelete(WatchActivityRaw item) {
+        return mDatabase.delete(TABLE_UPLOAD, TIME + "='" + item.mTime + "' AND " + MAC_ID + "='" + item.mMacId + "'", null);
     }
 
-    public Upload UploadItemGet() {
-        Upload item = null;
+    public WatchActivityRaw UploadItemGet() {
+        WatchActivityRaw item = null;
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " LIMIT 1", null);
 
         if (cursor.moveToNext())
@@ -347,27 +347,13 @@ public class WatchDatabase {
         return result;
     }
 
-    public static class Upload {
-        String mIndoorActivity;
-        String mOutdoorActivity;
-        int mTime;
-        String mMacId;
+    private WatchActivityRaw cursorToUpload(Cursor cursor) {
+        WatchActivityRaw item = new WatchActivityRaw();
 
-        Upload() {
-            mIndoorActivity = "";
-            mOutdoorActivity = "";
-            mTime = 0;
-            mMacId = "";
-        }
-    }
-
-    private Upload cursorToUpload(Cursor cursor) {
-        Upload item = new Upload();
-
-        item.mTime = cursor.getInt(0);
+        item.mTime = cursor.getString(0);
         item.mMacId = cursor.getString(1);
-        item.mIndoorActivity = cursor.getString(2);
-        item.mOutdoorActivity = cursor.getString(3);
+        item.mIndoor = cursor.getString(2);
+        item.mOutdoor = cursor.getString(3);
 
         return item;
     }
