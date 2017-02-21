@@ -26,9 +26,9 @@ public class ViewShape extends View {
     private int mShape = SHAPE_CIRCLE;
     private int mDesiredSize = 50;
 
-    private Paint mPaint;
-    private Rect mRect;
-    private Path mPath;
+    protected Paint mPaint;
+    protected Rect mRect;
+    protected Path mPath;
 
     public ViewShape(Context context) {
         super(context);

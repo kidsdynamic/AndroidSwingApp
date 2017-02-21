@@ -1,16 +1,17 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.TypedValue;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by 03543 on 2017/2/19.
@@ -24,6 +25,11 @@ public class FragmentDashboardChart extends ViewFragment {
     private static final int INDOOR = 0;
     private static final int OUTDOOR = 1;
 
+    private static final int CHART_TODAY = 0;
+    private static final int CHART_WEEK = 1;
+    private static final int CHART_MONTH = 2;
+    private static final int CHART_YEAR = 3;
+
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -33,6 +39,10 @@ public class FragmentDashboardChart extends ViewFragment {
     private ImageView mViewEmotionImage;
     private TextView mViewEmotionTitle;
     private TextView mViewEmotionMessage;
+    private ViewChartKDToday mViewChartToday;
+    private TextView mViewChartWeek;
+    private TextView mViewChartMonth;
+    private TextView mViewChartYear;
     private ViewBorderButton mViewIndoor;
     private ViewBorderButton mViewOutdoor;
 
@@ -58,6 +68,11 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewEmotionTitle = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_title);
         mViewEmotionMessage = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_message);
 
+        mViewChartToday = (ViewChartKDToday) mViewMain.findViewById(R.id.dashboard_chart_today);
+        mViewChartWeek = (TextView) mViewMain.findViewById(R.id.dashboard_chart_week);
+        mViewChartMonth = (TextView) mViewMain.findViewById(R.id.dashboard_chart_month);
+        mViewChartYear = (TextView) mViewMain.findViewById(R.id.dashboard_chart_year);
+
         mViewIndoor = (ViewBorderButton) mViewMain.findViewById(R.id.dashboard_chart_indoor);
         mViewIndoor.setOnClickListener(mDoorListener);
 
@@ -77,8 +92,14 @@ public class FragmentDashboardChart extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        // todo: load emotion here.
-        int emotion = EMOTION_EXCELLENT;
+        // todo: load today step here.
+        int step = getStepToday(INDOOR) + getStepToday(OUTDOOR);
+
+        int emotion = EMOTION_LOW;
+        if (step > 6000)
+            emotion = EMOTION_ALMOST;
+        if (step > 12000)
+            emotion = EMOTION_EXCELLENT;
 
         setEmotion(emotion);
 
@@ -89,6 +110,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewIndicator.setDotPosition(0);
 
         setDoor(INDOOR);
+        showToday();
     }
 
     @Override
@@ -100,6 +122,16 @@ public class FragmentDashboardChart extends ViewFragment {
         @Override
         public void OnSelect(View view, int position) {
             mViewIndicator.setDotPosition(position);
+            setChart(position);
+        }
+    };
+
+    private View.OnClickListener mDoorListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            setDoor(view == mViewIndoor ? INDOOR : OUTDOOR);
+            Log.d("xxx", "indoor:" + (view == mViewIndoor) + " chart:" + getChart());
+            setChart(getChart());
         }
     };
 
@@ -138,8 +170,16 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewSelector.setSelectorColor(mEmotionColor);
         mViewEmotionTitle.setTextColor(mEmotionColor);
         mViewEmotionMessage.setTextColor(mEmotionColor);
+        mViewIndoor.setBorderColor(mEmotionColor);
+        mViewOutdoor.setBorderColor(mEmotionColor);
+
+        mViewChartToday.setChartColor(mEmotionColor);
 
         mEmotion = emotion;
+    }
+
+    private int getDoor() {
+        return mViewIndoor.isSelected() ? INDOOR : OUTDOOR;
     }
 
     private void setDoor(int door) {
@@ -156,10 +196,99 @@ public class FragmentDashboardChart extends ViewFragment {
         }
     }
 
-    private View.OnClickListener mDoorListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            setDoor(view == mViewIndoor ? INDOOR : OUTDOOR);
-        }
-    };
+    private int getChart() {
+        if (mViewChartToday.getVisibility() == View.VISIBLE)
+            return CHART_TODAY;
+        else if (mViewChartWeek.getVisibility() == View.VISIBLE)
+            return CHART_WEEK;
+        else if (mViewChartMonth.getVisibility() == View.VISIBLE)
+            return CHART_MONTH;
+        else if (mViewChartYear.getVisibility() == View.VISIBLE)
+            return CHART_YEAR;
+
+        return CHART_TODAY;
+    }
+
+    private void setChart(int chart) {
+        if (chart == CHART_TODAY)
+            showToday();
+        else if (chart == CHART_WEEK)
+            showWeek();
+        else if (chart == CHART_MONTH)
+            showMonth();
+        else if (chart == CHART_YEAR)
+            showYear();
+    }
+
+    private void showToday() {
+        mViewChartToday.setVisibility(View.VISIBLE);
+        mViewChartWeek.setVisibility(View.GONE);
+        mViewChartMonth.setVisibility(View.GONE);
+        mViewChartYear.setVisibility(View.GONE);
+
+        mViewChartToday.setValue(getStepToday(getDoor()), 0);
+        mViewChartToday.setTotal(getStepToday(INDOOR) + getStepToday(OUTDOOR));
+        mViewChartToday.setGoal(12000);
+        mViewChartToday.invalidate();
+    }
+
+    private void showWeek() {
+        mViewChartToday.setVisibility(View.GONE);
+        mViewChartWeek.setVisibility(View.VISIBLE);
+        mViewChartMonth.setVisibility(View.GONE);
+        mViewChartYear.setVisibility(View.GONE);
+
+        mViewChartWeek.setText(getStepWeek(getDoor()).toString());
+    }
+
+    private void showMonth() {
+        mViewChartToday.setVisibility(View.GONE);
+        mViewChartWeek.setVisibility(View.GONE);
+        mViewChartMonth.setVisibility(View.VISIBLE);
+        mViewChartYear.setVisibility(View.GONE);
+
+        mViewChartMonth.setText(getStepMonth(getDoor()).toString());
+    }
+
+    private void showYear() {
+        mViewChartToday.setVisibility(View.GONE);
+        mViewChartWeek.setVisibility(View.GONE);
+        mViewChartMonth.setVisibility(View.GONE);
+        mViewChartYear.setVisibility(View.VISIBLE);
+
+        mViewChartYear.setText(getStepYear(getDoor()).toString());
+    }
+
+    private List<Integer> makeFakeList(int count, int maximum) {
+        List<Integer> list = new ArrayList<>();
+        for (int idx = 0; idx < count; idx++)
+            list.add((int) (Math.random() * maximum));
+        return list;
+    }
+
+    int todayStepIndoor = (int) (Math.random() * 7500);
+    int todayStepOutdoor = (int) (Math.random() * 7500);
+    List<Integer> weekStepIndoor = makeFakeList(7, 7500);
+    List<Integer> weekStepOutdoor = makeFakeList(7, 7500);
+    List<Integer> monthStepIndoor = makeFakeList(30, 7500);
+    List<Integer> monthStepOutdoor = makeFakeList(30, 7500);
+    List<Integer> yearStepIndoor = makeFakeList(12, 30 * 7500);
+    List<Integer> yearStepOutdoor = makeFakeList(12, 30 * 7500);
+
+    private int getStepToday(int door) {
+        return door == INDOOR ? todayStepIndoor : todayStepOutdoor;
+    }
+
+    private List<Integer> getStepWeek(int door) {
+        return door == INDOOR ? weekStepIndoor : weekStepOutdoor;
+    }
+
+    private List<Integer> getStepMonth(int door) {
+        return door == INDOOR ? monthStepIndoor : monthStepOutdoor;
+    }
+
+    private List<Integer> getStepYear(int door) {
+        return door == INDOOR ? yearStepIndoor : yearStepOutdoor;
+    }
+
 }

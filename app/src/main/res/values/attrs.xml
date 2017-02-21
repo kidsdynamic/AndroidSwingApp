@@ -114,6 +114,10 @@
         <attr name="axisTextColor" format="color" />
         <attr name="axisTextStyle" format="integer" />
         <attr name="axisHEnabled" format="boolean" />
+        <attr name="axisHMax" format="float"/>
+        <attr name="axisHMin" format="float"/>
         <attr name="axisVEnabled" format="boolean" />
+        <attr name="axisVMax" format="float"/>
+        <attr name="axisVMin" format="float"/>
     </declare-styleable>
 </resources>

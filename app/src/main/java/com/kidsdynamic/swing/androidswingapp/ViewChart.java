@@ -32,15 +32,15 @@ public abstract class ViewChart extends View {
     private boolean mAxisHEnabled = false;
     private boolean mAxisVEnabled = false;
 
-    private Float mAxisHMax = 100.f;
-    private Float mAxisHMin = 0.f;
-    private Float mAxisVMax = 100.f;
-    private Float mAxisVMin = 0.f;
-    private List<Float> mAxisHMarker;
-    private List<Float> mAxisVMarker;
-    private List<Float> mAxisHNode;
-    private List<Float> mAxisVNode;
-    private List<PointF> mValueList;
+    protected Float mAxisHMax = 100.f;
+    protected Float mAxisHMin = 0.f;
+    protected Float mAxisVMax = 100.f;
+    protected Float mAxisVMin = 0.f;
+    protected List<Float> mAxisHMarker;
+    protected List<Float> mAxisVMarker;
+    protected List<Float> mAxisHNode;
+    protected List<Float> mAxisVNode;
+    protected List<PointF> mValue;
 
     public ViewChart(Context context) {
         super(context);
@@ -91,14 +91,22 @@ public abstract class ViewChart extends View {
                     mAxisTextStyle = typedArray.getInteger(attr, mAxisTextStyle);
                 } else if (attr == R.styleable.ViewChart_axisHEnabled) {
                     mAxisHEnabled = typedArray.getBoolean(attr, mAxisHEnabled);
+                } else if (attr == R.styleable.ViewChart_axisHMax) {
+                    mAxisHMax = typedArray.getFloat(attr, mAxisHMax);
+                } else if (attr == R.styleable.ViewChart_axisHMin) {
+                    mAxisHMin = typedArray.getFloat(attr, mAxisHMin);
                 } else if (attr == R.styleable.ViewChart_axisVEnabled) {
                     mAxisVEnabled = typedArray.getBoolean(attr, mAxisVEnabled);
+                } else if (attr == R.styleable.ViewChart_axisVMax) {
+                    mAxisVMax = typedArray.getFloat(attr, mAxisVMax);
+                } else if (attr == R.styleable.ViewChart_axisVMin) {
+                    mAxisVMin = typedArray.getFloat(attr, mAxisVMin);
                 }
             }
             typedArray.recycle();
         }
 
-        mValueList = new ArrayList<>();
+        mValue = new ArrayList<>();
 
         mAxisHNode = new ArrayList<>();
         mAxisVNode = new ArrayList<>();
@@ -137,6 +145,14 @@ public abstract class ViewChart extends View {
 
     public void setChartTextSize(int size) {
         mChartTextSize = size;
+    }
+
+    public int getChartTextStyle() {
+        return mChartTextStyle;
+    }
+
+    public void setChartTextStyle(int style) {
+        mChartTextStyle = style;
     }
 
     public int getNodeColor() {
@@ -179,6 +195,14 @@ public abstract class ViewChart extends View {
         mAxisTextSize = size;
     }
 
+    public int getAxisTextStyle() {
+        return mAxisTextStyle;
+    }
+
+    public void setAxisTextStyle(int style) {
+        mAxisTextStyle = style;
+    }
+
     public int getAxisTextColor() {
         return mAxisTextColor;
     }
@@ -201,6 +225,38 @@ public abstract class ViewChart extends View {
 
     public void setAxisVEnabled(boolean enabled) {
         mAxisVEnabled = enabled;
+    }
+
+    public float getAxisHMax() {
+        return mAxisHMax;
+    }
+
+    public void setAxisHMax(float value) {
+        mAxisHMax = value;
+    }
+
+    public float getAxisHMin() {
+        return mAxisHMin;
+    }
+
+    public void setAxisHMin(float value) {
+        mAxisHMin = value;
+    }
+
+    public float getAxisVMax() {
+        return mAxisVMax;
+    }
+
+    public void setAxisVMax(float value) {
+        mAxisVMax = value;
+    }
+
+    public float getAxisVMin() {
+        return mAxisVMin;
+    }
+
+    public void setAxisVMin(float value) {
+        mAxisVMin = value;
     }
 
     public void addAxisHMarker(float marker) {
@@ -227,17 +283,17 @@ public abstract class ViewChart extends View {
         mAxisVMarker.clear();
     }
 
-    public void addValue(PointF value) {
-        mValueList.add(value);
+    public void setValue(PointF value) {
+        mValue.add(value);
     }
 
-    public void addValue(float x, float y) {
+    public void setValue(float x, float y) {
         PointF value = new PointF(x, y);
-        addValue(value);
+        setValue(value);
     }
 
     public void clearValue() {
-        mValueList.clear();
+        mValue.clear();
     }
 
     public void addAxisHNode(float node) {
