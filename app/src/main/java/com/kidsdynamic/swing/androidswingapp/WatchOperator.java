@@ -3,12 +3,14 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +42,12 @@ public class WatchOperator {
 
     void setActivityList(List<WatchActivity> list) {
         mWatchActivityList = list;
+        /*
+        Log.d("swing", "download " + mWatchActivityList.size());
+        for (WatchActivity act : mWatchActivityList) {
+            Log.d("swing", "\tTime("+act.mTimestamp+") " + WatchOperator.getDefaultTimeString(act.mTimestamp) + " In " + act.mIndoor.mSteps + " Out " + act.mOutdoor.mSteps);
+        }
+        */
     }
 
     //-------------------------------------------------------------------------
@@ -190,6 +198,13 @@ public class WatchOperator {
         return format.format(date);
     }
 
+    static String getDefaultTimeString(long timeStamp) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        Date date = new Date();
+        date.setTime(timeStamp);
+        return format.format(date);
+    }
+
     public ArrayList<WatchContact.Kid> getDeviceList() {
         WatchContact.User user = getUser();
         List<WatchContact.Kid> src = getKids();
@@ -293,7 +308,68 @@ public class WatchOperator {
         new WatchOperatorUpdateActivity(mActivity).start(listener, kid);
     }
 
-    public List<WatchActivity> getActivity() {
-        return mWatchActivityList;
+    public WatchActivity getActivityOfDay() {
+        return mWatchActivityList.get(0);
+    }
+
+    public List<WatchActivity> getActivityOfWeek() {
+        List<WatchActivity> rtn = new ArrayList<>();
+
+        for (int idx = 0; idx < 7; idx++) {
+            rtn.add(mWatchActivityList.get(idx));
+        }
+        Collections.reverse(rtn);
+
+        return rtn;
+    }
+
+    public List<WatchActivity> getActivityOfMonth() {
+        List<WatchActivity> rtn = new ArrayList<>();
+
+        for (int idx = 0; idx < 30; idx++) {
+            rtn.add(mWatchActivityList.get(idx));
+        }
+        Collections.reverse(rtn);
+
+        return rtn;
+    }
+
+    public List<WatchActivity> getActivityOfYear() {
+        List<WatchActivity> rtn = new ArrayList<>();
+        long startTimestamp;
+        long endTimestamp;
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.YEAR, -1);
+        cal.set(Calendar.DATE, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.add(Calendar.SECOND, -1);
+        cal.add(Calendar.MONTH, 2);
+        endTimestamp = cal.getTimeInMillis();
+
+        cal.add(Calendar.SECOND, 1);
+        cal.add(Calendar.MONTH, -1);
+        startTimestamp = cal.getTimeInMillis();
+
+        for (int idx = 0; idx < 12; idx++) {
+            //Log.d("swing", "Start Time("+startTimestamp+") " + WatchOperator.getDefaultTimeString(startTimestamp));
+            //Log.d("swing", "End Time("+endTimestamp+") " + WatchOperator.getDefaultTimeString(endTimestamp));
+            WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
+
+            for (WatchActivity src : mWatchActivityList)
+                watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
+            rtn.add(watchActivity);
+
+            cal.setTimeInMillis(startTimestamp);
+            cal.add(Calendar.MONTH, 1);
+            startTimestamp = cal.getTimeInMillis();
+
+            cal.setTimeInMillis(endTimestamp);
+            cal.add(Calendar.MONTH, 1);
+            endTimestamp = cal.getTimeInMillis();
+        }
+        return rtn;
     }
 }

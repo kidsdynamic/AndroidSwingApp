@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WatchHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "Swing.db";
-    private static final int DB_VERSION = 5;
+    private static final int DB_VERSION = 6;
 
     private static SQLiteDatabase mDatabase = null;
 

@@ -173,7 +173,7 @@ public class ActivityMain extends AppCompatActivity
     WatchOperatorResumeSync.finishListener mFinishListener = new WatchOperatorResumeSync.finishListener() {
         @Override
         public void onFinish(String msg) {
-            //eventTest();
+            eventTest();
 
             if (!msg.equals(""))
                 Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
@@ -392,12 +392,10 @@ public class ActivityMain extends AppCompatActivity
     }
 
     private void eventTest() {
-        mActivityList = crateFakeData();
-        nextActivity();
+        //mActivityList = crateFakeData();
+        //nextActivity();
 
-        //mServiceMachine.activityUploadRawData(null, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
-
-        //mOperator.updateActivity(null, mOperator.getFocusKid().mId);
+        //mOperator.updateActivity(mUpdateActivityListener, mOperator.getFocusKid().mId);
     }
 
     List<WatchActivityRaw> mActivityList;
@@ -410,6 +408,13 @@ public class ActivityMain extends AppCompatActivity
         }
 
     }
+
+    WatchOperatorUpdateActivity.finishListener mUpdateActivityListener = new WatchOperatorUpdateActivity.finishListener() {
+        @Override
+        public void onFinish(String msg) {
+            mOperator.getActivityOfYear();
+        }
+    };
 
     private List<WatchActivityRaw> crateFakeData() {
         Calendar cal = Calendar.getInstance();
@@ -429,7 +434,7 @@ public class ActivityMain extends AppCompatActivity
             cal = Calendar.getInstance();
             long step = cal.getTimeInMillis() % 3000;
 
-            fake.mTime = (int) (time / 1000) + "";
+            fake.mTime = (int) (time / 1000);
             fake.mMacId = macId;
             fake.mIndoor = fake.mTime + ",0,"+ step + ",2,3,4";
             fake.mOutdoor = fake.mTime + ",1," + step + ",2,3,4";
