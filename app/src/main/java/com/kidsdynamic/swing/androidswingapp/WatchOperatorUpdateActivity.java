@@ -1,15 +1,22 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 /**
  * Created by weichigio on 2017/2/19.
  */
 
-public class WatchOperatorUpdateActivity {
+class WatchOperatorUpdateActivity {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private finishListener mListener = null;
-    private int mKidId;
-    private String mPeriod;
+    private List<WatchActivity> mActivities;
+    private long mSearchStart;
+    private long mSearchEnd;
 
     WatchOperatorUpdateActivity(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
@@ -22,64 +29,73 @@ public class WatchOperatorUpdateActivity {
 
     public void start(finishListener listener, int kidId) {
         mListener = listener;
-        mKidId = kidId;
-        nextActivity(true);
-    }
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        mSearchEnd = cal.getTimeInMillis();
+        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.SECOND, 1);
+        mSearchStart = cal.getTimeInMillis();
+        mActivities = new ArrayList<>();
 
-    private void nextActivity(boolean start) {
-        if (start) {
-            mPeriod = WatchActivity.DAILY;
-        } else {
-            switch (mPeriod) {
-                case WatchActivity.DAILY:
-                    mPeriod = WatchActivity.WEEKLY;
-                    break;
-                case WatchActivity.WEEKLY:
-                    mPeriod = WatchActivity.MONTHLY;
-                    break;
-                case WatchActivity.MONTHLY:
-                    mPeriod = WatchActivity.YEARLY;
-                    break;
-                case WatchActivity.YEARLY:
-                    mPeriod = WatchActivity.END;
-                    break;
-            }
+        long activityTimeStamp = mSearchStart;
+        for (int idx = 0; idx < 356; idx++) {
+            mActivities.add(new WatchActivity(kidId, activityTimeStamp));
+            activityTimeStamp += 86400000;
         }
 
-        if (mPeriod.equals(WatchActivity.END)) {
+        mServerMachine.activityRetrieveDataByTime(
+                mActivityRetrieveDataByTimeListener,
+                (int) (mSearchStart / 1000),
+                (int) (mSearchEnd / 1000),
+                kidId);
+    }
+
+    private ServerMachine.activityRetrieveDataByTimeListener mActivityRetrieveDataByTimeListener = new ServerMachine.activityRetrieveDataByTimeListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.activity.retrieveDataByTime.response response) {
+            if (response == null || response.activities == null) {
+                if (mListener != null)
+                    mListener.onFinish("");
+                return;
+            }
+
+            for (ServerGson.activityData activity : response.activities) {
+                long timestamp = WatchOperator.getTimeStamp(activity.receivedDate);
+                if (timestamp < mSearchStart || timestamp > mSearchEnd) {
+                    Log.d("swing", "Retrieve activity wrong time! " + activity.receivedDate);
+                    continue;
+                }
+
+                for (WatchActivity act : mActivities) {
+                    long actEnd = act.mTimestamp + 86400000;
+                    if (timestamp >= act.mTimestamp && timestamp <= actEnd) {
+                        if (activity.type.equals("INDOOR")) {
+                            act.mIndoor.mId = activity.id;
+                            act.mIndoor.mMacId = activity.macId;
+                            act.mIndoor.mSteps = activity.steps;
+                        } else if (activity.type.equals("OUTDOOR")) {
+                            act.mOutdoor.mId = activity.id;
+                            act.mOutdoor.mMacId = activity.macId;
+                            act.mOutdoor.mSteps = activity.steps;
+
+                        }
+                        break;
+                    }
+                }
+            }
+
+            mOperator.setActivityList(mActivities);
             if (mListener != null)
                 mListener.onFinish("");
-            return;
-        }
-
-        mServerMachine.activityRetrieveData(mActivityRetrieveDataListener, mKidId + "", mPeriod);
-    }
-
-    ServerMachine.activityRetrieveDataListener mActivityRetrieveDataListener = new ServerMachine.activityRetrieveDataListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.activity.retrieveData.response response) {
-            WatchActivity activity = new WatchActivity();
-            ServerGson.activityData act1 = response.activities.get(0);
-            ServerGson.activityData act2 = response.activities.get(1);
-
-            activity.mIndoor.mId = act1.type.equals("INDOOR") ? act1.id : act2.id;
-            activity.mIndoor.mMacId = act1.type.equals("INDOOR") ? act1.macId : act2.macId;
-            activity.mIndoor.mKidId = act1.type.equals("INDOOR") ? act1.kidId : act2.kidId;
-            activity.mIndoor.mSteps = act1.type.equals("INDOOR") ? act1.steps : act2.steps;
-
-            activity.mOutdoor.mId = act1.type.equals("OUTDOOR") ? act1.id : act2.id;
-            activity.mOutdoor.mMacId = act1.type.equals("OUTDOOR") ? act1.macId : act2.macId;
-            activity.mOutdoor.mKidId = act1.type.equals("OUTDOOR") ? act1.kidId : act2.kidId;
-            activity.mOutdoor.mSteps = act1.type.equals("OUTDOOR") ? act1.steps : act2.steps;
-
-            mOperator.setActivity(mKidId, mPeriod, activity);
-            nextActivity(false);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Get activity failed " + statusCode);
+                mListener.onFinish("Retrieve activity failed " + statusCode);
         }
     };
+
 }

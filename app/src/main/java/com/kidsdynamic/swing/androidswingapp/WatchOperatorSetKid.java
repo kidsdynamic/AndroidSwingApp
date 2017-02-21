@@ -104,7 +104,7 @@ public class WatchOperatorSetKid {
 
     BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
         @Override
-        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
+        public void onSync(int resultCode, ArrayList<WatchActivityRaw> result) {
             if (!mKid.mProfile.equals("")) {
                 mServerMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
             } else {

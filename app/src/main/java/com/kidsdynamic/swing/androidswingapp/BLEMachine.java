@@ -14,22 +14,24 @@ import java.util.UUID;
  * Created by weichigio on 2017/1/11.
  */
 
-public class BLEMachine extends BLEControl {
+class BLEMachine extends BLEControl {
     private Handler mHandler = new Handler();
     private onSearchListener mOnSearchListener = null;
     private onSyncListener mOnSyncListener = null;
     private onBatteryListener mOnBatteryListener = null;
     private boolean mRunning = false;
+    private ArrayList<WatchActivityRaw> mActivities;
+
 
     private void Log(String msg) {
         Log.i("BLEMachine", msg);
     }
 
-    public BLEMachine(Context context) {
+    BLEMachine(Context context) {
         super(context);
     }
 
-    public boolean Start() {
+    boolean Start() {
         synchronized (this) {
             if (!mRunning) {
                 Init(mEventListener);
@@ -45,7 +47,7 @@ public class BLEMachine extends BLEControl {
         return true;
     }
 
-    public boolean Stop() {
+    boolean Stop() {
         synchronized (this) {
             if (mRunning) {
                 mHandler.removeCallbacks(stateTransition);
@@ -58,19 +60,19 @@ public class BLEMachine extends BLEControl {
 
     private static final int TRANSITION_GAP = 100;
 
-    public static final int STATE_INIT = 0;
-    public static final int STATE_SCAN = 1;
-    public static final int STATE_BONDING = 2;
-    public static final int STATE_CONNECTING = 3;
-    public static final int STATE_DISCOVERY = 4;
-    public static final int STATE_SET_TIME = 5;
-    public static final int STATE_GET_ADDRESS = 6;
-    public static final int STATE_SEND_ALERT = 7;
-    public static final int STATE_GET_HEADER = 8;
-    public static final int STATE_GET_TIME = 9;
-    public static final int STATE_GET_DATA1 = 10;
-    public static final int STATE_GET_DATA2 = 11;
-    public static final int STATE_GET_BATTERY = 12;
+    private static final int STATE_INIT = 0;
+    private static final int STATE_SCAN = 1;
+    private static final int STATE_BONDING = 2;
+    private static final int STATE_CONNECTING = 3;
+    private static final int STATE_DISCOVERY = 4;
+    private static final int STATE_SET_TIME = 5;
+    private static final int STATE_GET_ADDRESS = 6;
+    private static final int STATE_SEND_ALERT = 7;
+    private static final int STATE_GET_HEADER = 8;
+    private static final int STATE_GET_TIME = 9;
+    private static final int STATE_GET_DATA1 = 10;
+    private static final int STATE_GET_DATA2 = 11;
+    private static final int STATE_GET_BATTERY = 12;
 
     private Device mRelationDevice = new Device();
     private int mState;
@@ -92,7 +94,7 @@ public class BLEMachine extends BLEControl {
                         Scan(true);
 
                     } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
-                        mInOurDoors = new ArrayList<>();
+                        mActivities = new ArrayList<>();
                         mRelationDevice.mState.mTick = 150;
                         if (GetBondState(mRelationDevice.mAddress)) {
                             EnableBondStateReceiver(false);
@@ -109,7 +111,7 @@ public class BLEMachine extends BLEControl {
                 case STATE_SCAN:
                     if (--mRelationDevice.mAction.mScanTime == 0 ||
                             mOnSearchListener == null ||
-                            mRelationDevice.mState.mFoundSearchAddress ) {
+                            mRelationDevice.mState.mFoundSearchAddress) {
                         mState = STATE_INIT;
                         Scan(false);
 
@@ -173,27 +175,25 @@ public class BLEMachine extends BLEControl {
                     break;
 
                 case STATE_SEND_ALERT:
-                    synchronized (mVoiceAlerts) {
-                        if (!mRelationDevice.mState.mConnected) {
-                            syncFailProcess();
-                        } else if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 250) {
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
+                    if (!mRelationDevice.mState.mConnected) {
+                        syncFailProcess();
+                    } else if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 250) {
+                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
+                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
 
-                            mRelationDevice.mState.mHeader = null;
-                            Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
-                            mState = STATE_GET_HEADER;
-                        } else {
-                            VoiceAlert alert = mVoiceAlerts.get(0);
-                            mVoiceAlerts.remove(0);
-                            Calendar cal = Calendar.getInstance();
-                            int countdown = (int)((alert.mTimeStamp-cal.getTimeInMillis())/1000);
-                            if (countdown > 0) {
-                                byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
-                                Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
-                                Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
-                                mVoiceAlertCount++;
-                            }
+                        mRelationDevice.mState.mHeader = null;
+                        Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
+                        mState = STATE_GET_HEADER;
+                    } else {
+                        VoiceAlert alert = mVoiceAlerts.get(0);
+                        mVoiceAlerts.remove(0);
+                        Calendar cal = Calendar.getInstance();
+                        int countdown = (int) ((alert.mTimeStamp - cal.getTimeInMillis()) / 1000);
+                        if (countdown > 0) {
+                            byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
+                            mVoiceAlertCount++;
                         }
                     }
                     break;
@@ -210,7 +210,7 @@ public class BLEMachine extends BLEControl {
                             Disconnect();
 
                             if (mOnSyncListener != null)
-                                mOnSyncListener.onSync(SYNC_RESULT_SUCCESS, mInOurDoors);
+                                mOnSyncListener.onSync(SYNC_RESULT_SUCCESS, mActivities);
 
                             mState = STATE_INIT;
                         }
@@ -244,7 +244,7 @@ public class BLEMachine extends BLEControl {
 
                 case STATE_GET_DATA2:
                     if (mRelationDevice.mState.mData2 != null) {
-                        mInOurDoors.add(new InOutDoor(mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
+                        mActivities.add(new WatchActivityRaw(mRelationDevice.mAddress, mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
                         mRelationDevice.mState.mHeader = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
@@ -274,33 +274,33 @@ public class BLEMachine extends BLEControl {
     private void syncFailProcess() {
 
         if (mRelationDevice.mAction.mSync && mOnSyncListener != null)
-            mOnSyncListener.onSync(mState, mInOurDoors);
+            mOnSyncListener.onSync(mState, mActivities);
 
         if (mRelationDevice.mAction.mBattery && mOnBatteryListener != null)
-            mOnBatteryListener.onBattery((byte)0xFF);
+            mOnBatteryListener.onBattery((byte) 0xFF);
 
         mRelationDevice.resetFlag();
 
         mState = STATE_INIT;
     }
 
-    public final static int SYNC_RESULT_SUCCESS = 0xFFFFFFFF;
+    final static int SYNC_RESULT_SUCCESS = 0xFFFFFFFF;
 
-    public interface onSearchListener {
+    interface onSearchListener {
         void onSearch(ArrayList<Device> result);
 
         //void onFinish(int resultCode, ArrayList<InOutDoor> result);
     }
 
-    public interface onSyncListener {
-        void onSync(int resultCode, ArrayList<InOutDoor> result);
+    interface onSyncListener {
+        void onSync(int resultCode, ArrayList<WatchActivityRaw> result);
     }
 
-    public interface onBatteryListener {
+    interface onBatteryListener {
         void onBattery(byte value);
     }
 
-    public int Search(onSearchListener listener, int second) {
+    int Search(onSearchListener listener, int second) {
         if (listener == null) {
             mOnSearchListener = null;
             mRelationDevice.mAction.mScanTime = 0;
@@ -312,7 +312,7 @@ public class BLEMachine extends BLEControl {
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Search(onSearchListener listener, String address) {
+    int Search(onSearchListener listener, String address) {
         if (listener == null) {
             mOnSearchListener = null;
             mRelationDevice.mAction.mScanTime = 0;
@@ -324,7 +324,7 @@ public class BLEMachine extends BLEControl {
         return mRelationDevice.mAction.mScanTime;
     }
 
-    public int Sync(onSyncListener listener, Device device, List<VoiceAlert> alerts) {
+    int Sync(onSyncListener listener, Device device, List<VoiceAlert> alerts) {
         mOnSyncListener = listener;
         mRelationDevice = new Device(device.mName, device.mAddress, 0);
         mRelationDevice.mAction.mSync = true;
@@ -332,7 +332,7 @@ public class BLEMachine extends BLEControl {
         return 0;
     }
 
-    public int Sync(onSyncListener listener, String macAddress) {
+    int Sync(onSyncListener listener, String macAddress) {
         mOnSyncListener = listener;
         mRelationDevice = new Device("Swing", macAddress, 0);
         mRelationDevice.mAction.mSync = true;
@@ -340,14 +340,14 @@ public class BLEMachine extends BLEControl {
         return 0;
     }
 
-    public int Battery(onBatteryListener listener, String macAddress) {
+    int Battery(onBatteryListener listener, String macAddress) {
         mOnBatteryListener = listener;
         mRelationDevice = new Device("Swing", macAddress, 0);
         mRelationDevice.mAction.mBattery = true;
         return 0;
     }
 
-    public static class VoiceAlert {
+    static class VoiceAlert {
         byte mAlert;
         long mTimeStamp;
 
@@ -356,20 +356,6 @@ public class BLEMachine extends BLEControl {
             mTimeStamp = countdown;
         }
     }
-
-    public static class InOutDoor {
-        byte[] mTime;
-        byte[] mData1;
-        byte[] mData2;
-
-        InOutDoor(byte[] time, byte[] data1, byte[] data2) {
-            mTime = time;
-            mData1 = data1;
-            mData2 = data2;
-        }
-    }
-
-    private ArrayList<InOutDoor> mInOurDoors;
 
     class Device {
         String mName;
@@ -424,11 +410,6 @@ public class BLEMachine extends BLEControl {
             mAction = new Action();
             mState = new State();
             resetFlag();
-        }
-
-        void Copy(Device src) {
-            mName = src.mName;
-            mAddress = src.mAddress;
         }
     }
 
@@ -533,7 +514,7 @@ public class BLEMachine extends BLEControl {
         }
     };
 
-    public static String bytesToHex(byte[] in) {
+    private static String bytesToHex(byte[] in) {
         final StringBuilder builder = new StringBuilder();
         for (byte b : in) {
             builder.append(String.format("0x%02X ", b));
@@ -541,7 +522,7 @@ public class BLEMachine extends BLEControl {
         return builder.toString();
     }
 
-    public static long getCurrentTime() {
+    private static long getCurrentTime() {
         Calendar now = Calendar.getInstance();
         int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
         return now.getTimeInMillis() + offset;

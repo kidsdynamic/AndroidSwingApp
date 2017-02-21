@@ -19,7 +19,7 @@ public class ServerPushService extends Service {
     public ActivityConfig mConfig;
     private Handler mHandler = new Handler();
 
-    private WatchDatabase.Upload mUploadItem = null;
+    private WatchActivityRaw mUploadItem = null;
 
     @Override
     public void onCreate() {
@@ -87,7 +87,7 @@ public class ServerPushService extends Service {
             } else if (mUploadItem == null && mWatchDatabase.UploadItemCount() > 0) {
                 mUploadItem = mWatchDatabase.UploadItemGet();
                 Log.d("PushService", " MAC " + mUploadItem.mMacId + " time " + mUploadItem.mTime);
-                mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoorActivity, mUploadItem.mOutdoorActivity, mUploadItem.mTime, mUploadItem.mMacId);
+                mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
             }
             if (!stop)
                 mHandler.postDelayed(this, 1000);

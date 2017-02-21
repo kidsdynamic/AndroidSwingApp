@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Stack;
 
@@ -390,75 +392,69 @@ public class ActivityMain extends AppCompatActivity
     }
 
     private void eventTest() {
-        mOperator.mWatchDatabase.EventClear();
-        WatchEvent watchEvent = new WatchEvent();
-        watchEvent.mId = 0;
-        watchEvent.mUserId = 70;
-        watchEvent.mKids.add(23);
-        watchEvent.mName = "TEST EVENT BY GIO";
-        watchEvent.mStartDate = 12345678;
-        watchEvent.mEndDate = 12349678;
-        watchEvent.mColor = "#F05D25";
-        watchEvent.mDescription = "TEST DESCRIPTION BY GIO";
-        watchEvent.mAlert = 40;
-        watchEvent.mRepeat = "";
-        watchEvent.mTimezoneOffset = 0;
-        watchEvent.mTodoList.add(
-                new WatchTodo(
-                        0,
-                        70,
-                        0,
-                        "TEST TODO by GIO",
-                        "",
-                        12345678,
-                        12345678
-                )
-        );
-        mOperator.setEvent(null, watchEvent);
+        mActivityList = crateFakeData();
+        nextActivity();
 
-        /*
-        mOperator.EventReset();
-        mOperator.EventAdd(new WatchOperator.Event(0, 7, "", WatchOperator.getTimeStamp("2015-08-31T06:20:00Z"), WatchOperator.getTimeStamp("2015-08-31T08:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(1, 6, "", WatchOperator.getTimeStamp("2015-08-30T09:20:00Z"), WatchOperator.getTimeStamp("2015-08-30T11:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(2, 5, "", WatchOperator.getTimeStamp("2015-09-01T05:20:00Z"), WatchOperator.getTimeStamp("2015-09-01T07:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(3, 4, "", WatchOperator.getTimeStamp("2015-08-01T08:20:00Z"), WatchOperator.getTimeStamp("2015-08-01T09:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(4, 3, "WEEKLY", WatchOperator.getTimeStamp("2015-08-31T13:00:00Z"), WatchOperator.getTimeStamp("2015-08-31T15:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(5, 2, "WEEKLY", WatchOperator.getTimeStamp("2015-09-01T16:00:00Z"), WatchOperator.getTimeStamp("2015-09-01T18:00:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(6, 1, "WEEKLY", WatchOperator.getTimeStamp("2015-08-30T12:00:00Z"), WatchOperator.getTimeStamp("2015-08-30T12:20:00Z")));
-        mOperator.EventAdd(new WatchOperator.Event(7, 0, "", WatchOperator.getTimeStamp("2015-07-10T08:20:00Z"), WatchOperator.getTimeStamp("2015-07-10T12:00:00Z")));
-        List<WatchOperator.Event> events = mOperator.EventGet(0, 0, WatchOperator.getTimeStamp("2015-08-29T08:20:00Z"), WatchOperator.getTimeStamp("2015-09-10T08:20:00Z"));
+        //mServiceMachine.activityUploadRawData(null, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
 
-        mOperator.UserAdd(new WatchContact.User(null, 3, "email", "first", "last", "update", "create", "zip", "phone"));
-        WatchContact.User user = mOperator.UserGet();
-        Log.d("TEST", user.mEmail + " " + user.mName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
-        user.mName = "TEST";
-        user.mProfile = "jpg";
-        mOperator.UserUpdate(user);
-        user = mOperator.UserGet();
-        Log.d("TEST", user.mEmail + " " + user.mName + " " + user.mLastName + " " + user.mLastUpdate+ " " + user.mDateCreated+ " " + user.mZipCode+ " " + user.mPhoneNumber+ " " + user.mProfile);
-        WatchContact.Kid focus = mOperator.KidGetFocus();
-        if (focus == null)
-            Log.d("TEST", "No focus item");
-
-        mOperator.KidAdd(new WatchContact.Kid(null, 1, "Kid1", "last1", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 2, "Kid2", "last2", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 3, "Kid3", "last3", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 4, "Kid4", "last4", "ccc", "ddd", 3));
-        mOperator.KidAdd(new WatchContact.Kid(null, 5, "Kid5", "last5", "ccc", "ddd", 3));
-        List<WatchContact.Kid> kids = mOperator.KidGet();
-        for (WatchContact.Kid kid : kids) {
-            Log.d("TEST", "name " + kid.mName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
-            kid.mProfile = kid.mName+ "+profile";
-            mOperator.KidUpdate(kid);
-        }
-        kids = mOperator.KidGet();
-        for (WatchContact.Kid kid : kids)
-            Log.d("TEST", "name " + kid.mName + " " + kid.mLastName + " " + kid.mDateCreated + " " + kid.mMacId + " " + kid.mUserId + " "+ kid.mProfile);
-
-        focus = new WatchContact.Kid(null, 6, "Kid6", "last6", "ccc", "ddd", 3);
-        mOperator.KidSetFocus(focus);
-        focus = mOperator.KidGetFocus();
-        Log.d("TEST", "name " + focus.mName + " " + focus.mLastName + " " + focus.mDateCreated + " " + focus.mMacId + " " + focus.mUserId + " "+ focus.mProfile);
-    */
+        //mOperator.updateActivity(null, mOperator.getFocusKid().mId);
     }
+
+    List<WatchActivityRaw> mActivityList;
+    private void nextActivity() {
+
+        if (!mActivityList.isEmpty()) {
+            WatchActivityRaw raw = mActivityList.get(0);
+            mActivityList.remove(0);
+            mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, raw.mIndoor, raw.mOutdoor, raw.mTime, raw.mMacId);
+        }
+
+    }
+
+    private List<WatchActivityRaw> crateFakeData() {
+        Calendar cal = Calendar.getInstance();
+        long endTime = cal.getTimeInMillis();
+        cal.add(Calendar.DATE, -365);
+        long time = cal.getTimeInMillis();
+        List<WatchActivityRaw> rtn = new ArrayList<>();
+        String macId = mOperator.getFocusKid().mMacId + "";
+
+        Log.d("swing", time + " start " + WatchOperator.getTimeString(time));
+        Log.d("swing", endTime + " end " + WatchOperator.getTimeString(endTime));
+
+
+
+        while (time <= endTime) {
+            WatchActivityRaw fake = new WatchActivityRaw();
+            cal = Calendar.getInstance();
+            long step = cal.getTimeInMillis() % 3000;
+
+            fake.mTime = (int) (time / 1000) + "";
+            fake.mMacId = macId;
+            fake.mIndoor = fake.mTime + ",0,"+ step + ",2,3,4";
+            fake.mOutdoor = fake.mTime + ",1," + step + ",2,3,4";
+            rtn.add(fake);
+
+            time += 172800000;
+        }
+
+        return rtn;
+    }
+
+    ServerMachine.activityUploadRawDataListener mActivityUploadRawDataListener = new ServerMachine.activityUploadRawDataListener() {
+        @Override
+        public void onSuccess(int statusCode) {
+            nextActivity();
+        }
+
+        @Override
+        public void onConflict(int statusCode) {
+            nextActivity();
+        }
+
+        @Override
+        public void onFail(int statusCode) {
+        }
+    };
+
 }

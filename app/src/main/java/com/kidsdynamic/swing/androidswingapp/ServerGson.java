@@ -50,7 +50,6 @@ public class ServerGson {
         String kidId;
         String type;
         int steps;
-        int distance;
         String receivedDate;
     }
 
@@ -65,8 +64,6 @@ public class ServerGson {
         String status;
         String description;
         int alert;
-        String city;
-        String state;
         String repeat;
         int timezoneOffset;
         String dateCreated;
@@ -297,18 +294,20 @@ public class ServerGson {
             private static class c {
                 String indoorActivity;
                 String outdoorActivity;
-                int time;
+                String time;
                 String macId;
+                int timeZoneOffset;
 
-                c(String pIndoorActivity, String pOutdoorActivity, int pTime, String pMacId) {
+                c(String pIndoorActivity, String pOutdoorActivity, String pTime, String pMacId) {
                     indoorActivity = pIndoorActivity;
                     outdoorActivity = pOutdoorActivity;
                     time = pTime;
                     macId = pMacId;
+                    timeZoneOffset = 0;
                 }
             }
 
-            public static String toJson(String pIndoorActivity, String pOutdoorActivity, int pTime, String pMacId) {
+            public static String toJson(String pIndoorActivity, String pOutdoorActivity, String pTime, String pMacId) {
                 return new Gson().toJson(new c(pIndoorActivity, pOutdoorActivity, pTime, pMacId));
             }
         }

@@ -267,10 +267,10 @@ public class FragmentSyncSearch extends ViewFragment {
 
     BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
         @Override
-        public void onSync(int resultCode, ArrayList<BLEMachine.InOutDoor> result) {
+        public void onSync(int resultCode, ArrayList<WatchActivityRaw> result) {
             if (resultCode == SYNC_RESULT_SUCCESS) {
-                for (BLEMachine.InOutDoor res : result) {
-                    mActivityMain.mOperator.pushUploadItem(mDevice.mMacId, res.mTime, res.mData1, res.mData2);
+                for (WatchActivityRaw res : result) {
+                    mActivityMain.mOperator.pushUploadItem(res);
                 }
                 Intent intent = new Intent(mActivityMain, ServerPushService.class);
                 mActivityMain.startService(intent);
