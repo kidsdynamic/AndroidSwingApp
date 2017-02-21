@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -111,6 +113,11 @@ public class FragmentDashboardChart extends ViewFragment {
 
         setDoor(INDOOR);
         showToday();
+
+        Animation animation = new TranslateAnimation(0, 0, 300, 0);
+        animation.setDuration(500);
+        animation.setFillAfter(true);
+        mViewEmotionImage.startAnimation(animation);
     }
 
     @Override
