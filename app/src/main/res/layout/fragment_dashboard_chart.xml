@@ -115,18 +115,23 @@
         android:layout_weight="4"
         android:padding="20dp"
         android:visibility="gone"
-        app:axisTextSize="14sp"
+        app:axisTextSize="12sp"
         app:axisVMax="15000"
         app:axisWidth="1dp"
         app:chartTextColor="@color/color_white"
         app:chartTextSize="12sp" />
 
-    <TextView
+    <com.kidsdynamic.swing.androidswingapp.ViewChartKDCurve
         android:id="@+id/dashboard_chart_month"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:visibility="gone" />
+        android:padding="20dp"
+        android:visibility="gone"
+        app:axisTextSize="12sp"
+        app:axisVMax="15000"
+        app:axisWidth="1dp"
+        app:chartWidth="4dp" />
 
     <com.kidsdynamic.swing.androidswingapp.ViewChartKDBar
         android:id="@+id/dashboard_chart_year"
@@ -135,7 +140,7 @@
         android:layout_weight="4"
         android:padding="20dp"
         android:visibility="gone"
-        app:axisTextSize="14sp"
+        app:axisTextSize="12sp"
         app:axisVMax="450000"
         app:axisWidth="1dp"
         app:chartTextColor="@android:color/transparent"
