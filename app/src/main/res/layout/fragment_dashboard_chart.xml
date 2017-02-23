@@ -114,12 +114,13 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:padding="20dp"
+        android:visibility="gone"
         app:axisHEnabled="true"
         app:axisHMax="7"
+        app:axisTextSize="14sp"
         app:axisVMax="15000"
-        app:chartTextSize="12sp"
         app:axisWidth="1dp"
-        android:visibility="gone"/>
+        app:chartTextSize="12sp" />
 
     <TextView
         android:id="@+id/dashboard_chart_month"

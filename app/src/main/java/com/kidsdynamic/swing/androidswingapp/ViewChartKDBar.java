@@ -212,12 +212,8 @@ public class ViewChartKDBar extends ViewChart {
         Rect textRect = new Rect();
         mPaint.getTextBounds(title, 0, title.length(), textRect);
 
-        int x = (rect.width() - textRect.width()) / 2;
-        int y = rect.bottom - ((rect.height() - textRect.height()) / 2);
-
-        Log.d("xxx", "title:" + title);
-        Log.d("xxx", "rect:" + rect.toString());
-        Log.d("xxx", "textrect:" + textRect.toString());
+        int x = rect.left + (rect.width() - textRect.width()) / 2;
+        int y = rect.bottom - ((rect.height() - textRect.height()) / 2) - 5; // padding 5
 
         canvas.drawText(title, x, y, mPaint);
     }
