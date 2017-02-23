@@ -137,7 +137,6 @@ public class FragmentDashboardChart extends ViewFragment {
         @Override
         public void onClick(View view) {
             setDoor(view == mViewIndoor ? INDOOR : OUTDOOR);
-            Log.d("xxx", "indoor:" + (view == mViewIndoor) + " chart:" + getChart());
             setChart(getChart());
         }
     };
@@ -293,6 +292,10 @@ public class FragmentDashboardChart extends ViewFragment {
 
         for (WatchActivity activity : thisWeek)
             rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
+//        for (WatchActivity.Act act : rtn) {
+//            act.mSteps = (int) (Math.random() * mViewChartMonth.mAxisVMax);
+//        }
 
         return rtn;
     }

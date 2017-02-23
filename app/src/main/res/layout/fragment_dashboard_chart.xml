@@ -131,7 +131,7 @@
         app:axisTextSize="12sp"
         app:axisVMax="15000"
         app:axisWidth="1dp"
-        app:chartWidth="4dp" />
+        app:chartWidth="5dp" />
 
     <com.kidsdynamic.swing.androidswingapp.ViewChartKDBar
         android:id="@+id/dashboard_chart_year"
