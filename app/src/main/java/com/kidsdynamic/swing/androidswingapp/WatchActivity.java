@@ -60,6 +60,13 @@ public class WatchActivity implements Serializable {
         mTimestamp = timestamp;
     }
 
+    public void addInTimeRange(WatchActivity src, long rangeStart, long rangeEnd) {
+        if (src.mTimestamp>=rangeStart && src.mTimestamp<=rangeEnd) {
+            mIndoor.mSteps += src.mIndoor.mSteps;
+            mOutdoor.mSteps += src.mOutdoor.mSteps;
+        }
+    }
+
     @Override
     public String toString() {
 

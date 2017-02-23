@@ -33,41 +33,41 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class ServerMachine {
     private final static String SERVER_ADDRESS = "https://childrenlab.com/v1";
 
-    final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
-    final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
-    final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
-    final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
-    final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
-    final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
-    final static String CMD_USER_FIND_BY_EMAIL = SERVER_ADDRESS + "/user/findByEmail";
+    private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
+    private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
+    private final static String CMD_USER_IS_TOKEN_VALID = SERVER_ADDRESS + "/user/isTokenValid";
+    private final static String CMD_USER_IS_MAIL_AVAILABLE_TO_REGISTER = SERVER_ADDRESS + "/user/isEmailAvailableToRegister";
+    private final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
+    private final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
+    private final static String CMD_USER_FIND_BY_EMAIL = SERVER_ADDRESS + "/user/findByEmail";
 
-    final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
-    final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
+    private final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
+    private final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
 
-    final static String CMD_KIDS_ADD = SERVER_ADDRESS + "/kids/add";
-    final static String CMD_KIDS_UPDATE = SERVER_ADDRESS + "/kids/update";
-    final static String CMD_KIDS_DELETE = SERVER_ADDRESS + "/kids/delete";
-    final static String CMD_KIDS_WHO_REGISTERED_MAC_ID = SERVER_ADDRESS + "/kids/whoRegisteredMacID";
+    private final static String CMD_KIDS_ADD = SERVER_ADDRESS + "/kids/add";
+    private final static String CMD_KIDS_UPDATE = SERVER_ADDRESS + "/kids/update";
+    private final static String CMD_KIDS_DELETE = SERVER_ADDRESS + "/kids/delete";
+    private final static String CMD_KIDS_WHO_REGISTERED_MAC_ID = SERVER_ADDRESS + "/kids/whoRegisteredMacID";
 
-    final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
-    final static String CMD_ACTIVITY_RETRIEVE_DATA = SERVER_ADDRESS + "/activity/retrieveData";
-    final static String CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME = SERVER_ADDRESS + "/activity/retrieveDataByTime";
+    private final static String CMD_ACTIVITY_UPLOAD_RAW_DATA = SERVER_ADDRESS + "/activity/uploadRawData";
+    private final static String CMD_ACTIVITY_RETRIEVE_DATA = SERVER_ADDRESS + "/activity/retrieveData";
+    private final static String CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME = SERVER_ADDRESS + "/activity/retrieveDataByTime";
 
-    final static String CMD_EVENT_ADD = SERVER_ADDRESS + "/event/add";
-    final static String CMD_EVENT_UPDATE = SERVER_ADDRESS + "/event/update";
-    final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
-    final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
-    final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
-    final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_BY_KID = SERVER_ADDRESS + "/event/retrieveAllEventsByKid";
+    private final static String CMD_EVENT_ADD = SERVER_ADDRESS + "/event/add";
+    private final static String CMD_EVENT_UPDATE = SERVER_ADDRESS + "/event/update";
+    private final static String CMD_EVENT_DELETE = SERVER_ADDRESS + "/event/delete";
+    private final static String CMD_EVENT_RETRIEVE_EVENTS = SERVER_ADDRESS + "/event/retrieveEvents";
+    private final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_WITH_TODO = SERVER_ADDRESS + "/event/retrieveAllEventsWithTodo";
+    private final static String CMD_EVENT_RETRIEVE_ALL_EVENTS_BY_KID = SERVER_ADDRESS + "/event/retrieveAllEventsByKid";
 
-    final static String CMD_EVENT_TODO_DONE = SERVER_ADDRESS + "/event/todo/done";
+    private final static String CMD_EVENT_TODO_DONE = SERVER_ADDRESS + "/event/todo/done";
 
-    final static String CMD_SUBHOST_ADD = SERVER_ADDRESS + "/subHost/add";
-    final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "/subHost/accept";
-    final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "/subHost/deny";
-    final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
+    private final static String CMD_SUBHOST_ADD = SERVER_ADDRESS + "/subHost/add";
+    private final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "/subHost/accept";
+    private final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "/subHost/deny";
+    private final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
 
-    final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
+    private final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
 
     final static String REQUEST_TAG = "SERVER_MACHINE";
     final static String REQUEST_UPLOAD_TAG = "REQUEST_UPLOAD_TAG";
@@ -319,7 +319,7 @@ public class ServerMachine {
         void onFail(int statusCode);
     }
 
-    public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, String time, String macId) {
+    public void activityUploadRawData(activityUploadRawDataListener listener, String indoorActivity, String outdoorActivity, int time, String macId) {
         Map<String, String> map = new HashMap<>();
         Log.d("JSON", ServerGson.activity.uploadRawData.toJson(indoorActivity, outdoorActivity, time, macId));
         map.put("json", ServerGson.activity.uploadRawData.toJson(indoorActivity, outdoorActivity, time, macId));

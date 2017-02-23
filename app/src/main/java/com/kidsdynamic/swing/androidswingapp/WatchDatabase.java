@@ -15,48 +15,44 @@ import java.util.List;
  * Created by weichigio on 2017/2/12.
  */
 
-public class WatchDatabase {
-    public static final String TABLE_USER = "User";
-    public static final String TABLE_KIDS = "Kids";
-    public static final String TABLE_UPLOAD = "Upload";
-    public static final String TABLE_EVENT = "Event";
-    public static final String TABLE_TODO = "Todo";
-    public static final String TABLE_EVENT_KITS = "EventKits";
+class WatchDatabase {
+    static final String TABLE_USER = "User";
+    static final String TABLE_KIDS = "Kids";
+    static final String TABLE_UPLOAD = "Upload";
+    static final String TABLE_EVENT = "Event";
+    static final String TABLE_TODO = "Todo";
+    static final String TABLE_EVENT_KITS = "EventKits";
 
-    public static String ID = "ID";
-    public static String EMAIL = "EMAIL";
-    public static String FIRST_NAME = "FIRST_NAME";
-    public static String LAST_NAME = "LAST_NAME";
-    public static String LAST_UPDATE = "LAST_UPDATE";
-    public static String DATE_CREATED = "DATE_CREATED";
-    public static String ZIP_CODE = "ZIP_CODE";
-    public static String PHONE_NUMBER = "PHONE_NUMBER";
-    public static String PROFILE = "PROFILE";
-    public static String MAC_ID = "MAC_ID";
-    public static String USER_ID = "USER_ID";
-    public static String KID_ID = "KID_ID";
-    public static String NAME = "NAME";
-    public static String START_DATE = "START_DATE";
-    public static String END_DATE = "END_DATE";
-    public static String COLOR = "COLOR";
-    public static String DESCRIPTION = "DESCRIPTION";
-    public static String ALERT = "ALERT";
-    public static String CITY = "CITY";
-    public static String STATE = "STATE";
-    public static String REPEAT = "REPEAT";
-    public static String TIMEZONE_OFFSET = "TIMEZONE_OFFSET";
-    public static String EVENT_ID = "EVENT_ID";
-    public static String TEXT = "TEXT";
-    public static String STATUS = "STATUS";
-    public static String FOCUS_ID = "FOCUS_ID";
-    public static String FOCUS_PID = "FOCUS_PID";
+    private static String ID = "ID";
+    private static String EMAIL = "EMAIL";
+    private static String FIRST_NAME = "FIRST_NAME";
+    private static String LAST_NAME = "LAST_NAME";
+    private static String LAST_UPDATE = "LAST_UPDATE";
+    private static String DATE_CREATED = "DATE_CREATED";
+    private static String ZIP_CODE = "ZIP_CODE";
+    private static String PHONE_NUMBER = "PHONE_NUMBER";
+    private static String PROFILE = "PROFILE";
+    private static String MAC_ID = "MAC_ID";
+    private static String USER_ID = "USER_ID";
+    private static String KID_ID = "KID_ID";
+    private static String NAME = "NAME";
+    private static String START_DATE = "START_DATE";
+    private static String END_DATE = "END_DATE";
+    private static String COLOR = "COLOR";
+    private static String DESCRIPTION = "DESCRIPTION";
+    private static String ALERT = "ALERT";
+    private static String REPEAT = "REPEAT";
+    private static String TIMEZONE_OFFSET = "TIMEZONE_OFFSET";
+    private static String EVENT_ID = "EVENT_ID";
+    private static String TEXT = "TEXT";
+    private static String STATUS = "STATUS";
+    private static String FOCUS_ID = "FOCUS_ID";
+    private static String FOCUS_PID = "FOCUS_PID";
+    private static String TIME = "TIME";
+    private static String INDOOR_ACTIVITY = "INDOOR_ACTIVITY";
+    private static String OUTDOOR_ACTIVITY = "OUTDOOR_ACTIVITY";
 
-
-    public static String TIME = "TIME";
-    public static String INDOOR_ACTIVITY = "INDOOR_ACTIVITY";
-    public static String OUTDOOR_ACTIVITY = "OUTDOOR_ACTIVITY";
-
-    public static final String CREATE_USER_TABLE =
+    static final String CREATE_USER_TABLE =
             "CREATE TABLE " + TABLE_USER + " (" +
                     ID + " INTEGER, " +
                     EMAIL + " TEXT NOT NULL, " +
@@ -70,7 +66,7 @@ public class WatchDatabase {
                     FOCUS_ID + " INTEGER, " +
                     FOCUS_PID + " INTEGER)";
 
-    public static final String CREATE_KIDS_TABLE =
+    static final String CREATE_KIDS_TABLE =
             "CREATE TABLE " + TABLE_KIDS + " (" +
                     ID + " INTEGER NOT NULL, " +
                     FIRST_NAME + " TEXT NOT NULL, " +
@@ -79,14 +75,14 @@ public class WatchDatabase {
                     USER_ID + " INTEGER NOT NULL, " +
                     PROFILE + " TEXT)";
 
-    public static final String CREATE_UPLOAD_TABLE =
+    static final String CREATE_UPLOAD_TABLE =
             "CREATE TABLE " + TABLE_UPLOAD + " (" +
-                    TIME + " TEXT NOT NULL, " +
+                    TIME + " INTEGER NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
                     INDOOR_ACTIVITY + " TEXT NOT NULL, " +
                     OUTDOOR_ACTIVITY + " TEXT NOT NULL)";
 
-    public static final String CREATE_EVENT_TABLE =
+    static final String CREATE_EVENT_TABLE =
             "CREATE TABLE " + TABLE_EVENT + " (" +
                     ID + " INTEGER NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
@@ -102,7 +98,7 @@ public class WatchDatabase {
                     DATE_CREATED + " INTEGER NOT NULL, " +
                     LAST_UPDATE + " INTEGER NOT NULL)";
 
-    public static final String CREATE_TODO_TABLE =
+    static final String CREATE_TODO_TABLE =
             "CREATE TABLE " + TABLE_TODO + " (" +
                     ID + " INTEGER NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
@@ -112,21 +108,18 @@ public class WatchDatabase {
                     DATE_CREATED + " INTEGER NOT NULL, " +
                     LAST_UPDATE + " INTEGER NOT NULL)";
 
-    public static final String CREATE_EVENT_KIDS_TABLE =
+    static final String CREATE_EVENT_KIDS_TABLE =
             "CREATE TABLE " + TABLE_EVENT_KITS + " (" +
                     KID_ID + " INTEGER NOT NULL, " +
                     EVENT_ID + " INTEGER NOT NULL)";
 
     private SQLiteDatabase mDatabase;
-    private Context mContext;
 
-    public WatchDatabase(Context context) {
-        mContext = context;
-
-        mDatabase = WatchHelper.getDatabase(mContext);
+    WatchDatabase(Context context) {
+        mDatabase = WatchHelper.getDatabase(context);
     }
 
-    public void ResetDatabase() {
+    void ResetDatabase() {
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_KIDS);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_UPLOAD);
@@ -142,7 +135,7 @@ public class WatchDatabase {
         mDatabase.execSQL(CREATE_EVENT_KIDS_TABLE);
     }
 
-    public long UserAdd(WatchContact.User user) {
+    long UserAdd(WatchContact.User user) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, user.mId);
@@ -158,7 +151,7 @@ public class WatchDatabase {
         return mDatabase.insert(TABLE_USER, null, contentValues);
     }
 
-    public long UserUpdate(WatchContact.User user) {
+    long UserUpdate(WatchContact.User user) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, user.mId);
@@ -174,7 +167,7 @@ public class WatchDatabase {
         return mDatabase.update(TABLE_USER, contentValues, ID + "=" + user.mId, null);
     }
 
-    public WatchContact.User UserGet() {
+    WatchContact.User UserGet() {
         WatchContact.User user = null;
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_USER + " LIMIT 1", null);
 
@@ -202,11 +195,11 @@ public class WatchDatabase {
         return item;
     }
 
-    public void KidClear() {
+    void KidClear() {
         mDatabase.execSQL("delete from " + TABLE_KIDS);
     }
 
-    public long KidAdd(WatchContact.Kid kid) {
+    long KidAdd(WatchContact.Kid kid) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, kid.mId);
@@ -219,7 +212,7 @@ public class WatchDatabase {
         return mDatabase.insert(TABLE_KIDS, null, contentValues);
     }
 
-    public long KidUpdate(WatchContact.Kid kid) {
+    long KidUpdate(WatchContact.Kid kid) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, kid.mId);
@@ -232,11 +225,11 @@ public class WatchDatabase {
         return mDatabase.update(TABLE_KIDS, contentValues, ID + "=" + kid.mId + " AND " + USER_ID + "=" + kid.mUserId, null);
     }
 
-    public int KidDelete(int id) {
+    int KidDelete(int id) {
         return mDatabase.delete(TABLE_KIDS, ID + "=" + id, null);
     }
 
-    public WatchContact.Kid KidGet(int id) {
+    WatchContact.Kid KidGet(int id) {
         WatchContact.Kid kid = null;
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + ID + "=" + id, null);
         if (cursor.moveToNext()) {
@@ -247,7 +240,7 @@ public class WatchDatabase {
         return kid;
     }
 
-    public List<WatchContact.Kid> KidGet() {
+    List<WatchContact.Kid> KidGet() {
         List<WatchContact.Kid> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS, null);
 
@@ -259,7 +252,7 @@ public class WatchDatabase {
         return result;
     }
 
-    public void KidSetFocus(WatchContact.Kid kid) {
+    void KidSetFocus(WatchContact.Kid kid) {
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_KIDS + " WHERE " + ID + "=" + kid.mId + " AND " + USER_ID + "=" + kid.mUserId, null);
 
         if (cursor.moveToNext())
@@ -275,7 +268,7 @@ public class WatchDatabase {
         mDatabase.update(TABLE_USER, contentValues, ID + "=" + user.mId, null);
     }
 
-    public WatchContact.Kid KidGetFocus() {
+    WatchContact.Kid KidGetFocus() {
         int id = 0;
         int pid = 0;
         Cursor cursor = mDatabase.rawQuery("SELECT " + FOCUS_ID + "," + FOCUS_PID + " FROM " + TABLE_USER + " LIMIT 1", null);
@@ -308,7 +301,7 @@ public class WatchDatabase {
         return item;
     }
 
-    public long UploadItemAdd(WatchActivityRaw item) {
+    long UploadItemAdd(WatchActivityRaw item) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(TIME, item.mTime);
@@ -319,11 +312,11 @@ public class WatchDatabase {
         return mDatabase.insert(TABLE_UPLOAD, null, contentValues);
     }
 
-    public int UploadItemDelete(WatchActivityRaw item) {
+    int UploadItemDelete(WatchActivityRaw item) {
         return mDatabase.delete(TABLE_UPLOAD, TIME + "='" + item.mTime + "' AND " + MAC_ID + "='" + item.mMacId + "'", null);
     }
 
-    public WatchActivityRaw UploadItemGet() {
+    WatchActivityRaw UploadItemGet() {
         WatchActivityRaw item = null;
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " LIMIT 1", null);
 
@@ -335,7 +328,7 @@ public class WatchDatabase {
         return item;
     }
 
-    public int UploadItemCount() {
+    int UploadItemCount() {
         int result = 0;
         Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_UPLOAD, null);
 
@@ -350,7 +343,7 @@ public class WatchDatabase {
     private WatchActivityRaw cursorToUpload(Cursor cursor) {
         WatchActivityRaw item = new WatchActivityRaw();
 
-        item.mTime = cursor.getString(0);
+        item.mTime = cursor.getInt(0);
         item.mMacId = cursor.getString(1);
         item.mIndoor = cursor.getString(2);
         item.mOutdoor = cursor.getString(3);
@@ -358,7 +351,7 @@ public class WatchDatabase {
         return item;
     }
 
-    public class EventKid {
+    private class EventKid {
         int mEventId;
         int mKidId;
 
@@ -373,14 +366,14 @@ public class WatchDatabase {
         }
     }
 
-    public long EventKidAdd(EventKid eventKid) {
+    private long EventKidAdd(EventKid eventKid) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(KID_ID, eventKid.mKidId);
         contentValues.put(EVENT_ID, eventKid.mEventId);
         return mDatabase.insert(TABLE_EVENT_KITS, null, contentValues);
     }
 
-    public List<EventKid> EventKidGet(int eventId) {
+    private List<EventKid> EventKidGet(int eventId) {
         List<EventKid> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT_KITS + " WHERE " + EVENT_ID + "=" + eventId, null);
 
@@ -392,7 +385,7 @@ public class WatchDatabase {
         return result;
     }
 
-    public long EventKidDelete(int eventId) {
+    private long EventKidDelete(int eventId) {
         return mDatabase.delete(TABLE_EVENT_KITS, EVENT_ID + "=" + eventId, null);
 
     }
@@ -406,13 +399,13 @@ public class WatchDatabase {
         return item;
     }
 
-    public void EventClear() {
+    void EventClear() {
         mDatabase.execSQL("delete from " + TABLE_EVENT);
         mDatabase.execSQL("delete from " + TABLE_TODO);
         mDatabase.execSQL("delete from " + TABLE_EVENT_KITS);
     }
 
-    public long EventAdd(WatchEvent event) {
+    long EventAdd(WatchEvent event) {
         long rtn;
         ContentValues contentValues = new ContentValues();
 
@@ -441,7 +434,7 @@ public class WatchDatabase {
         return rtn;
     }
 
-    public long EventUpdate(WatchEvent event) {
+    long EventUpdate(WatchEvent event) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, event.mId);
@@ -470,7 +463,7 @@ public class WatchDatabase {
         return mDatabase.update(TABLE_EVENT, contentValues, ID + "=" + event.mId + " AND " + USER_ID + "=" + event.mUserId, null);
     }
 
-    public int EventDelete(int id) {
+    int EventDelete(int id) {
         mDatabase.delete(TABLE_EVENT, ID + "=" + id, null);
         EventKidDelete(id);
         TodoDelete(id);
@@ -526,7 +519,7 @@ public class WatchDatabase {
         return result;
     }
 
-    public List<WatchEvent> EventGet(long startTimeStamp, long endTimeStamp) {
+    List<WatchEvent> EventGet(long startTimeStamp, long endTimeStamp) {
         List<WatchEvent> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
                 " WHERE " + REPEAT + "=''" + " AND " +
@@ -577,7 +570,7 @@ public class WatchDatabase {
         return result;
     }
 
-    public WatchEvent EventGet(int eventId) {
+    WatchEvent EventGet(int eventId) {
         WatchEvent rtn = null;
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT + " WHERE " + ID + "=" + eventId, null);
         if (cursor.moveToNext()) {
@@ -610,7 +603,7 @@ public class WatchDatabase {
                 cursor.getLong(12));
     }
 
-    public long TodoAdd(WatchTodo todo) {
+    private long TodoAdd(WatchTodo todo) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, todo.mId);
@@ -624,7 +617,7 @@ public class WatchDatabase {
         return mDatabase.insert(TABLE_TODO, null, contentValues);
     }
 
-    public long TodoUpdate(WatchTodo todo) {
+    long TodoUpdate(WatchTodo todo) {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(ID, todo.mId);
@@ -638,10 +631,10 @@ public class WatchDatabase {
         return mDatabase.update(TABLE_TODO, contentValues, ID + "=" + todo.mId, null);
     }
 
-    public long TodoDelete(int eventId) {
+    private long TodoDelete(int eventId) {
         return mDatabase.delete(TABLE_TODO, EVENT_ID + "=" + eventId, null);
     }
-
+/*
     public WatchTodo TodoGet(int eventId, int todoId) {
         WatchTodo result = null;
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + ID + "=" + todoId + " AND " + EVENT_ID + "=" + eventId, null);
@@ -653,8 +646,8 @@ public class WatchDatabase {
 
         return result;
     }
-
-    public List<WatchTodo> TodoGetByUser(int eventId, int userId) {
+*/
+    private List<WatchTodo> TodoGetByUser(int eventId, int userId) {
         List<WatchTodo> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId, null);
 

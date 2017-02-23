@@ -4,7 +4,9 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by weichigio on 2017/2/19.
@@ -39,10 +41,12 @@ class WatchOperatorUpdateActivity {
         mSearchStart = cal.getTimeInMillis();
         mActivities = new ArrayList<>();
 
-        long activityTimeStamp = mSearchStart;
-        for (int idx = 0; idx < 356; idx++) {
+        //Log.d("swing", "Start Time("+mSearchStart+") " + WatchOperator.getDefaultTimeString(mSearchStart));
+        //Log.d("swing", "End Time("+mSearchEnd+") " + WatchOperator.getDefaultTimeString(mSearchEnd));
+
+        for (long activityTimeStamp = mSearchStart; activityTimeStamp < mSearchEnd; activityTimeStamp += 86400000) {
             mActivities.add(new WatchActivity(kidId, activityTimeStamp));
-            activityTimeStamp += 86400000;
+            //Log.d("swing", "activityTimeStamp("+activityTimeStamp+") " + WatchOperator.getDefaultTimeString(activityTimeStamp));
         }
 
         mServerMachine.activityRetrieveDataByTime(
@@ -86,6 +90,7 @@ class WatchOperatorUpdateActivity {
                 }
             }
 
+            Collections.reverse(mActivities);
             mOperator.setActivityList(mActivities);
             if (mListener != null)
                 mListener.onFinish("");

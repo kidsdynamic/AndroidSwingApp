@@ -9,29 +9,29 @@ import java.util.Locale;
 
 public class WatchActivityRaw {
     String mMacId;
-    String mTime;
+    int mTime;
     String mOutdoor;
     String mIndoor;
 
     int mOffset = 0;
 
     WatchActivityRaw() {
-        init("", "", "", "");
+        init("", 0, "", "");
 
     }
 
     WatchActivityRaw(String macId, byte[] time, byte[] outdoor, byte[] indoor) {
         init(macId,
-                (byteToDec(time[0], time[1], time[2], time[3]) - mOffset) + "",
+                (byteToDec(time[0], time[1], time[2], time[3]) - mOffset),
                 rawString(outdoor),
                 rawString(indoor));
     }
 
-    WatchActivityRaw(String macId, String time, String outdoor, String indoor) {
+    WatchActivityRaw(String macId, int time, String outdoor, String indoor) {
         init(macId, time, outdoor, indoor);
     }
 
-    private void init(String macId, String time, String outdoor, String indoor) {
+    private void init(String macId, int time, String outdoor, String indoor) {
         Calendar now = Calendar.getInstance();
         mOffset = (now.getTimeZone().getOffset(now.getTimeInMillis()))/1000;
 
