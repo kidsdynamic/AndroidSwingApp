@@ -283,7 +283,8 @@ public class FragmentDashboardChart extends ViewFragment {
     List<Integer> yearStepOutdoor = makeFakeList(12, 30 * 7500);
 
     private int getStepToday(int door) {
-        return door == INDOOR ? todayStepIndoor : todayStepOutdoor;
+        WatchActivity act = mActivityMain.mOperator.getActivityOfDay();
+        return door == INDOOR ? act.mIndoor.mSteps : act.mOutdoor.mSteps;
     }
 
     private List<Integer> getStepWeek(int door) {

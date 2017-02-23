@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -30,7 +31,7 @@ public class FragmentDashboardSync extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_dashboard_sync, container, false);
 
         mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.dashboard_sync_progress);
-        mViewProgress.setOnProgressListener(mProgressListener);
+        //mViewProgress.setOnProgressListener(mProgressListener);
 
         mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_sync_message);
 
@@ -52,8 +53,9 @@ public class FragmentDashboardSync extends ViewFragment {
         if (focus != null) {
             setTitle(focus.mName);
 
-            mViewProgress.setStrokeBeginEnd(0, 10);
+            mViewProgress.setStrokeBeginEnd(0, 0);
             mViewProgress.startProgress(30, -1, -1);
+            mActivityMain.mOperator.updateActivity(mUpdateActivityListener, focus.mId);
         } else {
             mViewProgress.setActive(false);
             mViewMessage.setText("You Haven't Any Watch");
@@ -67,6 +69,18 @@ public class FragmentDashboardSync extends ViewFragment {
         mViewProgress.stopProgress();
     }
 
+    WatchOperatorUpdateActivity.finishListener mUpdateActivityListener = new WatchOperatorUpdateActivity.finishListener() {
+        @Override
+        public void onFinish(String msg) {
+            mViewProgress.stopProgress();
+            if (msg.equals(""))
+                mActivityMain.selectFragment(FragmentDashboardChart.class.getName(), null);
+            else
+                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+/*
     private int debug_count_down = 100;
     private ViewCircle.OnProgressListener mProgressListener = new ViewCircle.OnProgressListener() {
         @Override
@@ -80,7 +94,7 @@ public class FragmentDashboardSync extends ViewFragment {
             /////////////////
         }
     };
-
+*/
     private void setTitle(String name) {
         String string = String.format(Locale.getDefault(), "%s's Watch", name);
         mActivityMain.toolbarSetTitle(string, false);

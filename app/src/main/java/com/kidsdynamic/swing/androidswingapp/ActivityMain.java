@@ -436,11 +436,11 @@ public class ActivityMain extends AppCompatActivity
 
             fake.mTime = (int) (time / 1000);
             fake.mMacId = macId;
-            fake.mIndoor = fake.mTime + ",0,"+ step + ",2,3,4";
-            fake.mOutdoor = fake.mTime + ",1," + step + ",2,3,4";
+            fake.mIndoor = fake.mTime + ",0,"+ (int) (Math.random() * 7500) + ",2,3,4";
+            fake.mOutdoor = fake.mTime + ",1," + (int) (Math.random() * 7500) + ",2,3,4";
             rtn.add(fake);
 
-            time += 172800000;
+            time += 86400000;
         }
 
         return rtn;
@@ -459,6 +459,7 @@ public class ActivityMain extends AppCompatActivity
 
         @Override
         public void onFail(int statusCode) {
+            nextActivity();
         }
     };
 
