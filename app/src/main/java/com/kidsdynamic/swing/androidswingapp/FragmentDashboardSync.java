@@ -20,6 +20,8 @@ public class FragmentDashboardSync extends ViewFragment {
     private ViewCircle mViewProgress;
     private TextView mViewMessage;
 
+    private boolean mIsPause = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +33,6 @@ public class FragmentDashboardSync extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_dashboard_sync, container, false);
 
         mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.dashboard_sync_progress);
-        //mViewProgress.setOnProgressListener(mProgressListener);
-
         mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_sync_message);
 
         return mViewMain;
@@ -47,13 +47,14 @@ public class FragmentDashboardSync extends ViewFragment {
     @Override
     public void onResume() {
         super.onResume();
+        mIsPause = false;
 
         WatchContact.Kid focus = mActivityMain.mOperator.getFocusKid();
 
         if (focus != null) {
             setTitle(focus.mName);
 
-            mViewProgress.setStrokeBeginEnd(0, 0);
+            mViewProgress.setStrokeBeginEnd(0, 10);
             mViewProgress.startProgress(30, -1, -1);
             mActivityMain.mOperator.updateActivity(mUpdateActivityListener, focus.mId);
         } else {
@@ -65,6 +66,7 @@ public class FragmentDashboardSync extends ViewFragment {
     @Override
     public void onPause() {
         super.onPause();
+        mIsPause = true;
 
         mViewProgress.stopProgress();
     }
@@ -72,6 +74,9 @@ public class FragmentDashboardSync extends ViewFragment {
     WatchOperatorUpdateActivity.finishListener mUpdateActivityListener = new WatchOperatorUpdateActivity.finishListener() {
         @Override
         public void onFinish(String msg) {
+            if(mIsPause)
+                return;
+
             mViewProgress.stopProgress();
             if (msg.equals(""))
                 mActivityMain.selectFragment(FragmentDashboardChart.class.getName(), null);
@@ -80,21 +85,6 @@ public class FragmentDashboardSync extends ViewFragment {
         }
     };
 
-/*
-    private int debug_count_down = 100;
-    private ViewCircle.OnProgressListener mProgressListener = new ViewCircle.OnProgressListener() {
-        @Override
-        public void onProgress(ViewCircle view, int begin, int end) {
-            // TEST, change timeout by when sync ready
-            debug_count_down--;
-            if (debug_count_down == 0) {
-                mViewProgress.stopProgress();
-                mActivityMain.selectFragment(FragmentDashboardChart.class.getName(), null);
-            }
-            /////////////////
-        }
-    };
-*/
     private void setTitle(String name) {
         String string = String.format(Locale.getDefault(), "%s's Watch", name);
         mActivityMain.toolbarSetTitle(string, false);
