@@ -17,30 +17,30 @@ import java.util.List;
 
 public abstract class ViewChart extends View {
 
-    private int mChartColor = Color.BLACK;
-    private int mChartWidth = 10;
-    private int mChartTextColor = Color.BLACK;
-    private int mChartTextSize = 30;
-    private int mChartTextStyle = Typeface.NORMAL;
-    private int mNodeColor = Color.GRAY;
-    private int mNodeSize = 15;
-    private int mAxisColor = Color.BLACK;
-    private int mAxisWidth = 6;
-    private int mAxisTextSize = 30;
-    private int mAxisTextColor = Color.BLACK;
-    private int mAxisTextStyle = Typeface.NORMAL;
-    private boolean mAxisHEnabled = false;
-    private boolean mAxisVEnabled = false;
+    public int mChartColor = Color.BLACK;
+    public int mChartWidth = 10;
+    public int mChartTextColor = Color.BLACK;
+    public int mChartTextSize = 30;
+    public int mChartTextStyle = Typeface.NORMAL;
+    public int mNodeColor = Color.GRAY;
+    public int mNodeSize = 15;
+    public int mAxisColor = Color.BLACK;
+    public int mAxisWidth = 6;
+    public int mAxisTextSize = 30;
+    public int mAxisTextColor = Color.BLACK;
+    public int mAxisTextStyle = Typeface.NORMAL;
+    public boolean mAxisHEnabled = false;
+    public boolean mAxisVEnabled = false;
 
-    protected Float mAxisHMax = 100.f;
-    protected Float mAxisHMin = 0.f;
-    protected Float mAxisVMax = 100.f;
-    protected Float mAxisVMin = 0.f;
-    protected List<Float> mAxisHMarker;
-    protected List<Float> mAxisVMarker;
-    protected List<Float> mAxisHNode;
-    protected List<Float> mAxisVNode;
-    protected List<PointF> mValue;
+    public Float mAxisHMax = 100.f;
+    public Float mAxisHMin = 0.f;
+    public Float mAxisVMax = 100.f;
+    public Float mAxisVMin = 0.f;
+    public List<Float> mAxisHMarker;
+    public List<Float> mAxisVMarker;
+    public List<Float> mAxisHNode;
+    public List<Float> mAxisVNode;
+    public List<PointF> mValue;
 
     public ViewChart(Context context) {
         super(context);

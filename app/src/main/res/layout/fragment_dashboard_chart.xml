@@ -108,12 +108,18 @@
         app:axisHMax="15000"
         app:chartTextSize="18sp" />
 
-    <TextView
+    <com.kidsdynamic.swing.androidswingapp.ViewChartKDWeek
         android:id="@+id/dashboard_chart_week"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="4"
-        android:visibility="gone" />
+        android:padding="20dp"
+        app:axisHEnabled="true"
+        app:axisHMax="7"
+        app:axisVMax="15000"
+        app:chartTextSize="12sp"
+        app:axisWidth="1dp"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/dashboard_chart_month"
