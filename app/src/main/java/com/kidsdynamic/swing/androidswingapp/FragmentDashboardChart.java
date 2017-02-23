@@ -291,16 +291,34 @@ public class FragmentDashboardChart extends ViewFragment {
         return door == INDOOR ? act.mIndoor.mSteps : act.mOutdoor.mSteps;
     }
 
-    private List<Integer> getStepWeek(int door) {
-        return door == INDOOR ? weekStepIndoor : weekStepOutdoor;
+    private List<WatchActivity.Act> getStepWeek(int door) {
+        List<WatchActivity> thisWeek = mActivityMain.mOperator.getActivityOfWeek();
+        List<WatchActivity.Act> rtn = new ArrayList<>();
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
+        return rtn;
     }
 
-    private List<Integer> getStepMonth(int door) {
-        return door == INDOOR ? monthStepIndoor : monthStepOutdoor;
+    private List<WatchActivity.Act> getStepMonth(int door) {
+        List<WatchActivity> thisWeek = mActivityMain.mOperator.getActivityOfMonth();
+        List<WatchActivity.Act> rtn = new ArrayList<>();
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
+        return rtn;
     }
 
-    private List<Integer> getStepYear(int door) {
-        return door == INDOOR ? yearStepIndoor : yearStepOutdoor;
+    private List<WatchActivity.Act> getStepYear(int door) {
+        List<WatchActivity> thisWeek = mActivityMain.mOperator.getActivityOfYear();
+        List<WatchActivity.Act> rtn = new ArrayList<>();
+
+        for (WatchActivity activity : thisWeek)
+            rtn.add(new WatchActivity.Act(door == INDOOR ? activity.mIndoor : activity.mOutdoor));
+
+        return rtn;
     }
 
 }

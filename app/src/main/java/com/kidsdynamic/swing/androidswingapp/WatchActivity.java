@@ -9,13 +9,29 @@ import java.io.Serializable;
 public class WatchActivity implements Serializable {
     Act mIndoor = new Act();
     Act mOutdoor = new Act();
-    long mTimestamp;
 
-    public class Act {
+    public static class Act {
         int mId;
         String mMacId;
         String mKidId;
         int mSteps;
+        long mTimestamp;
+
+        Act() {
+            init(0, "", "", 0, 0);
+        }
+
+        Act(Act src) {
+            init(src.mId, src.mMacId, src.mKidId, src.mSteps, src.mTimestamp);
+        }
+
+        void init(int id, String macId, String kidId, int steps, long timestamp) {
+            mId = id;
+            mMacId = macId;
+            mKidId = kidId;
+            mSteps = steps;
+            mTimestamp = timestamp;
+        }
     }
 
     WatchActivity() {
@@ -57,11 +73,13 @@ public class WatchActivity implements Serializable {
         mOutdoor.mMacId = outdoorMacId;
         mOutdoor.mKidId = outdoorKidId;
         mOutdoor.mSteps = outdoorSteps;
-        mTimestamp = timestamp;
+
+        mIndoor.mTimestamp = timestamp;
+        mOutdoor.mTimestamp = timestamp;
     }
 
     public void addInTimeRange(WatchActivity src, long rangeStart, long rangeEnd) {
-        if (src.mTimestamp>=rangeStart && src.mTimestamp<=rangeEnd) {
+        if (src.mIndoor.mTimestamp>=rangeStart && src.mIndoor.mTimestamp<=rangeEnd) {
             mIndoor.mSteps += src.mIndoor.mSteps;
             mOutdoor.mSteps += src.mOutdoor.mSteps;
         }
