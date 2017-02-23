@@ -22,7 +22,7 @@ public class ViewChartKDToday extends ViewChart {
 
     private float mTotal;
     private float mGoal;
-    private float mValue;
+    private WatchActivity.Act mValue;
 
     private Paint mPaint;
     private Rect mRect;
@@ -48,7 +48,7 @@ public class ViewChartKDToday extends ViewChart {
     }
 
     public void setValue(WatchActivity.Act value) {
-        mValue = value.mSteps;
+        mValue = new WatchActivity.Act(value);
     }
 
     public float getGoal() {
@@ -107,7 +107,7 @@ public class ViewChartKDToday extends ViewChart {
             drawAxisH(canvas, mRect);
         }
 
-        drawValue(canvas, mRect, mValue);
+        drawValue(canvas, mRect, mValue.mSteps);
         drawTotal(canvas, mRect);
         drawGoal(canvas, mRect);
     }

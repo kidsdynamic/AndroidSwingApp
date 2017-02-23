@@ -270,22 +270,6 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewChartYear.setText(getStepYear(getDoor()).toString());
     }
 
-    private List<Integer> makeFakeList(int count, int maximum) {
-        List<Integer> list = new ArrayList<>();
-        for (int idx = 0; idx < count; idx++)
-            list.add((int) (Math.random() * maximum));
-        return list;
-    }
-
-    int todayStepIndoor = (int) (Math.random() * 7500);
-    int todayStepOutdoor = (int) (Math.random() * 7500);
-    List<Integer> weekStepIndoor = makeFakeList(7, 7500);
-    List<Integer> weekStepOutdoor = makeFakeList(7, 7500);
-    List<Integer> monthStepIndoor = makeFakeList(30, 7500);
-    List<Integer> monthStepOutdoor = makeFakeList(30, 7500);
-    List<Integer> yearStepIndoor = makeFakeList(12, 30 * 7500);
-    List<Integer> yearStepOutdoor = makeFakeList(12, 30 * 7500);
-
     private WatchActivity.Act getStepToday(int door) {
         WatchActivity act = mActivityMain.mOperator.getActivityOfDay();
         return door == INDOOR ? act.mIndoor : act.mOutdoor;

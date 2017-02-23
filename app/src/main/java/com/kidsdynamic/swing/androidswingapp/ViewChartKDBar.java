@@ -11,6 +11,7 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,8 +29,7 @@ public class ViewChartKDBar extends ViewChart {
     private Rect mRectH;
     private Rect mRectV;
 
-    private List<Integer> mValue;
-    private List<Long> mDate;
+    private List<WatchActivity.Act> mValue;
     private String mTitle = "Step";
 
     public ViewChartKDBar(Context context) {
@@ -49,7 +49,6 @@ public class ViewChartKDBar extends ViewChart {
 
     private void init(Context context, AttributeSet attrs) {
         mValue = new ArrayList<>();
-        mDate = new ArrayList<>();
 
         mPaint = new Paint();
         mRect = new Rect();
@@ -61,8 +60,7 @@ public class ViewChartKDBar extends ViewChart {
         mValue.clear();
 
         for (WatchActivity.Act act : list) {
-            mValue.add(act.mSteps);
-            mDate.add(act.mTimestamp);
+            mValue.add(act);
         }
     }
 
@@ -106,14 +104,19 @@ public class ViewChartKDBar extends ViewChart {
 
     @Override
     public void onDraw(Canvas canvas) {
-        int dayWidth = mRect.width() * 162 / 1734;  // 1.62:1.00 Golder ratio. 7 days + 6 gaps = 1734.
-        int gapWidth = mRect.width() * 100 / 1734;
+        int colCount = mValue.size();
+        int gapCount = colCount - 1;
+
+        int sum = (colCount * 162) + (gapCount * 100); // 1.62:1.00 Golder ratio.
+
+        int colWidth = mRect.width() * 162 / sum;
+        int gapWidth = mRect.width() * 100 / sum;
 
         mRectV.set(mRect.left, mRect.top, mRect.right, mRect.top + mRect.height() * 3 / 4);
-        mRectH.set(mRectV.left, mRectV.top, mRectV.left + dayWidth, mRectV.bottom);
+        mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
         for (int idx = 0; idx < 7; idx++) {
             drawValue(canvas, mRectH, idx);
-            mRectH.offset(dayWidth + gapWidth, 0);
+            mRectH.offset(colWidth + gapWidth, 0);
         }
 
         mRectV.top = mRectV.bottom;
@@ -123,10 +126,10 @@ public class ViewChartKDBar extends ViewChart {
 
         mRectV.top = mRectV.bottom;
         mRectV.bottom = (mRect.bottom + mRectV.top) / 2;
-        mRectH.set(mRectV.left, mRectV.top, mRectV.left + dayWidth, mRectV.bottom);
+        mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
         for (int idx = 0; idx < 7; idx++) {
             drawDate(canvas, mRectH, idx);
-            mRectH.offset(dayWidth + gapWidth, 0);
+            mRectH.offset(colWidth + gapWidth, 0);
         }
 
         mRectV.top = mRectV.bottom;
@@ -134,12 +137,12 @@ public class ViewChartKDBar extends ViewChart {
         drawTitle(canvas, mRectV, mTitle);
     }
 
-    private void drawValue(Canvas canvas, Rect rect, int day) {
+    private void drawValue(Canvas canvas, Rect rect, int index) {
         Rect barRect = new Rect(rect);
 
         int value = 0;
-        if (day < mValue.size())
-            value = Math.round(mValue.get(day));
+        if (index < mValue.size())
+            value = mValue.get(index).mSteps;
 
         int bound = value;
         if (bound > mAxisVMax)
@@ -160,12 +163,12 @@ public class ViewChartKDBar extends ViewChart {
         Rect textRect = new Rect();
         String text = String.format(Locale.US, "%d", (int) value);
 
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mChartTextStyle));
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(Color.WHITE);
 
-        int textPadding = 4;
+        int textPadding = 5;
         textX = barRect.left + (barRect.width() - textRect.width()) / 2;
         if ((barRect.height() - (textPadding * 2)) > textRect.height())
             textY = barRect.top + textRect.height() + textPadding;
@@ -184,8 +187,30 @@ public class ViewChartKDBar extends ViewChart {
         canvas.drawRect(rect, mPaint);
     }
 
-    private void drawDate(Canvas canvas, Rect rect, long date) {
+    private void drawDate(Canvas canvas, Rect rect, int index) {
+        Calendar cale = Calendar.getInstance();
+        long date = cale.getTimeInMillis();
 
+        if (index < mValue.size())
+            date = mValue.get(index).mTimestamp;
+
+        cale.setTimeInMillis(date);
+
+        String text = String.format(Locale.US, "%d/%d", cale.get(Calendar.MONTH)+1, cale.get(Calendar.DAY_OF_MONTH));
+
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mChartTextStyle));
+        mPaint.setTextSize(mChartTextSize + 1);
+        mPaint.setColor(Color.WHITE);
+
+        Rect textRect = new Rect();
+        mPaint.getTextBounds(text, 0, text.length(), textRect);
+
+        int textX = rect.left + (rect.width() - textRect.width()) / 2;
+        int textY = rect.top + textRect.height() + 5; // padding 5
+
+        canvas.drawText(text, textX, textY, mPaint);
     }
 
     private void drawTitle(Canvas canvas, Rect rect, String title) {
