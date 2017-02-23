@@ -73,8 +73,8 @@ class WatchOperatorUpdateActivity {
                 }
 
                 for (WatchActivity act : mActivities) {
-                    long actEnd = act.mTimestamp + 86400000;
-                    if (timestamp >= act.mTimestamp && timestamp <= actEnd) {
+                    long actEnd = act.mIndoor.mTimestamp + 86400000;
+                    if (timestamp >= act.mIndoor.mTimestamp && timestamp <= actEnd) {
                         if (activity.type.equals("INDOOR")) {
                             act.mIndoor.mId = activity.id;
                             act.mIndoor.mMacId = activity.macId;
