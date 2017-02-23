@@ -57,22 +57,13 @@ public class ViewChartKDBar extends ViewChart {
         mRectH = new Rect();
     }
 
-    public void addValue(int value) {
-        mValue.add(value);
-    }
-
-    public void setValue(List<Integer> value) {
+    public void setValue(List<WatchActivity.Act> list) {
         mValue.clear();
-        mValue.addAll(value);
-    }
 
-    public void addDate(long date) {
-        mDate.add(date);
-    }
-
-    public void setDate(List<Long> date) {
-        mDate.clear();
-        mDate.addAll(date);
+        for (WatchActivity.Act act : list) {
+            mValue.add(act.mSteps);
+            mDate.add(act.mTimestamp);
+        }
     }
 
     public void setTitle(String title) {

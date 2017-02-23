@@ -47,12 +47,8 @@ public class ViewChartKDToday extends ViewChart {
         mRect = new Rect();
     }
 
-    public float getValue() {
-        return mValue;
-    }
-
-    public void setValue(float value) {
-        mValue = value;
+    public void setValue(WatchActivity.Act value) {
+        mValue = value.mSteps;
     }
 
     public float getGoal() {

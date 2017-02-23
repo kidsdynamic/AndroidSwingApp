@@ -95,7 +95,7 @@ public class FragmentDashboardChart extends ViewFragment {
         super.onResume();
 
         // todo: load today step here.
-        int step = getStepToday(INDOOR) + getStepToday(OUTDOOR);
+        int step = getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps;
 
         int emotion = EMOTION_LOW;
         if (step > 6000)
@@ -237,7 +237,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewChartYear.setVisibility(View.GONE);
 
         mViewChartToday.setValue(getStepToday(getDoor()));
-        mViewChartToday.setTotal(getStepToday(INDOOR) + getStepToday(OUTDOOR));
+        mViewChartToday.setTotal(getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps);
         mViewChartToday.setGoal(12000);
         mViewChartToday.invalidate();
     }
@@ -286,9 +286,9 @@ public class FragmentDashboardChart extends ViewFragment {
     List<Integer> yearStepIndoor = makeFakeList(12, 30 * 7500);
     List<Integer> yearStepOutdoor = makeFakeList(12, 30 * 7500);
 
-    private int getStepToday(int door) {
+    private WatchActivity.Act getStepToday(int door) {
         WatchActivity act = mActivityMain.mOperator.getActivityOfDay();
-        return door == INDOOR ? act.mIndoor.mSteps : act.mOutdoor.mSteps;
+        return door == INDOOR ? act.mIndoor : act.mOutdoor;
     }
 
     private List<WatchActivity.Act> getStepWeek(int door) {
