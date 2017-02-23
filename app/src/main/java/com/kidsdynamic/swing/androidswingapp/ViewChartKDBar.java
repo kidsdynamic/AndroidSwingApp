@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,63 +18,65 @@ import java.util.Locale;
  * Created by 03543 on 2017/2/22.
  */
 
-public class ViewChartKDWeek extends ViewChart {
+public class ViewChartKDBar extends ViewChart {
 
     private int mDesiredWidth = 160;
     private int mDesiredHeight = 100;
 
     private Paint mPaint;
     private Rect mRect;
-    private Rect mDayRect;
-    private Rect mAxisHRect;
+    private Rect mRectH;
+    private Rect mRectV;
 
-    public ViewChartKDWeek(Context context) {
+    private List<Integer> mValue;
+    private List<Long> mDate;
+    private String mTitle = "Step";
+
+    public ViewChartKDBar(Context context) {
         super(context);
         init(context, null);
     }
 
-    public ViewChartKDWeek(Context context, AttributeSet attrs) {
+    public ViewChartKDBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public ViewChartKDWeek(Context context, AttributeSet attrs, int defStyle) {
+    public ViewChartKDBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attrs) {
+        mValue = new ArrayList<>();
+        mDate = new ArrayList<>();
+
         mPaint = new Paint();
         mRect = new Rect();
-        mDayRect = new Rect();
-        mAxisHRect = new Rect();
+        mRectV = new Rect();
+        mRectH = new Rect();
     }
 
-    @Override
-    public void setValue(PointF point) {
-        setValue(point.x, point.y);
+    public void addValue(int value) {
+        mValue.add(value);
     }
 
-    @Override
-    public void setValue(float x, float y) {
-        boolean found = false;
-
-        for (PointF point : mValue) {
-            if (point.x != x)
-                continue;
-
-            found = true;
-            point.y = y;
-        }
-
-        if (!found)
-            mValue.add(new PointF(x, y));
+    public void setValue(List<Integer> value) {
+        mValue.clear();
+        mValue.addAll(value);
     }
 
-    public void setValue(List<Integer> list) {
-        int count = list.size();
-        for (int x = 0; x < count; x++)
-            setValue(x, list.get(x));
+    public void addDate(long date) {
+        mDate.add(date);
+    }
+
+    public void setDate(List<Long> date) {
+        mDate.clear();
+        mDate.addAll(date);
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     @Override
@@ -108,8 +111,6 @@ public class ViewChartKDWeek extends ViewChart {
         setMeasuredDimension(width, height);
 
         mRect.set(getPaddingStart(), getPaddingTop(), getMeasuredWidth() - getPaddingEnd(), getMeasuredHeight() - getPaddingBottom());
-        mAxisHRect.set(mRect);
-        mAxisHRect.top = mRect.top + (mRect.height() * 4 / 5);
     }
 
     @Override
@@ -117,28 +118,37 @@ public class ViewChartKDWeek extends ViewChart {
         int dayWidth = mRect.width() * 162 / 1734;  // 1.62:1.00 Golder ratio. 7 days + 6 gaps = 1734.
         int gapWidth = mRect.width() * 100 / 1734;
 
-        mPaint.reset();
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(getChartColor());
-        mPaint.setStyle(Paint.Style.FILL);
-
-        mDayRect.set(mRect.left, mRect.top, mRect.left + dayWidth, mAxisHRect.top - 1);
+        mRectV.set(mRect.left, mRect.top, mRect.right, mRect.top + mRect.height() * 3 / 4);
+        mRectH.set(mRectV.left, mRectV.top, mRectV.left + dayWidth, mRectV.bottom);
         for (int idx = 0; idx < 7; idx++) {
-            drawDay(canvas, mDayRect, idx);
-            mDayRect.offset(dayWidth + gapWidth, 0);
+            drawValue(canvas, mRectH, idx);
+            mRectH.offset(dayWidth + gapWidth, 0);
         }
 
-        if (isAxisHEnabled()) {
-            drawAxisH(canvas, mAxisHRect);
+        mRectV.top = mRectV.bottom;
+        mRectV.bottom = mRectV.top + (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                mAxisWidth, getResources().getDisplayMetrics());
+        drawAxisH(canvas, mRectV);
+
+        mRectV.top = mRectV.bottom;
+        mRectV.bottom = (mRect.bottom + mRectV.top) / 2;
+        mRectH.set(mRectV.left, mRectV.top, mRectV.left + dayWidth, mRectV.bottom);
+        for (int idx = 0; idx < 7; idx++) {
+            drawDate(canvas, mRectH, idx);
+            mRectH.offset(dayWidth + gapWidth, 0);
         }
+
+        mRectV.top = mRectV.bottom;
+        mRectV.bottom = mRect.bottom;
+        drawTitle(canvas, mRectV, mTitle);
     }
 
-    private void drawDay(Canvas canvas, Rect rect, int day) {
+    private void drawValue(Canvas canvas, Rect rect, int day) {
         Rect barRect = new Rect(rect);
 
         int value = 0;
         if (day < mValue.size())
-            value = (int) mValue.get(day).y;
+            value = Math.round(mValue.get(day));
 
         int bound = value;
         if (bound > mAxisVMax)
@@ -150,7 +160,7 @@ public class ViewChartKDWeek extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(getChartColor());
+        mPaint.setColor(mChartColor);
         mPaint.setStyle(Paint.Style.FILL);
 
         canvas.drawRect(barRect, mPaint);
@@ -159,8 +169,8 @@ public class ViewChartKDWeek extends ViewChart {
         Rect textRect = new Rect();
         String text = String.format(Locale.US, "%d", (int) value);
 
-        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        mPaint.setTextSize(getChartTextSize() + 1);
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mChartTextStyle));
+        mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(Color.WHITE);
 
@@ -177,12 +187,38 @@ public class ViewChartKDWeek extends ViewChart {
     private void drawAxisH(Canvas canvas, Rect rect) {
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(getChartColor());
+        mPaint.setColor(mChartColor);
         mPaint.setStyle(Paint.Style.FILL);
 
-        int y = rect.top;
-        y += (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                mAxisWidth, getResources().getDisplayMetrics());
-        canvas.drawRect(rect.left, rect.top, rect.right, y, mPaint);
+        canvas.drawRect(rect, mPaint);
+    }
+
+    private void drawDate(Canvas canvas, Rect rect, long date) {
+
+    }
+
+    private void drawTitle(Canvas canvas, Rect rect, String title) {
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setColor(mChartColor);
+        mPaint.setStyle(Paint.Style.FILL);
+
+        canvas.drawRect(rect, mPaint);
+
+        mPaint.setTextSize(mAxisTextSize + 1);
+        mPaint.setColor(Color.WHITE);
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+
+        Rect textRect = new Rect();
+        mPaint.getTextBounds(title, 0, title.length(), textRect);
+
+        int x = (rect.width() - textRect.width()) / 2;
+        int y = rect.bottom - ((rect.height() - textRect.height()) / 2);
+
+        Log.d("xxx", "title:" + title);
+        Log.d("xxx", "rect:" + rect.toString());
+        Log.d("xxx", "textrect:" + textRect.toString());
+
+        canvas.drawText(title, x, y, mPaint);
     }
 }

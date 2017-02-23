@@ -108,7 +108,7 @@
         app:axisHMax="15000"
         app:chartTextSize="18sp" />
 
-    <com.kidsdynamic.swing.androidswingapp.ViewChartKDWeek
+    <com.kidsdynamic.swing.androidswingapp.ViewChartKDBar
         android:id="@+id/dashboard_chart_week"
         android:layout_width="match_parent"
         android:layout_height="0dp"

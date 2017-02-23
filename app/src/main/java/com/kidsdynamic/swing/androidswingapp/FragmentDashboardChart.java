@@ -42,7 +42,7 @@ public class FragmentDashboardChart extends ViewFragment {
     private TextView mViewEmotionTitle;
     private TextView mViewEmotionMessage;
     private ViewChartKDToday mViewChartToday;
-    private ViewChartKDWeek mViewChartWeek;
+    private ViewChartKDBar mViewChartWeek;
     private TextView mViewChartMonth;
     private TextView mViewChartYear;
     private ViewBorderButton mViewIndoor;
@@ -71,7 +71,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewEmotionMessage = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_message);
 
         mViewChartToday = (ViewChartKDToday) mViewMain.findViewById(R.id.dashboard_chart_today);
-        mViewChartWeek = (ViewChartKDWeek) mViewMain.findViewById(R.id.dashboard_chart_week);
+        mViewChartWeek = (ViewChartKDBar) mViewMain.findViewById(R.id.dashboard_chart_week);
         mViewChartMonth = (TextView) mViewMain.findViewById(R.id.dashboard_chart_month);
         mViewChartYear = (TextView) mViewMain.findViewById(R.id.dashboard_chart_year);
 
@@ -180,8 +180,8 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewIndoor.setBorderColor(mEmotionColor);
         mViewOutdoor.setBorderColor(mEmotionColor);
 
-        mViewChartToday.setChartColor(mEmotionColor);
-        mViewChartWeek.setChartColor(mEmotionColor);
+        mViewChartToday.mChartColor = mEmotionColor;
+        mViewChartWeek.mChartColor = mEmotionColor;
         mViewChartMonth.setTextColor(mEmotionColor);
         mViewChartYear.setTextColor(mEmotionColor);
 
@@ -236,7 +236,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewChartMonth.setVisibility(View.GONE);
         mViewChartYear.setVisibility(View.GONE);
 
-        mViewChartToday.setValue(getStepToday(getDoor()), 0);
+        mViewChartToday.setValue(getStepToday(getDoor()));
         mViewChartToday.setTotal(getStepToday(INDOOR) + getStepToday(OUTDOOR));
         mViewChartToday.setGoal(12000);
         mViewChartToday.invalidate();

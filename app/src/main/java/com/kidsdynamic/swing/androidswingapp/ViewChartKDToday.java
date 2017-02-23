@@ -5,9 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PointF;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
@@ -24,6 +22,7 @@ public class ViewChartKDToday extends ViewChart {
 
     private float mTotal;
     private float mGoal;
+    private float mValue;
 
     private Paint mPaint;
     private Rect mRect;
@@ -48,10 +47,12 @@ public class ViewChartKDToday extends ViewChart {
         mRect = new Rect();
     }
 
-    @Override
-    public void setValue(float x, float y) {
-        mValue.clear();
-        setValue(new PointF(x, y));
+    public float getValue() {
+        return mValue;
+    }
+
+    public void setValue(float value) {
+        mValue = value;
     }
 
     public float getGoal() {
@@ -106,13 +107,11 @@ public class ViewChartKDToday extends ViewChart {
 
     @Override
     public void onDraw(Canvas canvas) {
-        if (isAxisHEnabled())
+        if (mAxisHEnabled) {
             drawAxisH(canvas, mRect);
-
-        if (mValue.size() > 0) {
-            drawValue(canvas, mRect, mValue.get(0).x);
         }
 
+        drawValue(canvas, mRect, mValue);
         drawTotal(canvas, mRect);
         drawGoal(canvas, mRect);
     }
@@ -120,7 +119,7 @@ public class ViewChartKDToday extends ViewChart {
     private void drawAxisH(Canvas canvas, Rect rect) {
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(getAxisColor());
+        mPaint.setColor(mAxisColor);
         mPaint.setStyle(Paint.Style.FILL);
 
         canvas.drawRect(rect, mPaint);
@@ -138,7 +137,7 @@ public class ViewChartKDToday extends ViewChart {
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(getChartColor());
+        mPaint.setColor(mChartColor);
         mPaint.setStyle(Paint.Style.FILL);
 
         canvas.drawRect(barRect, mPaint);
@@ -148,12 +147,12 @@ public class ViewChartKDToday extends ViewChart {
         String text = String.format(Locale.US, "Step %d", (int) value);
 
         mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        mPaint.setTextSize(getChartTextSize() + 1);
+        mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
         int textPadding = 20;
         if ((textRect.width() + (2 * textPadding)) > barRect.width()) {
-            mPaint.setColor(getChartColor());
+            mPaint.setColor(mChartColor);
             textX = barRect.right + textPadding;
         } else {
             mPaint.setColor(Color.WHITE);
@@ -167,11 +166,11 @@ public class ViewChartKDToday extends ViewChart {
     private void drawTotal(Canvas canvas, Rect rect) {
         int posX = rect.left + (int) (mTotal * rect.width() / mAxisHMax);
         int posY = rect.bottom;
-        int size = getChartTextSize() + 1;
+        int size = mChartTextSize + 1;
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
-        mPaint.setColor(getChartColor());
+        mPaint.setColor(mChartColor);
         mPaint.setStyle(Paint.Style.FILL);
 
         Path path = new Path();
@@ -187,9 +186,9 @@ public class ViewChartKDToday extends ViewChart {
         String text = String.format(Locale.US, "Total %d", (int) mTotal);
 
         mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        mPaint.setTextSize(getChartTextSize() + 1);
+        mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
-        mPaint.setColor(getChartColor());
+        mPaint.setColor(mChartColor);
 
         int textPadding = (size / 2) + 5;
         if ((posX - textRect.width() - textPadding * 2) > 0) {
@@ -205,7 +204,7 @@ public class ViewChartKDToday extends ViewChart {
     private void drawGoal(Canvas canvas, Rect rect) {
         int posX = rect.left + (int) (mGoal * rect.width() / mAxisHMax);
         int posY = rect.top;
-        int size = getChartTextSize() + 1;
+        int size = mChartTextSize + 1;
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
@@ -225,7 +224,7 @@ public class ViewChartKDToday extends ViewChart {
         String text = "Goal";
 
         mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        mPaint.setTextSize(getChartTextSize() + 1);
+        mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
         mPaint.setColor(Color.RED);
 
