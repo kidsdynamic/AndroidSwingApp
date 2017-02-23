@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -114,7 +115,7 @@ public class ViewChartKDBar extends ViewChart {
 
         mRectV.set(mRect.left, mRect.top, mRect.right, mRect.top + mRect.height() * 3 / 4);
         mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
-        for (int idx = 0; idx < 7; idx++) {
+        for (int idx = 0; idx < mValue.size(); idx++) {
             drawValue(canvas, mRectH, idx);
             mRectH.offset(colWidth + gapWidth, 0);
         }
@@ -127,8 +128,11 @@ public class ViewChartKDBar extends ViewChart {
         mRectV.top = mRectV.bottom;
         mRectV.bottom = (mRect.bottom + mRectV.top) / 2;
         mRectH.set(mRectV.left, mRectV.top, mRectV.left + colWidth, mRectV.bottom);
-        for (int idx = 0; idx < 7; idx++) {
-            drawDate(canvas, mRectH, idx);
+        for (int idx = 0; idx < mValue.size(); idx++) {
+            if (mValue.size() > 7)
+                drawMonth(canvas, mRectH, idx);
+            else
+                drawDate(canvas, mRectH, idx);
             mRectH.offset(colWidth + gapWidth, 0);
         }
 
@@ -159,6 +163,9 @@ public class ViewChartKDBar extends ViewChart {
 
         canvas.drawRect(barRect, mPaint);
 
+        if (mChartTextColor == Color.TRANSPARENT)
+            return;
+
         int textX, textY;
         Rect textRect = new Rect();
         String text = String.format(Locale.US, "%d", (int) value);
@@ -166,7 +173,7 @@ public class ViewChartKDBar extends ViewChart {
         mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         mPaint.setTextSize(mChartTextSize + 1);
         mPaint.getTextBounds(text, 0, text.length(), textRect);
-        mPaint.setColor(Color.WHITE);
+        mPaint.setColor(mChartTextColor);
 
         int textPadding = 5;
         textX = barRect.left + (barRect.width() - textRect.width()) / 2;
@@ -187,7 +194,10 @@ public class ViewChartKDBar extends ViewChart {
         canvas.drawRect(rect, mPaint);
     }
 
-    private void drawDate(Canvas canvas, Rect rect, int index) {
+    private void drawMonth(Canvas canvas, Rect rect, int index) {
+        if((index % 2) == 0)
+            return;
+
         Calendar cale = Calendar.getInstance();
         long date = cale.getTimeInMillis();
 
@@ -196,7 +206,8 @@ public class ViewChartKDBar extends ViewChart {
 
         cale.setTimeInMillis(date);
 
-        String text = String.format(Locale.US, "%d/%d", cale.get(Calendar.MONTH)+1, cale.get(Calendar.DAY_OF_MONTH));
+        SimpleDateFormat month_date = new SimpleDateFormat("MMM", Locale.US);
+        String text = month_date.format(date);
 
         mPaint.reset();
         mPaint.setAntiAlias(true);
@@ -208,7 +219,33 @@ public class ViewChartKDBar extends ViewChart {
         mPaint.getTextBounds(text, 0, text.length(), textRect);
 
         int textX = rect.left + (rect.width() - textRect.width()) / 2;
-        int textY = rect.top + textRect.height() + 5; // padding 5
+        int textY = rect.top + mChartTextSize + 5; // padding 5
+
+        canvas.drawText(text, textX, textY, mPaint);
+    }
+
+    private void drawDate(Canvas canvas, Rect rect, int index) {
+        Calendar cale = Calendar.getInstance();
+        long date = cale.getTimeInMillis();
+
+        if (index < mValue.size())
+            date = mValue.get(index).mTimestamp;
+
+        cale.setTimeInMillis(date);
+
+        String text = String.format(Locale.US, "%d/%d", cale.get(Calendar.MONTH) + 1, cale.get(Calendar.DAY_OF_MONTH));
+
+        mPaint.reset();
+        mPaint.setAntiAlias(true);
+        mPaint.setTypeface(Typeface.create(Typeface.DEFAULT, mChartTextStyle));
+        mPaint.setTextSize(mChartTextSize + 1);
+        mPaint.setColor(Color.WHITE);
+
+        Rect textRect = new Rect();
+        mPaint.getTextBounds(text, 0, text.length(), textRect);
+
+        int textX = rect.left + (rect.width() - textRect.width()) / 2;
+        int textY = rect.top + mChartTextSize + 5; // padding 5
 
         canvas.drawText(text, textX, textY, mPaint);
     }
