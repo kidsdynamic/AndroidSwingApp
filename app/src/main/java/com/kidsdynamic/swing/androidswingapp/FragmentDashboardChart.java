@@ -38,9 +38,7 @@ public class FragmentDashboardChart extends ViewFragment {
     private ViewDotIndicator mViewIndicator;
     private ViewTextSelector mViewSelector;
 
-    private ImageView mViewEmotionImage;
-    private TextView mViewEmotionTitle;
-    private TextView mViewEmotionMessage;
+    private TextView mViewMessage;
     private ViewChartKDToday mViewChartToday;
     private ViewChartKDBar mViewChartWeek;
     private ViewChartKDCurve mViewChartMonth;
@@ -66,9 +64,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewSelector = (ViewTextSelector) mViewMain.findViewById(R.id.dashboard_chart_selector);
         mViewSelector.setOnSelectListener(mSelectorListener);
 
-        mViewEmotionImage = (ImageView) mViewMain.findViewById(R.id.dashboard_chart_emotion_image);
-        mViewEmotionTitle = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_title);
-        mViewEmotionMessage = (TextView) mViewMain.findViewById(R.id.dashboard_chart_emotion_message);
+        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_chart_message);
 
         mViewChartToday = (ViewChartKDToday) mViewMain.findViewById(R.id.dashboard_chart_today);
         mViewChartWeek = (ViewChartKDBar) mViewMain.findViewById(R.id.dashboard_chart_week);
@@ -113,11 +109,6 @@ public class FragmentDashboardChart extends ViewFragment {
 
         setDoor(INDOOR);
         showToday();
-
-        Animation animation = new TranslateAnimation(0, 0, 300, 0);
-        animation.setDuration(500);
-        animation.setFillAfter(true);
-        mViewEmotionImage.startAnimation(animation);
     }
 
     @Override
@@ -147,35 +138,28 @@ public class FragmentDashboardChart extends ViewFragment {
                 mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_blue_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster01);
-                mViewEmotionImage.setImageResource(R.mipmap.monster_face_blue);
-                mViewEmotionTitle.setText("Below Average!");
-                mViewEmotionMessage.setText("Don't Give Up!\nYou Can Do This!");
+                mViewMessage.setText("Don't Give Up!\nYou Can Do This!");
                 break;
 
             case EMOTION_ALMOST:
                 mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_green_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster02);
-                mViewEmotionImage.setImageResource(R.mipmap.monster_face_green);
-                mViewEmotionTitle.setText("Almost There!");
-                mViewEmotionMessage.setText("One More Time!\nYou Are Almost There!");
+                mViewMessage.setText("One More Time!\nYou Are Almost There!");
                 break;
 
             default:
                 mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_orange_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster03);
-                mViewEmotionImage.setImageResource(R.mipmap.monster_face_yellow);
-                mViewEmotionTitle.setText("Excellent!");
-                mViewEmotionMessage.setText("Woohoo! You've\nReached Your Goal!");
+                mViewMessage.setText("Woohoo! You've\nReached Your Goal!");
                 break;
         }
 
         mViewIndicator.setDotColorOn(mEmotionColor);
         mViewSelector.setTextColor(mEmotionColor);
         mViewSelector.setSelectorColor(mEmotionColor);
-        mViewEmotionTitle.setTextColor(mEmotionColor);
-        mViewEmotionMessage.setTextColor(mEmotionColor);
+        mViewMessage.setTextColor(mEmotionColor);
         mViewIndoor.setBorderColor(mEmotionColor);
         mViewOutdoor.setBorderColor(mEmotionColor);
 
@@ -230,6 +214,7 @@ public class FragmentDashboardChart extends ViewFragment {
     }
 
     private void showToday() {
+        mViewMessage.setVisibility(View.VISIBLE);
         mViewChartToday.setVisibility(View.VISIBLE);
         mViewChartWeek.setVisibility(View.GONE);
         mViewChartMonth.setVisibility(View.GONE);
@@ -242,6 +227,7 @@ public class FragmentDashboardChart extends ViewFragment {
     }
 
     private void showWeek() {
+        mViewMessage.setVisibility(View.GONE);
         mViewChartToday.setVisibility(View.GONE);
         mViewChartWeek.setVisibility(View.VISIBLE);
         mViewChartMonth.setVisibility(View.GONE);
@@ -252,6 +238,7 @@ public class FragmentDashboardChart extends ViewFragment {
     }
 
     private void showMonth() {
+        mViewMessage.setVisibility(View.GONE);
         mViewChartToday.setVisibility(View.GONE);
         mViewChartWeek.setVisibility(View.GONE);
         mViewChartMonth.setVisibility(View.VISIBLE);
@@ -262,6 +249,7 @@ public class FragmentDashboardChart extends ViewFragment {
     }
 
     private void showYear() {
+        mViewMessage.setVisibility(View.GONE);
         mViewChartToday.setVisibility(View.GONE);
         mViewChartWeek.setVisibility(View.GONE);
         mViewChartMonth.setVisibility(View.GONE);

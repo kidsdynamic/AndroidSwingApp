@@ -43,6 +43,7 @@ public class ViewChartKDToday extends ViewChart {
     }
 
     private void init(Context context, AttributeSet attrs) {
+        mValue = new WatchActivity.Act();
         mPaint = new Paint();
         mRect = new Rect();
     }
@@ -238,7 +239,7 @@ public class ViewChartKDToday extends ViewChart {
     private Rect makeAxisXRect() {
         Rect rect = new Rect();
 
-        int height = (getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) * 4 / 9;
+        int height = (getMeasuredHeight() - getPaddingTop() - getPaddingBottom()) * 2 / 5;
 
         rect.left = getPaddingStart();
         rect.right = getMeasuredWidth() - getPaddingEnd();

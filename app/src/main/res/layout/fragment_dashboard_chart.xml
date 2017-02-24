@@ -57,45 +57,14 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/dashboard_chart_message"
+        style="@style/dashboard_chart_emotion"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
-        android:paddingEnd="20dp"
-        android:paddingStart="20dp">
-
-        <ImageView
-            android:id="@+id/dashboard_chart_emotion_image"
-            style="@style/dashboard_chart_emotion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:adjustViewBounds="true"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/monster_face_yellow" />
-
-        <TextView
-            android:id="@+id/dashboard_chart_emotion_title"
-            style="@style/dashboard_chart_emotion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start|center_vertical" />
-
-        <TextView
-            android:id="@+id/dashboard_chart_emotion_message"
-            style="@style/dashboard_chart_emotion"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/dashboard_chart_emotion_title"
-            android:gravity="start|center_vertical" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@color/color_gray_light" />
-    </RelativeLayout>
+        android:layout_gravity="center"
+        android:gravity="center" />
 
     <com.kidsdynamic.swing.androidswingapp.ViewChartKDToday
         android:id="@+id/dashboard_chart_today"
@@ -112,7 +81,7 @@
         android:id="@+id/dashboard_chart_week"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="6"
         android:padding="20dp"
         android:visibility="gone"
         app:axisTextSize="12sp"
@@ -125,7 +94,7 @@
         android:id="@+id/dashboard_chart_month"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="6"
         android:padding="20dp"
         android:visibility="gone"
         app:axisTextSize="12sp"
@@ -137,7 +106,7 @@
         android:id="@+id/dashboard_chart_year"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
+        android:layout_weight="6"
         android:padding="20dp"
         android:visibility="gone"
         app:axisTextSize="12sp"
