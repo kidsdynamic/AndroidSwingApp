@@ -79,7 +79,7 @@ public class FragmentDashboardSync extends ViewFragment {
 
             mViewProgress.stopProgress();
             if (msg.equals(""))
-                mActivityMain.selectFragment(FragmentDashboardChart.class.getName(), null);
+                mActivityMain.selectFragment(FragmentDashboardSelect.class.getName(), null);
             else
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
         }

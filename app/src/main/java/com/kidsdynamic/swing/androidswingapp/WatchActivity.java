@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 
 public class WatchActivity implements Serializable {
+    public static final int STEP_ALMOST = 9000;
+    public static final int STEP_GOAL = 12000;
+
     Act mIndoor = new Act();
     Act mOutdoor = new Act();
 
