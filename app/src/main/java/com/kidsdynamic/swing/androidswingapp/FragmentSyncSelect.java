@@ -33,6 +33,13 @@ public class FragmentSyncSelect extends ViewFragment {
 
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.sync_select_container);
 
+        return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         mDeviceList = mActivityMain.mOperator.getKids();
         for (WatchContact.Kid device : mDeviceList)
             addDevice(device);
@@ -44,13 +51,12 @@ public class FragmentSyncSelect extends ViewFragment {
                 break;
             }
         }
-
-        return mViewMain;
     }
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sync", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_sync), true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 

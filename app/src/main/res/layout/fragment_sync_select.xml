@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Select Watch\nto Sync" />
+        android:text="@string/sync_select_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"

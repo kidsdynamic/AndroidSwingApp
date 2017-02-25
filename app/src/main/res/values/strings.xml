@@ -215,6 +215,9 @@
     <string name="sync_search_again">"Try Again"</string>
     <string name="sync_search_last">"Go to Last Synced Data"</string>
 
+    <!-- FragmentSyncSelect -->
+    <string name="sync_select_message">"Select Watch\nto Sync"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>
