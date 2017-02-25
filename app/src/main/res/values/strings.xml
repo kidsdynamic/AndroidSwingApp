@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">"AndroidSwingApp"</string>
 
+    <!-- Language: Warning DO NOT translate below -->
     <string name="language_en_us">"English"</string>
     <string name="language_zh_tw">"繁體中文"</string>
     <string name="language_zh_cn">"简体中文"</string>
@@ -9,6 +10,7 @@
     <string name="title_boot">"Boot"</string>
     <string name="title_calendar">"Calendar"</string>
     <string name="title_dashboard">"Dashboard"</string>
+    <string name="title_photo">Photo</string>
 
     <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">"Agenda"</string>
@@ -72,10 +74,15 @@
     <string name="device_no_watch">"You Haven\'t Any Watch"</string>
     <string name="device_owner">"%s's Watch"</string>
 
+    <!-- FragmentPhotoClip -->
+    <string name="photo_clip_cancel">"Cancel"</string>
+    <string name="photo_clip_take_photo">"Take a Photo"</string>
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>
 
+    <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>
     <string name="event_alarm_make_bed">"Make Bed"</string>
@@ -107,6 +114,7 @@
     <string name="event_alarm_afternoon_snack_time">"Afternoon Snack Time"</string>
     <string name="event_alarm_review_the_backpack">"Review the Backpack"</string>
 
+    <!-- Events Repeat -->
     <string name="event_repeat_monthly">"Monthly"</string>
     <string name="event_repeat_weekly">"Weekly"</string>
     <string name="event_repeat_daily">"Daily"</string>

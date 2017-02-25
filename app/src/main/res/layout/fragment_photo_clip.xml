@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20sp"
-        android:text="Cancel" />
+        android:text="@string/photo_clip_cancel" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.7"
-            android:text="Take a Photo" />
+            android:text="@string/photo_clip_take_photo" />
 
         <ImageView
             android:id="@+id/photo_clip_left"
