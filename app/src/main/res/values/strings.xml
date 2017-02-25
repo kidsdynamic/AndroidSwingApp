@@ -46,9 +46,9 @@
     <string name="dashboard_chart_this_week">This Week</string>
     <string name="dashboard_chart_this_month">This Month</string>
     <string name="dashboard_chart_this_year">This Year</string>
-    <string name="dashboard_chart_message_below">Don't Give Up!\nYou Can Do This!</string>
-    <string name="dashboard_chart_message_almost">One More Time!\nYou Are Almost There!</string>
-    <string name="dashboard_chart_message_excellent">Woohoo! You've\nReached Your Goal!</string>
+    <string name="dashboard_chart_message_below">"Don't Give Up!\nYou Can Do This!"</string>
+    <string name="dashboard_chart_message_almost">"One More Time!\nYou Are Almost There!"</string>
+    <string name="dashboard_chart_message_excellent">"Woohoo! You've\nReached Your Goal!"</string>
 
     <string name="signup_language_select">Select</string>
 
