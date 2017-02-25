@@ -46,22 +46,22 @@ public class FragmentCalendarAlarm extends ViewFragment {
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_alert_container);
 
         addSeparator();
-        addTitle("Agenda");
-        addAlarm(0, "Agenda Reminders (Only for the App)", 0, mLineListener);
-        addTitle("Alarm Clock");
+        addTitle(getResources().getString(R.string.calendar_alarm_agenda));
         addAlarm(WatchEvent.AlarmList[0], mLineListener);
-        addRoutine("Morning Routine");
+        addTitle(getResources().getString(R.string.calendar_alarm_clock));
         addAlarm(WatchEvent.AlarmList[1], mLineListener);
+        addRoutine(getResources().getString(R.string.calendar_alarm_morning));
         addAlarm(WatchEvent.AlarmList[2], mLineListener);
         addAlarm(WatchEvent.AlarmList[3], mLineListener);
         addAlarm(WatchEvent.AlarmList[4], mLineListener);
         addAlarm(WatchEvent.AlarmList[5], mLineListener);
-        addRoutine("Bed Time Routine");
         addAlarm(WatchEvent.AlarmList[6], mLineListener);
+        addRoutine(getResources().getString(R.string.calendar_alarm_bed));
         addAlarm(WatchEvent.AlarmList[7], mLineListener);
         addAlarm(WatchEvent.AlarmList[8], mLineListener);
-        addRoutine("Activities");
-        for (int idx = 9; idx < WatchEvent.AlarmList.length; idx++)
+        addAlarm(WatchEvent.AlarmList[9], mLineListener);
+        addRoutine(getResources().getString(R.string.calendar_alarm_activities));
+        for (int idx = 10; idx < WatchEvent.AlarmList.length; idx++)
             addAlarm(WatchEvent.AlarmList[idx], mLineListener);
 
         return mViewMain;
@@ -79,7 +79,8 @@ public class FragmentCalendarAlarm extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Calendar", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.global_title_calendar), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -90,7 +91,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
     }
 
     private void addAlarm(WatchEvent.Alarm alarm, View.OnClickListener listener) {
-        addAlarm(alarm.mId, alarm.mName, alarm.mResource, listener);
+        addAlarm(alarm.mId, getResources().getString(alarm.mName), alarm.mResource, listener);
     }
 
     private void addAlarm(int id, String title, int resource, View.OnClickListener listener) {

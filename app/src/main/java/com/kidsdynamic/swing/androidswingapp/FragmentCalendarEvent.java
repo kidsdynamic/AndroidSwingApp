@@ -536,20 +536,20 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void loadAlarm() {
-        String alarmName = "";
-        for (WatchEvent.Alarm alarm : WatchEvent.AlarmList) {
-            if (alarm.mId == mEvent.mAlert)
-                alarmName = WatchEvent.findAlarmName(mEvent.mAlert);
+        WatchEvent.Alarm alarm = null;
+
+        for (WatchEvent.Alarm target : WatchEvent.AlarmList) {
+            if (target.mId == mEvent.mAlert) {
+                alarm = target;
+                break;
+            }
         }
 
-        if (alarmName.length() == 0) // Event is illegal
-            mEvent.mAlert = 0;
+        if (alarm == null)
+            alarm = WatchEvent.AlarmList[0];
 
-        if (mEvent.mAlert == 0)// simple name
-            alarmName = "App Only";
-
-        mEvent.mName = alarmName;   // multi-dependence issue, cause from KD.
-        mViewAlarm.setText(alarmName);
+        mEvent.mName = getResources().getString(alarm.mName);   // multi-dependence issue, cause from KD.
+        mViewAlarm.setText(mEvent.mName);
     }
 
     private void loadAssign() {

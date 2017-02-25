@@ -52,7 +52,7 @@ public class WatchEvent implements Serializable {
         Alarm alarm = AlarmList[0];
         int color = ColorList[0];
 
-        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -74,7 +74,7 @@ public class WatchEvent implements Serializable {
         Alarm alarm = AlarmList[0];
         int color = ColorList[0];
 
-        init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
@@ -83,7 +83,7 @@ public class WatchEvent implements Serializable {
         Alarm alarm = AlarmList[0];
         int color = ColorList[0];
 
-        init(0, 0, new ArrayList<Integer>(), alarm.mName, startDate, endDate, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, String name,
@@ -304,10 +304,10 @@ public class WatchEvent implements Serializable {
 
     static public class Alarm {
         int mId;
-        String mName;
+        int mName;
         int mResource;
 
-        Alarm(int id, String name, int resource) {
+        Alarm(int id, int name, int resource) {
             mId = id;
             mName = name;
             mResource = resource;
@@ -315,48 +315,42 @@ public class WatchEvent implements Serializable {
     }
 
     final static Alarm[] AlarmList = new Alarm[]{
-            new Alarm(36, "Good Morning", R.mipmap.icon_alert),
-            new Alarm(37, "Make Bed", R.mipmap.icon_sound),
-            new Alarm(38, "Get Dress", R.mipmap.icon_sound),
-            new Alarm(39, "Eat Breakfast", R.mipmap.icon_sound),
-            new Alarm(40, "Brush Teeth", R.mipmap.icon_sound),
-            new Alarm(41, "Get Ready for School", R.mipmap.icon_sound),
-            new Alarm(42, "Put on Pajamas", R.mipmap.icon_sound),
-            new Alarm(43, "Story Time", R.mipmap.icon_sound),
-            new Alarm(44, "Good Night", R.mipmap.icon_sound),
-            new Alarm(45, "Collect Toys", R.mipmap.icon_sound),
-            new Alarm(46, "Set Table", R.mipmap.icon_sound),
-            new Alarm(47, "Feed Pet", R.mipmap.icon_sound),
-            new Alarm(48, "Water Plants", R.mipmap.icon_sound),
-            new Alarm(49, "Clean Table", R.mipmap.icon_sound),
-            new Alarm(50, "Clean Bedroom", R.mipmap.icon_sound),
-            new Alarm(51, "Homework Time", R.mipmap.icon_sound),
-            new Alarm(52, "Take a Nap", R.mipmap.icon_sound),
-            new Alarm(53, "Outdoor Play Time", R.mipmap.icon_sound),
-            new Alarm(54, "Fun time", R.mipmap.icon_sound),
-            new Alarm(55, "Exercise", R.mipmap.icon_sound),
-            new Alarm(56, "Practice Music", R.mipmap.icon_sound),
-            new Alarm(57, "Drawing Time", R.mipmap.icon_sound),
-            new Alarm(58, "Reading Time", R.mipmap.icon_sound),
-            new Alarm(59, "Take a Bath", R.mipmap.icon_sound),
-            new Alarm(60, "Family Time", R.mipmap.icon_sound),
-            new Alarm(61, "Lunch Time", R.mipmap.icon_sound),
-            new Alarm(62, "Dinner Time", R.mipmap.icon_sound),
-            new Alarm(63, "Afternoon Snack Time", R.mipmap.icon_sound),
-            new Alarm(64, "Review the Backpack", R.mipmap.icon_sound),
+            new Alarm(0, R.string.alarm_app, R.mipmap.icon_alert),
+            new Alarm(36, R.string.alarm_good_morning, R.mipmap.icon_alert),
+            new Alarm(37, R.string.alarm_make_bed, R.mipmap.icon_sound),
+            new Alarm(38, R.string.alarm_get_dress, R.mipmap.icon_sound),
+            new Alarm(39, R.string.alarm_eat_breakfast, R.mipmap.icon_sound),
+            new Alarm(40, R.string.alarm_brush_teeth, R.mipmap.icon_sound),
+            new Alarm(41, R.string.alarm_get_ready_for_school, R.mipmap.icon_sound),
+            new Alarm(42, R.string.alarm_put_on_pajamas, R.mipmap.icon_sound),
+            new Alarm(43, R.string.alarm_story_time, R.mipmap.icon_sound),
+            new Alarm(44, R.string.alarm_good_night, R.mipmap.icon_sound),
+            new Alarm(45, R.string.alarm_collect_toys, R.mipmap.icon_sound),
+            new Alarm(46, R.string.alarm_set_table, R.mipmap.icon_sound),
+            new Alarm(47, R.string.alarm_feed_pet, R.mipmap.icon_sound),
+            new Alarm(48, R.string.alarm_water_plants, R.mipmap.icon_sound),
+            new Alarm(49, R.string.alarm_clean_table, R.mipmap.icon_sound),
+            new Alarm(50, R.string.alarm_clean_bedroom, R.mipmap.icon_sound),
+            new Alarm(51, R.string.alarm_homework_time, R.mipmap.icon_sound),
+            new Alarm(52, R.string.alarm_take_a_nap, R.mipmap.icon_sound),
+            new Alarm(53, R.string.alarm_outdoor_play_time, R.mipmap.icon_sound),
+            new Alarm(54, R.string.alarm_fun_time, R.mipmap.icon_sound),
+            new Alarm(55, R.string.alarm_exercise, R.mipmap.icon_sound),
+            new Alarm(56, R.string.alarm_practice_music, R.mipmap.icon_sound),
+            new Alarm(57, R.string.alarm_drawing_time, R.mipmap.icon_sound),
+            new Alarm(58, R.string.alarm_reading_time, R.mipmap.icon_sound),
+            new Alarm(59, R.string.alarm_take_a_bath, R.mipmap.icon_sound),
+            new Alarm(60, R.string.alarm_family_time, R.mipmap.icon_sound),
+            new Alarm(61, R.string.alarm_lunch_time, R.mipmap.icon_sound),
+            new Alarm(62, R.string.alarm_dinner_time, R.mipmap.icon_sound),
+            new Alarm(63, R.string.alarm_afternoon_snack_time, R.mipmap.icon_sound),
+            new Alarm(64, R.string.alarm_review_the_backpack, R.mipmap.icon_sound),
     };
 
-    public static String findAlarmName(int id) {
+    public static int findAlarmName(int id) {
         for (Alarm alarm : AlarmList)
             if (alarm.mId == id)
                 return alarm.mName;
-        return "";
-    }
-
-    public static int findAlarmId(String name) {
-        for (Alarm alarm : AlarmList)
-            if (alarm.mName.equals(name))
-                return alarm.mId;
-        return -1;
+        return AlarmList[0].mName;
     }
 }

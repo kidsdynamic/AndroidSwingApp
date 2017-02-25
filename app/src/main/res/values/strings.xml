@@ -6,8 +6,47 @@
     <string name="language_zh_cn">简体中文</string>
 
     <string name="global_title_boot">"Boot"</string>
+    <string name="global_title_calendar">"Calendar</string>
+
+    <string name="calendar_alarm_agenda">"Agenda"</string>
+    <string name="calendar_alarm_clock">"Alarm Clock"</string>
+    <string name="calendar_alarm_morning">"Morning Routine"</string>
+    <string name="calendar_alarm_bed">"Bed Time Routine"</string>
+    <string name="calendar_alarm_activities">"Activities"</string>
 
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>
+
+    <string name="alarm_app">"Agenda Reminders (Only for the App)"</string>
+    <string name="alarm_good_morning">"Good Morning"</string>
+    <string name="alarm_make_bed">"Make Bed"</string>
+    <string name="alarm_get_dress">"Get Dress"</string>
+    <string name="alarm_eat_breakfast">"Eat Breakfast"</string>
+    <string name="alarm_brush_teeth">"Brush Teeth"</string>
+    <string name="alarm_get_ready_for_school">"Get Ready for School"</string>
+    <string name="alarm_put_on_pajamas">"Put on Pajamas"</string>
+    <string name="alarm_story_time">"Story Time"</string>
+    <string name="alarm_good_night">"Good Night"</string>
+    <string name="alarm_collect_toys">"Collect Toys"</string>
+    <string name="alarm_set_table">"Set Table"</string>
+    <string name="alarm_feed_pet">"Feed Pet"</string>
+    <string name="alarm_water_plants">"Water Plants"</string>
+    <string name="alarm_clean_table">"Clean Table"</string>
+    <string name="alarm_clean_bedroom">"Clean Bedroom"</string>
+    <string name="alarm_homework_time">"Homework Time"</string>
+    <string name="alarm_take_a_nap">"Take a Nap"</string>
+    <string name="alarm_outdoor_play_time">"Outdoor Play Time"</string>
+    <string name="alarm_fun_time">"Fun Time"</string>
+    <string name="alarm_exercise">"Exercise"</string>
+    <string name="alarm_practice_music">"Practice Music"</string>
+    <string name="alarm_drawing_time">"Drawing Time"</string>
+    <string name="alarm_reading_time">"Reading Time"</string>
+    <string name="alarm_take_a_bath">"Take a Bath"</string>
+    <string name="alarm_family_time">"Family Time"</string>
+    <string name="alarm_lunch_time">"Lunch Time"</string>
+    <string name="alarm_dinner_time">"Dinner Time"</string>
+    <string name="alarm_afternoon_snack_time">"Afternoon Snack Time"</string>
+    <string name="alarm_review_the_backpack">"Review the Backpack"</string>
+
 </resources>

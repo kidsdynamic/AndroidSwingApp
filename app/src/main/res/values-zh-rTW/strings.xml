@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">AndroidSwingApp</string>
+
+    <string name="language_en_us">English</string>
+    <string name="language_zh_tw">繁體中文</string>
+    <string name="language_zh_cn">简体中文</string>
+
+    <string name="global_title_boot">"啟動"</string>
+
+    <string name="calendar_alarm_agenda">"事件"</string>
+    <string name="calendar_alarm_app">"事件提醒 (僅發生於手持裝置)"</string>
+    <string name="calendar_alarm_clock">"鬧鈴"</string>
+    <string name="calendar_alarm_morning">"晨間事件"</string>
+    <string name="calendar_alarm_bed">"就寢事件"</string>
+    <string name="calendar_alarm_activities">"活動"</string>
+
+    <string name="signup_language_select">"確定"</string>
+
+    <string name="signup_login_login">"註冊/登入 zh-TW"</string>
+</resources>
