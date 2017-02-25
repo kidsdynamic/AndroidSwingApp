@@ -45,26 +45,26 @@
                 style="@style/textview_hint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
                 android:layout_centerInParent="true"
+                android:layout_margin="10dp"
                 android:gravity="center"
-                android:text="or" />
+                android:text="@string/signup_login_or" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:layout_centerVertical="true"
                 android:layout_toStartOf="@+id/signup_login_hint_text"
                 android:background="@color/color_gray_light" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/signup_login_hint_text"
                 android:background="@color/color_gray_light" />
 
@@ -80,7 +80,8 @@
             android:layout_alignStart="@+id/signup_login_sponge"
             android:layout_below="@+id/signup_login_hint"
             android:layout_marginBottom="10dp"
-            android:text="Login with Facebook" />
+            android:text="@string/signup_login_facebook"
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/signup_login_google"
@@ -90,7 +91,8 @@
             android:layout_alignEnd="@+id/signup_login_sponge"
             android:layout_alignStart="@+id/signup_login_sponge"
             android:layout_below="@+id/signup_login_facebook"
-            android:text="Login with Google" />
+            android:text="@string/signup_login_google"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 </LinearLayout>
