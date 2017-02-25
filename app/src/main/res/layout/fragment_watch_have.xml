@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="DO YOU HAVE\nA SWING WATCH?" />
+        android:text="@string/watch_have_have" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_alignStart="@+id/watch_have_sponge"
             android:layout_alignEnd="@+id/watch_have_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Yes" />
+            android:text="@string/watch_have_yes" />
 
         <Button
             android:id="@+id/watch_have_no"
@@ -52,7 +52,7 @@
             android:layout_below="@+id/watch_have_yes"
             android:layout_alignEnd="@+id/watch_have_sponge"
             android:layout_alignStart="@+id/watch_have_sponge"
-            android:text="No" />
+            android:text="@string/watch_have_no" />
 
     </RelativeLayout>
 </LinearLayout>

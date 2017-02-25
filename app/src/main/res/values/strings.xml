@@ -227,6 +227,10 @@
     <string name="watch_finish_dashboard">"Go to Dashboard"</string>
     <string name="watch_finish_another">"Add Another Watch"</string>
 
+    <!-- FragmentWatchHave -->
+    <string name="watch_have_have">"DO YOU HAVE\nA SWING WATCH?"</string>
+    <string name="watch_have_yes">"Yes"</string>
+    <string name="watch_have_no">"No"</string>
 
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
