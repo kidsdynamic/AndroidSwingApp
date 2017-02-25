@@ -262,9 +262,13 @@
     <string name="watch_request_wait">"Please Wait&#8230;"</string>
     <string name="watch_request_add">"Add"</string>
 
-    <!-- FragmentWatchRequest -->
+    <!-- FragmentWatchSearch -->
     <string name="watch_search_searching">"Searching"</string>
     <string name="watch_search_failed">"Search MAC failed"</string>
+
+    <!-- FragmentWatchSelect -->
+    <string name="watch_select_message">"Please Select\nYour Swing Watch"</string>
+    <string name="watch_select_dashboard">"Go to Dashboard"</string>
 
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>

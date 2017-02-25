@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Please Select\nYour Swing Watch" />
+        android:text="@string/watch_select_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_select_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Go to Dashboard" />
+            android:text="@string/watch_select_dashboard" />
 
     </RelativeLayout>
 

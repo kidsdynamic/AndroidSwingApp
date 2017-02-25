@@ -30,8 +30,6 @@ public class FragmentWatchSelect extends ViewFragment {
         mActivityMain = (ActivityMain) getActivity();
 
         mDeviceList = new ArrayList<>();
-        while (!mActivityMain.mContactStack.isEmpty())
-            mDeviceList.add((WatchContact.Kid) mActivityMain.mContactStack.pop());
     }
 
     @Override
@@ -46,22 +44,30 @@ public class FragmentWatchSelect extends ViewFragment {
         mButtonDashboard = (Button) mViewMain.findViewById(R.id.watch_select_dashboard);
         mButtonDashboard.setOnClickListener(mOnDashboardListener);
 
-        for (WatchContact.Kid device : mDeviceList) {
-            addWatch(device);
-        }
-
         return mViewMain;
     }
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
     @Override
     public void onToolbarAction1() {
         mActivityMain.popFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mDeviceList.clear();
+        while (!mActivityMain.mContactStack.isEmpty())
+            mDeviceList.add((WatchContact.Kid) mActivityMain.mContactStack.pop());
+
+        for (WatchContact.Kid device : mDeviceList)
+            addWatch(device);
     }
 
     private View.OnClickListener mBackOnClickListener = new View.OnClickListener() {
