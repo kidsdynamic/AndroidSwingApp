@@ -92,7 +92,8 @@ public class FragmentSyncSearch extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sync", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_sync), true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -176,7 +177,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewSearching() {
-        mViewLabel.setText("Searching\nfor Your\nDevice!");
+        mViewLabel.setText(getResources().getString(R.string.sync_search_searching));
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -192,8 +193,8 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewFound() {
-        mViewLabel.setText("Found\nYour\nDevice!");
-        mViewButton1.setText("Sync Now");
+        mViewLabel.setText(getResources().getString(R.string.sync_search_found));
+        mViewButton1.setText(getResources().getString(R.string.sync_search_sync_now));
 
         mViewButton1.setVisibility(View.VISIBLE);
         mViewButton1.setOnClickListener(mSyncListener);
@@ -207,7 +208,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewSyncing() {
-        mViewLabel.setText("Syncing");
+        mViewLabel.setText(getResources().getString(R.string.sync_search_syncing));
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -222,8 +223,8 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewCompleted() {
-        mViewLabel.setText("Sync\nCompleted");
-        mViewButton1.setText("Go to Dashboard");
+        mViewLabel.setText(getResources().getString(R.string.sync_search_completed));
+        mViewButton1.setText(getResources().getString(R.string.sync_search_dashboard));
 
         mViewButton1.setVisibility(View.VISIBLE);
         mViewButton1.setOnClickListener(mExitListener);
@@ -237,10 +238,10 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewNotFound() {
-        mViewLabel.setText("We Can't\nFind Your\nDevice!");
+        mViewLabel.setText(getResources().getString(R.string.sync_search_not_found));
 
-        mViewButton1.setText("Try Again");
-        mViewButton2.setText("Go to Last Synced Data");
+        mViewButton1.setText(getResources().getString(R.string.sync_search_again));
+        mViewButton2.setText(getResources().getString(R.string.sync_search_last));
 
         mViewButton1.setVisibility(View.VISIBLE);
         mViewButton1.setOnClickListener(mAgainListener);

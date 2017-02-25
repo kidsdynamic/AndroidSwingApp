@@ -24,7 +24,7 @@
         android:layout_alignStart="@+id/sync_search_sponge"
         android:layout_alignTop="@+id/sync_search_sponge"
         android:gravity="center"
-        android:text="Searching\nfor Your\nDevice!" />
+        android:text="@string/sync_search_searching" />
 
     <com.kidsdynamic.swing.androidswingapp.ViewCircle
         android:id="@+id/sync_search_progress"

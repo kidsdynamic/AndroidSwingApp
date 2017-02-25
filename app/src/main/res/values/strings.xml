@@ -204,6 +204,17 @@
     <string name="sync_now_another">"Sync Another Watch"</string>
     <string name="sync_now_no_device">"There is no bound device!"</string>
 
+    <!-- FragmentSyncSearch -->
+    <string name="sync_search_searching">"Searching\nfor Your\nDevice!"</string>
+    <string name="sync_search_found">"Found\nYour\nDevice!"</string>
+    <string name="sync_search_sync_now">"Sync Now"</string>
+    <string name="sync_search_syncing">"Syncing"</string>
+    <string name="sync_search_completed">"Sync\nCompleted"</string>
+    <string name="sync_search_dashboard">"Go to Dashboard"</string>
+    <string name="sync_search_not_found">"We Can\'t\nFind Your\nDevice!"</string>
+    <string name="sync_search_again">"Try Again"</string>
+    <string name="sync_search_last">"Go to Last Synced Data"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>
