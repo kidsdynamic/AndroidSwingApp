@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -82,8 +83,6 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        int count;
-
         mViewMain = inflater.inflate(R.layout.fragment_calendar_event, container, false);
 
         // Line Creator
@@ -130,9 +129,10 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewRepeatOption = mViewMain.findViewById(R.id.calendar_event_repeat_option);
         mViewRepeatContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_event_repeat_container);
 
-        count = mViewRepeatContainer.getChildCount();
-        for (int idx = 0; idx < count; idx++)
-            mViewRepeatContainer.getChildAt(idx).setOnClickListener(mRepeatOptionListener);
+        addRepeat(WatchEvent.REPEAT_NEVER);
+        addRepeat(WatchEvent.REPEAT_DAILY);
+        addRepeat(WatchEvent.REPEAT_WEEKLY);
+        addRepeat(WatchEvent.REPEAT_MONTHLY);
 
         // Line Description
         mViewDescriptionLine = mViewMain.findViewById(R.id.calendar_event_description_line);
@@ -158,7 +158,8 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Calendar", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.global_title_calendar), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_calendar, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -344,6 +345,34 @@ public class FragmentCalendarEvent extends ViewFragment {
         return view;
     }
 
+    private void addRepeat(String repeat) {
+        TextView view = new TextView(mActivityMain);
+
+        if (repeat.contains(WatchEvent.REPEAT_MONTHLY)) {
+            view.setText(getResources().getString(R.string.event_repeat_monthly));
+            view.setTag(WatchEvent.REPEAT_MONTHLY);
+        } else if (repeat.contains(WatchEvent.REPEAT_WEEKLY)) {
+            view.setText(getResources().getString(R.string.event_repeat_weekly));
+            view.setTag(WatchEvent.REPEAT_WEEKLY);
+        } else if (repeat.contains(WatchEvent.REPEAT_DAILY)) {
+            view.setText(getResources().getString(R.string.event_repeat_daily));
+            view.setTag(WatchEvent.REPEAT_DAILY);
+        } else {
+            view.setText(getResources().getString(R.string.event_repeat_never));
+            view.setTag(WatchEvent.REPEAT_NEVER);
+        }
+
+        view.setTextColor(ContextCompat.getColor(mActivityMain, R.color.color_gray_main));
+        view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        view.setGravity(Gravity.CENTER);
+        view.setPadding(0, 10, 0, 10);
+        view.setOnClickListener(mRepeatOptionListener);
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+
+        mViewRepeatContainer.addView(view, layoutParams);
+    }
+
     private View.OnClickListener mAlarmListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -425,6 +454,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mSaveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
             mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
             mActivityMain.mOperator.setEvent(mSetEventListener, mEvent);
         }
@@ -471,20 +501,9 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mRepeatOptionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            TextView viewRepeat = (TextView) view;
-            String repeat = viewRepeat.getText().toString();
-
-            mViewRepeat.setText(repeat);
-
-            repeat = repeat.toUpperCase();
-            if (repeat.contains(WatchEvent.REPEAT_DAILY))
-                mEvent.mRepeat = WatchEvent.REPEAT_DAILY;
-            else if (repeat.contains(WatchEvent.REPEAT_WEEKLY))
-                mEvent.mRepeat = WatchEvent.REPEAT_WEEKLY;
-            else if (repeat.contains(WatchEvent.REPEAT_MONTHLY))
-                mEvent.mRepeat = WatchEvent.REPEAT_MONTHLY;
-            else
-                mEvent.mRepeat = "";
+            TextView viewOption = (TextView) view;
+            mViewRepeat.setText(viewOption.getText().toString());
+            mEvent.mRepeat = (String) viewOption.getTag();
         }
     };
 
@@ -590,19 +609,25 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void loadRepeat() {
-        String repeat = "NEVER";
+        String repeat = mEvent.mRepeat.toUpperCase();
 
-        if (mEvent.mRepeat.equals(WatchEvent.REPEAT_DAILY))
-            repeat = WatchEvent.REPEAT_DAILY;
-        else if (mEvent.mRepeat.equals(WatchEvent.REPEAT_WEEKLY))
-            repeat = WatchEvent.REPEAT_WEEKLY;
-        else if (mEvent.mRepeat.equals(WatchEvent.REPEAT_MONTHLY))
-            repeat = WatchEvent.REPEAT_MONTHLY;
+        switch (repeat) {
+            case WatchEvent.REPEAT_MONTHLY:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_monthly));
+                break;
 
-        repeat = repeat.toLowerCase();
-        repeat = repeat.substring(0, 1).toUpperCase() + repeat.substring(1);
+            case WatchEvent.REPEAT_WEEKLY:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_weekly));
+                break;
 
-        mViewRepeat.setText(repeat);
+            case WatchEvent.REPEAT_DAILY:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_daily));
+                break;
+
+            case WatchEvent.REPEAT_NEVER:
+                mViewRepeat.setText(getResources().getString(R.string.event_repeat_never));
+                break;
+        }
     }
 
     private void loadDescription() {
