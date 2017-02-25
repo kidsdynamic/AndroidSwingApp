@@ -218,6 +218,10 @@
     <!-- FragmentSyncSelect -->
     <string name="sync_select_message">"Select Watch\nto Sync"</string>
 
+    <!-- FragmentWatchAdded -->
+    <string name="watch_added_added">"Added"</string>
+    <string name="watch_added_message">"We\'ve successfully added your\nSwing Watch."</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

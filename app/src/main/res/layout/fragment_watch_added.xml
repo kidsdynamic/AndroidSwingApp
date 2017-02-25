@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:gravity="center"
-        android:text="Added" />
+        android:text="@string/watch_added_added" />
 
     <TextView
         style="@style/textview_hint"
@@ -27,7 +27,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="We've successfully added your\nSwing Watch." />
+        android:text="@string/watch_added_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,11 +46,11 @@
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/watch_added_sponge"
+            android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_added_sponge"
-            android:text="Set up Your Profile" />
+            android:layout_marginBottom="10dp"
+            android:text="@string/watch_added_profile" />
     </RelativeLayout>
 
 </LinearLayout>
