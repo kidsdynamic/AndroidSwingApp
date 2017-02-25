@@ -270,6 +270,13 @@
     <string name="watch_select_message">"Please Select\nYour Swing Watch"</string>
     <string name="watch_select_dashboard">"Go to Dashboard"</string>
 
+    <!-- FragmentWatchSorry -->
+    <string name="watch_sorry_sorry">"Sorry!"</string>
+    <string name="watch_sorry_message">"We could\'t find your swing watch. Please\nmake sure your watch is fully charged"</string>
+    <string name="watch_sorry_again">"Search Again"</string>
+    <string name="watch_sorry_others">"Request Access to Others"</string>
+    <string name="watch_sorry_contact_us">"Contact Us"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>
