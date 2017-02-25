@@ -157,6 +157,11 @@
     <!-- FragmentProfileSelect -->
     <string name="profile_select_watch">"Please Select\nYour Swing Watch"</string>
 
+    <!-- FragmentProfileSelect -->
+    <string name="profile_share_save">"Save"</string>
+    <string name="profile_share_who">"Select Swing Watch to\nShare with %s"</string>
+    <string name="profile_share_save">"Please Select\nYour Swing Watch"</string>
+    <string name="profile_share_save">"Please Select\nYour Swing Watch"</string>
 
     <string name="signup_language_select">"Select"</string>
 

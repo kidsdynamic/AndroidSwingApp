@@ -48,7 +48,7 @@ public class FragmentProfileShare extends ViewFragment {
         if(!mActivityMain.mContactStack.isEmpty()) {
             mRequestTo = (WatchContact.User)mActivityMain.mContactStack.pop();
 
-            String title = String.format(Locale.getDefault(), "Select Swing Watch to\nShare with %s", mRequestTo.mLabel);
+            String title = String.format(Locale.getDefault(), getResources().getString(R.string.profile_share_who), mRequestTo.mLabel);
             mViewTitle.setText(title);
 
             // Todo: Load Kids of mRequestTo and insert into container. like test below
@@ -65,7 +65,8 @@ public class FragmentProfileShare extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Request", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_request_from), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 

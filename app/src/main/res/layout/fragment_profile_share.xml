@@ -48,7 +48,7 @@
             android:layout_alignEnd="@+id/profile_share_sponge"
             android:layout_alignStart="@+id/profile_share_sponge"
             android:layout_centerVertical="true"
-            android:text="Save" />
+            android:text="@string/profile_share_save" />
 
     </RelativeLayout>
 
