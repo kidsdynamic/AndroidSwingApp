@@ -221,6 +221,7 @@
     <!-- FragmentWatchAdded -->
     <string name="watch_added_added">"Added"</string>
     <string name="watch_added_message">"We\'ve successfully added your\nSwing Watch."</string>
+    <string name="watch_added_profile">"Set up Your Profile"</string>
 
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
