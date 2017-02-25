@@ -13,7 +13,7 @@
         android:gravity="center_vertical|start"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
-        android:text="Account" />
+        android:text="@string/profile_option_account" />
 
     <RelativeLayout
         android:id="@+id/profile_option_profile"
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Edit Your Kid's Profile" />
+            android:text="@string/profile_option_kid" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Change Password" />
+            android:text="@string/profile_option_password" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Logout" />
+            android:text="@string/profile_option_logout" />
 
     </RelativeLayout>
 
@@ -98,7 +98,7 @@
         android:gravity="center_vertical|start"
         android:paddingEnd="10dp"
         android:paddingStart="10dp"
-        android:text="About" />
+        android:text="@string/profile_option_about" />
 
     <RelativeLayout
         android:id="@+id/profile_option_contact"
@@ -113,7 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Contact Us" />
+            android:text="@string/profile_option_contact_us" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -142,7 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Privacy Policy" />
+            android:text="@string/profile_option_privacy_policy" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Version" />
+            android:text="@string/profile_option_version" />
 
         <TextView
             android:id="@+id/profile_option_version"
