@@ -95,7 +95,13 @@
     <string name="profile_editor_zip">"Zip"</string>
     <string name="profile_editor_processing">"Processing"</string>
     <string name="profile_editor_wait">"Please Wait&#8230;"</string>
-    <string name="profile_editor_avatar_failed">"Update avatar failed("</string>
+    <string name="profile_editor_avatar_failed">"Update avatar failed"</string>
+
+    <!-- FragmentProfileKid -->
+    <string name="profile_kid_name">"Name"</string>
+    <string name="profile_kid_remove">"Remove"</string>
+    <string name="profile_kid_processing">"Processing"</string>
+    <string name="profile_kid_wait">"Please Wait&#8230;"</string>
 
     <string name="signup_language_select">"Select"</string>
 

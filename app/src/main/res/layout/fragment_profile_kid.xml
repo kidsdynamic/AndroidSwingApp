@@ -47,7 +47,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:enabled="false"
-            android:hint="Name" />
+            android:hint="@string/profile_kid_name" />
     </LinearLayout>
 
     <View
@@ -76,7 +76,7 @@
             android:layout_alignEnd="@+id/profile_kid_sponge"
             android:layout_alignStart="@+id/profile_kid_sponge"
             android:layout_centerVertical="true"
-            android:text="Remove" />
+            android:text="@string/profile_kid_remove" />
 
     </RelativeLayout>
 </LinearLayout>

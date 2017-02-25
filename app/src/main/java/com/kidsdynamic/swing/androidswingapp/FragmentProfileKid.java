@@ -51,19 +51,6 @@ public class FragmentProfileKid extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        mKid = mActivityMain.mContactStack.isEmpty() ?
-                new WatchContact.Kid() : (WatchContact.Kid) mActivityMain.mContactStack.pop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (!mActivityMain.mBitmapStack.isEmpty()) {
-            mAvatarBitmap = mActivityMain.mBitmapStack.pop();
-            mViewPhoto.setBitmap(mAvatarBitmap);
-        }
     }
 
     @Override
@@ -77,21 +64,13 @@ public class FragmentProfileKid extends ViewFragment {
         mViewRemove = (Button) mViewMain.findViewById(R.id.profile_kid_remove);
         mViewRemove.setOnClickListener(mRemoveListener);
 
-        if (mKid != null) {
-            if (!mKid.mBound)
-                viewNewKid();
-            else if (mKid.mUserId == mActivityMain.mOperator.getUser().mId)
-                viewMyKid();
-            else
-                viewOthersKid();
-        }
-
         return mViewMain;
     }
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Profile", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_profile), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_ok);
     }
 
@@ -103,7 +82,28 @@ public class FragmentProfileKid extends ViewFragment {
     @Override
     public void onToolbarAction2() {
         saveContact(mKid);
-        //mActivityMain.popFragment();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mKid = mActivityMain.mContactStack.isEmpty() ?
+                new WatchContact.Kid() : (WatchContact.Kid) mActivityMain.mContactStack.pop();
+
+        if (mKid != null) {
+            if (!mKid.mBound)
+                viewNewKid();
+            else if (mKid.mUserId == mActivityMain.mOperator.getUser().mId)
+                viewMyKid();
+            else
+                viewOthersKid();
+        }
+
+        if (!mActivityMain.mBitmapStack.isEmpty()) {
+            mAvatarBitmap = mActivityMain.mBitmapStack.pop();
+            mViewPhoto.setBitmap(mAvatarBitmap);
+        }
     }
 
     @Override
@@ -214,27 +214,10 @@ public class FragmentProfileKid extends ViewFragment {
         public void onClick(View view) {
             if (mKid == null)
                 return;
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.profile_kid_processing),
+                    getResources().getString(R.string.profile_kid_wait), true);
             mActivityMain.mOperator.deleteKid(mDeleteKidListener, mKid.mId);
-/*
-            switch(tester) {
-                case 0:
-                    Log.d("TEST", "1");
-                    mActivityMain.mOperator.setKid(null, mViewName.getText().toString(), "AAAAAABBBB0A", mAvatarBitmap);
-                    tester = 1;
-                    break;
-                case 1:
-                    Log.d("TEST", "2");
-                    mActivityMain.mOperator.setKid(null, mViewName.getText().toString(), "AAAAAABBBB0B", mAvatarBitmap);
-                    tester = 2;
-                    break;
-                case 2:
-                    Log.d("TEST", "3");
-                    mActivityMain.mOperator.setKid(null, mViewName.getText().toString(), "AAAAAABBBB0C", mAvatarBitmap);
-                    tester = 3;
-                    break;
-            }
-*/
         }
     };
 
@@ -258,7 +241,9 @@ public class FragmentProfileKid extends ViewFragment {
                     mKid.mName = mViewName.getText().toString();
 
                     if (!mKid.mName.equals("")) {
-                        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+                        mProcessDialog = ProgressDialog.show(mActivityMain,
+                                getResources().getString(R.string.profile_kid_processing),
+                                getResources().getString(R.string.profile_kid_wait), true);
                         String macId = ServerMachine.getMacID(mKid.mLabel);
                         mActivityMain.mOperator.setKid(mAddKidListener, mKid.mName, macId, mAvatarBitmap);
                     }
@@ -320,7 +305,9 @@ public class FragmentProfileKid extends ViewFragment {
             return;
         mKid.mName = mViewName.getText().toString();
         if (!mKid.mName.equals("")) {
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.profile_kid_processing),
+                    getResources().getString(R.string.profile_kid_wait), true);
             mActivityMain.mOperator.setKid(mUpdateKidListener, mKid.mId, mKid.mName, mAvatarBitmap);
         } else {
             mActivityMain.popFragment();
