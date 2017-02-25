@@ -50,7 +50,7 @@ public class WatchEvent implements Serializable {
         long end = calc.getTimeInMillis();
 
         Alarm alarm = AlarmList[0];
-        int color = ColorList[4];
+        int color = ColorList[0];
 
         init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
@@ -72,7 +72,7 @@ public class WatchEvent implements Serializable {
         long end = calc.getTimeInMillis();
 
         Alarm alarm = AlarmList[0];
-        int color = ColorList[4];
+        int color = ColorList[0];
 
         init(0, 0, new ArrayList<Integer>(), alarm.mName, start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
@@ -81,7 +81,7 @@ public class WatchEvent implements Serializable {
         long now = System.currentTimeMillis();
 
         Alarm alarm = AlarmList[0];
-        int color = ColorList[4];
+        int color = ColorList[0];
 
         init(0, 0, new ArrayList<Integer>(), alarm.mName, startDate, endDate, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
     }
@@ -300,7 +300,7 @@ public class WatchEvent implements Serializable {
     }
 
     final static int[] ColorList = new int[]{
-            0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFFFF7231, 0xFF9A989A};
+            0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFF4DC1DF, 0xFF9A989A};
 
     static public class Alarm {
         int mId;
