@@ -154,6 +154,10 @@
     <string name="profile_search_searching">"Searching"</string>
     <string name="profile_search_mac_failed">"Search MAC failed"</string>
 
+    <!-- FragmentProfileSelect -->
+    <string name="profile_select_watch">"Please Select\nYour Swing Watch"</string>
+
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>

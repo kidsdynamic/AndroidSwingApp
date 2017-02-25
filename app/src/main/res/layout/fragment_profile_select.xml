@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Please Select\nYour Swing Watch" />
+        android:text="@string/profile_select_watch" />
 
     <RelativeLayout
         android:layout_width="match_parent"

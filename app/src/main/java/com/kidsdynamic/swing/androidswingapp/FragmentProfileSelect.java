@@ -46,7 +46,8 @@ public class FragmentProfileSelect extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Search Device", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_search_device), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
