@@ -64,7 +64,8 @@ public class FragmentCalendarMain extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Calendar", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.global_title_calendar), true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_calendar, R.mipmap.icon_add);
     }
 
@@ -122,7 +123,7 @@ public class FragmentCalendarMain extends ViewFragment {
 
         if (event == null) {
             timeString = "";
-            messageString = "No Incoming Event";
+            messageString = getResources().getString(R.string.calendar_main_no_incoming_event);
 
         } else {
             Calendar cale = Calendar.getInstance();

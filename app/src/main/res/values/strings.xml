@@ -25,6 +25,10 @@
     <string name="calendar_event_save">Save</string>
     <string name="calendar_event_advance">Advance</string>
 
+    <string name="calendar_main_today_schedule">Today\'s Schedule</string>
+    <string name="calendar_main_monthly_schedule">Monthly Schedule</string>
+    <string name="calendar_main_no_incoming_event">No Incoming Event</string>
+
     <string name="signup_language_select">Select</string>
 
     <string name="signup_login_login">Sing Up / Login</string>

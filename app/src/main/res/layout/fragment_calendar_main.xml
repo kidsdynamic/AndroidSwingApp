@@ -142,7 +142,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/calendar_main_button_sponge"
             android:layout_alignStart="@+id/calendar_main_button_sponge"
-            android:text="Today's Schedule" />
+            android:text="@string/calendar_main_today_schedule" />
 
         <Button
             android:id="@+id/calendar_main_monthly"
@@ -155,7 +155,7 @@
             android:layout_below="@+id/calendar_main_today"
             android:layout_centerVertical="true"
             android:paddingTop="10dp"
-            android:text="Monthly Schedule" />
+            android:text="@string/calendar_main_monthly_schedule" />
 
     </RelativeLayout>
 
