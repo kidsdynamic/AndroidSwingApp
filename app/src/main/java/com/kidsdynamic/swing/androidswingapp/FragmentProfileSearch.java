@@ -46,7 +46,8 @@ public class FragmentProfileSearch extends ViewFragment {
 
     @Override
     public ViewFragment.ViewFragmentConfig getConfig() {
-        return new ViewFragment.ViewFragmentConfig("Search Device", true, true, false,
+        return new ViewFragment.ViewFragmentConfig(
+                getResources().getString(R.string.title_search_device), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -110,12 +111,13 @@ public class FragmentProfileSearch extends ViewFragment {
         @Override
         public void onFail(int statusCode) {
             mViewProgress.stopProgress();
-            Toast.makeText(mActivityMain, "Search MAC failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.profile_search_mac_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 
     private void gotoWatchSelect() {
-        for(WatchContact contact : mSearchResult)
+        for (WatchContact contact : mSearchResult)
             mActivityMain.mContactStack.push(contact);
         mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
     }

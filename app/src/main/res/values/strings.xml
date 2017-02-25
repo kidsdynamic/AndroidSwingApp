@@ -16,6 +16,7 @@
     <string name="title_password">Password</string>
     <string name="title_request_from">Request From</string>
     <string name="title_request_to">Send Requests To</string>
+    <string name="title_search_device">Search Device</string>
 
     <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">"Agenda"</string>
@@ -149,7 +150,9 @@
     <string name="profile_request_to_processing">"Processing"</string>
     <string name="profile_request_to_wait">"Please Wait&#8230;"</string>
 
-
+    <!-- FragmentProfileSearch -->
+    <string name="profile_search_searching">"Searching"</string>
+    <string name="profile_search_mac_failed">"Search MAC failed"</string>
 
     <string name="signup_language_select">"Select"</string>
 

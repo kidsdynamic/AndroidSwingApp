@@ -30,7 +30,7 @@
             android:layout_alignEnd="@+id/profile_search_sponge"
             android:layout_alignStart="@+id/profile_search_sponge"
             android:gravity="center"
-            android:text="Searching" />
+            android:text="@string/profile_search_searching" />
 
         <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/profile_search_progress"
