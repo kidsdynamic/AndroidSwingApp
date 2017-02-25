@@ -76,7 +76,7 @@ public class FragmentWatchProfile extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -171,8 +171,6 @@ public class FragmentWatchProfile extends ViewFragment {
         }
     };
 
-    //private static int testCounter = 0;
-
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
@@ -181,27 +179,11 @@ public class FragmentWatchProfile extends ViewFragment {
                 mDevice.mName = mViewName.getText().toString();
 
                 if (!mDevice.mName.equals("")) {
-                    mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+                    mProcessDialog = ProgressDialog.show(mActivityMain,
+                            getResources().getString(R.string.watch_profile_processing),
+                            getResources().getString(R.string.watch_profile_wait), true);
                     String macId = ServerMachine.getMacID(mDevice.mLabel);
                     mActivityMain.mOperator.setKid(mAddKidListener, mDevice.mName, macId, mAvatarBitmap);
-
-                    //mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, macId);
-                    /*
-                    switch(testCounter) {
-                        case 0:
-                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, "AAAAAABBBB01");
-                            testCounter = 1;
-                            break;
-                        case 1:
-                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, "AAAAAABBBB02");
-                            testCounter = 2;
-                            break;
-                        case 2:
-                            mActivityMain.mServiceMachine.kidsAdd(mKidsAddListener, mDevice.mName, "AAAAAABBBB03");
-                            testCounter = 0;
-                            break;
-                    }
-                    */
                 }
             }
 

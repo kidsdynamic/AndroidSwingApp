@@ -239,6 +239,11 @@
     <string name="watch_owner_others">"Request Access\nto Others"</string>
     <string name="watch_owner_add_now">"Add Now"</string>
 
+    <!-- FragmentWatchProfile -->
+    <string name="watch_profile_name">"Kid\'s Name"</string>
+    <string name="watch_profile_processing">"Processing"</string>
+    <string name="watch_profile_wait">"Please Wait&#8230;"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

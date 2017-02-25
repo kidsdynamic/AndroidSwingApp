@@ -63,26 +63,11 @@
             android:layout_alignStart="@+id/watch_profile_sponge"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:hint="Kid's Name"
+            android:hint="@string/watch_profile_name"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:nextFocusForward="@+id/registration_info_last" />
-<!--
-        <EditText
-            android:id="@+id/watch_profile_zip"
-            style="@style/edittext_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/watch_profile_sponge"
-            android:layout_alignStart="@+id/watch_profile_sponge"
-            android:layout_below="@+id/watch_profile_name"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:hint="Zip Code"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:nextFocusForward="@+id/registration_info_phone" />
--->
+
     </RelativeLayout>
 
 </LinearLayout>
