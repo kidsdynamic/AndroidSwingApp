@@ -262,6 +262,10 @@
     <string name="watch_request_wait">"Please Wait&#8230;"</string>
     <string name="watch_request_add">"Add"</string>
 
+    <!-- FragmentWatchRequest -->
+    <string name="watch_search_searching">"Searching"</string>
+    <string name="watch_search_failed">"Search MAC failed"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

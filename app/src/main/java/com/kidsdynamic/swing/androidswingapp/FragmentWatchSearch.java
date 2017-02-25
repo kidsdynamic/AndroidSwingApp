@@ -49,7 +49,7 @@ public class FragmentWatchSearch extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -113,7 +113,8 @@ public class FragmentWatchSearch extends ViewFragment {
         @Override
         public void onFail(int statusCode) {
             mViewProgress.stopProgress();
-            Toast.makeText(mActivityMain, "Search MAC failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.watch_search_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 
