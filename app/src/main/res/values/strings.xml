@@ -175,6 +175,8 @@
     <string name="signup_account_processing">"Processing"</string>
     <string name="signup_account_wait">"Please Wait&#8230;"</string>
 
+    <!-- FragmentSignupLanguage -->
+    <string name="signup_language_message">"Please Select\nYour Language"</string>
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>

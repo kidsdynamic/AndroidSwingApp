@@ -59,7 +59,7 @@ public class FragmentSignupLanguage extends ViewFragment {
     @Override
     public ViewFragment.ViewFragmentConfig getConfig() {
         return new ViewFragment.ViewFragmentConfig(
-                getResources().getString(R.string.signup_language_select), false, false, false,
+                "", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 

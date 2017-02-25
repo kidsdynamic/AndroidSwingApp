@@ -12,7 +12,7 @@
         android:layout_marginBottom="20dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Please Select\nYour Language" />
+        android:text="@string/signup_language_message" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
             android:layout_alignEnd="@+id/signup_language_button_sponge"
             android:layout_alignStart="@+id/signup_language_button_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Select" />
+            android:text="@string/signup_language_select" />
 
     </RelativeLayout>
 
