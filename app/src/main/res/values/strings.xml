@@ -249,6 +249,14 @@
     <string name="watch_purchase_yes">"Yes, Please"</string>
     <string name="watch_purchase_others">"Request Access to Others"</string>
 
+    <!-- FragmentWatchRegistered -->
+    <string name="watch_registered_message">"This Watch Has\nBeen Registered"</string>
+    <string name="watch_registered_request_access">"Request Access"</string>
+    <string name="watch_registered_contact_us">"Contact Us"</string>
+    <string name="watch_registered_processing">"Processing"</string>
+    <string name="watch_registered_wait">"Please Wait&#8230;"</string>
+
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

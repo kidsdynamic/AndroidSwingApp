@@ -58,7 +58,7 @@ public class FragmentWatchRegistered extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -80,7 +80,9 @@ public class FragmentWatchRegistered extends ViewFragment {
             for (WatchContact contact : mKidList)
                 mActivityMain.mContactStack.push(contact);
 
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.watch_registered_processing),
+                    getResources().getString(R.string.watch_registered_wait), true);
             mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mKidList.get(0).mLabel);
         }
     };

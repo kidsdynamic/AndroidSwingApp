@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="This Watch Has\nBeen Registered" />
+        android:text="@string/watch_registered_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_registered_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Request Access" />
+            android:text="@string/watch_registered_request_access" />
 
         <Button
             android:id="@+id/watch_registered_contact"
@@ -53,6 +53,6 @@
             android:layout_alignStart="@+id/watch_registered_sponge"
             android:layout_below="@+id/watch_registered_request"
             android:layout_marginBottom="10dp"
-            android:text="Contact Us" />
+            android:text="@string/watch_registered_contact_us" />
     </RelativeLayout>
 </LinearLayout>
