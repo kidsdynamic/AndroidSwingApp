@@ -3,12 +3,10 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,7 +69,8 @@ public class FragmentCalendarTodo extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Calendar", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_calendar), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_edit);
     }
 

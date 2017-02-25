@@ -1,14 +1,11 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/10.
@@ -49,7 +46,7 @@ public class FragmentCalendarDaily extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
-                getResources().getString(R.string.global_title_calendar), true, true, false,
+                getResources().getString(R.string.title_calendar), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_add);
     }
 

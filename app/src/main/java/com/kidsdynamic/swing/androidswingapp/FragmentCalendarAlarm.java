@@ -80,7 +80,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
-                getResources().getString(R.string.global_title_calendar), true, true, false,
+                getResources().getString(R.string.title_calendar), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 

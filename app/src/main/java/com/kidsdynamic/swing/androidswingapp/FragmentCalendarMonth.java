@@ -5,9 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/4.
@@ -44,7 +42,7 @@ public class FragmentCalendarMonth extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
-                getResources().getString(R.string.global_title_calendar), true, true, false,
+                getResources().getString(R.string.title_calendar), true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_left, R.mipmap.icon_add);
     }
 

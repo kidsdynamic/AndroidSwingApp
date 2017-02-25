@@ -1,17 +1,12 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
-import android.widget.TimePicker;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/11.
@@ -82,7 +77,8 @@ public class FragmentCalendarPicker extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Calendar", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_calendar), true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_left, R.mipmap.icon_ok);
     }
 

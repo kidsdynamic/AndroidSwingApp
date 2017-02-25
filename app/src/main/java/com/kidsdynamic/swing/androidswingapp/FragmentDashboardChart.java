@@ -82,7 +82,8 @@ public class FragmentDashboardChart extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Dashboard", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_dashboard), true, true, false,
                 R.mipmap.city_newyork, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -90,7 +91,6 @@ public class FragmentDashboardChart extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        // todo: load today step here.
         int step = getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps;
 
         int emotion = EMOTION_LOW;
@@ -102,7 +102,11 @@ public class FragmentDashboardChart extends ViewFragment {
         setEmotion(emotion);
 
         mViewSelector.clear();
-        mViewSelector.add(Arrays.asList("Today", "This Week", "This Month", "This Year"));
+        mViewSelector.add(Arrays.asList(
+                getResources().getString(R.string.dashboard_chart_today),
+                getResources().getString(R.string.dashboard_chart_this_week),
+                getResources().getString(R.string.dashboard_chart_this_month),
+                getResources().getString(R.string.dashboard_chart_this_year)));
 
         mViewIndicator.setDotCount(mViewSelector.getCount());
         mViewIndicator.setDotPosition(0);
@@ -138,21 +142,21 @@ public class FragmentDashboardChart extends ViewFragment {
                 mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_blue_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster01);
-                mViewMessage.setText("Don't Give Up!\nYou Can Do This!");
+                mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_below));
                 break;
 
             case EMOTION_ALMOST:
                 mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_green_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster02);
-                mViewMessage.setText("One More Time!\nYou Are Almost There!");
+                mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_almost));
                 break;
 
             default:
                 mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_orange_main);
 
                 mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster03);
-                mViewMessage.setText("Woohoo! You've\nReached Your Goal!");
+                mViewMessage.setText(getResources().getString(R.string.dashboard_chart_message_excellent));
                 break;
         }
 

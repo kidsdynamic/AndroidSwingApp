@@ -35,7 +35,7 @@ public class FragmentBoot extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
-                getResources().getString(R.string.global_title_boot), false, false, false,
+                getResources().getString(R.string.title_boot), false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 

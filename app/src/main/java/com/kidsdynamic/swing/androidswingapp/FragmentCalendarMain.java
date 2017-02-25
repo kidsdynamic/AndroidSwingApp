@@ -7,11 +7,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
 
 /**
  * Created by 03543 on 2016/12/19.
@@ -65,7 +63,7 @@ public class FragmentCalendarMain extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
-                getResources().getString(R.string.global_title_calendar), true, true, false,
+                getResources().getString(R.string.title_calendar), true, true, false,
                 R.mipmap.city_florida, R.mipmap.icon_calendar, R.mipmap.icon_add);
     }
 

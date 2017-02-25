@@ -5,15 +5,19 @@
     <string name="language_zh_tw">繁體中文</string>
     <string name="language_zh_cn">简体中文</string>
 
-    <string name="global_title_boot">Boot</string>
-    <string name="global_title_calendar">Calendar</string>
+    <!-- Title bar -->
+    <string name="title_boot">Boot</string>
+    <string name="title_calendar">Calendar</string>
+    <string name="title_dashboard">Dashboard</string>
 
+    <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">Agenda</string>
     <string name="calendar_alarm_clock">Alarm Clock</string>
     <string name="calendar_alarm_morning">Morning Routine</string>
     <string name="calendar_alarm_bed">Bed Time Routine</string>
     <string name="calendar_alarm_activities">Activities</string>
 
+    <!-- FragmentCalendarEvent -->
     <string name="calendar_event_creator">Creator</string>
     <string name="calendar_event_assign">Assign To</string>
     <string name="calendar_event_start">Start</string>
@@ -25,13 +29,26 @@
     <string name="calendar_event_save">Save</string>
     <string name="calendar_event_advance">Advance</string>
 
+    <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">Today\'s Schedule</string>
     <string name="calendar_main_monthly_schedule">Monthly Schedule</string>
     <string name="calendar_main_no_incoming_event">No Incoming Event</string>
 
+    <!-- FragmentCalendarTodo -->
     <string name="calendar_todo_save">Save</string>
     <string name="calendar_todo_processing">Processing</string>
     <string name="calendar_todo_wait">Please Wait&#8230;</string>
+
+    <!-- FragmentDashboardChart -->
+    <string name="dashboard_chart_indoor">Indoor</string>
+    <string name="dashboard_chart_outdoor">Outdoor</string>
+    <string name="dashboard_chart_today">Today</string>
+    <string name="dashboard_chart_this_week">This Week</string>
+    <string name="dashboard_chart_this_month">This Month</string>
+    <string name="dashboard_chart_this_year">This Year</string>
+    <string name="dashboard_chart_message_below">Don't Give Up!\nYou Can Do This!</string>
+    <string name="dashboard_chart_message_almost">One More Time!\nYou Are Almost There!</string>
+    <string name="dashboard_chart_message_excellent">Woohoo! You've\nReached Your Goal!</string>
 
     <string name="signup_language_select">Select</string>
 
