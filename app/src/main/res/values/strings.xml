@@ -103,6 +103,13 @@
     <string name="profile_kid_processing">"Processing"</string>
     <string name="profile_kid_wait">"Please Wait&#8230;"</string>
 
+    <!-- FragmentProfileMain -->
+    <string name="profile_main_parent">"Parent Name"</string>
+    <string name="profile_main_hosting">"My Hosting Device"</string>
+    <string name="profile_main_shared">"Device Shared with Me"</string>
+    <string name="profile_main_request_to">"You\'ve sent requests to"</string>
+    <string name="profile_main_request_from">"You\'ve %d requests from"</string>
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>

@@ -86,7 +86,7 @@ public class FragmentProfileMain extends ViewFragment {
 
         for (WatchContact user : mActivityMain.mOperator.getRequestFromList()) {
             //if (((WatchContact.User) user).mRequestStatus.equals("PENDING"))
-                addContact(mViewRequestFromContainer, user, mContactListener);
+            addContact(mViewRequestFromContainer, user, mContactListener);
         }
 
         updateRequestFromTitle();
@@ -96,7 +96,8 @@ public class FragmentProfileMain extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Profile", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_profile), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_edit, R.mipmap.icon_settings);
     }
 
@@ -218,7 +219,8 @@ public class FragmentProfileMain extends ViewFragment {
     private void updateRequestFromTitle() {
         int count = mViewRequestFromContainer.getChildCount();
 
-        String string = String.format(Locale.getDefault(), "You've %d requests from", count);
+        String string = String.format(Locale.getDefault(),
+                getResources().getString(R.string.profile_main_request_from), count);
         mViewRequestFromTitle.setText(string);
     }
 }

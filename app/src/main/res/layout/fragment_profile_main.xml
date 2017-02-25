@@ -27,7 +27,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="Parent Name" />
+        android:text="@string/profile_main_parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="My Hosting Device" />
+            android:text="@string/profile_main_hosting" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Device Shared with Me" />
+            android:text="@string/profile_main_shared" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="You've sent requests to" />
+            android:text="@string/profile_main_request_to" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
