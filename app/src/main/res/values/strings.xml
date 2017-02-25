@@ -78,6 +78,11 @@
     <string name="photo_clip_cancel">"Cancel"</string>
     <string name="photo_clip_take_photo">"Take a Photo"</string>
 
+    <!-- FragmentProfileAdded -->
+    <string name="profile_added_added">"Added"</string>
+    <string name="profile_added_successfully">"We've successfully added your\nSwing Watch."</string>
+    <string name="profile_added_profile">"Set up Your Profile"</string>
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>
