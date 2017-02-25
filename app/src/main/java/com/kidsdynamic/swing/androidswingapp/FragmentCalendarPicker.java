@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -22,7 +23,8 @@ public class FragmentCalendarPicker extends ViewFragment {
 
     private ViewCalendarSelector mViewSelector;
     private ViewCalendarMonth mViewCalendar;
-    private TimePicker mViewTime;
+    private NumberPicker mViewHour;
+    private NumberPicker mViewMinute;
 
     private WatchEvent mEvent;
     private boolean mIsStartDate;
@@ -44,8 +46,15 @@ public class FragmentCalendarPicker extends ViewFragment {
         mViewCalendar = (ViewCalendarMonth) mViewMain.findViewById(R.id.calendar_picker_calendar);
         mViewCalendar.setOnSelectListener(mCalendarListener);
 
-        mViewTime = (TimePicker) mViewMain.findViewById(R.id.calendar_picker_time);
-        mViewTime.setOnTimeChangedListener(mTimeListener);
+        mViewHour = (NumberPicker) mViewMain.findViewById(R.id.calendar_picker_hour);
+        mViewHour.setMaxValue(23);
+        mViewHour.setMinValue(0);
+        mViewHour.setOnValueChangedListener(mHourListener);
+
+        mViewMinute = (NumberPicker) mViewMain.findViewById(R.id.calendar_picker_minute);
+        mViewMinute.setMaxValue(59);
+        mViewMinute.setMinValue(0);
+        mViewMinute.setOnValueChangedListener(mMinuteListener);
 
         return mViewMain;
     }
@@ -67,13 +76,8 @@ public class FragmentCalendarPicker extends ViewFragment {
 
         Calendar calc = Calendar.getInstance();
         calc.setTimeInMillis(mDate);
-        if (Build.VERSION.SDK_INT >= 23) {
-            mViewTime.setHour(calc.get(Calendar.HOUR_OF_DAY));
-            mViewTime.setMinute(calc.get(Calendar.MINUTE));
-        } else {
-            mViewTime.setCurrentHour(calc.get(Calendar.HOUR_OF_DAY));
-            mViewTime.setCurrentMinute(calc.get(Calendar.MINUTE));
-        }
+        mViewHour.setValue(calc.get(Calendar.HOUR_OF_DAY));
+        mViewMinute.setValue(calc.get(Calendar.MINUTE));
     }
 
     @Override
@@ -115,14 +119,27 @@ public class FragmentCalendarPicker extends ViewFragment {
         }
     };
 
-    private TimePicker.OnTimeChangedListener mTimeListener = new TimePicker.OnTimeChangedListener() {
+    private NumberPicker.OnValueChangeListener mHourListener = new NumberPicker.OnValueChangeListener() {
         @Override
-        public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
             Calendar calc = Calendar.getInstance();
 
             calc.setTimeInMillis(mDate);
-            calc.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calc.set(Calendar.MINUTE, minute);
+            calc.set(Calendar.HOUR_OF_DAY, newVal);
+            calc.set(Calendar.MINUTE, mViewMinute.getValue());
+
+            mDate = calc.getTimeInMillis();
+        }
+    };
+
+    private NumberPicker.OnValueChangeListener mMinuteListener = new NumberPicker.OnValueChangeListener() {
+        @Override
+        public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+            Calendar calc = Calendar.getInstance();
+
+            calc.setTimeInMillis(mDate);
+            calc.set(Calendar.HOUR_OF_DAY, mViewHour.getValue());
+            calc.set(Calendar.MINUTE, newVal);
 
             mDate = calc.getTimeInMillis();
         }
