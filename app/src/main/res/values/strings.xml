@@ -17,6 +17,7 @@
     <string name="title_request_from">Request From</string>
     <string name="title_request_to">Send Requests To</string>
     <string name="title_search_device">Search Device</string>
+    <string name="title_sync">Sync</string>
 
     <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">"Agenda"</string>
@@ -195,6 +196,13 @@
     <string name="signup_profile_login_failed">"Login failed"</string>
     <string name="signup_profile_update_failed">"Update failed"</string>
     <string name="signup_profile_avatar_failed">"Update avatar failed"</string>
+
+    <!-- FragmentSyncNow -->
+    <string name="sync_now_message">"Would You Like to\nSync now?"</string>
+    <string name="sync_now_yes">"Yes, Please"</string>
+    <string name="sync_now_dashboard">"No, Go to Dashboard"</string>
+    <string name="sync_now_another">"Sync Another Watch"</string>
+    <string name="sync_now_no_device">"There is no bound device!"</string>
 
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>

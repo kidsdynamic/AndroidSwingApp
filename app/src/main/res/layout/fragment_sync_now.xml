@@ -12,7 +12,7 @@
         android:layout_marginBottom="20dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Would You Like to\nSync now?" />
+        android:text="@string/sync_now_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             android:layout_alignEnd="@+id/sync_now_sponge"
             android:layout_alignStart="@+id/sync_now_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Yes, Please" />
+            android:text="@string/sync_now_yes" />
 
         <Button
             android:id="@+id/sync_now_no"
@@ -45,7 +45,7 @@
             android:layout_alignStart="@+id/sync_now_sponge"
             android:layout_below="@+id/sync_now_yes"
             android:layout_marginBottom="10dp"
-            android:text="No, Go to Dashboard" />
+            android:text="@string/sync_now_dashboard" />
 
         <Button
             android:id="@+id/sync_now_another"
@@ -56,7 +56,7 @@
             android:layout_alignStart="@+id/sync_now_sponge"
             android:layout_below="@+id/sync_now_no"
             android:layout_marginBottom="10dp"
-            android:text="Sync Another Watch" />
+            android:text="@string/sync_now_another" />
     </RelativeLayout>
 
 </LinearLayout>

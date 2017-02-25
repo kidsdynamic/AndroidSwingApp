@@ -44,7 +44,8 @@ public class FragmentSyncNow extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sync", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_sync), true, true, false,
                 R.mipmap.city_overall, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -54,7 +55,7 @@ public class FragmentSyncNow extends ViewFragment {
             WatchContact.Kid device = mActivityMain.mOperator.getFocusKid();
 
             if (device == null) {
-                Toast.makeText(mActivityMain, "There is no bound device", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivityMain, getResources().getString(R.string.sync_now_no_device), Toast.LENGTH_SHORT).show();
             } else {
                 if (device.mProfile != null && !device.mProfile.equals("")) {
                     device.mPhoto = BitmapFactory.decodeFile(device.mProfile);
