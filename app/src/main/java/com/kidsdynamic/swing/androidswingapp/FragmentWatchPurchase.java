@@ -1,6 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +46,7 @@ public class FragmentWatchPurchase extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -63,7 +65,10 @@ public class FragmentWatchPurchase extends ViewFragment {
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            mActivityMain.selectFragment(FragmentSignupWatchBind.class.getName(), null);
+            String url = "http://www.kidsdynamic.com";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         }
     };
 

@@ -244,6 +244,11 @@
     <string name="watch_profile_processing">"Processing"</string>
     <string name="watch_profile_wait">"Please Wait&#8230;"</string>
 
+    <!-- FragmentWatchPurchase -->
+    <string name="watch_purchase_message">"Would You Like\nto Purchase One?"</string>
+    <string name="watch_purchase_yes">"Yes, Please"</string>
+    <string name="watch_purchase_others">"Request Access to Others"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

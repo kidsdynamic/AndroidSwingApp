@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Would You Like\nto Purchase One?" />
+        android:text="@string/watch_purchase_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/watch_purchase_sponge"
             android:layout_alignStart="@+id/watch_purchase_sponge"
-            android:text="Yes, Please" />
+            android:text="@string/watch_purchase_yes" />
 
         <Button
             android:id="@+id/watch_purchase_request"
@@ -53,7 +53,7 @@
             android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/watch_purchase_sponge"
             android:layout_alignStart="@+id/watch_purchase_sponge"
-            android:text="Request Access to Others" />
+            android:text="@string/watch_purchase_others" />
 
     </RelativeLayout>
 
