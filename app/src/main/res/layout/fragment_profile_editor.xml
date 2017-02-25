@@ -53,7 +53,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:hint="First Name" />
+            android:hint="@string/profile_editor_first_name" />
     </LinearLayout>
 
     <LinearLayout
@@ -77,7 +77,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:hint="Last Name" />
+            android:hint="@string/profile_editor_last_name" />
     </LinearLayout>
 
     <LinearLayout
@@ -101,7 +101,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:hint="Phone" />
+            android:hint="@string/profile_editor_phone"
+            android:inputType="phone" />
     </LinearLayout>
 
     <LinearLayout
@@ -125,7 +126,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:hint="Mail Address" />
+            android:hint="@string/profile_editor_mail_address" />
     </LinearLayout>
 
     <LinearLayout
@@ -149,7 +150,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:hint="Address 1" />
+            android:hint="@string/profile_editor_address1" />
     </LinearLayout>
 
 
@@ -174,7 +175,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:hint="Address 2" />
+            android:hint="@string/profile_editor_address2" />
     </LinearLayout>
 
     <LinearLayout
@@ -193,7 +194,7 @@
             android:layout_weight="1"
             android:background="@drawable/contact_background"
             android:gravity="center_vertical"
-            android:hint="City" />
+            android:hint="@string/profile_editor_city" />
 
         <EditText
             android:id="@+id/profile_editor_zip"
@@ -205,7 +206,7 @@
             android:layout_weight="1"
             android:background="@drawable/contact_background"
             android:gravity="center_vertical"
-            android:hint="Zip" />
+            android:hint="@string/profile_editor_zip" />
 
     </LinearLayout>
 </LinearLayout>

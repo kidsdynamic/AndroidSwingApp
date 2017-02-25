@@ -75,13 +75,16 @@ public class FragmentProfileEditor extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Profile", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_profile), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override
     public void onToolbarAction1() {
-        processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+        processDialog = ProgressDialog.show(mActivityMain,
+                getResources().getString(R.string.profile_editor_processing),
+                getResources().getString(R.string.profile_editor_wait), true);
         profileSave();
 
         //mActivityMain.popFragment();
@@ -287,7 +290,7 @@ public class FragmentProfileEditor extends ViewFragment {
             WatchContact.User user = mActivityMain.mOperator.getUser();
             File fileFrom = new File(mUserAvatarFilename);
             File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
-            if(!fileFrom.renameTo(fileTo))
+            if (!fileFrom.renameTo(fileTo))
                 Log.d("swing", "Rename failed! " + mUserAvatarFilename + " to " + response.user.profile);
             user.mProfile = response.user.profile;
             mActivityMain.mOperator.setUser(user);
@@ -297,7 +300,9 @@ public class FragmentProfileEditor extends ViewFragment {
 
         @Override
         public void onFail(int statusCode) {
-            Toast.makeText(mActivityMain, "Update avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.profile_editor_avatar_failed) +
+                            "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
             mActivityMain.popFragment();
         }
     };
