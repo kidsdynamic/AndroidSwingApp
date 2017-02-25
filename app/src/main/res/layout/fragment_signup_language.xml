@@ -10,17 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="20dp"
-        android:layout_weight="5"
+        android:layout_weight="4"
         android:gravity="center"
         android:text="Please Select\nYour Language" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+
+        <LinearLayout
+            android:id="@+id/signup_language_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7">
+        android:layout_weight="2">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_language_sponge"
+            android:id="@+id/signup_language_button_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -31,18 +43,11 @@
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_language_sponge"
-            android:layout_alignStart="@+id/signup_language_sponge"
+            android:layout_alignEnd="@+id/signup_language_button_sponge"
+            android:layout_alignStart="@+id/signup_language_button_sponge"
             android:layout_marginBottom="10dp"
             android:text="Select" />
 
-        <ListView
-            android:id="@+id/signup_language_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/signup_language_sponge"
-            android:layout_alignStart="@+id/signup_language_sponge"
-            android:layout_below="@+id/signup_language_select" />
     </RelativeLayout>
 
 

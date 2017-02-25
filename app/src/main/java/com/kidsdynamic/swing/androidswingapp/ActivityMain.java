@@ -4,7 +4,10 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Stack;
 
 import static com.kidsdynamic.swing.androidswingapp.ServerMachine.REQUEST_TAG;
@@ -85,9 +89,15 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mConfig = new ActivityConfig(this, null);
+
+        String language = mConfig.getString(ActivityConfig.KEY_LANGUAGE);
+        if (!language.equals("")) {
+            setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
+        }
+
         setContentView(R.layout.activity_main);
 
-        mConfig = new ActivityConfig(this, null);
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();
         mContactStack = new Stack<>();
@@ -122,7 +132,7 @@ public class ActivityMain extends AppCompatActivity
         mViewConsole = findViewById(R.id.main_console);
         mViewToolbar = findViewById(R.id.main_toolbar);
 
-        mViewBackground = (ImageView)findViewById(R.id.main_background);
+        mViewBackground = (ImageView) findViewById(R.id.main_background);
     }
 
     @Override
@@ -399,6 +409,7 @@ public class ActivityMain extends AppCompatActivity
     }
 
     List<WatchActivityRaw> mActivityList;
+
     private void nextActivity() {
 
         if (!mActivityList.isEmpty()) {
@@ -428,7 +439,6 @@ public class ActivityMain extends AppCompatActivity
         Log.d("swing", endTime + " end " + WatchOperator.getTimeString(endTime));
 
 
-
         while (time <= endTime) {
             WatchActivityRaw fake = new WatchActivityRaw();
             cal = Calendar.getInstance();
@@ -436,7 +446,7 @@ public class ActivityMain extends AppCompatActivity
 
             fake.mTime = (int) (time / 1000);
             fake.mMacId = macId;
-            fake.mIndoor = fake.mTime + ",0,"+ (int) (Math.random() * 7500) + ",2,3,4";
+            fake.mIndoor = fake.mTime + ",0," + (int) (Math.random() * 7500) + ",2,3,4";
             fake.mOutdoor = fake.mTime + ",1," + (int) (Math.random() * 7500) + ",2,3,4";
             rtn.add(fake);
 
@@ -463,4 +473,13 @@ public class ActivityMain extends AppCompatActivity
         }
     };
 
+    public void setLocale(String language, String region) {
+        Locale locale = new Locale(language, region);
+        Locale.setDefault(locale);
+
+        android.content.res.Configuration config = new android.content.res.Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
 }

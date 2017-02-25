@@ -17,13 +17,14 @@ public class ActivityConfig {
     private Context mContext;
 
     final static String DEF_APPNAME = "ActivityConfig";
-    final static String DEF_APPVERSION = "0000-0000-0001";
+    final static String DEF_APPVERSION = "0001-0100-000E";
     final static String PREFS_SPLIT = "__BPPS:__";
 
     public final static String KEY_APPNAME = "KEY_NAME";
     public final static String KEY_APPVERSION = "KEY_VERSION";
 
     public final static String KEY_LANGUAGE = "KEY_LANGUAGE";
+    public final static String KEY_REGION = "KEY_REGION";
     public final static String KEY_MAIL = "KEY_MAIL";
     public final static String KEY_PASSWORD = "KEY_PASSWORD";
     public final static String KEY_AUTH_TOKEN = "KEY_AUTH_TOKEN";
