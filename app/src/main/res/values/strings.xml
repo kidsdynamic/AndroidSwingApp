@@ -120,6 +120,10 @@
     <string name="profile_option_privacy_policy">"Privacy Policy"</string>
     <string name="profile_option_version">"Version"</string>
 
+    <!-- FragmentProfilePassword -->
+    <string name="profile_password_current">"Current Password"</string>
+    <string name="profile_password_new">"New Password"</string>
+    <string name="profile_password_again">"New Password, Again!"</string>
 
     <string name="signup_language_select">"Select"</string>
 
