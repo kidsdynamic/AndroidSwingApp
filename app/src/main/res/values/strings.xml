@@ -185,6 +185,17 @@
     <string name="signup_login_facebook">"Login with Facebook"</string>
     <string name="signup_login_google">"Login with Google"</string>
 
+    <!-- FragmentSignupProfile -->
+    <string name="signup_profile_first_name">"First Name"</string>
+    <string name="signup_profile_last_name">"Last Name"</string>
+    <string name="signup_profile_phone_number">"Phone Number"</string>
+    <string name="signup_profile_zip_code">"Zip Code"</string>
+    <string name="signup_profile_processing">"Processing"</string>
+    <string name="signup_profile_wait">"Please Wait&#8230;"</string>
+    <string name="signup_profile_login_failed">"Login failed"</string>
+    <string name="signup_profile_update_failed">"Update failed"</string>
+    <string name="signup_profile_avatar_failed">"Update avatar failed"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

@@ -111,7 +111,7 @@ public class FragmentSignupProfile extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sign up", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -188,7 +188,9 @@ public class FragmentSignupProfile extends ViewFragment {
                 mPhoneNumber = mViewPhone.getText().toString();
                 mZipCode = mViewZip.getText().toString();
 
-                processDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+                processDialog = ProgressDialog.show(mActivityMain,
+                        getResources().getString(R.string.signup_profile_processing),
+                        getResources().getString(R.string.signup_profile_wait), true);
 
                 if (mRegisterMail != null && mRegisterPassword != null)
                     mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
@@ -230,7 +232,8 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public void onFail(int statusCode) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain, "Login failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.signup_profile_login_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -275,7 +278,8 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public void onFail(int statusCode, ServerGson.error.e1 error) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain, "Update failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.signup_profile_update_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
 
         }
     };
@@ -286,7 +290,7 @@ public class FragmentSignupProfile extends ViewFragment {
             WatchContact.User user = mActivityMain.mOperator.getUser();
             File fileFrom = new File(mRegisterAvatarFilename);
             File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
-            if(!fileFrom.renameTo(fileTo))
+            if (!fileFrom.renameTo(fileTo))
                 Log.d("swing", "Rename failed! " + mRegisterAvatarFilename + " to " + response.user.profile);
             user.mProfile = response.user.profile;
             mActivityMain.mOperator.setUser(user);
@@ -297,7 +301,8 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public void onFail(int statusCode) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain, "Update avatar failed(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.signup_profile_avatar_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
             //mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }
     };
