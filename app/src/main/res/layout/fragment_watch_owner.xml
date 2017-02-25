@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Register Your\nWatch" />
+        android:text="@string/watch_owner_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:layout_alignEnd="@+id/watch_owner_search_sponge"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_owner_search_sponge"
-            android:text="Search Now" />
+            android:text="@string/watch_owner_search" />
     </RelativeLayout>
 
     <LinearLayout
@@ -65,7 +65,7 @@
             android:layout_margin="10dp"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="or" />
+            android:text="@string/watch_owner_or" />
 
         <View
             android:layout_width="0dp"
@@ -82,7 +82,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Request Access\nto Others" />
+        android:text="@string/watch_owner_others" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -104,6 +104,6 @@
             android:layout_alignEnd="@+id/watch_owner_others_sponge"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_owner_others_sponge"
-            android:text="Add Now" />
+            android:text="@string/watch_owner_add_now" />
     </RelativeLayout>
 </LinearLayout>

@@ -232,6 +232,13 @@
     <string name="watch_have_yes">"Yes"</string>
     <string name="watch_have_no">"No"</string>
 
+    <!-- FragmentWatchOwner -->
+    <string name="watch_owner_message">"Register Your\nWatch"</string>
+    <string name="watch_owner_search">"Search Now"</string>
+    <string name="watch_owner_or">"or"</string>
+    <string name="watch_owner_others">"Request Access\nto Others"</string>
+    <string name="watch_owner_add_now">"Add Now"</string>
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>
