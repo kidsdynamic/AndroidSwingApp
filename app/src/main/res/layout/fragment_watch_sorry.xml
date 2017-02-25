@@ -46,10 +46,10 @@
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/watch_sorry_sponge"
+            android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_sorry_sponge"
+            android:layout_marginBottom="10dp"
             android:text="Search Again" />
 
         <Button
@@ -57,10 +57,10 @@
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/watch_sorry_search"
-            android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/watch_sorry_sponge"
             android:layout_alignStart="@+id/watch_sorry_sponge"
+            android:layout_below="@+id/watch_sorry_search"
+            android:layout_marginBottom="10dp"
             android:text="Request Access to Others" />
 
         <Button
@@ -68,10 +68,10 @@
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/watch_sorry_request"
-            android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/watch_sorry_sponge"
             android:layout_alignStart="@+id/watch_sorry_sponge"
+            android:layout_below="@+id/watch_sorry_request"
+            android:layout_marginBottom="10dp"
             android:text="Contact Us" />
 
     </RelativeLayout>

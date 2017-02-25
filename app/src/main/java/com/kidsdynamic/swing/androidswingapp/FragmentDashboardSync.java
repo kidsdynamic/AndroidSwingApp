@@ -1,9 +1,11 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +19,11 @@ public class FragmentDashboardSync extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
-    private ViewCircle mViewProgress;
     private TextView mViewMessage;
+    private Button mViewRequest;
+    private Button mViewProfile;
 
-    private boolean mIsPause = true;
+    private ProgressDialog mProcessDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,8 +35,10 @@ public class FragmentDashboardSync extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_dashboard_sync, container, false);
 
-        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.dashboard_sync_progress);
         mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_sync_message);
+
+        mViewRequest = (Button) mViewMain.findViewById(R.id.dashboard_sync_request);
+        mViewProfile = (Button) mViewMain.findViewById(R.id.dashboard_sync_profile);
 
         return mViewMain;
     }
@@ -47,37 +52,46 @@ public class FragmentDashboardSync extends ViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mIsPause = false;
 
         WatchContact.Kid focus = mActivityMain.mOperator.getFocusKid();
 
         if (focus != null) {
             setTitle(focus.mName);
+            mViewMessage.setVisibility(View.INVISIBLE);
+            mViewRequest.setVisibility(View.INVISIBLE);
+            mViewProfile.setVisibility(View.INVISIBLE);
 
-            mViewProgress.setStrokeBeginEnd(0, 10);
-            mViewProgress.startProgress(30, -1, -1);
+            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
             mActivityMain.mOperator.updateActivity(mUpdateActivityListener, focus.mId);
+
+        } else if(mActivityMain.mOperator.getRequestToList().size() > 0) {
+            mViewMessage.setVisibility(View.VISIBLE);
+            mViewRequest.setVisibility(View.VISIBLE);
+            mViewProfile.setVisibility(View.VISIBLE);
+
+            mViewMessage.setText("Request Pending.\nAwait responses");
+
         } else {
-            mViewProgress.setActive(false);
-            mViewMessage.setText("You Haven't Any Watch");
+            mViewMessage.setVisibility(View.VISIBLE);
+            mViewRequest.setVisibility(View.VISIBLE);
+            mViewProfile.setVisibility(View.VISIBLE);
+
+            mViewMessage.setText("You Don't Have Any\nData Yet");
         }
     }
 
     @Override
     public void onPause() {
+        if (mProcessDialog != null)
+            mProcessDialog.dismiss();
         super.onPause();
-        mIsPause = true;
-
-        mViewProgress.stopProgress();
     }
 
     WatchOperatorUpdateActivity.finishListener mUpdateActivityListener = new WatchOperatorUpdateActivity.finishListener() {
         @Override
         public void onFinish(String msg) {
-            if(mIsPause)
-                return;
 
-            mViewProgress.stopProgress();
+            mProcessDialog.dismiss();
             if (msg.equals(""))
                 mActivityMain.selectFragment(FragmentDashboardSelect.class.getName(), null);
             else
