@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="How Are You Doing\nToday?" />
+        android:text="@string/dashboard_select_hello" />
 
     <ImageView
         android:id="@+id/dashboard_select_monster"

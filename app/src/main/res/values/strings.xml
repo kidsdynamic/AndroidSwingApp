@@ -50,6 +50,12 @@
     <string name="dashboard_chart_message_almost">"One More Time!\nYou Are Almost There!"</string>
     <string name="dashboard_chart_message_excellent">"Woohoo! You've\nReached Your Goal!"</string>
 
+    <!-- FragmentDashboardSelect -->
+    <string name="dashboard_select_hello">"How Are You Doing\nToday?"</string>
+    <string name="dashboard_select_excellent">Excellent!</string>
+    <string name="dashboard_select_almost">Almost There!</string>
+    <string name="dashboard_select_below">Below Average!</string>
+
     <string name="signup_language_select">Select</string>
 
     <string name="signup_login_login">Sing Up / Login</string>

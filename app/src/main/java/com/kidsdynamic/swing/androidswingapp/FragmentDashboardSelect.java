@@ -55,7 +55,8 @@ public class FragmentDashboardSelect extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Dashboard", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_dashboard), true, true, false,
                 ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -84,7 +85,7 @@ public class FragmentDashboardSelect extends ViewFragment {
     private void showExcellent() {
         mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster03);
         mViewMonster.setImageResource(R.mipmap.monster_yellow);
-        mViewEmotion.setText("Excellent!");
+        mViewEmotion.setText(getResources().getString(R.string.dashboard_select_excellent));
 
         mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_orange_main);
         mViewHello.setTextColor(mEmotionColor);
@@ -98,7 +99,7 @@ public class FragmentDashboardSelect extends ViewFragment {
     private void showAlmost() {
         mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster02);
         mViewMonster.setImageResource(R.mipmap.monster_green);
-        mViewEmotion.setText("Almost There!");
+        mViewEmotion.setText(getResources().getString(R.string.dashboard_select_almost));
 
         mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_green_main);
         mViewHello.setTextColor(mEmotionColor);
@@ -112,7 +113,7 @@ public class FragmentDashboardSelect extends ViewFragment {
     private void showBelow() {
         mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster01);
         mViewMonster.setImageResource(R.mipmap.monster_purple);
-        mViewEmotion.setText("Below Average!");
+        mViewEmotion.setText(getResources().getString(R.string.dashboard_select_below));
 
         mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_blue_main);
         mViewHello.setTextColor(mEmotionColor);
