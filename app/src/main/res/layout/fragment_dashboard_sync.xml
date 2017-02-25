@@ -29,7 +29,6 @@
         android:gravity="center"
         android:paddingEnd="15dp"
         android:paddingStart="15dp"
-        android:text="Await Responses"
         android:textColor="@color/color_orange_main"
         android:textSize="28sp"
         android:textStyle="bold" />
@@ -55,7 +54,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/dashboard_sync_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Request Access" />
+            android:text="@string/dashboard_sync_request" />
 
         <Button
             android:id="@+id/dashboard_sync_profile"
@@ -65,7 +64,7 @@
             android:layout_alignEnd="@+id/dashboard_sync_sponge"
             android:layout_alignStart="@+id/dashboard_sync_sponge"
             android:layout_below="@+id/dashboard_sync_request"
-            android:text="Go to Profile" />
+            android:text="@string/dashboard_sync_profile" />
     </RelativeLayout>
 
 </LinearLayout>

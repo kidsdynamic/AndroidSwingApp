@@ -45,7 +45,8 @@ public class FragmentDashboardSync extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Dashboard", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_dashboard), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -61,22 +62,24 @@ public class FragmentDashboardSync extends ViewFragment {
             mViewRequest.setVisibility(View.INVISIBLE);
             mViewProfile.setVisibility(View.INVISIBLE);
 
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.dashboard_sync_process),
+                    getResources().getString(R.string.dashboard_sync_waiting), true);
             mActivityMain.mOperator.updateActivity(mUpdateActivityListener, focus.mId);
 
-        } else if(mActivityMain.mOperator.getRequestToList().size() > 0) {
+        } else if (mActivityMain.mOperator.getRequestToList().size() > 0) {
             mViewMessage.setVisibility(View.VISIBLE);
             mViewRequest.setVisibility(View.VISIBLE);
             mViewProfile.setVisibility(View.VISIBLE);
 
-            mViewMessage.setText("Request Pending.\nAwait responses");
+            mViewMessage.setText(getResources().getString(R.string.dashboard_sync_pending));
 
         } else {
             mViewMessage.setVisibility(View.VISIBLE);
             mViewRequest.setVisibility(View.VISIBLE);
             mViewProfile.setVisibility(View.VISIBLE);
 
-            mViewMessage.setText("You Don't Have Any\nData Yet");
+            mViewMessage.setText(getResources().getString(R.string.dashboard_sync_no_data));
         }
     }
 
@@ -100,7 +103,8 @@ public class FragmentDashboardSync extends ViewFragment {
     };
 
     private void setTitle(String name) {
-        String string = String.format(Locale.getDefault(), "%s's Watch", name);
+        String string = String.format(Locale.getDefault(),
+                getResources().getString(R.string.dashboard_sync_owner), name);
         mActivityMain.toolbarSetTitle(string, false);
     }
 

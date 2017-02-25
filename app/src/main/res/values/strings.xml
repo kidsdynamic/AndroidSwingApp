@@ -56,6 +56,15 @@
     <string name="dashboard_select_almost">Almost There!</string>
     <string name="dashboard_select_below">Below Average!</string>
 
+    <!-- FragmentDashboardSync -->
+    <string name="dashboard_sync_request">Request Access</string>
+    <string name="dashboard_sync_profile">Go to Profile</string>
+    <string name="dashboard_sync_process">Processing</string>
+    <string name="dashboard_sync_waiting">Please Wait&#8230;</string>
+    <string name="dashboard_sync_pending">"Request Pending.\nAwait responses"</string>
+    <string name="dashboard_sync_no_data">"You Don't Have Any\nData Yet"</string>
+    <string name="dashboard_sync_owner">"%s's Watch"</string>
+
     <string name="signup_language_select">Select</string>
 
     <string name="signup_login_login">Sing Up / Login</string>
