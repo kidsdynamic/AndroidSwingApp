@@ -17,7 +17,7 @@ public class ActivityConfig {
     private Context mContext;
 
     final static String DEF_APPNAME = "ActivityConfig";
-    final static String DEF_APPVERSION = "0001-0100-000E";
+    final static String DEF_APPVERSION = "0001-0100-000F";
     final static String PREFS_SPLIT = "__BPPS:__";
 
     public final static String KEY_APPNAME = "KEY_NAME";

@@ -6,6 +6,10 @@
     <string name="language_zh_tw">"繁體中文"</string>
     <string name="language_zh_cn">"简体中文"</string>
 
+    <!-- ActivityMain -->
+    <string name="activity_main_synchronize">"Synchronize"</string>
+    <string name="activity_main_wait">"Please Wait&#8230;"</string>
+
     <!-- Title bar -->
     <string name="title_boot">"Boot"</string>
     <string name="title_calendar">"Calendar"</string>

@@ -157,7 +157,9 @@ public class ActivityMain extends AppCompatActivity
 
         if (!mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("") && !mIgnoreSyncOnce) {
             if (mProcessDialog == null) {
-                mProcessDialog = ProgressDialog.show(this, "Synchronize", "Please wait...", true);
+                mProcessDialog = ProgressDialog.show(this,
+                        getResources().getString(R.string.activity_main_synchronize),
+                        getResources().getString(R.string.activity_main_wait), true);
 
                 mOperator.resumeSync(mFinishListener, "", "");
             }
