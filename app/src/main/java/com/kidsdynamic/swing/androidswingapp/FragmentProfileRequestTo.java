@@ -75,7 +75,8 @@ public class FragmentProfileRequestTo extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Send Requests To", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_request_to), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -85,7 +86,7 @@ public class FragmentProfileRequestTo extends ViewFragment {
     }
 
     public void addUser(WatchContact.User person) {
-        View view = WatchContact.inflateButton(mActivityMain, person, "Send");
+        View view = WatchContact.inflateButton(mActivityMain, person, getResources().getString(R.string.profile_request_to_send));
 
         View button = view.findViewById(R.id.watch_contact_button_button);
         button.setTag(person);
@@ -95,7 +96,7 @@ public class FragmentProfileRequestTo extends ViewFragment {
     }
 
     public void addPending(WatchContact.User device) {
-        View view = WatchContact.inflateButton(mActivityMain, device, "Cancel");
+        View view = WatchContact.inflateButton(mActivityMain, device, getResources().getString(R.string.profile_request_to_cancel));
 
         View button = view.findViewById(R.id.watch_contact_button_button);
         button.setTag(device);
@@ -118,7 +119,9 @@ public class FragmentProfileRequestTo extends ViewFragment {
             String mail = mViewMail.getText().toString();
 
             if (!mail.equals("")) {
-                mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+                mProcessDialog = ProgressDialog.show(mActivityMain,
+                        getResources().getString(R.string.profile_request_to_processing),
+                        getResources().getString(R.string.profile_request_to_wait), true);
                 mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mail);
             }
 

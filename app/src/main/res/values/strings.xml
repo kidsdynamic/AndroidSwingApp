@@ -15,6 +15,7 @@
     <string name="title_option">Option</string>
     <string name="title_password">Password</string>
     <string name="title_request_from">Request From</string>
+    <string name="title_request_to">Send Requests To</string>
 
     <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">"Agenda"</string>
@@ -138,6 +139,17 @@
     <string name="profile_request_from_processing">"Processing"</string>
     <string name="profile_request_from_wait">"Please Wait&#8230;"</string>
     <string name="profile_request_from_count">"You Have %d Requests"</string>
+
+    <!-- FragmentProfileRequestTo -->
+    <string name="profile_request_to_mail">"Search User Email"</string>
+    <string name="profile_request_to_users">"Users"</string>
+    <string name="profile_request_to_others">"You\'ve Requested Others"</string>
+    <string name="profile_request_to_send">"Send"</string>
+    <string name="profile_request_to_cancel">"Cancel"</string>
+    <string name="profile_request_to_processing">"Processing"</string>
+    <string name="profile_request_to_wait">"Please Wait&#8230;"</string>
+
+
 
     <string name="signup_language_select">"Select"</string>
 
