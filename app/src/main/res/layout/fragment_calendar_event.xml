@@ -261,7 +261,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:padding="1dp"
-                        app:color="@color/color_orange_main"
+                        app:color="@color/color_yellow_main"
                         app:desiredSize="24dp" />
 
                 </LinearLayout>
