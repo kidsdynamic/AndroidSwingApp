@@ -14,6 +14,7 @@
     <string name="title_profile">Profile</string>
     <string name="title_option">Option</string>
     <string name="title_password">Password</string>
+    <string name="title_request_from">Request From</string>
 
     <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">"Agenda"</string>
@@ -133,6 +134,10 @@
     <string name="profile_registered_processing">"Processing"</string>
     <string name="profile_registered_wait">"Please Wait&#8230;"</string>
 
+    <!-- FragmentProfileRequestFrom -->
+    <string name="profile_request_from_processing">"Processing"</string>
+    <string name="profile_request_from_wait">"Please Wait&#8230;"</string>
+    <string name="profile_request_from_count">"You Have %d Requests"</string>
 
     <string name="signup_language_select">"Select"</string>
 

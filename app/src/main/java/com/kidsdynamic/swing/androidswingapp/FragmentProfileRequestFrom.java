@@ -67,13 +67,16 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Request From", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_request_from), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override
     public void onToolbarAction1() {
-        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+        mProcessDialog = ProgressDialog.show(mActivityMain,
+                getResources().getString(R.string.profile_request_from_processing),
+                getResources().getString(R.string.profile_request_from_wait), true);
         int count = mViewContainer.getChildCount();
         List<Integer> list = new ArrayList<>();
 
@@ -122,7 +125,8 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
     private void updateCount() {
         int count = mViewContainer.getChildCount();
-        String string = String.format(Locale.getDefault(), "You Have %d Requests", count);
+        String string = String.format(Locale.getDefault(),
+                getResources().getString(R.string.profile_request_from_count), count);
 
         mViewCount.setText(string);
     }
