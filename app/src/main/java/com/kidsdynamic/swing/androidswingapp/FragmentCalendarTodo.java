@@ -172,7 +172,9 @@ public class FragmentCalendarTodo extends ViewFragment {
                 viewTodo.save(todo);
             }
 
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.calendar_todo_processing),
+                    getResources().getString(R.string.calendar_todo_wait), true);
             mActivityMain.mOperator.todoDone(mTodoDoneListener, mEvent.mTodoList);
             //mActivityMain.mOperator.setEvent(null, mEvent);
         }
@@ -181,7 +183,9 @@ public class FragmentCalendarTodo extends ViewFragment {
     private View.OnClickListener mDeleteListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.calendar_todo_processing),
+                    getResources().getString(R.string.calendar_todo_wait), true);
             mActivityMain.mOperator.deleteEvent(mDeleteEventListener, mEvent.mId);
         }
     };

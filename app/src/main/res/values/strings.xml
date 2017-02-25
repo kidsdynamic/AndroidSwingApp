@@ -29,6 +29,10 @@
     <string name="calendar_main_monthly_schedule">Monthly Schedule</string>
     <string name="calendar_main_no_incoming_event">No Incoming Event</string>
 
+    <string name="calendar_todo_save">Save</string>
+    <string name="calendar_todo_processing">Processing</string>
+    <string name="calendar_todo_wait">Please Wait&#8230;</string>
+
     <string name="signup_language_select">Select</string>
 
     <string name="signup_login_login">Sing Up / Login</string>

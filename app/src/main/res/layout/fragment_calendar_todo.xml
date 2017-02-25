@@ -126,7 +126,7 @@
             android:layout_alignEnd="@id/calendar_todo_button_sponge"
             android:layout_alignStart="@id/calendar_todo_button_sponge"
             android:layout_centerInParent="true"
-            android:text="Save" />
+            android:text="@string/calendar_todo_save" />
 
         <ImageView
             android:id="@+id/calendar_todo_delete"
