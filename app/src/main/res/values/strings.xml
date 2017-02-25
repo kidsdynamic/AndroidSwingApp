@@ -223,6 +223,11 @@
     <string name="watch_added_message">"We\'ve successfully added your\nSwing Watch."</string>
     <string name="watch_added_profile">"Set up Your Profile"</string>
 
+    <!-- FragmentWatchFinish -->
+    <string name="watch_finish_dashboard">"Go to Dashboard"</string>
+    <string name="watch_finish_another">"Add Another Watch"</string>
+
+
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
     <string name="event_alarm_good_morning">"Good Morning"</string>

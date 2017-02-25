@@ -63,7 +63,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/watch_finish_sponge"
             android:layout_marginBottom="10dp"
-            android:text="Go to Dashboard" />
+            android:text="@string/watch_finish_dashboard" />
 
         <Button
             android:id="@+id/watch_finish_another"
@@ -74,7 +74,7 @@
             android:layout_alignStart="@+id/watch_finish_sponge"
             android:layout_below="@+id/watch_finish_dashboard"
             android:layout_marginBottom="10dp"
-            android:text="Add Another Watch" />
+            android:text="@string/watch_finish_another" />
 
     </RelativeLayout>
 
