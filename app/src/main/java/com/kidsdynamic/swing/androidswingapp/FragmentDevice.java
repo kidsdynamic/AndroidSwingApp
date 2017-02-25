@@ -89,18 +89,19 @@ public class FragmentDevice extends ViewFragment {
 
     private void setStatus(int status) {
         if (status == STATUS_SEARCH) {
-            mViewStatus.setText("Searching...");
+            mViewStatus.setText(getResources().getString(R.string.device_searching));
         } else if (status == STATUS_NOTFOUND) {
-            mViewStatus.setText("Not Found");
-        } else if (status == STATUS_FOUND){
-            mViewStatus.setText("Battery");
-        } else if( status == STATUS_NOKID) {
-            mViewStatus.setText("You Haven't Any Watch");
+            mViewStatus.setText(getResources().getString(R.string.device_not_found));
+        } else if (status == STATUS_FOUND) {
+            mViewStatus.setText(getResources().getString(R.string.device_battery));
+        } else if (status == STATUS_NOKID) {
+            mViewStatus.setText(getResources().getString(R.string.device_no_watch));
         }
     }
 
     private void setTitle(String name) {
-        String string = String.format(Locale.getDefault(), "%s's Watch", name);
+        String string = String.format(Locale.getDefault(),
+                getResources().getString(R.string.device_owner), name);
         mActivityMain.toolbarSetTitle(string, false);
     }
 
@@ -128,7 +129,6 @@ public class FragmentDevice extends ViewFragment {
             mViewProgress.stopProgress();
 
             if (value == (byte) 0xFF) {
-                // Todo : can't find watch.
                 setStatus(STATUS_NOTFOUND);
                 mViewProgress.setActive(false);
             } else {

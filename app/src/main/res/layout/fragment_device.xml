@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:gravity="center"
-        android:text="Battery" />
+        android:text="@string/device_battery" />
 
 
     <RelativeLayout
