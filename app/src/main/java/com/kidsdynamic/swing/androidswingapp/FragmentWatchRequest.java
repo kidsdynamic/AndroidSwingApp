@@ -43,7 +43,7 @@ public class FragmentWatchRequest extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_request, container, false);
 
-        mViewContainer = (LinearLayout)mViewMain.findViewById(R.id.watch_request_container);
+        mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.watch_request_container);
 
         mButtonBack = (Button) mViewMain.findViewById(R.id.watch_request_back);
         mButtonBack.setOnClickListener(mOnBackListener);
@@ -57,7 +57,9 @@ public class FragmentWatchRequest extends ViewFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+        mProcessDialog = ProgressDialog.show(mActivityMain,
+                getResources().getString(R.string.watch_request_processing),
+                getResources().getString(R.string.watch_request_wait), true);
         getKidAvatar(true);
     }
 
@@ -111,7 +113,7 @@ public class FragmentWatchRequest extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Watch", false, false,  false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE, ActivityMain.RESOURCE_IGNORE);
     }
 
@@ -130,7 +132,8 @@ public class FragmentWatchRequest extends ViewFragment {
     };
 
     private void addDevice(WatchContact.Kid device) {
-        View view = WatchContact.inflateButton(mActivityMain, device, "Add");
+        View view = WatchContact.inflateButton(mActivityMain, device,
+                getResources().getString(R.string.watch_request_add));
         View button = view.findViewById(R.id.watch_contact_button_button);
         button.setOnClickListener(mDeviceClickListener);
 

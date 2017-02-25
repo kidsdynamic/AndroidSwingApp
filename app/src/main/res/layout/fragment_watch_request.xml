@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="3"
         android:gravity="center"
-        android:text="Request Access\nto Device" />
+        android:text="@string/watch_request_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"

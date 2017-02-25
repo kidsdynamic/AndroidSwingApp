@@ -256,6 +256,11 @@
     <string name="watch_registered_processing">"Processing"</string>
     <string name="watch_registered_wait">"Please Wait&#8230;"</string>
 
+    <!-- FragmentWatchRequest -->
+    <string name="watch_request_message">"Request Access\nto Device"</string>
+    <string name="watch_request_processing">"Processing"</string>
+    <string name="watch_request_wait">"Please Wait&#8230;"</string>
+    <string name="watch_request_add">"Add"</string>
 
     <!-- Events name -->
     <string name="event_alarm_app">"Agenda Reminders (Only for the App)"</string>
