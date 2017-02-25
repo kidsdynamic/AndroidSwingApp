@@ -55,7 +55,7 @@ public class FragmentProfileRegistered extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Search Device", true, true, false,
+        return new ViewFragmentConfig("", true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -70,7 +70,9 @@ public class FragmentProfileRegistered extends ViewFragment {
             for (WatchContact contact : mKidList)
                 mActivityMain.mContactStack.push(contact);
 
-            mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.profile_registered_processing),
+                    getResources().getString(R.string.profile_registered_wait), true);
             mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mKidList.get(0).mLabel);
         }
     };

@@ -126,6 +126,14 @@
     <string name="profile_password_new">"New Password"</string>
     <string name="profile_password_again">"New Password, Again!"</string>
 
+    <!-- FragmentProfileRegistered -->
+    <string name="profile_registered_registered">"This Watch Has\nBeen Registered"</string>
+    <string name="profile_registered_request_access">"Request Access"</string>
+    <string name="profile_registered_contact_us">"Contact Us"</string>
+    <string name="profile_registered_processing">"Processing"</string>
+    <string name="profile_registered_wait">"Please Wait&#8230;"</string>
+
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>
