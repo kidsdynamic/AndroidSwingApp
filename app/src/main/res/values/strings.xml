@@ -161,6 +161,13 @@
     <string name="profile_share_save">"Save"</string>
     <string name="profile_share_who">"Select Swing Watch to\nShare with %s"</string>
 
+    <!-- FragmentProfileSorry -->
+    <string name="profile_sorry_sorry">"Sorry!"</string>
+    <string name="profile_sorry_message">"We could't find your swing watch. Please\nmake sure your watch is fully charged."</string>
+    <string name="profile_sorry_again">"Search Again"</string>
+    <string name="profile_sorry_others">"Request Access to Others"</string>
+    <string name="profile_sorry_contact_us">"Contact Us"</string>
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>

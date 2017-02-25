@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="Sorry!" />
+        android:text="@string/profile_sorry_sorry" />
 
     <TextView
         style="@style/textview_hint"
@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="We could't find your swing watch. Please\nmake sure your watch is fully charged" />
+        android:text="@string/profile_sorry_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/profile_sorry_sponge"
             android:layout_alignStart="@+id/profile_sorry_sponge"
-            android:text="Search Again" />
+            android:text="@string/profile_sorry_again" />
 
         <Button
             android:id="@+id/profile_sorry_request"
@@ -53,7 +53,7 @@
             android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/profile_sorry_sponge"
             android:layout_alignStart="@+id/profile_sorry_sponge"
-            android:text="Request Access to Others" />
+            android:text="@string/profile_sorry_others" />
 
         <Button
             android:id="@+id/profile_sorry_contact"
@@ -64,7 +64,7 @@
             android:layout_marginBottom="10dp"
             android:layout_alignEnd="@+id/profile_sorry_sponge"
             android:layout_alignStart="@+id/profile_sorry_sponge"
-            android:text="Contact Us" />
+            android:text="@string/profile_sorry_contact_us" />
 
     </RelativeLayout>
 </LinearLayout>

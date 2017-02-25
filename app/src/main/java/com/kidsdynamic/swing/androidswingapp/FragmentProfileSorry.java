@@ -48,7 +48,8 @@ public class FragmentProfileSorry extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Search Device", true, true, false,
+        return new ViewFragmentConfig(
+                getResources().getString(R.string.title_search_device), true, true, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -67,7 +68,7 @@ public class FragmentProfileSorry extends ViewFragment {
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // todo: intend to request by email
+            mActivityMain.selectFragment(FragmentProfileRequestTo.class.getName(), null);
         }
     };
 
@@ -77,6 +78,7 @@ public class FragmentProfileSorry extends ViewFragment {
             String url = "http://www.kidsdynamic.com";
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
-            startActivity(i);        }
+            startActivity(i);
+        }
     };
 }
