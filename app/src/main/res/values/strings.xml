@@ -13,6 +13,7 @@
     <string name="title_photo">Photo</string>
     <string name="title_profile">Profile</string>
     <string name="title_option">Option</string>
+    <string name="title_password">Password</string>
 
     <!-- FragmentCalendarAlarm -->
     <string name="calendar_alarm_agenda">"Agenda"</string>
