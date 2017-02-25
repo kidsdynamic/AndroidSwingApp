@@ -30,7 +30,6 @@ public class FragmentSignupAccount extends ViewFragment {
     private Dialog mProcessDialog = null;
     private String mMail = "";
     private String mPassword = "";
-    private List<WatchContact.Kid> mKidList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
     @Override
     public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig("Sign up", false, false, false,
+        return new ViewFragmentConfig("", false, false, false,
                 ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
@@ -94,10 +93,13 @@ public class FragmentSignupAccount extends ViewFragment {
                 mPassword = mViewPassword.getText().toString();
 
                 if (mMail.equals("") || mPassword.equals("")) {
-                    Toast.makeText(mActivityMain,"Login failed.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivityMain,
+                            getResources().getString(R.string.signup_account_login_failed), Toast.LENGTH_SHORT).show();
                     //mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
-                    mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...",true);
+                    mProcessDialog = ProgressDialog.show(mActivityMain,
+                            getResources().getString(R.string.signup_account_processing),
+                            getResources().getString(R.string.signup_account_wait), true);
                     mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
                 }
             }
@@ -123,7 +125,7 @@ public class FragmentSignupAccount extends ViewFragment {
         @Override
         public void onFail(int statusCode) {
             mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain,""+statusCode,Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain, "" + statusCode, Toast.LENGTH_SHORT).show();
         }
     };
 

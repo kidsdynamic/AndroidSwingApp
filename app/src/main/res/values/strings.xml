@@ -168,6 +168,13 @@
     <string name="profile_sorry_others">"Request Access to Others"</string>
     <string name="profile_sorry_contact_us">"Contact Us"</string>
 
+    <!-- FragmentSignupAccount -->
+    <string name="signup_account_mail">"Email"</string>
+    <string name="signup_account_password">"Password"</string>
+    <string name="signup_account_login_failed">"Login failed."</string>
+    <string name="signup_account_processing">"Processing"</string>
+    <string name="signup_account_wait">"Please Wait&#8230;"</string>
+
     <string name="signup_language_select">"Select"</string>
 
     <string name="signup_login_login">"Sing Up / Login"</string>

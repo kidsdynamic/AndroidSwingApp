@@ -40,7 +40,7 @@
             android:layout_alignStart="@+id/signup_account_sponge"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:hint="Email"
+            android:hint="@string/signup_account_mail"
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:nextFocusForward="@+id/registration_account_password" />
@@ -54,7 +54,7 @@
             android:layout_alignStart="@+id/signup_account_sponge"
             android:layout_below="@+id/signup_account_email"
             android:gravity="center"
-            android:hint="Password"
+            android:hint="@string/signup_account_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword" />
     </RelativeLayout>
