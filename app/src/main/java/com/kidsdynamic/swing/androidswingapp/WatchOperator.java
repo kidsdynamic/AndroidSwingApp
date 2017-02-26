@@ -50,29 +50,38 @@ public class WatchOperator {
         */
     }
 
+    interface finishListener {
+        void onFinish(String msg, Object arg);
+        void onFailed(String Command, int statusCode);
+    }
+
     //-------------------------------------------------------------------------
-    public void resumeSync(WatchOperatorResumeSync.finishListener listener, String email, String password) {
+    public void resumeSync(WatchOperator.finishListener listener, String email, String password) {
         new WatchOperatorResumeSync(mActivity).start(listener, email, password);
     }
 
-    public void replyToSubHost(WatchOperatorReplyToSubHost.finishListener listener, int subHostId, List<Integer> kidsId) {
+    public void replyToSubHost(WatchOperator.finishListener listener, int subHostId, List<Integer> kidsId) {
         new WatchOperatorReplyToSubHost(mActivity).start(listener, subHostId, kidsId);
     }
 
-    public void requestToSubHost(WatchOperatorRequestToSubHost.finishListener listener, String email) {
+    public void requestToSubHost(WatchOperator.finishListener listener, String email) {
         new WatchOperatorRequestToSubHost(mActivity).start(listener, email);
     }
 
-    public void setKid(WatchOperatorSetKid.finishListener listener, String name, String macId, Bitmap avatar) {
+    public void setKid(WatchOperator.finishListener listener, String name, String macId, Bitmap avatar) {
         new WatchOperatorSetKid(mActivity).start(listener, name, macId, avatar);
     }
 
-    public void setKid(WatchOperatorSetKid.finishListener listener, int id, String name, Bitmap avatar) {
+    public void setKid(WatchOperator.finishListener listener, int id, String name, Bitmap avatar) {
         new WatchOperatorSetKid(mActivity).start(listener, id, name, avatar);
     }
 
-    public void deleteKid(WatchOperatorDeleteKid.finishListener listener, int id) {
+    public void deleteKid(WatchOperator.finishListener listener, int id) {
         new WatchOperatorDeleteKid(mActivity).start(listener, id);
+    }
+
+    public void signUp(WatchOperator.finishListener listener, String email, String password, String firstName, String lastName, String phone, String zip, Bitmap avatar) {
+        new WatchOperatorSignUp(mActivity).start(listener, email, password, firstName, lastName, phone, zip, avatar);
     }
     //-------------------------------------------------------------------------
 
@@ -284,11 +293,11 @@ public class WatchOperator {
         return mWatchDatabase.EventGet(id);
     }
 
-    public void setEvent(WatchOperatorSetEvent.finishListener listener, WatchEvent event) {
+    public void setEvent(WatchOperator.finishListener listener, WatchEvent event) {
         new WatchOperatorSetEvent(mActivity).start(listener, event);
     }
 
-    public void deleteEvent(WatchOperatorDeleteEvent.finishListener listener, int eventId) {
+    public void deleteEvent(WatchOperator.finishListener listener, int eventId) {
         new WatchOperatorDeleteEvent(mActivity).start(listener, eventId);
     }
 
@@ -300,11 +309,11 @@ public class WatchOperator {
         return null;
     }
 
-    public void todoDone(WatchOperatorTodoDone.finishListener listener, List<WatchTodo> todos) {
+    public void todoDone(WatchOperator.finishListener listener, List<WatchTodo> todos) {
         new WatchOperatorTodoDone(mActivity).start(listener, todos);
     }
 
-    public void updateActivity(WatchOperatorUpdateActivity.finishListener listener, int kid) {
+    public void updateActivity(WatchOperator.finishListener listener, int kid) {
         new WatchOperatorUpdateActivity(mActivity).start(listener, kid);
     }
 

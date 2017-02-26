@@ -653,9 +653,9 @@ public class FragmentCalendarEvent extends ViewFragment {
         ViewDelete(mActivityMain.mOperator.getUser().mId == mEvent.mUserId && mEvent.mId != 0);
     }
 
-    WatchOperatorSetEvent.finishListener mSetEventListener = new WatchOperatorSetEvent.finishListener() {
+    WatchOperator.finishListener mSetEventListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             if (!msg.equals("")) {
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
@@ -663,17 +663,27 @@ public class FragmentCalendarEvent extends ViewFragment {
                 mActivityMain.popFragment();
             }
         }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
+        }
     };
 
-    WatchOperatorDeleteEvent.finishListener mDeleteEventListener = new WatchOperatorDeleteEvent.finishListener() {
+    WatchOperator.finishListener mDeleteEventListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             if (!msg.equals("")) {
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             } else {
                 mActivityMain.popFragment();
             }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 }

@@ -182,9 +182,9 @@ public class ActivityMain extends AppCompatActivity
         super.onPause();
     }
 
-    WatchOperatorResumeSync.finishListener mFinishListener = new WatchOperatorResumeSync.finishListener() {
+    WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             eventTest();
 
             if (!msg.equals(""))
@@ -197,6 +197,11 @@ public class ActivityMain extends AppCompatActivity
                 getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 selectFragment(FragmentSyncNow.class.getName(), null);
             }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 
@@ -422,10 +427,15 @@ public class ActivityMain extends AppCompatActivity
 
     }
 
-    WatchOperatorUpdateActivity.finishListener mUpdateActivityListener = new WatchOperatorUpdateActivity.finishListener() {
+    WatchOperator.finishListener mUpdateActivityListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mOperator.getActivityOfYear();
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 

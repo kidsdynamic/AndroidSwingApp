@@ -191,9 +191,9 @@ public class FragmentWatchProfile extends ViewFragment {
         }
     };
 
-    WatchOperatorSetKid.finishListener mAddKidListener = new WatchOperatorSetKid.finishListener() {
+    WatchOperator.finishListener mAddKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             if (!msg.equals("")) {
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
@@ -206,6 +206,11 @@ public class FragmentWatchProfile extends ViewFragment {
                     mActivityMain.selectFragment(FragmentWatchFinish.class.getName(), bundle);
                 }
             }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 

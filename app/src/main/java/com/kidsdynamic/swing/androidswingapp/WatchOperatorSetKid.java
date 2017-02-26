@@ -16,7 +16,7 @@ public class WatchOperatorSetKid {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private BLEMachine mBLEMachine;
-    private finishListener mFinishListener = null;
+    private WatchOperator.finishListener mFinishListener = null;
     private WatchContact.Kid mKid;
     private Bitmap mAvatarBitmap = null;
 
@@ -27,17 +27,13 @@ public class WatchOperatorSetKid {
         mKid = new WatchContact.Kid();
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    void start(finishListener listener, String name, String macId, Bitmap avatar) {
+    void start(WatchOperator.finishListener listener, String name, String macId, Bitmap avatar) {
         mFinishListener = listener;
         mAvatarBitmap = avatar;
         mServerMachine.kidsAdd(mKidsAddListener, name, macId);
     }
 
-    void start(finishListener listener, int id, String name, Bitmap avatar) {
+    void start(WatchOperator.finishListener listener, int id, String name, Bitmap avatar) {
         mFinishListener = listener;
         mAvatarBitmap = avatar;
         mServerMachine.kidsUpdate(mKidsUpdateListener, id, name);
@@ -64,13 +60,13 @@ public class WatchOperatorSetKid {
         @Override
         public void onConflict(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Add kid failed(" + statusCode + ").");
+                mFinishListener.onFinish("Add kid failed(" + statusCode + ").", null);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Add kid failed(" + statusCode + ").");
+                mFinishListener.onFinish("Add kid failed(" + statusCode + ").", null);
         }
     };
 
@@ -91,14 +87,14 @@ public class WatchOperatorSetKid {
                 mServerMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
             } else {
                 if (mFinishListener != null)
-                    mFinishListener.onFinish("");
+                    mFinishListener.onFinish("", null);
             }
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("");
+                mFinishListener.onFinish("", null);
         }
     };
 
@@ -109,7 +105,7 @@ public class WatchOperatorSetKid {
                 mServerMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
             } else {
                 if (mFinishListener != null)
-                    mFinishListener.onFinish("");
+                    mFinishListener.onFinish("", null);
             }
         }
     };
@@ -128,13 +124,13 @@ public class WatchOperatorSetKid {
             mOperator.setFocusKid(mKid);
 
             if (mFinishListener != null)
-                mFinishListener.onFinish("");
+                mFinishListener.onFinish("", null);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Upload kid avatar failed(" + statusCode + ").");
+                mFinishListener.onFinish("Upload kid avatar failed(" + statusCode + ").", null);
         }
     };
 

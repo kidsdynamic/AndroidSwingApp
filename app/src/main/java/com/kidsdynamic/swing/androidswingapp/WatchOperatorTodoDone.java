@@ -9,7 +9,7 @@ import java.util.List;
 public class WatchOperatorTodoDone {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mListener = null;
+    private WatchOperator.finishListener mListener = null;
     private List<WatchTodo> mTodos;
     private WatchTodo mCurrentTodo;
     private int mTodoIndex = 0;
@@ -19,11 +19,7 @@ public class WatchOperatorTodoDone {
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    public void start(finishListener listener, List<WatchTodo> todos) {
+    public void start(WatchOperator.finishListener listener, List<WatchTodo> todos) {
         mTodos = todos;
         mListener = listener;
         nextTodo(true);
@@ -45,7 +41,7 @@ public class WatchOperatorTodoDone {
 
         if (mCurrentTodo == null) {
             if (mListener != null)
-                mListener.onFinish("");
+                mListener.onFinish("", null);
         } else {
             mServerMachine.eventTodoDone(mEventTodoDoneListener, mCurrentTodo.mEventId, mCurrentTodo.mId);
         }
@@ -62,7 +58,7 @@ public class WatchOperatorTodoDone {
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("TodoDone error " + statusCode);
+                mListener.onFinish("TodoDone error " + statusCode, null);
         }
     };
 }

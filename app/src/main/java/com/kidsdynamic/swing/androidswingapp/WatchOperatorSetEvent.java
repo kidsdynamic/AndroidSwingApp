@@ -10,18 +10,14 @@ import java.util.List;
 public class WatchOperatorSetEvent {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mListener = null;
+    private WatchOperator.finishListener mListener = null;
 
     WatchOperatorSetEvent(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    public void start(finishListener listener, WatchEvent event) {
+    public void start(WatchOperator.finishListener listener, WatchEvent event) {
         mListener = listener;
         List<String> todos = new ArrayList<>();
         for (WatchTodo todo : event.mTodoList)
@@ -94,13 +90,13 @@ public class WatchOperatorSetEvent {
             }
             mOperator.mWatchDatabase.EventAdd(watchEvent);
             if (mListener != null)
-                mListener.onFinish("");
+                mListener.onFinish("", null);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Add event NG " + statusCode);
+                mListener.onFinish("Add event NG " + statusCode, null);
         }
     };
 
@@ -140,13 +136,13 @@ public class WatchOperatorSetEvent {
             }
             mOperator.mWatchDatabase.EventUpdate(watchEvent);
             if (mListener != null)
-                mListener.onFinish("");
+                mListener.onFinish("", null);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Update event NG " + statusCode);
+                mListener.onFinish("Update event NG " + statusCode, null);
         }
     };
 

@@ -13,7 +13,7 @@ public class WatchOperatorReplyToSubHost {
     
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mListener = null;
+    private WatchOperator.finishListener mListener = null;
     private int mSubHostId;
     private List<Integer> mKidsId;
     private List<String> mAvatarToGet;
@@ -23,11 +23,7 @@ public class WatchOperatorReplyToSubHost {
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-    
-    public void start(finishListener listener, int subHostId, List<Integer> kidsId) {
+    public void start(WatchOperator.finishListener listener, int subHostId, List<Integer> kidsId) {
         mListener = listener;
         mSubHostId = subHostId;
         mKidsId = kidsId;
@@ -45,7 +41,7 @@ public class WatchOperatorReplyToSubHost {
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("subHostAccept failed " + statusCode);
+                mListener.onFinish("subHostAccept failed " + statusCode, null);
         }
     };
 
@@ -132,7 +128,7 @@ public class WatchOperatorReplyToSubHost {
 
     private void syncAvatar() {
         if (mAvatarToGet.isEmpty()) {
-            mListener.onFinish("");
+            mListener.onFinish("", null);
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);

@@ -7,7 +7,7 @@ package com.kidsdynamic.swing.androidswingapp;
 public class WatchOperatorDeleteEvent {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mListener = null;
+    private WatchOperator.finishListener mListener = null;
     private int mId;
 
     WatchOperatorDeleteEvent(ActivityMain activityMain) {
@@ -15,11 +15,7 @@ public class WatchOperatorDeleteEvent {
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    public void start(finishListener listener, int eventId) {
+    public void start(WatchOperator.finishListener listener, int eventId) {
         mId = eventId;
         mListener = listener;
         mServerMachine.eventDelete(mEventDeleteListener, eventId);
@@ -30,13 +26,13 @@ public class WatchOperatorDeleteEvent {
         public void onSuccess(int statusCode) {
             mOperator.mWatchDatabase.EventDelete(mId);
             if (mListener != null)
-                mListener.onFinish("");
+                mListener.onFinish("", null);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Delete event NG " + statusCode);
+                mListener.onFinish("Delete event NG " + statusCode, null);
         }
     };
 }

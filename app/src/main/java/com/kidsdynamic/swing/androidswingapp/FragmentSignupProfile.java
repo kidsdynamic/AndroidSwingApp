@@ -48,12 +48,6 @@ public class FragmentSignupProfile extends ViewFragment {
     private String mRegisterMail = null;
     private String mRegisterPassword = null;
     private Bitmap mRegisterAvatar = null;
-    private String mRegisterAvatarFilename = null;
-    private String mFirstName;
-    private String mLastName;
-    private String mPhoneNumber;
-    private String mZipCode;
-
     private Dialog processDialog = null;
 
     public final static int ACTIVITY_RESULT_CAMERA_REQUEST = 1888;
@@ -183,127 +177,47 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
-                mFirstName = mViewFirstName.getText().toString();
-                mLastName = mViewLastName.getText().toString();
-                mPhoneNumber = mViewPhone.getText().toString();
-                mZipCode = mViewZip.getText().toString();
+                String firstName = mViewFirstName.getText().toString();
+                String lastName = mViewLastName.getText().toString();
+                String phoneNumber = mViewPhone.getText().toString();
+                String zipCode = mViewZip.getText().toString();
 
-                processDialog = ProgressDialog.show(mActivityMain,
-                        getResources().getString(R.string.signup_profile_processing),
-                        getResources().getString(R.string.signup_profile_wait), true);
+                if (mRegisterMail != null && !mRegisterMail.equals("") &&
+                        mRegisterPassword != null && !mRegisterPassword.equals("") &&
+                        !firstName.equals("") &&
+                        !lastName.equals("") &&
+                        !phoneNumber.equals("") &&
+                        !zipCode.equals("")) {
 
-                if (mRegisterMail != null && mRegisterPassword != null)
-                    mActivityMain.mServiceMachine.userRegister(mRegisterListener, mRegisterMail, mRegisterPassword, mFirstName, mLastName, mPhoneNumber, mZipCode);
+                    processDialog = ProgressDialog.show(mActivityMain,
+                            getResources().getString(R.string.signup_profile_processing),
+                            getResources().getString(R.string.signup_profile_wait), true);
+
+                    mActivityMain.mOperator.signUp(
+                            mSignUpListener,
+                            mRegisterMail,
+                            mRegisterPassword,
+                            firstName,
+                            lastName,
+                            phoneNumber,
+                            zipCode,
+                            mRegisterAvatar);
+                }
             }
 
             return false;
         }
     };
-
-    ServerMachine.userRegisterListener mRegisterListener = new ServerMachine.userRegisterListener() {
+    WatchOperator.finishListener mSignUpListener = new WatchOperator.finishListener() {
         @Override
-        public void onSuccess(int statusCode) {
-            mActivityMain.mServiceMachine.userLogin(mLoginListener, mRegisterMail, mRegisterPassword);
-        }
-
-        @Override
-        public void onFail(int statusCode, ServerGson.error.e1 error) {
-            String msg = "" + statusCode;
-            if (error != null) {
-                if (error.message != null)
-                    msg += " Msg[" + error.message + "]";
-                if (error.error != null)
-                    msg += " Err[" + error.error + "]";
-            }
-
+        public void onFinish(String msg, Object arg) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    ServerMachine.userLoginListener mLoginListener = new ServerMachine.userLoginListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            mActivityMain.mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
-            mActivityMain.mServiceMachine.setAuthToken(result.access_token);
-            mActivityMain.mServiceMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhoneNumber, mZipCode);
-        }
-
-        @Override
-        public void onFail(int statusCode) {
-            processDialog.dismiss();
-            Toast.makeText(mActivityMain,
-                    getResources().getString(R.string.signup_profile_login_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-
-    ServerMachine.userUpdateProfileListener mUpdateProfileListener = new ServerMachine.userUpdateProfileListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.userData response) {
-            mActivityMain.mConfig.setString(ActivityConfig.KEY_MAIL, mRegisterMail);
-            mActivityMain.mConfig.setString(ActivityConfig.KEY_PASSWORD, mRegisterPassword);
-
-            mActivityMain.mOperator.ResetDatabase();
-            ServerMachine.ResetAvatar();
-            mActivityMain.mOperator.setUser(
-                    new WatchContact.User(
-                            null,
-                            response.id,
-                            response.email,
-                            response.firstName,
-                            response.lastName,
-                            WatchOperator.getTimeStamp(response.lastUpdate),
-                            WatchOperator.getTimeStamp(response.dateCreated),
-                            response.zipCode,
-                            response.phoneNumber)
-            );
-
-            if (mRegisterAvatar != null) {
-                mRegisterAvatarFilename = ServerMachine.createAvatarFile(mRegisterAvatar, "User", ".jpg");
-
-                if (mRegisterAvatarFilename != null) {
-                    mActivityMain.mServiceMachine.userAvatarUpload(mUserAvatarUploadListener, mRegisterAvatarFilename);
-                } else {
-                    // GioChen Todo: upload later?
-                    Log.d("swing", "Can't create avatar file!" + mRegisterAvatarFilename);
-                    mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
-                }
-
-            } else {
-                mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
-            }
-        }
-
-        @Override
-        public void onFail(int statusCode, ServerGson.error.e1 error) {
-            processDialog.dismiss();
-            Toast.makeText(mActivityMain,
-                    getResources().getString(R.string.signup_profile_update_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-
-        }
-    };
-
-    ServerMachine.userAvatarUploadListener mUserAvatarUploadListener = new ServerMachine.userAvatarUploadListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.avatar.upload.response response) {
-            WatchContact.User user = mActivityMain.mOperator.getUser();
-            File fileFrom = new File(mRegisterAvatarFilename);
-            File fileTo = new File(ServerMachine.GetAvatarFilePath(), response.user.profile);
-            if (!fileFrom.renameTo(fileTo))
-                Log.d("swing", "Rename failed! " + mRegisterAvatarFilename + " to " + response.user.profile);
-            user.mProfile = response.user.profile;
-            mActivityMain.mOperator.setUser(user);
-
             mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFailed(String Command, int statusCode) {
             processDialog.dismiss();
-            Toast.makeText(mActivityMain,
-                    getResources().getString(R.string.signup_profile_avatar_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
-            //mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }
     };
 

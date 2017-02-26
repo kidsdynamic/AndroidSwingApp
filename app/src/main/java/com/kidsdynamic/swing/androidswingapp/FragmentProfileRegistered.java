@@ -77,14 +77,20 @@ public class FragmentProfileRegistered extends ViewFragment {
         }
     };
 
-    WatchOperatorRequestToSubHost.finishListener mAddRequestToListener = new WatchOperatorRequestToSubHost.finishListener() {
+    WatchOperator.finishListener mAddRequestToListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, WatchContact.User user) {
+        public void onFinish(String msg, Object arg) {
+            WatchContact.User user = (WatchContact.User)arg;
             mProcessDialog.dismiss();
             if (!msg.equals(""))
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             else
                 mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 

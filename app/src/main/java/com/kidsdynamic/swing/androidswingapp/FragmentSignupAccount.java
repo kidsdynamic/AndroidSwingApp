@@ -129,15 +129,20 @@ public class FragmentSignupAccount extends ViewFragment {
         }
     };
 
-    WatchOperatorResumeSync.finishListener mFinishListener = new WatchOperatorResumeSync.finishListener() {
+    WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             if (!msg.equals("")) {
                 mProcessDialog.dismiss();
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             } else {
                 mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
             }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 }

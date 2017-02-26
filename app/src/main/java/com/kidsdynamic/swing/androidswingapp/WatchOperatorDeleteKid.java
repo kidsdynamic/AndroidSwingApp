@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 public class WatchOperatorDeleteKid {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mFinishListener = null;
+    private WatchOperator.finishListener mFinishListener = null;
     private int mId;
 
     WatchOperatorDeleteKid(ActivityMain activityMain) {
@@ -17,11 +17,7 @@ public class WatchOperatorDeleteKid {
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    void start(finishListener listener, int id) {
+    void start(WatchOperator.finishListener listener, int id) {
         mFinishListener = listener;
         mId = id;
         mServerMachine.kidsDelete(mKidsDeleteListener, id);
@@ -32,14 +28,14 @@ public class WatchOperatorDeleteKid {
         public void onSuccess(int statusCode) {
             mOperator.mWatchDatabase.KidDelete(mId);
             if (mFinishListener != null)
-                mFinishListener.onFinish("");
+                mFinishListener.onFinish("", null);
             //mActivityMain.popFragment();
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Delete failed " + statusCode);
+                mFinishListener.onFinish("Delete failed " + statusCode, null);
             //mActivityMain.popFragment();
         }
     };

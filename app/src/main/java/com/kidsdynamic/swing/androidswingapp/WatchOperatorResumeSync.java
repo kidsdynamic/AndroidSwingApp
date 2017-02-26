@@ -14,7 +14,7 @@ public class WatchOperatorResumeSync {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private ActivityConfig mConfig;
-    private finishListener mFinishListener = null;
+    private WatchOperator.finishListener mFinishListener = null;
     private List<String> mAvatarToGet;
 
     WatchOperatorResumeSync(ActivityMain activityMain) {
@@ -23,11 +23,7 @@ public class WatchOperatorResumeSync {
         mConfig = activityMain.mConfig;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    void start(finishListener listener, String email, String password) {
+    void start(WatchOperator.finishListener listener, String email, String password) {
         mFinishListener = listener;
         if (email.equals("") && password.equals("")) {
             mServerMachine.userIsTokenValid(
@@ -69,7 +65,7 @@ public class WatchOperatorResumeSync {
         @Override
         public void onFail(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("login failed!");
+                mFinishListener.onFinish("login failed!", null);
         }
     };
 
@@ -130,7 +126,7 @@ public class WatchOperatorResumeSync {
         @Override
         public void onFail(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Retrieve user profile failed!");
+                mFinishListener.onFinish("Retrieve user profile failed!", null);
         }
     };
 
@@ -278,7 +274,7 @@ public class WatchOperatorResumeSync {
 
     private void syncAvatar() {
         if (mAvatarToGet.isEmpty()) {
-            mFinishListener.onFinish("");
+            mFinishListener.onFinish("", null);
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);

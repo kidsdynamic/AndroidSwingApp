@@ -15,7 +15,7 @@ import java.util.TimeZone;
 class WatchOperatorUpdateActivity {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mListener = null;
+    private WatchOperator.finishListener mListener = null;
     private List<WatchActivity> mActivities;
     private long mSearchStart;
     private long mSearchEnd;
@@ -25,11 +25,7 @@ class WatchOperatorUpdateActivity {
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg);
-    }
-
-    public void start(finishListener listener, int kidId) {
+    public void start(WatchOperator.finishListener listener, int kidId) {
         mListener = listener;
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 23);
@@ -61,7 +57,7 @@ class WatchOperatorUpdateActivity {
         public void onSuccess(int statusCode, ServerGson.activity.retrieveDataByTime.response response) {
             if (response == null || response.activities == null) {
                 if (mListener != null)
-                    mListener.onFinish("");
+                    mListener.onFinish("", null);
                 return;
             }
 
@@ -93,13 +89,13 @@ class WatchOperatorUpdateActivity {
             Collections.reverse(mActivities);
             mOperator.setActivityList(mActivities);
             if (mListener != null)
-                mListener.onFinish("");
+                mListener.onFinish("", null);
         }
 
         @Override
         public void onFail(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Retrieve activity failed " + statusCode);
+                mListener.onFinish("Retrieve activity failed " + statusCode, null);
         }
     };
 

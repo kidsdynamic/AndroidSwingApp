@@ -11,18 +11,14 @@ import java.util.List;
 public class WatchOperatorRequestToSubHost {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
-    private finishListener mListener = null;
+    private WatchOperator.finishListener mListener = null;
 
     WatchOperatorRequestToSubHost(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    interface finishListener {
-        void onFinish(String msg, WatchContact.User user);
-    }
-
-    public void start(finishListener listener, String mail) {
+    public void start(WatchOperator.finishListener listener, String mail) {
         mListener = listener;
         mServerMachine.userFindByEmail(mUserFindByEmailListener, mail);
     }

@@ -92,11 +92,16 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         mActivityMain.mOperator.replyToSubHost(mResponseForRequestToListener, mRequestFrom.mSubHostId, list);
     }
 
-    WatchOperatorReplyToSubHost.finishListener mResponseForRequestToListener = new WatchOperatorReplyToSubHost.finishListener() {
+    WatchOperator.finishListener mResponseForRequestToListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 

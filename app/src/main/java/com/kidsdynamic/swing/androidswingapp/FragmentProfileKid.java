@@ -221,15 +221,20 @@ public class FragmentProfileKid extends ViewFragment {
         }
     };
 
-    WatchOperatorDeleteKid.finishListener mDeleteKidListener = new WatchOperatorDeleteKid.finishListener() {
+    WatchOperator.finishListener mDeleteKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             if (!msg.equals("")) {
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             } else {
                 mActivityMain.popFragment();
             }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 
@@ -254,9 +259,9 @@ public class FragmentProfileKid extends ViewFragment {
         }
     };
 
-    WatchOperatorSetKid.finishListener mAddKidListener = new WatchOperatorSetKid.finishListener() {
+    WatchOperator.finishListener mAddKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             if (!msg.equals("")) {
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
@@ -265,6 +270,11 @@ public class FragmentProfileKid extends ViewFragment {
                 bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
                 mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
             }
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 
@@ -314,13 +324,18 @@ public class FragmentProfileKid extends ViewFragment {
         }
     }
 
-    WatchOperatorSetKid.finishListener mUpdateKidListener = new WatchOperatorSetKid.finishListener() {
+    WatchOperator.finishListener mUpdateKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg) {
+        public void onFinish(String msg, Object arg) {
             mProcessDialog.dismiss();
             if (!msg.equals(""))
                 Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             mActivityMain.popFragment();
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+
         }
     };
 }
