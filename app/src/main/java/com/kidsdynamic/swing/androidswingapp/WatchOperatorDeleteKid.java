@@ -28,15 +28,13 @@ public class WatchOperatorDeleteKid {
         public void onSuccess(int statusCode) {
             mOperator.mWatchDatabase.KidDelete(mId);
             if (mFinishListener != null)
-                mFinishListener.onFinish("", null);
-            //mActivityMain.popFragment();
+                mFinishListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Delete failed " + statusCode, null);
-            //mActivityMain.popFragment();
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 

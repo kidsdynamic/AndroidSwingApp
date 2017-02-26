@@ -89,18 +89,15 @@ public class FragmentWatchRegistered extends ViewFragment {
 
     WatchOperator.finishListener mAddRequestToListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
-            WatchContact.User user = (WatchContact.User)arg;
+        public void onFinish(Object arg) {
             mProcessDialog.dismiss();
-            if (!msg.equals(""))
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
-            else
-                mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
+            mActivityMain.selectFragment(FragmentWatchRequest.class.getName(), null);
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 

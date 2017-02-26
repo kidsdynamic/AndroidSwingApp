@@ -38,7 +38,8 @@
             android:layout_alignEnd="@+id/signup_login_sponge"
             android:layout_alignStart="@+id/signup_login_sponge"
             android:layout_below="@+id/signup_login_login"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="invisible" >
 
             <TextView
                 android:id="@+id/signup_login_hint_text"

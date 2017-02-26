@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,14 +95,15 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
     WatchOperator.finishListener mResponseForRequestToListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 

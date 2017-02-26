@@ -123,26 +123,23 @@ public class FragmentSignupAccount extends ViewFragment {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, "" + statusCode, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivityMain,
+                    mActivityMain.mServiceMachine.getErrorMessage(command, statusCode) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 
     WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
-            if (!msg.equals("")) {
-                mProcessDialog.dismiss();
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
-            } else {
-                mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
-            }
+        public void onFinish(Object arg) {
+            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 }

@@ -40,8 +40,6 @@ public class WatchOperatorSignUp {
         mZip = zip;
         mAvatar = avatar;
 
-        Log.d("HERE", "START+++");
-
         mServerMachine.userRegister(mRegisterListener, mEmail, mPassword, mFirstName, mLastName, mPhone, mZip);
     }
 
@@ -52,9 +50,9 @@ public class WatchOperatorSignUp {
         }
 
         @Override
-        public void onFail(int statusCode, ServerGson.error.e1 error) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Register failed!", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -67,9 +65,9 @@ public class WatchOperatorSignUp {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("login failed!", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -99,14 +97,14 @@ public class WatchOperatorSignUp {
                 mServerMachine.userAvatarUpload(mUserAvatarUploadListener, mRegisterAvatarFilename);
             } else {
                 if (mFinishListener != null)
-                    mFinishListener.onFinish("", null);
+                    mFinishListener.onFinish(null);
             }
         }
 
         @Override
-        public void onFail(int statusCode, ServerGson.error.e1 error) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Update failed", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -122,13 +120,13 @@ public class WatchOperatorSignUp {
             mOperator.setUser(user);
 
             if (mFinishListener != null)
-                mFinishListener.onFinish("", null);
+                mFinishListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Upload avatar failed", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 

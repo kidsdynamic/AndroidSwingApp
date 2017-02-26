@@ -30,9 +30,9 @@ public class WatchOperatorRequestToSubHost {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Can't find user by the email.", null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -57,20 +57,20 @@ public class WatchOperatorRequestToSubHost {
                 mServerMachine.getAvatar(mGetNewUserAvatarListener, user.mProfile);
             } else {
                 if (mListener != null)
-                    mListener.onFinish("", user);
+                    mListener.onFinish(user);
             }
         }
 
         @Override
         public void onConflict(int statusCode) {
             if (mListener != null)
-                mListener.onFinish("The request is already exists.", null);
+                mListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Bad request.", null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -84,15 +84,15 @@ public class WatchOperatorRequestToSubHost {
             user.mPhoto = avatar;
 
             if (mListener != null)
-                mListener.onFinish("", user);
+                mListener.onFinish(user);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             List<WatchContact.User> to = mOperator.getRequestToList();
 
             if (mListener != null)
-                mListener.onFinish("", to.get(to.size()-1));
+                mListener.onFinish(to.get(to.size()-1));
         }
     };
 

@@ -39,9 +39,9 @@ public class WatchOperatorReplyToSubHost {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("subHostAccept failed " + statusCode, null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -55,7 +55,7 @@ public class WatchOperatorReplyToSubHost {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (!mKidsId.isEmpty())
                 mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
             else
@@ -121,14 +121,14 @@ public class WatchOperatorReplyToSubHost {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             syncAvatar();
         }
     };
 
     private void syncAvatar() {
         if (mAvatarToGet.isEmpty()) {
-            mListener.onFinish("", null);
+            mListener.onFinish(null);
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);
@@ -143,7 +143,7 @@ public class WatchOperatorReplyToSubHost {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             syncAvatar();
         }
     };

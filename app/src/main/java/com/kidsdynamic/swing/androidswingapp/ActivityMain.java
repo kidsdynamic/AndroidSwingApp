@@ -184,11 +184,9 @@ public class ActivityMain extends AppCompatActivity
 
     WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             eventTest();
 
-            if (!msg.equals(""))
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
             if (mCurrentFragment.equals("")) {
                 selectFragment(FragmentBoot.class.getName(), null);
             } else {
@@ -201,7 +199,16 @@ public class ActivityMain extends AppCompatActivity
 
         @Override
         public void onFailed(String Command, int statusCode) {
+            Toast.makeText(getApplicationContext(), Command, Toast.LENGTH_SHORT).show();
 
+            if (mCurrentFragment.equals("")) {
+                selectFragment(FragmentBoot.class.getName(), null);
+            } else {
+                if (mProcessDialog != null)
+                    mProcessDialog.dismiss();
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                selectFragment(FragmentSyncNow.class.getName(), null);
+            }
         }
     };
 
@@ -429,7 +436,7 @@ public class ActivityMain extends AppCompatActivity
 
     WatchOperator.finishListener mUpdateActivityListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             mOperator.getActivityOfYear();
         }
 
@@ -480,7 +487,7 @@ public class ActivityMain extends AppCompatActivity
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             nextActivity();
         }
     };

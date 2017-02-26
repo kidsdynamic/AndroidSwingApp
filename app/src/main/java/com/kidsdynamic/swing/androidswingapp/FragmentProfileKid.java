@@ -223,18 +223,15 @@ public class FragmentProfileKid extends ViewFragment {
 
     WatchOperator.finishListener mDeleteKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             mProcessDialog.dismiss();
-            if (!msg.equals("")) {
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
-            } else {
-                mActivityMain.popFragment();
-            }
+            mActivityMain.popFragment();
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -261,20 +258,17 @@ public class FragmentProfileKid extends ViewFragment {
 
     WatchOperator.finishListener mAddKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             mProcessDialog.dismiss();
-            if (!msg.equals("")) {
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
-                mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
+            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -326,16 +320,16 @@ public class FragmentProfileKid extends ViewFragment {
 
     WatchOperator.finishListener mUpdateKidListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             mProcessDialog.dismiss();
-            if (!msg.equals(""))
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             mActivityMain.popFragment();
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+            mActivityMain.popFragment();
         }
     };
 }

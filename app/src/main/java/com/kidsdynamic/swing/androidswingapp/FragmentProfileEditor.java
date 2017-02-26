@@ -279,7 +279,7 @@ public class FragmentProfileEditor extends ViewFragment {
         }
 
         @Override
-        public void onFail(int statusCode, ServerGson.error.e1 error) {
+        public void onFail(String command, int statusCode) {
             mActivityMain.popFragment();
         }
     };
@@ -299,9 +299,9 @@ public class FragmentProfileEditor extends ViewFragment {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             Toast.makeText(mActivityMain,
-                    getResources().getString(R.string.profile_editor_avatar_failed) +
+                    mActivityMain.mServiceMachine.getErrorMessage(command, statusCode) +
                             "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
             mActivityMain.popFragment();
         }

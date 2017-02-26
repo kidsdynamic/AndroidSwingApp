@@ -131,18 +131,17 @@ public class FragmentProfileRequestTo extends ViewFragment {
 
     WatchOperator.finishListener mAddRequestToListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             WatchContact.User user = (WatchContact.User)arg;
             mProcessDialog.dismiss();
-            if (!msg.equals(""))
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
             if (user != null)
                 addPending(user);
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 

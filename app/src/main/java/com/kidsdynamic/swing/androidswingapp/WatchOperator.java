@@ -51,7 +51,7 @@ public class WatchOperator {
     }
 
     interface finishListener {
-        void onFinish(String msg, Object arg);
+        void onFinish(Object arg);
         void onFailed(String Command, int statusCode);
     }
 

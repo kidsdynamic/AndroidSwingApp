@@ -210,7 +210,7 @@ public class FragmentSignupProfile extends ViewFragment {
     };
     WatchOperator.finishListener mSignUpListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
+        public void onFinish(Object arg) {
             processDialog.dismiss();
             mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
         }

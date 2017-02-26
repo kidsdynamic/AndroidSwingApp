@@ -60,13 +60,13 @@ public class WatchOperatorSetKid {
         @Override
         public void onConflict(int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Add kid failed(" + statusCode + ").", null);
+                mFinishListener.onFailed("Error", statusCode);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Add kid failed(" + statusCode + ").", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -87,14 +87,14 @@ public class WatchOperatorSetKid {
                 mServerMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
             } else {
                 if (mFinishListener != null)
-                    mFinishListener.onFinish("", null);
+                    mFinishListener.onFinish(null);
             }
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("", null);
+                mFinishListener.onFinish(null);
         }
     };
 
@@ -105,7 +105,7 @@ public class WatchOperatorSetKid {
                 mServerMachine.userAvatarUploadKid(mUserAvatarUploadKidListener, "" + mKid.mId, mKid.mProfile);
             } else {
                 if (mFinishListener != null)
-                    mFinishListener.onFinish("", null);
+                    mFinishListener.onFinish(null);
             }
         }
     };
@@ -124,13 +124,13 @@ public class WatchOperatorSetKid {
             mOperator.setFocusKid(mKid);
 
             if (mFinishListener != null)
-                mFinishListener.onFinish("", null);
+                mFinishListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Upload kid avatar failed(" + statusCode + ").", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 

@@ -109,10 +109,10 @@ public class FragmentProfileSearch extends ViewFragment {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mViewProgress.stopProgress();
             Toast.makeText(mActivityMain,
-                    getResources().getString(R.string.profile_search_mac_failed) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+                    mActivityMain.mServiceMachine.getErrorMessage(command, statusCode) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
         }
     };
 

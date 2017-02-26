@@ -57,7 +57,7 @@ class WatchOperatorUpdateActivity {
         public void onSuccess(int statusCode, ServerGson.activity.retrieveDataByTime.response response) {
             if (response == null || response.activities == null) {
                 if (mListener != null)
-                    mListener.onFinish("", null);
+                    mListener.onFinish(null);
                 return;
             }
 
@@ -89,13 +89,13 @@ class WatchOperatorUpdateActivity {
             Collections.reverse(mActivities);
             mOperator.setActivityList(mActivities);
             if (mListener != null)
-                mListener.onFinish("", null);
+                mListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Retrieve activity failed " + statusCode, null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 

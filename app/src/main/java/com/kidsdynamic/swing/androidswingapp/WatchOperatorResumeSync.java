@@ -49,7 +49,7 @@ public class WatchOperatorResumeSync {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mServerMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
         }
     };
@@ -63,9 +63,9 @@ public class WatchOperatorResumeSync {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("login failed!", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -124,9 +124,9 @@ public class WatchOperatorResumeSync {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mFinishListener != null)
-                mFinishListener.onFinish("Retrieve user profile failed!", null);
+                mFinishListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -218,7 +218,7 @@ public class WatchOperatorResumeSync {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mServerMachine.eventRetrieveAllEventsWithTodo(mEventRetrieveAllEventsWithTodoListener);
         }
     };
@@ -267,14 +267,14 @@ public class WatchOperatorResumeSync {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             syncAvatar();
         }
     };
 
     private void syncAvatar() {
         if (mAvatarToGet.isEmpty()) {
-            mFinishListener.onFinish("", null);
+            mFinishListener.onFinish(null);
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);
@@ -289,7 +289,7 @@ public class WatchOperatorResumeSync {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             syncAvatar();
         }
     };

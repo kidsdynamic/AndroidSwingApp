@@ -92,18 +92,15 @@ public class FragmentDashboardSync extends ViewFragment {
 
     WatchOperator.finishListener mUpdateActivityListener = new WatchOperator.finishListener() {
         @Override
-        public void onFinish(String msg, Object arg) {
-
+        public void onFinish(Object arg) {
             mProcessDialog.dismiss();
-            if (msg.equals(""))
-                mActivityMain.selectFragment(FragmentDashboardSelect.class.getName(), null);
-            else
-                Toast.makeText(mActivityMain, msg, Toast.LENGTH_SHORT).show();
+            mActivityMain.selectFragment(FragmentDashboardSelect.class.getName(), null);
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 

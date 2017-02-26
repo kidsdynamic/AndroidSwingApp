@@ -90,13 +90,13 @@ public class WatchOperatorSetEvent {
             }
             mOperator.mWatchDatabase.EventAdd(watchEvent);
             if (mListener != null)
-                mListener.onFinish("", null);
+                mListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Add event NG " + statusCode, null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -136,13 +136,13 @@ public class WatchOperatorSetEvent {
             }
             mOperator.mWatchDatabase.EventUpdate(watchEvent);
             if (mListener != null)
-                mListener.onFinish("", null);
+                mListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Update event NG " + statusCode, null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 

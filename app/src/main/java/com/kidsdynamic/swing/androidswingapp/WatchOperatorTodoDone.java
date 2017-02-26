@@ -41,7 +41,7 @@ public class WatchOperatorTodoDone {
 
         if (mCurrentTodo == null) {
             if (mListener != null)
-                mListener.onFinish("", null);
+                mListener.onFinish(null);
         } else {
             mServerMachine.eventTodoDone(mEventTodoDoneListener, mCurrentTodo.mEventId, mCurrentTodo.mId);
         }
@@ -56,9 +56,9 @@ public class WatchOperatorTodoDone {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("TodoDone error " + statusCode, null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 }

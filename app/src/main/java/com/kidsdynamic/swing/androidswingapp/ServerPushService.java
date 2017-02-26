@@ -67,7 +67,7 @@ public class ServerPushService extends Service {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mUploadItem = null;
         }
     };
@@ -107,7 +107,7 @@ public class ServerPushService extends Service {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
         }
     };
@@ -122,7 +122,7 @@ public class ServerPushService extends Service {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             Log.d("PushService", "Login failed!");
             mHandler.postDelayed(DoPush, 1000);
         }

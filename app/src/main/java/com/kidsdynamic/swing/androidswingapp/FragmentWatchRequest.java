@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -106,7 +107,7 @@ public class FragmentWatchRequest extends ViewFragment {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             getKidAvatar(false);
         }
     };
@@ -163,8 +164,11 @@ public class FragmentWatchRequest extends ViewFragment {
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
+            Toast.makeText(mActivityMain,
+                    mActivityMain.mServiceMachine.getErrorMessage(command, statusCode) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
+
         }
     };
 }

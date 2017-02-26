@@ -26,13 +26,14 @@ public class WatchOperatorDeleteEvent {
         public void onSuccess(int statusCode) {
             mOperator.mWatchDatabase.EventDelete(mId);
             if (mListener != null)
-                mListener.onFinish("", null);
+                mListener.onFinish(null);
         }
 
         @Override
-        public void onFail(int statusCode) {
+        public void onFail(String command, int statusCode) {
             if (mListener != null)
-                mListener.onFinish("Delete event NG " + statusCode, null);
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
+
         }
     };
 }
