@@ -38,7 +38,10 @@ public class FragmentDashboardSync extends ViewFragment {
         mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_sync_message);
 
         mViewRequest = (Button) mViewMain.findViewById(R.id.dashboard_sync_request);
+        mViewRequest.setOnClickListener(mRequestListener);
+
         mViewProfile = (Button) mViewMain.findViewById(R.id.dashboard_sync_profile);
+        mViewProfile.setOnClickListener(mProfileListener);
 
         return mViewMain;
     }
@@ -109,5 +112,19 @@ public class FragmentDashboardSync extends ViewFragment {
                 getResources().getString(R.string.dashboard_sync_owner), name);
         mActivityMain.toolbarSetTitle(string, false);
     }
+
+    private View.OnClickListener mRequestListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentProfileRequestTo.class.getName(), null);
+        }
+    };
+
+    private View.OnClickListener mProfileListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
+        }
+    };
 
 }
