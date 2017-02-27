@@ -38,10 +38,12 @@
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/profile_search_sponge"
             android:layout_alignStart="@+id/profile_search_sponge"
-            app:strokeColorActive="@color/color_white_snow"
+            app:strokeBegin="100"
+            app:strokeColorActive="@color/color_orange_main"
             app:strokeColorNormal="@color/color_gray_light"
-            app:strokeType="dot"
-            app:strokeWidth="16dp"/>
+            app:strokeCount="100"
+            app:strokeEnd="-1"
+            app:strokeWidth="10dp" />
     </RelativeLayout>
 
     <View

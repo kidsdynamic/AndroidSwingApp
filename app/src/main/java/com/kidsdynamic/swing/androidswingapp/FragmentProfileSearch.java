@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/1/25.
@@ -18,7 +19,6 @@ public class FragmentProfileSearch extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
     private ViewCircle mViewProgress;
-    //private int mTimeOut;
 
     private ArrayList<WatchContact> mSearchResult;
     private int mSearchResultIndex = 0;
@@ -34,14 +34,27 @@ public class FragmentProfileSearch extends ViewFragment {
         mViewMain = inflater.inflate(R.layout.fragment_profile_search, container, false);
 
         mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.profile_search_progress);
-        mViewProgress.setOnProgressListener(mSearchProgressListener);
-        //mTimeOut = 40;
-        mViewProgress.setStrokeBeginEnd(0, 0); // For test, remove me later
-        mViewProgress.startProgress(250, -1, -1);
-
-        mActivityMain.mBLEMachine.Search(mOnSearchListener, 10);
+        //mViewProgress.setOnClickListener(mFakeListener); // for test
 
         return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mViewProgress.setStrokeBeginEnd(0, 10);
+        mViewProgress.startProgress(30, -1, -1);
+
+        mActivityMain.mBLEMachine.Search(mOnSearchListener, 10);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        mViewProgress.stopProgress();
+        mActivityMain.mBLEMachine.Search(null, 0);
     }
 
     @Override
@@ -53,7 +66,6 @@ public class FragmentProfileSearch extends ViewFragment {
 
     @Override
     public void onToolbarAction1() {
-        mActivityMain.mBLEMachine.Search(null, 0);
         mActivityMain.popFragment();
     }
 
@@ -122,12 +134,23 @@ public class FragmentProfileSearch extends ViewFragment {
         mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
     }
 
-    private ViewCircle.OnProgressListener mSearchProgressListener = new ViewCircle.OnProgressListener() {
+    private View.OnClickListener mFakeListener = new View.OnClickListener() {
         @Override
-        public void onProgress(ViewCircle view, int begin, int end) {
-            //mTimeOut--;
-            //if(mTimeOut == 0)
-            //    mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
+        public void onClick(View view) {
+            mViewProgress.stopProgress();
+
+            WatchContact.Kid device = new WatchContact.Kid(null, "");
+            device.mLabel = mActivityMain.mOperator.getUser().mEmail;
+            device.mUserId = mActivityMain.mOperator.getUser().mId;
+            device.mProfile = "profile";
+            device.mMacId = String.format(Locale.US, "0x%02X0x%02X0x%02X0x%02X0x%02X0x%02X",
+                    (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF),
+                    (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF));
+
+            mSearchResult = new ArrayList<>();
+            mSearchResult.add(device);
+
+            mActivityMain.mServiceMachine.kidsWhoRegisteredMacID(mKidsWhoRegisteredMacIDListener, device.mMacId);
         }
     };
 }
