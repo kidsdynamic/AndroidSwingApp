@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -68,7 +69,7 @@ public class ActivityMain extends AppCompatActivity
     private View mViewDevice;
     private View mViewCalendar;
     private View mViewDashboard;
-    private View mViewProfile;
+    private ViewCircle mViewProfile;
     private ImageView mViewAction1;
     private ImageView mViewAction2;
     private TextView mViewTitle;
@@ -118,7 +119,7 @@ public class ActivityMain extends AppCompatActivity
         mViewDashboard = findViewById(R.id.main_console_dashboard);
         mViewDashboard.setOnClickListener(mConsoleClickListener);
 
-        mViewProfile = findViewById(R.id.main_control_profile);
+        mViewProfile = (ViewCircle) findViewById(R.id.main_control_profile);
         mViewProfile.setOnClickListener(mConsoleClickListener);
 
         mViewTitle = (TextView) findViewById(R.id.main_toolbar_title);
@@ -296,6 +297,8 @@ public class ActivityMain extends AppCompatActivity
         mViewCalendar.setSelected(view == mViewCalendar);
         mViewDashboard.setSelected(view == null || view == mViewDashboard);
         mViewProfile.setSelected(view == mViewProfile);
+
+        mViewProfile.setActive(view == mViewProfile);
     }
 
     private View.OnClickListener mConsoleClickListener = new View.OnClickListener() {
@@ -314,10 +317,22 @@ public class ActivityMain extends AppCompatActivity
         }
     };
 
+    public void updateFocusAvatar() {
+        WatchContact.Kid focus = mOperator.getFocusKid();
+
+        if (focus != null && focus.mPhoto != null) {
+            mViewProfile.setBitmap(focus.mPhoto);
+        } else {
+            mViewProfile.setBitmap(BitmapFactory.decodeResource(getResources(), R.mipmap.nofocus));
+        }
+    }
+
     public void toolbarShow(boolean visible) {
         boolean cur_visible = mViewToolbar.getLayoutParams().height != 0;
         if (cur_visible == visible)
             return;
+
+        updateFocusAvatar();
 
         ValueAnimator anim = visible ?
                 ValueAnimator.ofInt(0, mToolbarHeight) : ValueAnimator.ofInt(mToolbarHeight, 0);

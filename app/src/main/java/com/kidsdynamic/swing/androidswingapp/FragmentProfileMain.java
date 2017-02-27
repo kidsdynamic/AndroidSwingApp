@@ -214,6 +214,8 @@ public class FragmentProfileMain extends ViewFragment {
 
         if (!onCreate)
             mActivityMain.mOperator.setFocusKid((WatchContact.Kid) contact);
+
+        mActivityMain.updateFocusAvatar();
     }
 
     private void updateRequestFromTitle() {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -13,8 +14,8 @@
         android:layout_above="@+id/main_console"
         android:adjustViewBounds="false"
         android:cropToPadding="true"
-        android:src="@mipmap/city_newyork"
-        android:scaleType="center" />
+        android:scaleType="center"
+        android:src="@mipmap/city_newyork" />
 
     <RelativeLayout
         android:id="@+id/main_toolbar"
@@ -41,8 +42,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
-            android:cropToPadding="false"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:cropToPadding="false" />
 
     </RelativeLayout>
 
@@ -84,15 +85,15 @@
             android:gravity="center"
             android:src="@drawable/control_button_dashboard" />
 
-        <ImageView
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
             android:id="@+id/main_control_profile"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/control_button_background"
-            android:gravity="center"
-            android:src="@drawable/control_button_profile" />
+            android:padding="10dp"
+            app:strokeColorActive="@color/color_orange_main"
+            app:strokeColorNormal="@color/color_gray_main"
+            app:strokeWidth="2dp"/>
 
     </LinearLayout>
 

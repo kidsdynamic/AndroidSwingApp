@@ -226,6 +226,7 @@ public class FragmentProfileKid extends ViewFragment {
         public void onFinish(Object arg) {
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
+            mActivityMain.updateFocusAvatar();
         }
 
         @Override
@@ -307,6 +308,7 @@ public class FragmentProfileKid extends ViewFragment {
     private void saveContact(WatchContact.Kid kid) {
         if (mKid == null)
             return;
+
         mKid.mName = mViewName.getText().toString();
         if (!mKid.mName.equals("")) {
             mProcessDialog = ProgressDialog.show(mActivityMain,
@@ -323,6 +325,7 @@ public class FragmentProfileKid extends ViewFragment {
         public void onFinish(Object arg) {
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
+            mActivityMain.updateFocusAvatar();
         }
 
         @Override
