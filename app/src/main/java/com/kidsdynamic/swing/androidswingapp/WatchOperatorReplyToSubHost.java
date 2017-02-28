@@ -29,7 +29,10 @@ public class WatchOperatorReplyToSubHost {
         mKidsId = kidsId;
         mAvatarToGet = new ArrayList<>();
 
-        mServerMachine.subHostDeny(mSubHostDenyListener, subHostId);
+        if (!mKidsId.isEmpty())
+            mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
+        else
+            mServerMachine.subHostDeny(mSubHostDenyListener, subHostId);
     }
 
     ServerMachine.subHostAcceptListener mSubHostAcceptListener = new ServerMachine.subHostAcceptListener() {
