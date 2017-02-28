@@ -25,6 +25,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:gravity="center"
+            android:inputType="textEmailAddress"
             android:imeOptions="actionDone"
             android:hint="@string/profile_request_to_mail" />
     </LinearLayout>
