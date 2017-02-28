@@ -138,14 +138,13 @@ public class FragmentProfileSearch extends ViewFragment {
         @Override
         public void onClick(View view) {
             mViewProgress.stopProgress();
+            mActivityMain.mBLEMachine.Search(null, 0);
 
             WatchContact.Kid device = new WatchContact.Kid(null, "");
-            device.mLabel = mActivityMain.mOperator.getUser().mEmail;
-            device.mUserId = mActivityMain.mOperator.getUser().mId;
-            device.mProfile = "profile";
-            device.mMacId = String.format(Locale.US, "0x%02X0x%02X0x%02X0x%02X0x%02X0x%02X",
+            device.mMacId = String.format(Locale.US, "%02X%02X%02X%02X%02X%02X",
                     (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF),
                     (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF), (int) (Math.random() * 0xFF));
+            device.mLabel = device.mMacId;
 
             mSearchResult = new ArrayList<>();
             mSearchResult.add(device);
