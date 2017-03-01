@@ -185,7 +185,7 @@
     <string name="signup_language_select">"Select"</string>
 
     <!-- FragmentSignupLogin -->
-    <string name="signup_login_login">"Sing Up / Login"</string>
+    <string name="signup_login_login">"Sign Up / Login"</string>
     <string name="signup_login_or">"or"</string>
     <string name="signup_login_facebook">"Login with Facebook"</string>
     <string name="signup_login_google">"Login with Google"</string>
