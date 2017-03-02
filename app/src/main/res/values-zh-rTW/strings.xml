@@ -63,20 +63,41 @@
     <string name="dashboard_chart_message_almost">"再多試試!\n你快完成了!"</string>
     <string name="dashboard_chart_message_excellent">"哇! \n你完成目標了!"</string>
 
-    <!-- FragmentDashboardSelect -->
-    <string name="dashboard_select_hello">"你今天如何?"</string>
-    <string name="dashboard_select_excellent">"棒極了!"</string>
-    <string name="dashboard_select_almost">"快完成了!"</string>
-    <string name="dashboard_select_below">"再多加油!"</string>
+    <!-- FragmentDashboardMain -->
+    <string name="dashboard_main_message">"立刻同步?"</string>
+    <string name="dashboard_main_yes">"是, 請同步"</string>
+    <string name="dashboard_main_dashboard">"否, 開啟活動記錄"</string>
+    <string name="dashboard_main_another">"同步其它的手錶"</string>
+    <string name="dashboard_main_no_device">"未綁定任何裝置!"</string>
 
-    <!-- FragmentDashboardSync -->
-    <string name="dashboard_sync_request">"發出請求"</string>
-    <string name="dashboard_sync_profile">"編輯個人資訊"</string>
-    <string name="dashboard_sync_process">"處理中"</string>
-    <string name="dashboard_sync_waiting">"請稍候&#8230;"</string>
-    <string name="dashboard_sync_pending">"請求中.\n等候回應"</string>
-    <string name="dashboard_sync_no_data">"你尚無任何資料"</string>
-    <string name="dashboard_sync_owner">"%s的手錶"</string>
+    <!-- FragmentDashboardEmotion -->
+    <string name="dashboard_emotion_hello">"你今天如何?"</string>
+    <string name="dashboard_emotion_excellent">"棒極了!"</string>
+    <string name="dashboard_emotion_almost">"快完成了!"</string>
+    <string name="dashboard_emotion_below">"再多加油!"</string>
+
+    <!-- FragmentDashboardProgress -->
+    <string name="dashboard_progress_searching">"尋找裝置!"</string>
+    <string name="dashboard_progress_found">"尋獲你的裝置!"</string>
+    <string name="dashboard_progress_sync_now">"立即同步"</string>
+    <string name="dashboard_progress_syncing">"同步中"</string>
+    <string name="dashboard_progress_completed">"同步完成"</string>
+    <string name="dashboard_progress_dashboard">"開啟活動記錄"</string>
+    <string name="dashboard_progress_not_found">"無法找到裝置!"</string>
+    <string name="dashboard_progress_again">"重試"</string>
+    <string name="dashboard_progress_last">"使用最後的記錄"</string>
+
+    <!-- FragmentDashboardRequest -->
+    <string name="dashboard_request_request">"發出請求"</string>
+    <string name="dashboard_request_profile">"編輯個人資訊"</string>
+    <string name="dashboard_request_process">"處理中"</string>
+    <string name="dashboard_request_waiting">"請稍候&#8230;"</string>
+    <string name="dashboard_request_pending">"請求中.\n等候回應"</string>
+    <string name="dashboard_request_no_data">"你尚無任何資料"</string>
+    <string name="dashboard_request_owner">"%s的手錶"</string>
+
+    <!-- FragmentDashboardWatch -->
+    <string name="dashboard_watch_message">"選擇同步的手錶"</string>
 
     <!-- FragmentDevice -->
     <string name="device_battery">"電池"</string>
@@ -200,27 +221,6 @@
     <string name="signup_profile_login_failed">"登入失敗"</string>
     <string name="signup_profile_update_failed">"更新失敗"</string>
     <string name="signup_profile_avatar_failed">"更新頭像失敗"</string>
-
-    <!-- FragmentSyncNow -->
-    <string name="sync_now_message">"立刻同步?"</string>
-    <string name="sync_now_yes">"是, 請同步"</string>
-    <string name="sync_now_dashboard">"否, 開啟活動記錄"</string>
-    <string name="sync_now_another">"同步其它的手錶"</string>
-    <string name="sync_now_no_device">"未綁定任何裝置!"</string>
-
-    <!-- FragmentSyncSearch -->
-    <string name="sync_search_searching">"尋找裝置!"</string>
-    <string name="sync_search_found">"尋獲你的裝置!"</string>
-    <string name="sync_search_sync_now">"立即同步"</string>
-    <string name="sync_search_syncing">"同步中"</string>
-    <string name="sync_search_completed">"同步完成"</string>
-    <string name="sync_search_dashboard">"開啟活動記錄"</string>
-    <string name="sync_search_not_found">"無法找到裝置!"</string>
-    <string name="sync_search_again">"重試"</string>
-    <string name="sync_search_last">"使用最後的記錄"</string>
-
-    <!-- FragmentSyncSelect -->
-    <string name="sync_select_message">"選擇同步的手錶"</string>
 
     <!-- FragmentWatchAdded -->
     <string name="watch_added_added">"完成新增"</string>

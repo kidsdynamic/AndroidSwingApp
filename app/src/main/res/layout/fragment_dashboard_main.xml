@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/textview_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="4"
+        android:gravity="center"
+        android:text="@string/dashboard_main_message" />
+<!--
+    <com.kidsdynamic.swing.androidswingapp.LayoutDrawer
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:background="@color/color_red">
+
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Text1" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Text2" />
+    </com.kidsdynamic.swing.androidswingapp.LayoutDrawer>
+-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4">
+
+        <com.kidsdynamic.swing.androidswingapp.ViewSponge
+            android:id="@+id/dashboard_main_sponge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:shrinkWidth="0.7" />
+
+        <Button
+            android:id="@+id/dashboard_main_yes"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/dashboard_main_sponge"
+            android:layout_alignStart="@+id/dashboard_main_sponge"
+            android:layout_marginBottom="10dp"
+            android:text="@string/dashboard_main_yes" />
+
+        <Button
+            android:id="@+id/dashboard_main_no"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/dashboard_main_sponge"
+            android:layout_alignStart="@+id/dashboard_main_sponge"
+            android:layout_below="@+id/dashboard_main_yes"
+            android:layout_marginBottom="10dp"
+            android:text="@string/dashboard_main_dashboard" />
+
+        <Button
+            android:id="@+id/dashboard_main_another"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/dashboard_main_sponge"
+            android:layout_alignStart="@+id/dashboard_main_sponge"
+            android:layout_below="@+id/dashboard_main_no"
+            android:layout_marginBottom="10dp"
+            android:text="@string/dashboard_main_another" />
+    </RelativeLayout>
+
+</LinearLayout>

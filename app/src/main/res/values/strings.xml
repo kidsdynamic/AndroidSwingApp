@@ -63,20 +63,41 @@
     <string name="dashboard_chart_message_almost">"One More Time!\nYou Are Almost There!"</string>
     <string name="dashboard_chart_message_excellent">"Woohoo! You've\nReached Your Goal!"</string>
 
-    <!-- FragmentDashboardSelect -->
-    <string name="dashboard_select_hello">"How Are You Doing\nToday?"</string>
-    <string name="dashboard_select_excellent">"Excellent!"</string>
-    <string name="dashboard_select_almost">"Almost There!"</string>
-    <string name="dashboard_select_below">"Below Average!"</string>
+    <!-- FragmentDashboardMain -->
+    <string name="dashboard_main_message">"Would You Like to\nSync now?"</string>
+    <string name="dashboard_main_yes">"Yes, Please"</string>
+    <string name="dashboard_main_dashboard">"No, Go to Dashboard"</string>
+    <string name="dashboard_main_another">"Sync Another Watch"</string>
+    <string name="dashboard_main_no_device">"There is no bound device!"</string>
 
-    <!-- FragmentDashboardSync -->
-    <string name="dashboard_sync_request">"Request Access"</string>
-    <string name="dashboard_sync_profile">"Go to Profile"</string>
-    <string name="dashboard_sync_process">"Processing"</string>
-    <string name="dashboard_sync_waiting">"Please Wait&#8230;"</string>
-    <string name="dashboard_sync_pending">"Request Pending.\nAwait responses"</string>
-    <string name="dashboard_sync_no_data">"You Don't Have Any\nData Yet"</string>
-    <string name="dashboard_sync_owner">"%s's Watch"</string>
+    <!-- FragmentDashboardEmotion -->
+    <string name="dashboard_emotion_hello">"How Are You Doing\nToday?"</string>
+    <string name="dashboard_emotion_excellent">"Excellent!"</string>
+    <string name="dashboard_emotion_almost">"Almost There!"</string>
+    <string name="dashboard_emotion_below">"Below Average!"</string>
+
+    <!-- FragmentDashboardProgress -->
+    <string name="dashboard_progress_searching">"Searching\nfor Your\nDevice!"</string>
+    <string name="dashboard_progress_found">"Found\nYour\nDevice!"</string>
+    <string name="dashboard_progress_sync_now">"Sync Now"</string>
+    <string name="dashboard_progress_syncing">"Syncing"</string>
+    <string name="dashboard_progress_completed">"Sync\nCompleted"</string>
+    <string name="dashboard_progress_dashboard">"Go to Dashboard"</string>
+    <string name="dashboard_progress_not_found">"We Can\'t\nFind Your\nDevice!"</string>
+    <string name="dashboard_progress_again">"Try Again"</string>
+    <string name="dashboard_progress_last">"Go to Last Synced Data"</string>
+
+    <!-- FragmentDashboardRequest -->
+    <string name="dashboard_request_request">"Request Access"</string>
+    <string name="dashboard_request_profile">"Go to Profile"</string>
+    <string name="dashboard_request_process">"Processing"</string>
+    <string name="dashboard_request_waiting">"Please Wait&#8230;"</string>
+    <string name="dashboard_request_pending">"Request Pending.\nAwait responses"</string>
+    <string name="dashboard_request_no_data">"You Don't Have Any\nData Yet"</string>
+    <string name="dashboard_request_owner">"%s's Watch"</string>
+
+    <!-- FragmentDashboardWatch -->
+    <string name="dashboard_watch_message">"Select Watch\nto Sync"</string>
 
     <!-- FragmentDevice -->
     <string name="device_battery">"Battery"</string>
@@ -185,7 +206,7 @@
     <string name="signup_language_select">"Select"</string>
 
     <!-- FragmentSignupLogin -->
-    <string name="signup_login_login">"Sing Up / Login"</string>
+    <string name="signup_login_login">"Sign Up / Login"</string>
     <string name="signup_login_or">"or"</string>
     <string name="signup_login_facebook">"Login with Facebook"</string>
     <string name="signup_login_google">"Login with Google"</string>
@@ -200,27 +221,6 @@
     <string name="signup_profile_login_failed">"Login failed"</string>
     <string name="signup_profile_update_failed">"Update failed"</string>
     <string name="signup_profile_avatar_failed">"Update avatar failed"</string>
-
-    <!-- FragmentSyncNow -->
-    <string name="sync_now_message">"Would You Like to\nSync now?"</string>
-    <string name="sync_now_yes">"Yes, Please"</string>
-    <string name="sync_now_dashboard">"No, Go to Dashboard"</string>
-    <string name="sync_now_another">"Sync Another Watch"</string>
-    <string name="sync_now_no_device">"There is no bound device!"</string>
-
-    <!-- FragmentSyncSearch -->
-    <string name="sync_search_searching">"Searching\nfor Your\nDevice!"</string>
-    <string name="sync_search_found">"Found\nYour\nDevice!"</string>
-    <string name="sync_search_sync_now">"Sync Now"</string>
-    <string name="sync_search_syncing">"Syncing"</string>
-    <string name="sync_search_completed">"Sync\nCompleted"</string>
-    <string name="sync_search_dashboard">"Go to Dashboard"</string>
-    <string name="sync_search_not_found">"We Can\'t\nFind Your\nDevice!"</string>
-    <string name="sync_search_again">"Try Again"</string>
-    <string name="sync_search_last">"Go to Last Synced Data"</string>
-
-    <!-- FragmentSyncSelect -->
-    <string name="sync_select_message">"Select Watch\nto Sync"</string>
 
     <!-- FragmentWatchAdded -->
     <string name="watch_added_added">"Added"</string>

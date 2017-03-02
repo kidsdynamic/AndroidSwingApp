@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <com.kidsdynamic.swing.androidswingapp.ViewSponge
-        android:id="@+id/sync_search_sponge"
+        android:id="@+id/dashboard_progress_sponge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -15,49 +15,49 @@
         app:shrinkWidth="0.7" />
 
     <TextView
-        android:id="@+id/sync_search_title"
+        android:id="@+id/dashboard_progress_title"
         style="@style/textview_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/sync_search_sponge"
-        android:layout_alignEnd="@id/sync_search_sponge"
-        android:layout_alignStart="@+id/sync_search_sponge"
-        android:layout_alignTop="@+id/sync_search_sponge"
+        android:layout_alignBottom="@+id/dashboard_progress_sponge"
+        android:layout_alignEnd="@id/dashboard_progress_sponge"
+        android:layout_alignStart="@+id/dashboard_progress_sponge"
+        android:layout_alignTop="@+id/dashboard_progress_sponge"
         android:gravity="center"
-        android:text="@string/sync_search_searching" />
+        android:text="@string/dashboard_progress_searching" />
 
     <com.kidsdynamic.swing.androidswingapp.ViewCircle
-        android:id="@+id/sync_search_progress"
+        android:id="@+id/dashboard_progress_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/sync_search_sponge"
-        android:layout_alignEnd="@id/sync_search_sponge"
-        android:layout_alignStart="@+id/sync_search_sponge"
-        android:layout_alignTop="@+id/sync_search_sponge"
+        android:layout_alignBottom="@+id/dashboard_progress_sponge"
+        android:layout_alignEnd="@id/dashboard_progress_sponge"
+        android:layout_alignStart="@+id/dashboard_progress_sponge"
+        android:layout_alignTop="@+id/dashboard_progress_sponge"
         app:strokeColorActive="@color/color_orange"
         app:strokeColorNormal="@color/color_white"
         app:strokeType="dot"
         app:strokeWidth="12dp" />
 
     <Button
-        android:id="@+id/sync_search_button1"
+        android:id="@+id/dashboard_progress_button1"
         style="@style/button_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/sync_search_sponge"
-        android:layout_alignStart="@+id/sync_search_sponge"
-        android:layout_below="@+id/sync_search_sponge"
+        android:layout_alignEnd="@id/dashboard_progress_sponge"
+        android:layout_alignStart="@+id/dashboard_progress_sponge"
+        android:layout_below="@+id/dashboard_progress_sponge"
         android:layout_marginTop="40dp"
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/sync_search_button2"
+        android:id="@+id/dashboard_progress_button2"
         style="@style/button_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@id/sync_search_sponge"
-        android:layout_alignStart="@+id/sync_search_sponge"
-        android:layout_below="@+id/sync_search_button1"
+        android:layout_alignEnd="@id/dashboard_progress_sponge"
+        android:layout_alignStart="@+id/dashboard_progress_sponge"
+        android:layout_below="@+id/dashboard_progress_button1"
         android:layout_marginTop="10dp"
         android:visibility="invisible" />
 

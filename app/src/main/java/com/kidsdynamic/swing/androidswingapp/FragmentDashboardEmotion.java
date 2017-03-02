@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -13,13 +12,13 @@ import android.widget.TextView;
  * Created by 03543 on 2017/2/25.
  */
 
-public class FragmentDashboardSelect extends ViewFragment {
+public class FragmentDashboardEmotion extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
     private TextView mViewHello;
     private ImageView mViewMonster;
-    private TextView mViewEmotion;
+    private TextView mViewMessage;
 
     private ImageView mViewStep;
     private ImageView mViewUv;
@@ -35,19 +34,19 @@ public class FragmentDashboardSelect extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_dashboard_select, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_dashboard_emotion, container, false);
 
-        mViewHello = (TextView) mViewMain.findViewById(R.id.dashboard_select_hello);
-        mViewMonster = (ImageView) mViewMain.findViewById(R.id.dashboard_select_monster);
-        mViewEmotion = (TextView) mViewMain.findViewById(R.id.dashboard_select_emotion);
+        mViewHello = (TextView) mViewMain.findViewById(R.id.dashboard_emotion_hello);
+        mViewMonster = (ImageView) mViewMain.findViewById(R.id.dashboard_emotion_monster);
+        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_emotion_message);
 
-        mViewStep = (ImageView) mViewMain.findViewById(R.id.dashboard_select_step);
+        mViewStep = (ImageView) mViewMain.findViewById(R.id.dashboard_emotion_step);
         mViewStep.setOnClickListener(mSelectListener);
 
-        mViewUv = (ImageView) mViewMain.findViewById(R.id.dashboard_select_uv);
+        mViewUv = (ImageView) mViewMain.findViewById(R.id.dashboard_emotion_uv);
         mViewUv.setOnClickListener(mSelectListener);
 
-        mViewGlasses = (ImageView) mViewMain.findViewById(R.id.dashboard_select_glasses);
+        mViewGlasses = (ImageView) mViewMain.findViewById(R.id.dashboard_emotion_glasses);
         mViewGlasses.setOnClickListener(mSelectListener);
 
         return mViewMain;
@@ -85,11 +84,11 @@ public class FragmentDashboardSelect extends ViewFragment {
     private void showExcellent() {
         mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster03);
         mViewMonster.setImageResource(R.mipmap.monster_yellow);
-        mViewEmotion.setText(getResources().getString(R.string.dashboard_select_excellent));
+        mViewMessage.setText(getResources().getString(R.string.dashboard_emotion_excellent));
 
         mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_orange_main);
         mViewHello.setTextColor(mEmotionColor);
-        mViewEmotion.setTextColor(mEmotionColor);
+        mViewMessage.setTextColor(mEmotionColor);
 
         mViewStep.setImageResource(R.mipmap.active_step_orange);
         mViewUv.setImageResource(R.mipmap.active_uv_orange);
@@ -99,11 +98,11 @@ public class FragmentDashboardSelect extends ViewFragment {
     private void showAlmost() {
         mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster02);
         mViewMonster.setImageResource(R.mipmap.monster_green);
-        mViewEmotion.setText(getResources().getString(R.string.dashboard_select_almost));
+        mViewMessage.setText(getResources().getString(R.string.dashboard_emotion_almost));
 
         mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_green_main);
         mViewHello.setTextColor(mEmotionColor);
-        mViewEmotion.setTextColor(mEmotionColor);
+        mViewMessage.setTextColor(mEmotionColor);
 
         mViewStep.setImageResource(R.mipmap.active_step_green);
         mViewUv.setImageResource(R.mipmap.active_step_green);
@@ -113,11 +112,11 @@ public class FragmentDashboardSelect extends ViewFragment {
     private void showBelow() {
         mViewMain.setBackgroundResource(R.mipmap.background_dashboard_monster01);
         mViewMonster.setImageResource(R.mipmap.monster_purple);
-        mViewEmotion.setText(getResources().getString(R.string.dashboard_select_below));
+        mViewMessage.setText(getResources().getString(R.string.dashboard_emotion_below));
 
         mEmotionColor = ContextCompat.getColor(mActivityMain, R.color.color_blue_main);
         mViewHello.setTextColor(mEmotionColor);
-        mViewEmotion.setTextColor(mEmotionColor);
+        mViewMessage.setTextColor(mEmotionColor);
 
         mViewStep.setImageResource(R.mipmap.active_step_blue);
         mViewUv.setImageResource(R.mipmap.active_step_blue);

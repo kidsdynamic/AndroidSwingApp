@@ -1,6 +1,5 @@
 package com.kidsdynamic.swing.androidswingapp;
 
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import java.util.List;
  * Created by 03543 on 2017/1/15.
  */
 
-public class FragmentSyncSelect extends ViewFragment {
+public class FragmentDashboardWatch extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
     LinearLayout mViewContainer;
@@ -29,9 +28,9 @@ public class FragmentSyncSelect extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_sync_select, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_dashboard_watch, container, false);
 
-        mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.sync_select_container);
+        mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.dashboard_watch_container);
 
         return mViewMain;
     }
@@ -95,7 +94,7 @@ public class FragmentSyncSelect extends ViewFragment {
             setSelected(mDeviceList.indexOf(device));
 
             mActivityMain.mContactStack.push(device);
-            mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardProgress.class.getName(), null);
         }
     };
 }
