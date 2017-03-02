@@ -3,11 +3,13 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class FragmentDashboardProgress extends ViewFragment {
     private BLEMachine.Device mSearchResult = null;
     private List<BLEMachine.VoiceAlert> mVoiceAlertList;
     private boolean mSyncFinish = false;
+    private boolean mActivityUpdateFinish = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,8 +136,9 @@ public class FragmentDashboardProgress extends ViewFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             mUploadTimeout--;
 
-            if (false) {    // todo: when the update is finish.
+            if (mActivityMain.mOperator.mWatchDatabase.UploadItemCount() == 0) {
                 viewDownload();
+                mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
             } else if (mUploadTimeout == 0) {
                 viewServerFailed();
             }
@@ -146,7 +150,7 @@ public class FragmentDashboardProgress extends ViewFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             mDownloadTimeout--;
 
-            if (false) {     // todo: when the download is finish
+            if (mActivityUpdateFinish) {
                 viewCompleted();
             } else if (mDownloadTimeout == 0) {
                 viewServerFailed();
@@ -339,17 +343,27 @@ public class FragmentDashboardProgress extends ViewFragment {
                 for (WatchActivityRaw res : result) {
                     mActivityMain.mOperator.pushUploadItem(res);
                 }
-                Intent intent = new Intent(mActivityMain, ServerPushService.class);
-                mActivityMain.startService(intent);
 
                 mSyncFinish = true;
             } else {
                 // Todo : first connect?
                 mSyncFinish = true;
-
             }
+            Intent intent = new Intent(mActivityMain, ServerPushService.class);
+            mActivityMain.startService(intent);
         }
     };
 
+    WatchOperator.finishListener mActivityUpdateListener = new WatchOperator.finishListener() {
+        @Override
+        public void onFinish(Object arg) {
+            mActivityUpdateFinish = true;
+        }
 
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            mActivityUpdateFinish = true;
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+        }
+    };
 }

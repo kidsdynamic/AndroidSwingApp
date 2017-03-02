@@ -244,7 +244,7 @@ class BLEMachine extends BLEControl {
 
                 case STATE_GET_DATA2:
                     if (mRelationDevice.mState.mData2 != null) {
-                        mActivities.add(new WatchActivityRaw(mRelationDevice.mAddress, mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
+                        mActivities.add(new WatchActivityRaw(ServerMachine.getMacID(mRelationDevice.mAddress), mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
                         mRelationDevice.mState.mHeader = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
