@@ -86,6 +86,7 @@
     <string name="dashboard_progress_not_found">"We Can\'t\nFind Your\nDevice!"</string>
     <string name="dashboard_progress_again">"Try Again"</string>
     <string name="dashboard_progress_last">"Go to Last Synced Data"</string>
+    <string name="dashboard_progress_server_not_reach">Can't Reach Server!</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">"Request Access"</string>

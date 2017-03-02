@@ -36,7 +36,8 @@
         android:layout_alignTop="@+id/dashboard_progress_sponge"
         app:strokeColorActive="@color/color_orange"
         app:strokeColorNormal="@color/color_white"
-        app:strokeType="dot"
+        app:strokeType="arc"
+        app:strokeCount="100"
         app:strokeWidth="12dp" />
 
     <Button
