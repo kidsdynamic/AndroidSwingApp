@@ -107,10 +107,7 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             if (mSearchResult != null && mMacAddress.equals(mSearchResult.mAddress)) {
                 viewFound();
-                return;
-            }
-
-            if (mSearchTimeout == 0) {
+            } else if (mSearchTimeout == 0) {
                 viewNotFound();
                 bleSearchCancel();
             }
@@ -124,10 +121,7 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             if (mSyncFinish) {
                 viewUpload();
-                return;
-            }
-
-            if (mSyncTimeout == 0) {
+            } else if (mSyncTimeout == 0) {
                 viewNotFound();
                 bleSyncCancel();
             }
@@ -141,10 +135,7 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             if (false) {    // todo: when the update is finish.
                 viewDownload();
-                return;
-            }
-
-            if (mUploadTimeout == 0) {
+            } else if (mUploadTimeout == 0) {
                 viewServerFailed();
             }
         }
@@ -155,12 +146,9 @@ public class FragmentDashboardProgress extends ViewFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             mDownloadTimeout--;
 
-            if(false) {     // todo: when the download is finish
+            if (false) {     // todo: when the download is finish
                 viewCompleted();
-                return;
-            }
-
-            if (mDownloadTimeout == 0) {
+            } else if (mDownloadTimeout == 0) {
                 viewServerFailed();
             }
         }
