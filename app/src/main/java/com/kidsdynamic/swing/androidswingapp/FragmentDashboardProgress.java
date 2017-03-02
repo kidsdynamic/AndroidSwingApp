@@ -19,12 +19,17 @@ import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCE
  */
 
 public class FragmentDashboardProgress extends ViewFragment {
+    private final int PROGRESS_INTERVAL = 100;
 
-    private final int SEARCH_TIMEOUT = 15;  // 15 seconds
+    private final int SEARCH_TIMEOUT = 150;     // 150 * PROGRESS_INTERVAL milliseconds
     private int mSearchTimeout;
-
-    private final int SYNC_TIMEOUT = 400;  // 100 seconds
+    private final int SYNC_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
     private int mSyncTimeout;
+    private final int UPLOAD_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
+    private int mUploadTimeout;
+    private final int DOWNLOAD_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
+    private int mDownloadTimeout;
+
 
     private ActivityMain mActivityMain;
     private View mViewMain;
@@ -55,6 +60,15 @@ public class FragmentDashboardProgress extends ViewFragment {
         mViewButton1 = (Button) mViewMain.findViewById(R.id.dashboard_progress_button1);
         mViewButton2 = (Button) mViewMain.findViewById(R.id.dashboard_progress_button2);
 
+        return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        viewSearching();
+
         mDevice = mActivityMain.mContactStack.isEmpty() ?
                 new WatchContact.Kid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();
@@ -65,23 +79,7 @@ public class FragmentDashboardProgress extends ViewFragment {
             mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
 
         mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
-        //mMacAddress = "E0:E5:CF:1E:D7:C2";
-
-        Handler handle = new Handler();
-        handle.post(new Runnable() {
-            @Override
-            public void run() {
-                viewSearching();
-                bleSearchStart();
-            }
-        });
-
-        return mViewMain;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
+        bleSearchStart();
     }
 
     @Override
@@ -109,6 +107,7 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             if (mSearchResult != null && mMacAddress.equals(mSearchResult.mAddress)) {
                 viewFound();
+                return;
             }
 
             if (mSearchTimeout == 0) {
@@ -124,12 +123,45 @@ public class FragmentDashboardProgress extends ViewFragment {
             mSyncTimeout--;
 
             if (mSyncFinish) {
-                viewCompleted();
+                viewUpload();
+                return;
             }
 
             if (mSyncTimeout == 0) {
                 viewNotFound();
                 bleSyncCancel();
+            }
+        }
+    };
+
+    private ViewCircle.OnProgressListener mUploadProgressListener = new ViewCircle.OnProgressListener() {
+        @Override
+        public void onProgress(ViewCircle view, int begin, int end) {
+            mUploadTimeout--;
+
+            if (false) {    // todo: when the update is finish.
+                viewDownload();
+                return;
+            }
+
+            if (mUploadTimeout == 0) {
+                viewServerFailed();
+            }
+        }
+    };
+
+    private ViewCircle.OnProgressListener mDownloadProgressListener = new ViewCircle.OnProgressListener() {
+        @Override
+        public void onProgress(ViewCircle view, int begin, int end) {
+            mDownloadTimeout--;
+
+            if(false) {     // todo: when the download is finish
+                viewCompleted();
+                return;
+            }
+
+            if (mDownloadTimeout == 0) {
+                viewServerFailed();
             }
         }
     };
@@ -151,7 +183,7 @@ public class FragmentDashboardProgress extends ViewFragment {
 
     private Button.OnClickListener mSyncListener = new Button.OnClickListener() {
         @Override
-        public void onClick(View v) {
+        public void onClick(View view) {
             viewSyncing();
             bleSyncStart();
         }
@@ -186,10 +218,9 @@ public class FragmentDashboardProgress extends ViewFragment {
         mViewButton2.setOnClickListener(null);
 
         mSearchTimeout = SEARCH_TIMEOUT;
-
         mViewProgress.setOnProgressListener(mSearchProgressListener);
-        mViewProgress.setStrokeBeginEnd(0, 0);
-        mViewProgress.startProgress(250, -1, -1);
+        mViewProgress.setStrokeBeginEnd(0, 10);
+        mViewProgress.startProgress(PROGRESS_INTERVAL, -1, -1);
     }
 
     private void viewFound() {
@@ -207,6 +238,36 @@ public class FragmentDashboardProgress extends ViewFragment {
         mViewProgress.setActive(false);
     }
 
+    private void viewUpload() {
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_syncing));
+
+        mViewButton1.setVisibility(View.INVISIBLE);
+        mViewButton1.setOnClickListener(null);
+
+        mViewButton2.setVisibility(View.INVISIBLE);
+        mViewButton2.setOnClickListener(null);
+
+        mUploadTimeout = UPLOAD_TIMEOUT;
+        mViewProgress.setOnProgressListener(mUploadProgressListener);
+        mViewProgress.setStrokeBeginEnd(0, 10);
+        mViewProgress.startProgress(PROGRESS_INTERVAL, -1, -1);
+    }
+
+    private void viewDownload() {
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_syncing));
+
+        mViewButton1.setVisibility(View.INVISIBLE);
+        mViewButton1.setOnClickListener(null);
+
+        mViewButton2.setVisibility(View.INVISIBLE);
+        mViewButton2.setOnClickListener(null);
+
+        mDownloadTimeout = DOWNLOAD_TIMEOUT;
+        mViewProgress.setOnProgressListener(mDownloadProgressListener);
+        mViewProgress.setStrokeBeginEnd(0, 10);
+        mViewProgress.startProgress(PROGRESS_INTERVAL, -1, -1);
+    }
+
     private void viewSyncing() {
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_syncing));
 
@@ -218,8 +279,8 @@ public class FragmentDashboardProgress extends ViewFragment {
 
         mSyncTimeout = SYNC_TIMEOUT;
         mViewProgress.setOnProgressListener(mSyncProgressListener);
-        mViewProgress.setStrokeBeginEnd(0, 0);
-        mViewProgress.startProgress(250, -1, -1);
+        mViewProgress.setStrokeBeginEnd(0, 10);
+        mViewProgress.startProgress(PROGRESS_INTERVAL, -1, -1);
     }
 
     private void viewCompleted() {
@@ -239,6 +300,23 @@ public class FragmentDashboardProgress extends ViewFragment {
 
     private void viewNotFound() {
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_not_found));
+
+        mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));
+        mViewButton2.setText(getResources().getString(R.string.dashboard_progress_last));
+
+        mViewButton1.setVisibility(View.VISIBLE);
+        mViewButton1.setOnClickListener(mAgainListener);
+
+        mViewButton2.setVisibility(View.VISIBLE);
+        mViewButton2.setOnClickListener(mExitListener);
+
+        mViewProgress.stopProgress();
+        mViewProgress.setOnProgressListener(null);
+        mViewProgress.setActive(false);
+    }
+
+    private void viewServerFailed() {
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_server_not_reach));
 
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));
         mViewButton2.setText(getResources().getString(R.string.dashboard_progress_last));

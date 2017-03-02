@@ -86,6 +86,7 @@
     <string name="dashboard_progress_not_found">"無法找到裝置!"</string>
     <string name="dashboard_progress_again">"重試"</string>
     <string name="dashboard_progress_last">"使用最後的記錄"</string>
+    <string name="dashboard_progress_server_not_reach">"Can't Reach Server!"</string>
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">"發出請求"</string>
