@@ -21,7 +21,7 @@
         android:src="@mipmap/monster_all" />
 
     <TextView
-        android:id="@+id/dashboard_sync_message"
+        android:id="@+id/dashboard_request_message"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
@@ -39,32 +39,32 @@
         android:layout_weight="4">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/dashboard_sync_sponge"
+            android:id="@+id/dashboard_request_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             app:shrinkWidth="0.7" />
 
         <Button
-            android:id="@+id/dashboard_sync_request"
+            android:id="@+id/dashboard_request_request"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/dashboard_sync_sponge"
+            android:layout_alignEnd="@+id/dashboard_request_sponge"
             android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/dashboard_sync_sponge"
+            android:layout_alignStart="@+id/dashboard_request_sponge"
             android:layout_marginBottom="10dp"
-            android:text="@string/dashboard_sync_request" />
+            android:text="@string/dashboard_request_request" />
 
         <Button
-            android:id="@+id/dashboard_sync_profile"
+            android:id="@+id/dashboard_request_profile"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/dashboard_sync_sponge"
-            android:layout_alignStart="@+id/dashboard_sync_sponge"
-            android:layout_below="@+id/dashboard_sync_request"
-            android:text="@string/dashboard_sync_profile" />
+            android:layout_alignEnd="@+id/dashboard_request_sponge"
+            android:layout_alignStart="@+id/dashboard_request_sponge"
+            android:layout_below="@+id/dashboard_request_request"
+            android:text="@string/dashboard_request_profile" />
     </RelativeLayout>
 
 </LinearLayout>

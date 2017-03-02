@@ -11,7 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="4"
         android:gravity="center"
-        android:text="@string/sync_select_message" />
+        android:text="@string/dashboard_watch_message" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:layout_weight="7">
 
         <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/sync_select_sponge"
+            android:id="@+id/dashboard_watch_sponge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -30,11 +30,11 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignStart="@+id/sync_select_sponge"
-            android:layout_alignEnd="@+id/sync_select_sponge">
+            android:layout_alignStart="@+id/dashboard_watch_sponge"
+            android:layout_alignEnd="@+id/dashboard_watch_sponge">
 
             <LinearLayout
-                android:id="@+id/sync_select_container"
+                android:id="@+id/dashboard_watch_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

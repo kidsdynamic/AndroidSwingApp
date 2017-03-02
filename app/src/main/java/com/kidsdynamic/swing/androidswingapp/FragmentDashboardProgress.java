@@ -18,7 +18,7 @@ import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCE
  * Created by 03543 on 2017/1/21.
  */
 
-public class FragmentSyncSearch extends ViewFragment {
+public class FragmentDashboardProgress extends ViewFragment {
 
     private final int SEARCH_TIMEOUT = 15;  // 15 seconds
     private int mSearchTimeout;
@@ -47,13 +47,13 @@ public class FragmentSyncSearch extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_sync_search, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_dashboard_progress, container, false);
 
-        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.sync_search_progress);
+        mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.dashboard_progress_progress);
 
-        mViewLabel = (TextView) mViewMain.findViewById(R.id.sync_search_title);
-        mViewButton1 = (Button) mViewMain.findViewById(R.id.sync_search_button1);
-        mViewButton2 = (Button) mViewMain.findViewById(R.id.sync_search_button2);
+        mViewLabel = (TextView) mViewMain.findViewById(R.id.dashboard_progress_title);
+        mViewButton1 = (Button) mViewMain.findViewById(R.id.dashboard_progress_button1);
+        mViewButton2 = (Button) mViewMain.findViewById(R.id.dashboard_progress_button2);
 
         mDevice = mActivityMain.mContactStack.isEmpty() ?
                 new WatchContact.Kid() :
@@ -145,7 +145,7 @@ public class FragmentSyncSearch extends ViewFragment {
     private Button.OnClickListener mExitListener = new Button.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
         }
     };
 
@@ -177,7 +177,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewSearching() {
-        mViewLabel.setText(getResources().getString(R.string.sync_search_searching));
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_searching));
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -193,8 +193,8 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewFound() {
-        mViewLabel.setText(getResources().getString(R.string.sync_search_found));
-        mViewButton1.setText(getResources().getString(R.string.sync_search_sync_now));
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_found));
+        mViewButton1.setText(getResources().getString(R.string.dashboard_progress_sync_now));
 
         mViewButton1.setVisibility(View.VISIBLE);
         mViewButton1.setOnClickListener(mSyncListener);
@@ -208,7 +208,7 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewSyncing() {
-        mViewLabel.setText(getResources().getString(R.string.sync_search_syncing));
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_syncing));
 
         mViewButton1.setVisibility(View.INVISIBLE);
         mViewButton1.setOnClickListener(null);
@@ -223,8 +223,8 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewCompleted() {
-        mViewLabel.setText(getResources().getString(R.string.sync_search_completed));
-        mViewButton1.setText(getResources().getString(R.string.sync_search_dashboard));
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_completed));
+        mViewButton1.setText(getResources().getString(R.string.dashboard_progress_dashboard));
 
         mViewButton1.setVisibility(View.VISIBLE);
         mViewButton1.setOnClickListener(mExitListener);
@@ -238,10 +238,10 @@ public class FragmentSyncSearch extends ViewFragment {
     }
 
     private void viewNotFound() {
-        mViewLabel.setText(getResources().getString(R.string.sync_search_not_found));
+        mViewLabel.setText(getResources().getString(R.string.dashboard_progress_not_found));
 
-        mViewButton1.setText(getResources().getString(R.string.sync_search_again));
-        mViewButton2.setText(getResources().getString(R.string.sync_search_last));
+        mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));
+        mViewButton2.setText(getResources().getString(R.string.dashboard_progress_last));
 
         mViewButton1.setVisibility(View.VISIBLE);
         mViewButton1.setOnClickListener(mAgainListener);

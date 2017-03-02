@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
-
 /**
  * Created by 03543 on 2016/12/30.
  */
@@ -133,7 +131,7 @@ public class FragmentSignupAccount extends ViewFragment {
     WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
         @Override
         public void onFinish(Object arg) {
-            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
         }
 
         @Override

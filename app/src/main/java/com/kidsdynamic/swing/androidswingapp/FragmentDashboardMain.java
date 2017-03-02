@@ -12,7 +12,7 @@ import android.widget.Toast;
  * Created by 03543 on 2017/1/1.
  */
 
-public class FragmentSyncNow extends ViewFragment {
+public class FragmentDashboardMain extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -28,18 +28,35 @@ public class FragmentSyncNow extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_sync_now, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_dashboard_main, container, false);
 
-        mButtonYes = (Button) mViewMain.findViewById(R.id.sync_now_yes);
-        mButtonYes.setOnClickListener(mOnYesListener);
-
-        mButtonNo = (Button) mViewMain.findViewById(R.id.sync_now_no);
-        mButtonNo.setOnClickListener(mOnNoListener);
-
-        mbuttonAnother = (Button) mViewMain.findViewById(R.id.sync_now_another);
-        mbuttonAnother.setOnClickListener(mOnAnotherListener);
+        mButtonYes = (Button) mViewMain.findViewById(R.id.dashboard_main_yes);
+        mButtonNo = (Button) mViewMain.findViewById(R.id.dashboard_main_no);
+        mbuttonAnother = (Button) mViewMain.findViewById(R.id.dashboard_main_another);
 
         return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mActivityMain.mOperator.getFocusKid() == null) {
+            mActivityMain.selectFragment(FragmentDashboardRequest.class.getName(), null);
+        } else {
+            mButtonYes.setOnClickListener(mOnYesListener);
+            mButtonNo.setOnClickListener(mOnNoListener);
+            mbuttonAnother.setOnClickListener(mOnAnotherListener);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        mButtonYes.setOnClickListener(null);
+        mButtonNo.setOnClickListener(null);
+        mbuttonAnother.setOnClickListener(null);
+
+        super.onPause();
     }
 
     @Override
@@ -55,7 +72,7 @@ public class FragmentSyncNow extends ViewFragment {
             WatchContact.Kid device = mActivityMain.mOperator.getFocusKid();
 
             if (device == null) {
-                Toast.makeText(mActivityMain, getResources().getString(R.string.sync_now_no_device), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mActivityMain, getResources().getString(R.string.dashboard_main_no_device), Toast.LENGTH_SHORT).show();
             } else {
                 if (device.mProfile != null && !device.mProfile.equals("")) {
                     device.mPhoto = BitmapFactory.decodeFile(device.mProfile);
@@ -66,7 +83,7 @@ public class FragmentSyncNow extends ViewFragment {
                 device.mBound = true;
 
                 mActivityMain.mContactStack.push(device);
-                mActivityMain.selectFragment(FragmentSyncSearch.class.getName(), null);
+                mActivityMain.selectFragment(FragmentDashboardProgress.class.getName(), null);
             }
         }
     };
@@ -77,14 +94,14 @@ public class FragmentSyncNow extends ViewFragment {
             mActivityMain.consoleSelect(null);
             mActivityMain.consoleShow(true);
             mActivityMain.toolbarShow(true);
-            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnAnotherListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentSyncSelect.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardWatch.class.getName(), null);
         }
     };
 }

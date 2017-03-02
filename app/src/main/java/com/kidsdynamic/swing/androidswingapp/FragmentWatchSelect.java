@@ -80,7 +80,7 @@ public class FragmentWatchSelect extends ViewFragment {
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboardSync.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
         }
     };
 

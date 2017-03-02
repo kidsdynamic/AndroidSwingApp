@@ -56,14 +56,14 @@ public class FragmentSignupLogin extends ViewFragment {
     private Button.OnClickListener mOnFacebookListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
         }
     };
 
     private Button.OnClickListener mOnGoogleListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
         }
     };
 }

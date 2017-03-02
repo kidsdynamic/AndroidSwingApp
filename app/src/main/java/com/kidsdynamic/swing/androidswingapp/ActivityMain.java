@@ -4,13 +4,9 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -194,7 +190,7 @@ public class ActivityMain extends AppCompatActivity
                 if (mProcessDialog != null)
                     mProcessDialog.dismiss();
                 getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                selectFragment(FragmentSyncNow.class.getName(), null);
+                selectFragment(FragmentDashboardMain.class.getName(), null);
             }
         }
 
@@ -208,7 +204,7 @@ public class ActivityMain extends AppCompatActivity
                 if (mProcessDialog != null)
                     mProcessDialog.dismiss();
                 getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                selectFragment(FragmentSyncNow.class.getName(), null);
+                selectFragment(FragmentDashboardMain.class.getName(), null);
             }
         }
     };
@@ -311,7 +307,7 @@ public class ActivityMain extends AppCompatActivity
             else if (view == mViewCalendar)
                 selectFragment(FragmentCalendarMain.class.getName(), null);
             else if (view == mViewDashboard)
-                selectFragment(FragmentDashboardSync.class.getName(), null);
+                selectFragment(FragmentDashboardMain.class.getName(), null);
             else if (view == mViewProfile)
                 selectFragment(FragmentProfileMain.class.getName(), null);
         }

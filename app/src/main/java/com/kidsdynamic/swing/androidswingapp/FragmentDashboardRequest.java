@@ -15,7 +15,7 @@ import java.util.Locale;
  * Created by 03543 on 2016/12/19.
  */
 
-public class FragmentDashboardSync extends ViewFragment {
+public class FragmentDashboardRequest extends ViewFragment {
     private ActivityMain mActivityMain;
     private View mViewMain;
 
@@ -33,14 +33,14 @@ public class FragmentDashboardSync extends ViewFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_dashboard_sync, container, false);
+        mViewMain = inflater.inflate(R.layout.fragment_dashboard_request, container, false);
 
-        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_sync_message);
+        mViewMessage = (TextView) mViewMain.findViewById(R.id.dashboard_request_message);
 
-        mViewRequest = (Button) mViewMain.findViewById(R.id.dashboard_sync_request);
+        mViewRequest = (Button) mViewMain.findViewById(R.id.dashboard_request_request);
         mViewRequest.setOnClickListener(mRequestListener);
 
-        mViewProfile = (Button) mViewMain.findViewById(R.id.dashboard_sync_profile);
+        mViewProfile = (Button) mViewMain.findViewById(R.id.dashboard_request_profile);
         mViewProfile.setOnClickListener(mProfileListener);
 
         return mViewMain;
@@ -57,32 +57,19 @@ public class FragmentDashboardSync extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        WatchContact.Kid focus = mActivityMain.mOperator.getFocusKid();
-
-        if (focus != null) {
-            setTitle(focus.mName);
-            mViewMessage.setVisibility(View.INVISIBLE);
-            mViewRequest.setVisibility(View.INVISIBLE);
-            mViewProfile.setVisibility(View.INVISIBLE);
-
-            mProcessDialog = ProgressDialog.show(mActivityMain,
-                    getResources().getString(R.string.dashboard_sync_process),
-                    getResources().getString(R.string.dashboard_sync_waiting), true);
-            mActivityMain.mOperator.updateActivity(mUpdateActivityListener, focus.mId);
-
-        } else if (mActivityMain.mOperator.getRequestToList().size() > 0) {
+        if (mActivityMain.mOperator.getRequestToList().size() > 0) {
             mViewMessage.setVisibility(View.VISIBLE);
-            mViewRequest.setVisibility(View.VISIBLE);
+            mViewRequest.setVisibility(View.INVISIBLE);
             mViewProfile.setVisibility(View.VISIBLE);
 
-            mViewMessage.setText(getResources().getString(R.string.dashboard_sync_pending));
+            mViewMessage.setText(getResources().getString(R.string.dashboard_request_pending));
 
         } else {
             mViewMessage.setVisibility(View.VISIBLE);
             mViewRequest.setVisibility(View.VISIBLE);
             mViewProfile.setVisibility(View.VISIBLE);
 
-            mViewMessage.setText(getResources().getString(R.string.dashboard_sync_no_data));
+            mViewMessage.setText(getResources().getString(R.string.dashboard_request_no_data));
         }
     }
 
@@ -97,7 +84,7 @@ public class FragmentDashboardSync extends ViewFragment {
         @Override
         public void onFinish(Object arg) {
             mProcessDialog.dismiss();
-            mActivityMain.selectFragment(FragmentDashboardSelect.class.getName(), null);
+            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
         }
 
         @Override
@@ -109,7 +96,7 @@ public class FragmentDashboardSync extends ViewFragment {
 
     private void setTitle(String name) {
         String string = String.format(Locale.getDefault(),
-                getResources().getString(R.string.dashboard_sync_owner), name);
+                getResources().getString(R.string.dashboard_request_owner), name);
         mActivityMain.toolbarSetTitle(string, false);
     }
 

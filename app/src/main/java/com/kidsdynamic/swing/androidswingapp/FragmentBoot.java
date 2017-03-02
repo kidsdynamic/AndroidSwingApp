@@ -54,7 +54,7 @@ public class FragmentBoot extends ViewFragment {
                 if (mActivityMain.mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
                     mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
                 } else {
-                    mActivityMain.selectFragment(FragmentSyncNow.class.getName(), null);
+                    mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
                 }
             }
         }
