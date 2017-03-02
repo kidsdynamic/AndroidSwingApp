@@ -90,10 +90,12 @@ public class BLEControl {
             return;
 
         mBondStateReceiverEnabled = enable;
-        if (enable)
+        if (enable) {
             mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-        else
+            mContext.registerReceiver(mBroadcastReceiver, new IntentFilter("android.bluetooth.device.action.PAIRING_REQUEST"));
+        } else {
             mContext.unregisterReceiver(mBroadcastReceiver);
+        }
     }
 
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
@@ -117,6 +119,30 @@ public class BLEControl {
                 }
                 if (mEventListener != null)
                     mEventListener.onBondStateChange(device.getBondState());
+            } else if ("android.bluetooth.device.action.PAIRING_REQUEST".equals(intent.getAction())) {
+                try {
+                    BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+                    byte[] pin = (byte[]) BluetoothDevice.class.getMethod("convertPinToBytes", String.class).invoke(BluetoothDevice.class, "0000");
+                    Method m = device.getClass().getMethod("setPin", byte[].class);
+                    m.invoke(device, pin);
+                    device.getClass().getMethod("setPairingConfirmation", boolean.class).invoke(device, true);
+
+/*
+                    int pin=intent.getIntExtra("android.bluetooth.device.extra.PAIRING_KEY", 0);
+                    //the pin in case you need to accept for an specific pin
+                    Log.d("PIN", " " + intent.getIntExtra("android.bluetooth.device.extra.PAIRING_KEY",0));
+                    //maybe you look for a name or address
+                    Log.d("Bonded", device.getName());
+                    byte[] pinBytes;
+                    pinBytes = (""+pin).getBytes("UTF-8");
+                    device.setPin(pinBytes);
+                    */
+                    //setPairing confirmation if neeeded
+                    //device.setPairingConfirmation(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -173,7 +199,7 @@ public class BLEControl {
         mTaskQueue.reset();
 
         BluetoothDevice dev = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
-
+/*
         if (dev.getBondState() == BluetoothDevice.BOND_NONE) {
             Log("Bond state is none, pair first...");
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -188,7 +214,7 @@ public class BLEControl {
             }
             return false;
         }
-
+*/
         if (mBluetoothGatt != null && (mConnecting || mDiscovering)) {
             mBluetoothGatt.disconnect();
             mDiscovering = false;

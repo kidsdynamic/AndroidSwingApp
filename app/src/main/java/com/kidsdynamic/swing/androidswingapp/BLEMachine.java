@@ -96,15 +96,15 @@ class BLEMachine extends BLEControl {
                     } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
                         mActivities = new ArrayList<>();
                         mRelationDevice.mState.mTick = 150;
-                        if (GetBondState(mRelationDevice.mAddress)) {
+                        //if (GetBondState(mRelationDevice.mAddress)) {
                             EnableBondStateReceiver(false);
                             mState = STATE_CONNECTING;
                             Connect(mRelationDevice.mAddress);
-                        } else {
-                            mState = STATE_BONDING;
-                            EnableBondStateReceiver(true);
-                            Connect(mRelationDevice.mAddress);
-                        }
+                        //} else {
+                        //    mState = STATE_BONDING;
+                        //    EnableBondStateReceiver(true);
+                        //    Connect(mRelationDevice.mAddress);
+                        //}
                     }
                     break;
 
