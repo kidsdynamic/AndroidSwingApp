@@ -66,6 +66,7 @@ public class ServerMachine {
     private final static String CMD_SUBHOST_ACCEPT = SERVER_ADDRESS + "/subHost/accept";
     private final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "/subHost/deny";
     private final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
+    private final static String CMD_SUBHOST_REMOVE_KID = SERVER_ADDRESS + "/subHost/removeKid";
 
     private final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
 
@@ -498,6 +499,19 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_SUBHOST_LIST, listener));
     }
 
+    public interface subHostRemoveKidListener {
+        void onSuccess(int statusCode, ServerGson.hostData response);
+
+        void onFail(String command, int statusCode);
+    }
+
+    public void subHostRemoveKid(subHostRemoveKidListener listener, int subHostId, int kidId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("json", ServerGson.subHost.removeKid.toJson(subHostId, kidId));
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_SUBHOST_REMOVE_KID, map, null), CMD_SUBHOST_REMOVE_KID, listener));
+    }
+
+
     public interface getAvatarListener {
         void onSuccess(Bitmap avatar, String filename);
 
@@ -776,6 +790,13 @@ public class ServerMachine {
                             ((subHostListListener) mCurrentTask.mResponseListener).onFail(CMD_SUBHOST_LIST, responseCode);
                         break;
 
+                    case CMD_SUBHOST_REMOVE_KID:
+                        if (responseCode == 200)
+                            ((subHostRemoveKidListener) mCurrentTask.mResponseListener).onSuccess(responseCode, ServerGson.subHost.removeKid.fromJson(responseString));
+                        else
+                            ((subHostRemoveKidListener) mCurrentTask.mResponseListener).onFail(CMD_SUBHOST_REMOVE_KID, responseCode);
+                        break;
+
                     case CMD_GET_AVATAR:
                         ((getAvatarListener) mCurrentTask.mResponseListener).onSuccess(bitmap, mCurrentTask.mImageFile);
                         break;
@@ -908,6 +929,10 @@ public class ServerMachine {
 
                     case CMD_SUBHOST_LIST:
                         ((subHostListListener) mCurrentTask.mResponseListener).onFail(CMD_SUBHOST_LIST, responseCode);
+                        break;
+
+                    case CMD_SUBHOST_REMOVE_KID:
+                        ((subHostRemoveKidListener) mCurrentTask.mResponseListener).onFail(CMD_SUBHOST_REMOVE_KID, responseCode);
                         break;
 
                     case CMD_GET_AVATAR:
@@ -1158,6 +1183,13 @@ public class ServerMachine {
                 break;
 
             case CMD_SUBHOST_LIST:
+                break;
+
+            case CMD_SUBHOST_REMOVE_KID:
+                if (statusCode == 400)
+                    return mContext.getResources().getString(R.string.error_subhost_remove_kid_400);
+                else if (statusCode == 403)
+                    return mContext.getResources().getString(R.string.error_subhost_remove_kid_403);
                 break;
 
             case CMD_GET_AVATAR:

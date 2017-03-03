@@ -69,10 +69,13 @@ public class WatchOperator {
     }
 
     public void setKid(WatchOperator.finishListener listener, String name, String macId, Bitmap avatar) {
+        Log.d("OPERATOR", name + " macId " + macId + " ");
         new WatchOperatorSetKid(mActivity).start(listener, name, macId, avatar);
     }
 
     public void setKid(WatchOperator.finishListener listener, int id, String name, Bitmap avatar) {
+        Log.d("OPERATOR", name + " Id " + id + " ");
+
         new WatchOperatorSetKid(mActivity).start(listener, id, name, avatar);
     }
 

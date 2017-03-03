@@ -537,5 +537,25 @@ public class ServerGson {
                 return new Gson().fromJson(json, response.class);
             }
         }
+
+        public static class removeKid {
+            private static class c {
+                int subHostId;
+                int kidId;
+
+                c(int pSubHostId, int pKidId) {
+                    subHostId = pSubHostId;
+                    kidId = pKidId;
+                }
+            }
+
+            public static String toJson(int pSubHostId, int pKidId) {
+                return new Gson().toJson(new c(pSubHostId, pKidId));
+            }
+
+            public static hostData fromJson(String json) {
+                return new Gson().fromJson(json, hostData.class);
+            }
+        }
     }
 }

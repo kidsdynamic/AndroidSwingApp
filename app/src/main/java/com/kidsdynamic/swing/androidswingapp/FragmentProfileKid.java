@@ -170,6 +170,8 @@ public class FragmentProfileKid extends ViewFragment {
         public void onClick(View view) {
             mDialog.dismiss();
 
+            mActivityMain.mContactStack.push(mKid);
+
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
             if (intent.resolveActivity(mActivityMain.getPackageManager()) != null) {
@@ -196,6 +198,7 @@ public class FragmentProfileKid extends ViewFragment {
         @Override
         public void onClick(View view) {
             mDialog.dismiss();
+            mActivityMain.mContactStack.push(mKid);
 
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), ACTIVITY_RESULT_PHOTO_PICK);
