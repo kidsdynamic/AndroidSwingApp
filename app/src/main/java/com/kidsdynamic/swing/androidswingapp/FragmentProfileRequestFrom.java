@@ -44,6 +44,13 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         mViewCount = (TextView) mViewMain.findViewById(R.id.profile_request_from_count);
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_request_from_container);
 
+        return mViewMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         if (!mActivityMain.mContactStack.isEmpty()) {
             mRequestFrom = (WatchContact.User) mActivityMain.mContactStack.pop();
             ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getDeviceList();
@@ -62,8 +69,6 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         }
 
         updateCount();
-
-        return mViewMain;
     }
 
     @Override

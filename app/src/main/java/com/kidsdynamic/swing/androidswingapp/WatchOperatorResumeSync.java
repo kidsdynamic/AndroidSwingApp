@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +142,9 @@ public class WatchOperatorResumeSync {
                     List<WatchContact.Kid> removeList = mOperator.getSharedList();
 
                     for (ServerGson.hostData subHost : response.requestTo) {
+
+                        if (subHost.requestToUser.id == 0)
+                            continue;
                         WatchContact.User user = new WatchContact.User();
                         user.mPhoto = null;
                         user.mId = subHost.requestToUser.id;
