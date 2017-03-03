@@ -38,6 +38,10 @@ public class WatchOperatorResumeSync {
         }
     }
 
+    void stop() {
+        mFinishListener = null;
+    }
+
     private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
         @Override
         public void onValidState(boolean valid) {
@@ -280,7 +284,8 @@ public class WatchOperatorResumeSync {
 
     private void syncAvatar() {
         if (mAvatarToGet.isEmpty()) {
-            mFinishListener.onFinish(null);
+            if (mFinishListener != null)
+                mFinishListener.onFinish(null);
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);

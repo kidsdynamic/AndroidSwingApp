@@ -56,8 +56,17 @@ public class WatchOperator {
     }
 
     //-------------------------------------------------------------------------
+    WatchOperatorResumeSync mResumeSync;
     public void resumeSync(WatchOperator.finishListener listener, String email, String password) {
-        new WatchOperatorResumeSync(mActivity).start(listener, email, password);
+        resumeSyncStop();
+        mResumeSync = new WatchOperatorResumeSync(mActivity);
+        mResumeSync.start(listener, email, password);
+    }
+
+    public void resumeSyncStop() {
+        if (mResumeSync!=null)
+            mResumeSync.stop();
+        mResumeSync = null;
     }
 
     public void replyToSubHost(WatchOperator.finishListener listener, int subHostId, List<Integer> kidsId) {

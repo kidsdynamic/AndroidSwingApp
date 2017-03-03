@@ -176,6 +176,7 @@ public class ActivityMain extends AppCompatActivity
             if (mServiceMachine != null)
                 mServiceMachine.Stop();
         }
+        mOperator.resumeSyncStop();
         super.onPause();
     }
 
