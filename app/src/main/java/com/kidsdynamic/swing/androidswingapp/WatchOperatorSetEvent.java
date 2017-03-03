@@ -38,7 +38,7 @@ public class WatchOperatorSetEvent {
                     todos);
         } else {
             mServerMachine.eventUpdate(
-                    mEvemtUpdateListener,
+                    mEventUpdateListener,
                     event.mId,
                     event.mName,
                     WatchOperator.getTimeString(event.mStartDate),
@@ -100,7 +100,7 @@ public class WatchOperatorSetEvent {
         }
     };
 
-    ServerMachine.eventUpdateListener mEvemtUpdateListener = new ServerMachine.eventUpdateListener() {
+    ServerMachine.eventUpdateListener mEventUpdateListener = new ServerMachine.eventUpdateListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.event.update.response response) {
             ServerGson.eventData eventData = response.event;
@@ -121,18 +121,20 @@ public class WatchOperatorSetEvent {
             watchEvent.mTimezoneOffset = eventData.timezoneOffset;
             watchEvent.mDateCreated = WatchOperator.getTimeStamp(eventData.dateCreated);
             watchEvent.mLastUpdated = WatchOperator.getTimeStamp(eventData.lastUpdated);
-            for (ServerGson.todoData todoData : eventData.todo) {
-                watchEvent.mTodoList.add(
-                        new WatchTodo(
-                                todoData.id,
-                                eventData.user.id,
-                                eventData.id,
-                                todoData.text,
-                                todoData.status,
-                                WatchOperator.getTimeStamp(todoData.dateCreated),
-                                WatchOperator.getTimeStamp(todoData.lastUpdated)
-                        )
-                );
+            if (eventData.todo != null) {
+                for (ServerGson.todoData todoData : eventData.todo) {
+                    watchEvent.mTodoList.add(
+                            new WatchTodo(
+                                    todoData.id,
+                                    eventData.user.id,
+                                    eventData.id,
+                                    todoData.text,
+                                    todoData.status,
+                                    WatchOperator.getTimeStamp(todoData.dateCreated),
+                                    WatchOperator.getTimeStamp(todoData.lastUpdated)
+                            )
+                    );
+                }
             }
             mOperator.mWatchDatabase.EventUpdate(watchEvent);
             if (mListener != null)
