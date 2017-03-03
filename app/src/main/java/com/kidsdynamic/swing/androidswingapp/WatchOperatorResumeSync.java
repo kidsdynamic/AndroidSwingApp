@@ -155,7 +155,7 @@ public class WatchOperatorResumeSync {
                         if (!user.mProfile.equals(""))
                             mAvatarToGet.add(user.mProfile);
 
-                        if (subHost.status.equals("ACCEPTED") && subHost.kids != null) {
+                        if (subHost.status.equals(WatchContact.User.STATUS_ACCEPTED) && subHost.kids != null) {
                             for (ServerGson.kidData kidData : subHost.kids) {
                                 WatchContact.Kid kid = new WatchContact.Kid();
                                 kid.mId = kidData.id;

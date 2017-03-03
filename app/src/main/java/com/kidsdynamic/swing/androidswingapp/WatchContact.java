@@ -119,6 +119,9 @@ public class WatchContact implements Serializable {
         public String mRequestStatus;
         public List<Kid> mRequestKids;
 
+        public final static String STATUS_PENDING = "PENDING";
+        public final static String STATUS_ACCEPTED = "ACCEPTED";
+
         public User() {
             super(null, "");
             mId = 0;

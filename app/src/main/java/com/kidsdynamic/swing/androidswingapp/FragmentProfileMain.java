@@ -80,12 +80,12 @@ public class FragmentProfileMain extends ViewFragment {
             addContact(mViewSharedContainer, device, mContactListener);
 
         for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
-            if (((WatchContact.User) user).mRequestStatus.equals("PENDING"))
+            if (((WatchContact.User) user).mRequestStatus.equals(WatchContact.User.STATUS_PENDING))
                 addContact(mViewRequestToContainer, user, null);
         }
 
         for (WatchContact user : mActivityMain.mOperator.getRequestFromList()) {
-            //if (((WatchContact.User) user).mRequestStatus.equals("PENDING"))
+            //if (((WatchContact.User) user).mRequestStatus.equals("WatchContact.User.STATUS_PENDING"))
             addContact(mViewRequestFromContainer, user, mContactListener);
         }
 

@@ -49,7 +49,7 @@ public class FragmentProfileRequestFrom extends ViewFragment {
             ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getDeviceList();
             for (WatchContact.Kid kid : list) {
                 boolean isCheck = false;
-                if (mRequestFrom.mRequestStatus.equals("ACCEPTED")) {
+                if (mRequestFrom.mRequestStatus.equals(WatchContact.User.STATUS_ACCEPTED)) {
                     for (WatchContact.Kid accepted : mRequestFrom.mRequestKids) {
                         if (accepted.mId == kid.mId) {
                             isCheck = true;
