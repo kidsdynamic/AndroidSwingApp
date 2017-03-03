@@ -318,6 +318,10 @@ public class WatchOperator {
     }
 
     public WatchActivity getActivityOfDay() {
+        if(mWatchActivityList.isEmpty()) {
+            return new WatchActivity();
+        }
+
         return mWatchActivityList.get(0);
     }
 
