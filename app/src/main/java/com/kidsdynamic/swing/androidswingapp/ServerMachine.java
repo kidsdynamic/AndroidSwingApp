@@ -31,7 +31,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 
 public class ServerMachine {
-    private final static String SERVER_ADDRESS = "https://childrenlab.com/v1";
+    private final static String SERVER_ADDRESS = BuildConfig.API_BASE_URL;
 
     private final static String CMD_USER_LOGIN = SERVER_ADDRESS + "/user/login";
     private final static String CMD_USER_REGISTER = SERVER_ADDRESS + "/user/register";
@@ -68,7 +68,7 @@ public class ServerMachine {
     private final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
     private final static String CMD_SUBHOST_REMOVE_KID = SERVER_ADDRESS + "/subHost/removeKid";
 
-    private final static String CMD_GET_AVATAR = "https://s3.amazonaws.com/childrenlab/userProfile/";
+    private final static String CMD_GET_AVATAR = BuildConfig.PHOTO_BASE_URL;
 
     final static String REQUEST_TAG = "SERVER_MACHINE";
     final static String REQUEST_UPLOAD_TAG = "REQUEST_UPLOAD_TAG";
