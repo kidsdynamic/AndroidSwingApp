@@ -170,8 +170,8 @@ public class ActivityMain extends AppCompatActivity
 
     @Override
     public void onPause() {
+        Log.d("ActivityMain", "onPause()");
         if (mProcessDialog == null) {
-            mProcessDialog.dismiss();
             if (mBLEMachine != null)
                 mBLEMachine.Stop();
             if (mServiceMachine != null)
@@ -185,6 +185,7 @@ public class ActivityMain extends AppCompatActivity
         @Override
         public void onFinish(Object arg) {
             eventTest();
+            Log.d("ActivityMain", "+++++++++++++++onFinish");
 
             if (mCurrentFragment.equals("")) {
                 selectFragment(FragmentBoot.class.getName(), null);
@@ -199,6 +200,7 @@ public class ActivityMain extends AppCompatActivity
         @Override
         public void onFailed(String Command, int statusCode) {
             Toast.makeText(getApplicationContext(), Command, Toast.LENGTH_SHORT).show();
+            Log.d("ActivityMain", "+++++++++++++++onFailed");
 
             if (mCurrentFragment.equals("")) {
                 selectFragment(FragmentBoot.class.getName(), null);

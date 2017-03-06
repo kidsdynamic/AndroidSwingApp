@@ -131,9 +131,10 @@ public class ServerMachine {
     private Request<NetworkResponse> NewRequest(int method, String address, Map<String, String> map, String filename) {
         Request<NetworkResponse> newRequest = new ServerRequest(mContext, method, address, mSuccessListener, mErrorListener, map, filename, mAuthToken);
         newRequest.setTag(REQUEST_TAG);
-        int socketTimeout = 30000;
+        int socketTimeout = 5000;
         RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         newRequest.setRetryPolicy(policy);
+        Log.d("ServerMachine", "New request " + address);
         return newRequest;
     }
 
@@ -1014,9 +1015,6 @@ public class ServerMachine {
             File myFile = new File(avatarFilename);
             if(myFile.exists())
                 result = myFile.delete();
-
-            if (!result)
-                Log.d("swing", "delete() or mkdirs() failed");
 
             out = new FileOutputStream(avatarFilename);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
