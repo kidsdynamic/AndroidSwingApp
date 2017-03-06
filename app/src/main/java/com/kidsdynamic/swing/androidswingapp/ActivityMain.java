@@ -171,6 +171,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onPause() {
         if (mProcessDialog == null) {
+            mProcessDialog.dismiss();
             if (mBLEMachine != null)
                 mBLEMachine.Stop();
             if (mServiceMachine != null)

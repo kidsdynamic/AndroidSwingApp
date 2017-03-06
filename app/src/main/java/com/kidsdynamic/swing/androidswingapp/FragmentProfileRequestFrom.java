@@ -27,7 +27,8 @@ public class FragmentProfileRequestFrom extends ViewFragment {
     private TextView mViewCount;
     private LinearLayout mViewContainer;
     private Dialog mProcessDialog = null;
-
+    private boolean mIsNewRequest = true;
+    private List<Integer> mCheckMap = new ArrayList<>();
 
     WatchContact.User mRequestFrom;
 
@@ -53,8 +54,10 @@ public class FragmentProfileRequestFrom extends ViewFragment {
 
         if (!mActivityMain.mContactStack.isEmpty()) {
             mRequestFrom = (WatchContact.User) mActivityMain.mContactStack.pop();
-            ArrayList<WatchContact.Kid> list = mActivityMain.mOperator.getDeviceList();
-            for (WatchContact.Kid kid : list) {
+            mIsNewRequest = mRequestFrom.mRequestStatus.equals(WatchContact.User.STATUS_PENDING);
+
+            ArrayList<WatchContact.Kid> kids = mActivityMain.mOperator.getDeviceList();
+            for (WatchContact.Kid kid : kids) {
                 boolean isCheck = false;
                 if (mRequestFrom.mRequestStatus.equals(WatchContact.User.STATUS_ACCEPTED)) {
                     for (WatchContact.Kid accepted : mRequestFrom.mRequestKids) {
@@ -65,6 +68,7 @@ public class FragmentProfileRequestFrom extends ViewFragment {
                     }
                 }
                 addKid(kid, isCheck);
+                mCheckMap.add(isCheck?1:0);
             }
         }
 
@@ -83,19 +87,49 @@ public class FragmentProfileRequestFrom extends ViewFragment {
         mProcessDialog = ProgressDialog.show(mActivityMain,
                 getResources().getString(R.string.profile_request_from_processing),
                 getResources().getString(R.string.profile_request_from_wait), true);
-        int count = mViewContainer.getChildCount();
-        List<Integer> list = new ArrayList<>();
 
-        for (int idx = 0; idx < count; idx++) {
-            View view = mViewContainer.getChildAt(idx);
-            View check = view.findViewById(R.id.watch_contact_check_icon);
+        if (mIsNewRequest) {
+            int count = mViewContainer.getChildCount();
+            List<Integer> list = new ArrayList<>();
 
-            WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
-            if (check.isSelected())
-                list.add(kid.mId);
+            for (int idx = 0; idx < count; idx++) {
+                View view = mViewContainer.getChildAt(idx);
+                View check = view.findViewById(R.id.watch_contact_check_icon);
+
+                if (check.isSelected()) {
+                    WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
+                    list.add(kid.mId);
+                }
+            }
+
+            mActivityMain.mOperator.replyToSubHost(mResponseForRequestToListener, mRequestFrom.mSubHostId, list, null);
+        } else {
+            int count = mViewContainer.getChildCount();
+
+            List<Integer> acceptList = new ArrayList<>();
+            List<Integer> removeList = new ArrayList<>();
+
+            for (int idx = 0; idx < count; idx++) {
+                View view = mViewContainer.getChildAt(idx);
+                View check = view.findViewById(R.id.watch_contact_check_icon);
+
+                WatchContact.Kid kid = (WatchContact.Kid) view.getTag();
+                if (check.isSelected()) {
+                    if (mCheckMap.get(idx) == 0)
+                        acceptList.add(kid.mId);
+                } else {
+                    if (mCheckMap.get(idx) == 1)
+                        removeList.add(kid.mId);
+                }
+            }
+
+            if (acceptList.isEmpty() && removeList.isEmpty()) {
+                mProcessDialog.dismiss();
+                mActivityMain.popFragment();
+            } else {
+                mActivityMain.mOperator.replyToSubHost(mResponseForRequestToListener, mRequestFrom.mSubHostId, acceptList, removeList);
+            }
         }
-
-        mActivityMain.mOperator.replyToSubHost(mResponseForRequestToListener, mRequestFrom.mSubHostId, list);
     }
 
     WatchOperator.finishListener mResponseForRequestToListener = new WatchOperator.finishListener() {

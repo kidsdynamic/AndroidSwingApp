@@ -69,8 +69,8 @@ public class WatchOperator {
         mResumeSync = null;
     }
 
-    public void replyToSubHost(WatchOperator.finishListener listener, int subHostId, List<Integer> kidsId) {
-        new WatchOperatorReplyToSubHost(mActivity).start(listener, subHostId, kidsId);
+    public void replyToSubHost(WatchOperator.finishListener listener, int subHostId, List<Integer> accepts, List<Integer> removes) {
+        new WatchOperatorReplyToSubHost(mActivity).start(listener, subHostId, accepts, removes);
     }
 
     public void requestToSubHost(WatchOperator.finishListener listener, String email) {

@@ -10,27 +10,31 @@ import java.util.List;
  */
 
 public class WatchOperatorReplyToSubHost {
-    
+
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private WatchOperator.finishListener mListener = null;
     private int mSubHostId;
-    private List<Integer> mKidsId;
+    private List<Integer> mAcceptKids;
+    private List<Integer> mRemoveKids;
     private List<String> mAvatarToGet;
-    
+
     WatchOperatorReplyToSubHost(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
         mServerMachine = activityMain.mServiceMachine;
     }
 
-    public void start(WatchOperator.finishListener listener, int subHostId, List<Integer> kidsId) {
+    public void start(WatchOperator.finishListener listener, int subHostId, List<Integer> acceptKids, List<Integer> removeKids) {
         mListener = listener;
         mSubHostId = subHostId;
-        mKidsId = kidsId;
+        mAcceptKids = acceptKids;
+        mRemoveKids = removeKids;
         mAvatarToGet = new ArrayList<>();
 
-        if (!mKidsId.isEmpty())
-            mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
+        if (mRemoveKids != null && !mAcceptKids.isEmpty())
+            mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mAcceptKids);
+        else if (mRemoveKids != null && !mRemoveKids.isEmpty())
+            mServerMachine.subHostRemoveKid(mSubHostRemoveKidListener, mSubHostId, mRemoveKids.get(0));
         else
             mServerMachine.subHostDeny(mSubHostDenyListener, subHostId);
     }
@@ -38,7 +42,27 @@ public class WatchOperatorReplyToSubHost {
     ServerMachine.subHostAcceptListener mSubHostAcceptListener = new ServerMachine.subHostAcceptListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.hostData response) {
-            mServerMachine.subHostList(mSubHostListListener, "");
+            if (mRemoveKids != null && !mRemoveKids.isEmpty())
+                mServerMachine.subHostRemoveKid(mSubHostRemoveKidListener, mSubHostId, mRemoveKids.get(0));
+            else
+                mServerMachine.subHostList(mSubHostListListener, "");
+        }
+
+        @Override
+        public void onFail(String command, int statusCode) {
+            if (mListener != null)
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
+        }
+    };
+
+    ServerMachine.subHostRemoveKidListener mSubHostRemoveKidListener = new ServerMachine.subHostRemoveKidListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.hostData response) {
+            mRemoveKids.remove(0);
+            if (!mRemoveKids.isEmpty())
+                mServerMachine.subHostRemoveKid(mSubHostRemoveKidListener, mSubHostId, mRemoveKids.get(0));
+            else
+                mServerMachine.subHostList(mSubHostListListener, "");
         }
 
         @Override
@@ -51,18 +75,13 @@ public class WatchOperatorReplyToSubHost {
     ServerMachine.subHostDenyListener mSubHostDenyListener = new ServerMachine.subHostDenyListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.hostData response) {
-            if (!mKidsId.isEmpty())
-                mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
-            else
-                mServerMachine.subHostList(mSubHostListListener, "");
+            mServerMachine.subHostList(mSubHostListListener, "");
         }
 
         @Override
         public void onFail(String command, int statusCode) {
-            if (!mKidsId.isEmpty())
-                mServerMachine.subHostAccept(mSubHostAcceptListener, mSubHostId, mKidsId);
-            else
-                mServerMachine.subHostList(mSubHostListListener, "");
+            if (mListener != null)
+                mListener.onFailed(mServerMachine.getErrorMessage(command, statusCode), statusCode);
         }
     };
 
@@ -150,5 +169,5 @@ public class WatchOperatorReplyToSubHost {
             syncAvatar();
         }
     };
-    
+
 }
