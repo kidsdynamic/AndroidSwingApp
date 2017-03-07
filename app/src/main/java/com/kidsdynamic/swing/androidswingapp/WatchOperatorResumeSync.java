@@ -38,10 +38,6 @@ public class WatchOperatorResumeSync {
         }
     }
 
-    void stop() {
-        mFinishListener = null;
-    }
-
     private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
         @Override
         public void onValidState(boolean valid) {
@@ -286,6 +282,9 @@ public class WatchOperatorResumeSync {
         if (mAvatarToGet.isEmpty()) {
             if (mFinishListener != null)
                 mFinishListener.onFinish(null);
+            else
+                Log.d("Operator", "mFinishListener is null");
+
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);
@@ -295,12 +294,14 @@ public class WatchOperatorResumeSync {
     private ServerMachine.getAvatarListener mGetAvatarListener = new ServerMachine.getAvatarListener() {
         @Override
         public void onSuccess(Bitmap avatar, String filename) {
+            Log.d("Operator", "Get avatar Success " + mAvatarToGet.size());
             ServerMachine.createAvatarFile(avatar, filename, "");
             syncAvatar();
         }
 
         @Override
         public void onFail(String command, int statusCode) {
+            Log.d("Operator", "Get avatar Failed");
             syncAvatar();
         }
     };

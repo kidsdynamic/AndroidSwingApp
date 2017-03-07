@@ -61,6 +61,7 @@ public class ActivityMain extends AppCompatActivity
     private Dialog mProcessDialog = null;
     private String mCurrentFragment = "";
     public boolean mIgnoreSyncOnce = false;
+    private boolean mIsForeground = false;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -138,6 +139,8 @@ public class ActivityMain extends AppCompatActivity
         boolean activeBLE = true;
         boolean activeService = true;
 
+        mIsForeground = true;
+
         requestPermission();
 
         if (activeBLE && mBLEMachine == null)
@@ -177,8 +180,25 @@ public class ActivityMain extends AppCompatActivity
             if (mServiceMachine != null)
                 mServiceMachine.Stop();
         }
-        mOperator.resumeSyncStop();
+
+        mIsForeground = false;
+        mIgnoreSyncOnce = false;
         super.onPause();
+    }
+
+    private void loadFirstPage() {
+        if (mProcessDialog != null)
+            mProcessDialog.dismiss();
+        mProcessDialog = null;
+
+        if (mIsForeground) {
+            if (mCurrentFragment.equals("")) {
+                selectFragment(FragmentBoot.class.getName(), null);
+            } else {
+                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                selectFragment(FragmentDashboardMain.class.getName(), null);
+            }
+        }
     }
 
     WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
@@ -186,30 +206,14 @@ public class ActivityMain extends AppCompatActivity
         public void onFinish(Object arg) {
             eventTest();
             Log.d("ActivityMain", "+++++++++++++++onFinish");
-
-            if (mCurrentFragment.equals("")) {
-                selectFragment(FragmentBoot.class.getName(), null);
-            } else {
-                if (mProcessDialog != null)
-                    mProcessDialog.dismiss();
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                selectFragment(FragmentDashboardMain.class.getName(), null);
-            }
+            loadFirstPage();
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
             Toast.makeText(getApplicationContext(), Command, Toast.LENGTH_SHORT).show();
             Log.d("ActivityMain", "+++++++++++++++onFailed");
-
-            if (mCurrentFragment.equals("")) {
-                selectFragment(FragmentBoot.class.getName(), null);
-            } else {
-                if (mProcessDialog != null)
-                    mProcessDialog.dismiss();
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                selectFragment(FragmentDashboardMain.class.getName(), null);
-            }
+            loadFirstPage();
         }
     };
 
