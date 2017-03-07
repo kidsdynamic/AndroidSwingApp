@@ -170,7 +170,6 @@
 
     <!-- FragmentProfileRequestTo -->
     <string name="profile_request_to_mail">"Search User Email"</string>
-    <string name="profile_request_to_users">"Users"</string>
     <string name="profile_request_to_others">"You\'ve Requested Others"</string>
     <string name="profile_request_to_send">"Send"</string>
     <string name="profile_request_to_cancel">"Cancel"</string>

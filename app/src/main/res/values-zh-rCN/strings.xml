@@ -170,7 +170,6 @@
 
     <!-- FragmentProfileRequestTo -->
     <string name="profile_request_to_mail">"用户电子信箱"</string>
-    <string name="profile_request_to_users">"查询结果"</string>
     <string name="profile_request_to_others">"你所发出的请求"</string>
     <string name="profile_request_to_send">"发送"</string>
     <string name="profile_request_to_cancel">"取消"</string>
