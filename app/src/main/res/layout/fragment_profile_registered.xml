@@ -45,6 +45,6 @@
             android:layout_alignStart="@+id/profile_registered_sponge"
             android:layout_below="@+id/profile_registered_request"
             android:layout_marginBottom="10dp"
-            android:text="profile_registered_contact_us" />
+            android:text="@string/profile_registered_contact_us" />
     </RelativeLayout>
 </LinearLayout>
