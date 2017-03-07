@@ -54,7 +54,7 @@ public class ViewCalendarCellDaily extends ViewCalendarCell {
 
     public void setEvent(WatchEvent event) {
         mEvent = event;
-        setText(event.mDescription);
+        setText(event.mName);
     }
 
     public WatchEvent getEvent() {
