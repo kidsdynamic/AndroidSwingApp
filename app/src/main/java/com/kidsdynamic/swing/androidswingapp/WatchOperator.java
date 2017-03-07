@@ -57,6 +57,7 @@ public class WatchOperator {
 
     //-------------------------------------------------------------------------
     public void resumeSync(WatchOperator.finishListener listener, String email, String password) {
+        ResetBitmapCache();
         new WatchOperatorResumeSync(mActivity).start(listener, email, password);
     }
 
@@ -304,15 +305,48 @@ public class WatchOperator {
         new WatchOperatorDeleteEvent(mActivity).start(listener, eventId);
     }
 
-    private Bitmap loadAvatar(String filename) {
-        File file = new File(ServerMachine.GetAvatarFilePath() + "/" + filename);
-        if (file.exists()) {
-            Bitmap bitmap = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + filename);
-            Log.d("WatchOperator", "Load bitmap " + ServerMachine.GetAvatarFilePath() + "/" + filename + " " + (bitmap == null ? "Fail" : "Success"));
-            return bitmap;
+    private class bitmapCache {
+        Bitmap mBitmap;
+        String mFilename;
+
+        bitmapCache(String filename) {
+            mFilename = filename;
+            decode();
         }
 
-        return null;
+        void decode() {
+            File file = new File(ServerMachine.GetAvatarFilePath() + "/" + mFilename);
+            if (file.exists()) {
+                Log.d("WatchOperator", "Load bitmap " + file.getAbsolutePath());
+                mBitmap = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + mFilename);
+            } else {
+                mBitmap = null;
+            }
+        }
+    }
+
+    private ArrayList<bitmapCache> mBitmapCacheList = new ArrayList<>();
+
+    private void ResetBitmapCache() {
+        for (bitmapCache bc : mBitmapCacheList) {
+            if (bc.mBitmap != null)
+                bc.mBitmap.recycle();
+        }
+        mBitmapCacheList = new ArrayList<>();
+    }
+
+    private Bitmap loadAvatar(String filename) {
+        for (bitmapCache bc : mBitmapCacheList) {
+            if (bc.mFilename.equals(filename)) {
+                if (bc.mBitmap == null)
+                    bc.decode();
+                return bc.mBitmap;
+            }
+        }
+        bitmapCache bc = new bitmapCache(filename);
+        mBitmapCacheList.add(bc);
+
+        return bc.mBitmap;
     }
 
     public void todoDone(WatchOperator.finishListener listener, List<WatchTodo> todos) {
