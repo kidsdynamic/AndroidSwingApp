@@ -123,14 +123,16 @@ public class WatchOperatorReplyToSubHost {
                         user.mRequestStatus = subHost.status;
                         user.mLabel = user.mFirstName + " " + user.mLastName;
                         user.mSubHostId = subHost.id;
-                        for (ServerGson.kidData kidData : subHost.kids) {
-                            WatchContact.Kid kid = new WatchContact.Kid();
-                            kid.mLabel = kidData.name;
-                            kid.mId = kidData.id;
-                            kid.mName = kidData.name;
-                            kid.mMacId = kidData.macId;
-                            kid.mProfile = kidData.profile;
-                            user.mRequestKids.add(kid);
+                        if (subHost.kids != null) {
+                            for (ServerGson.kidData kidData : subHost.kids) {
+                                WatchContact.Kid kid = new WatchContact.Kid();
+                                kid.mLabel = kidData.name;
+                                kid.mId = kidData.id;
+                                kid.mName = kidData.name;
+                                kid.mMacId = kidData.macId;
+                                kid.mProfile = kidData.profile;
+                                user.mRequestKids.add(kid);
+                            }
                         }
                         from.add(user);
                         if (!user.mProfile.equals(""))
