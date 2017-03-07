@@ -119,6 +119,12 @@ public class ViewPhotoClip extends View {
     }
 
     @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mBitmapPhoto.recycle();
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
