@@ -315,8 +315,11 @@ public class WatchOperator {
 
     private Bitmap loadAvatar(String filename) {
         File file = new File(ServerMachine.GetAvatarFilePath() + "/" + filename);
-        if (file.exists())
-            return BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + filename);
+        if (file.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(ServerMachine.GetAvatarFilePath() + "/" + filename);
+            Log.d("WatchOperator", "Load bitmap " + ServerMachine.GetAvatarFilePath() + "/" + filename + " " + (bitmap == null ? "Fail" : "Success"));
+            return bitmap;
+        }
 
         return null;
     }
