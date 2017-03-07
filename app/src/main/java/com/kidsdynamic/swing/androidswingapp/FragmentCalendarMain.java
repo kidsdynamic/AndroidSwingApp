@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,8 +94,9 @@ public class FragmentCalendarMain extends ViewFragment {
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
 
-        long date = ViewCalendar.stripTime(mDefaultDate);
-        mEventList = mActivityMain.mOperator.getEventList(date, date + 86400 - 1);
+        long start = ViewCalendar.stripTime(mDefaultDate);
+        long end = start + 86400000 - 1;
+        mEventList = mActivityMain.mOperator.getEventList(start, end);
 
         updateAlert();
     }
@@ -127,7 +129,7 @@ public class FragmentCalendarMain extends ViewFragment {
             Calendar cale = Calendar.getInstance();
             cale.setTimeInMillis(event.mStartDate);
             timeString = String.format(Locale.getDefault(), "%02d:%02d", cale.get(Calendar.HOUR_OF_DAY), cale.get(Calendar.MINUTE));
-            messageString = event.mDescription;
+            messageString = event.mName;
         }
 
         mViewAlertTime.setText(timeString);
