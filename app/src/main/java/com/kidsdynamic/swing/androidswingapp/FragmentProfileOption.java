@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ public class FragmentProfileOption extends ViewFragment {
     private View mViewPassword;
     private View mViewProfile;
     private View mViewLogout;
+    private View mViewContact;
+    private View mViewPrivacy;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,12 @@ public class FragmentProfileOption extends ViewFragment {
 
         mViewLogout = mViewMain.findViewById(R.id.profile_option_logout);
         mViewLogout.setOnClickListener(mLogoutListener);
+
+        mViewContact = mViewMain.findViewById(R.id.profile_option_contact);
+        mViewContact.setOnClickListener(mContactListener);
+
+        mViewPrivacy = mViewMain.findViewById(R.id.profile_option_privacy);
+        mViewPrivacy.setOnClickListener(mPrivacyListener);
 
         TextView view = (TextView) mViewMain.findViewById(R.id.profile_option_version);
         view.setText(BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE);
@@ -86,4 +95,25 @@ public class FragmentProfileOption extends ViewFragment {
             startActivity(i);
         }
     };
+
+    private View.OnClickListener mContactListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String url = "http://www.kidsdynamic.com";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+    };
+
+    private View.OnClickListener mPrivacyListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String url = "http://www.kidsdynamic.com";
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+    };
+
 }

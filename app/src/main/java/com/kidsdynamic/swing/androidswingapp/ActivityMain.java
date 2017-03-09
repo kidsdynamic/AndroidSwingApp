@@ -138,7 +138,7 @@ public class ActivityMain extends AppCompatActivity
         if (!language.equals("")) {
             setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
         }
-        
+
         mIsForeground = true;
 
         requestPermission();
