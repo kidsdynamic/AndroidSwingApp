@@ -120,7 +120,7 @@ public class FragmentDashboardProgress extends ViewFragment {
     private ViewCircle.OnProgressListener mSyncProgressListener = new ViewCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewCircle view, int begin, int end) {
-            mSyncTimeout--;
+            //mSyncTimeout--;
 
             if (mSyncFinish) {
                 viewUpload();
@@ -138,6 +138,11 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             if (mActivityMain.mOperator.mWatchDatabase.UploadItemCount() == 0) {
                 viewDownload();
+
+                Intent intent = new Intent(mActivityMain, ServerPushService.class);
+                intent.putExtra("PAUSE", true);
+                mActivityMain.startService(intent);
+
                 mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
             } else if (mUploadTimeout == 0) {
                 viewServerFailed();
@@ -349,8 +354,8 @@ public class FragmentDashboardProgress extends ViewFragment {
                 // Todo : first connect?
                 mSyncFinish = true;
             }
-            Intent intent = new Intent(mActivityMain, ServerPushService.class);
-            mActivityMain.startService(intent);
+            //Intent intent = new Intent(mActivityMain, ServerPushService.class);
+            //mActivityMain.startService(intent);
         }
     };
 

@@ -74,6 +74,7 @@ public class FragmentDashboardMain extends ViewFragment {
             if (device == null) {
                 Toast.makeText(mActivityMain, getResources().getString(R.string.dashboard_main_no_device), Toast.LENGTH_SHORT).show();
             } else {
+                // Todo : don't load avatar here.
                 if (device.mProfile != null && !device.mProfile.equals("")) {
                     device.mPhoto = BitmapFactory.decodeFile(device.mProfile);
                 } else {

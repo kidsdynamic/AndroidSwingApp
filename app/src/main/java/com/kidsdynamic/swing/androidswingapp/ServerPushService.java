@@ -42,7 +42,7 @@ public class ServerPushService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("ServiceUpload", "onStartCommand");
         mHandler.removeCallbacks(DoPush);
-        mHandler.postDelayed(DoPush, 1000);
+        mHandler.postDelayed(DoPush, intent.getBooleanExtra("PAUSE", false) ? 20000 : 1000);
 
         return START_STICKY;
     }
@@ -56,13 +56,13 @@ public class ServerPushService extends Service {
     ServerMachine.activityUploadRawDataListener mActivityUploadRawDataListener = new ServerMachine.activityUploadRawDataListener() {
         @Override
         public void onSuccess(int statusCode) {
-            mWatchDatabase.UploadItemDelete(mUploadItem);
+            mWatchDatabase.UploadItemDone(mUploadItem);
             mUploadItem = null;
         }
 
         @Override
         public void onConflict(int statusCode) {
-            mWatchDatabase.UploadItemDelete(mUploadItem);
+            mWatchDatabase.UploadItemDone(mUploadItem);
             mUploadItem = null;
         }
 

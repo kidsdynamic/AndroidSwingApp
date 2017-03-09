@@ -80,7 +80,8 @@ class WatchDatabase {
                     TIME + " INTEGER NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
                     INDOOR_ACTIVITY + " TEXT NOT NULL, " +
-                    OUTDOOR_ACTIVITY + " TEXT NOT NULL)";
+                    OUTDOOR_ACTIVITY + " TEXT NOT NULL, " +
+                    STATUS + " TEXT NOT NULL)";
 
     static final String CREATE_EVENT_TABLE =
             "CREATE TABLE " + TABLE_EVENT + " (" +
@@ -308,17 +309,45 @@ class WatchDatabase {
         contentValues.put(MAC_ID, item.mMacId);
         contentValues.put(INDOOR_ACTIVITY, item.mIndoor);
         contentValues.put(OUTDOOR_ACTIVITY, item.mOutdoor);
+        contentValues.put(STATUS, "PENDING");
 
         return mDatabase.insert(TABLE_UPLOAD, null, contentValues);
+    }
+
+    long UploadItemDone(WatchActivityRaw item) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(TIME, item.mTime);
+        contentValues.put(MAC_ID, item.mMacId);
+        contentValues.put(INDOOR_ACTIVITY, item.mIndoor);
+        contentValues.put(OUTDOOR_ACTIVITY, item.mOutdoor);
+        contentValues.put(STATUS, "DONE");
+
+        return mDatabase.update(TABLE_UPLOAD, contentValues, TIME + "=" + item.mTime + " AND " + MAC_ID + "='" + item.mMacId + "'", null);
     }
 
     int UploadItemDelete(WatchActivityRaw item) {
         return mDatabase.delete(TABLE_UPLOAD, TIME + "='" + item.mTime + "' AND " + MAC_ID + "='" + item.mMacId + "'", null);
     }
 
+    int UploadItemRemoveDone() {
+        return mDatabase.delete(TABLE_UPLOAD, STATUS + "='DONE'", null);
+    }
+
+    List<WatchActivityRaw> UploadItemGet(String macId) {
+        List<WatchActivityRaw> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " WHERE " + MAC_ID + " ='" + macId + "'", null);
+
+        while (cursor.moveToNext())
+            result.add(cursorToUpload(cursor));
+
+        cursor.close();
+        return result;
+    }
+
     WatchActivityRaw UploadItemGet() {
         WatchActivityRaw item = null;
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " LIMIT 1", null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " WHERE " + STATUS + " ='PENDING'" + " LIMIT 1", null);
 
         if (cursor.moveToNext())
             item = cursorToUpload(cursor);
@@ -330,7 +359,7 @@ class WatchDatabase {
 
     int UploadItemCount() {
         int result = 0;
-        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_UPLOAD, null);
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_UPLOAD + " WHERE " + STATUS + " ='PENDING'", null);
 
         if (cursor.moveToNext())
             result = cursor.getInt(0);
