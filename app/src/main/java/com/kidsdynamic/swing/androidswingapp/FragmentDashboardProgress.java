@@ -51,6 +51,10 @@ public class FragmentDashboardProgress extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        Intent intent = new Intent(mActivityMain, ServerPushService.class);
+        intent.putExtra("PAUSE", true);
+        mActivityMain.startService(intent);
     }
 
     @Override
@@ -136,12 +140,12 @@ public class FragmentDashboardProgress extends ViewFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             mUploadTimeout--;
 
-            if (mActivityMain.mOperator.mWatchDatabase.UploadItemCount() == 0) {
+            if (true) {
                 viewDownload();
 
-                Intent intent = new Intent(mActivityMain, ServerPushService.class);
-                intent.putExtra("PAUSE", true);
-                mActivityMain.startService(intent);
+                //Intent intent = new Intent(mActivityMain, ServerPushService.class);
+                //intent.putExtra("PAUSE", true);
+                //mActivityMain.startService(intent);
 
                 mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
             } else if (mUploadTimeout == 0) {
@@ -156,6 +160,9 @@ public class FragmentDashboardProgress extends ViewFragment {
             mDownloadTimeout--;
 
             if (mActivityUpdateFinish) {
+                Intent intent = new Intent(mActivityMain, ServerPushService.class);
+                mActivityMain.startService(intent);
+
                 viewCompleted();
             } else if (mDownloadTimeout == 0) {
                 viewServerFailed();

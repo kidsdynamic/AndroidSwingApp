@@ -294,6 +294,7 @@ public class FragmentProfileEditor extends ViewFragment {
                 Log.d("swing", "Rename failed! " + mUserAvatarFilename + " to " + response.user.profile);
             user.mProfile = response.user.profile;
             mActivityMain.mOperator.setUser(user);
+            mActivityMain.mOperator.ResetBitmapCache();
 
             mActivityMain.popFragment();
         }

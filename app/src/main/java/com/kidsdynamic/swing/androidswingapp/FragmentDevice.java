@@ -135,7 +135,7 @@ public class FragmentDevice extends ViewFragment {
                 setStatus(STATUS_FOUND);
                 setCapacity(value);
             }
-            mHandler.postDelayed(mRunnable, 10000);
+            //mHandler.postDelayed(mRunnable, 10000);
         }
     };
 

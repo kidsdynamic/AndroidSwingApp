@@ -123,6 +123,8 @@ public class WatchOperatorSetKid {
             mKid.mProfile = response.kid.profile;
             mOperator.setFocusKid(mKid);
 
+            mOperator.ResetBitmapCache();
+
             if (mFinishListener != null)
                 mFinishListener.onFinish(null);
         }

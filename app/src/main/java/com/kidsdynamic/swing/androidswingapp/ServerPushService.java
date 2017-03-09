@@ -42,7 +42,8 @@ public class ServerPushService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("ServiceUpload", "onStartCommand");
         mHandler.removeCallbacks(DoPush);
-        mHandler.postDelayed(DoPush, intent.getBooleanExtra("PAUSE", false) ? 20000 : 1000);
+        if (!intent.getBooleanExtra("PAUSE", false))
+            mHandler.postDelayed(DoPush, 1000);
 
         return START_STICKY;
     }

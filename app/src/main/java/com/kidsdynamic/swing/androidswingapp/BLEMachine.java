@@ -259,6 +259,8 @@ class BLEMachine extends BLEControl {
                 case STATE_GET_BATTERY:
                     if (mRelationDevice.mState.mBatteryUpdated) {
                         mRelationDevice.mAction.mBattery = false;
+                        Disconnect();
+
                         if (mOnBatteryListener != null)
                             mOnBatteryListener.onBattery(mRelationDevice.mState.mBattery);
                         mState = STATE_INIT;
@@ -443,10 +445,10 @@ class BLEMachine extends BLEControl {
                 mRelationDevice.mState.mConnected = connected;
 
                 if (!connected) {
-                    if (mRelationDevice.mAction.mSync) {
+                    if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
                         Log("Retry? " + mState);
                     }
-                    Log("Disconnected");
+                    Log("Disconnected " + mRelationDevice.mState.mConnected);
                 }
             }
         }

@@ -327,7 +327,7 @@ public class WatchOperator {
 
     private ArrayList<bitmapCache> mBitmapCacheList = new ArrayList<>();
 
-    private void ResetBitmapCache() {
+    public void ResetBitmapCache() {
         for (bitmapCache bc : mBitmapCacheList) {
             if (bc.mBitmap != null)
                 bc.mBitmap.recycle();
