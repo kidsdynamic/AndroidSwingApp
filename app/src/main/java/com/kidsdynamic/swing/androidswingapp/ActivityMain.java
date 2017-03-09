@@ -89,11 +89,6 @@ public class ActivityMain extends AppCompatActivity
 
         mConfig = new ActivityConfig(this, null);
 
-        String language = mConfig.getString(ActivityConfig.KEY_LANGUAGE);
-        if (!language.equals("")) {
-            setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
-        }
-
         setContentView(R.layout.activity_main);
 
         mOperator = new WatchOperator(this);
@@ -138,6 +133,11 @@ public class ActivityMain extends AppCompatActivity
         super.onResume();
         boolean activeBLE = true;
         boolean activeService = true;
+
+        String language = mConfig.getString(ActivityConfig.KEY_LANGUAGE);
+        if (!language.equals("")) {
+            setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
+        }
 
         mIsForeground = true;
 
