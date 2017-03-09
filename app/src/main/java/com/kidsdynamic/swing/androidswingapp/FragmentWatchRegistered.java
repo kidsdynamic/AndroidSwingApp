@@ -77,13 +77,18 @@ public class FragmentWatchRegistered extends ViewFragment {
     private Button.OnClickListener mOnRequestListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            for (WatchContact contact : mKidList)
-                mActivityMain.mContactStack.push(contact);
+            WatchContact.User user = mActivityMain.mOperator.getUser();
+            if (!user.mEmail.equals(mKidList.get(0).mLabel)) {
+                for (WatchContact contact : mKidList)
+                    mActivityMain.mContactStack.push(contact);
 
-            mProcessDialog = ProgressDialog.show(mActivityMain,
-                    getResources().getString(R.string.watch_registered_processing),
-                    getResources().getString(R.string.watch_registered_wait), true);
-            mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mKidList.get(0).mLabel);
+                mProcessDialog = ProgressDialog.show(mActivityMain,
+                        getResources().getString(R.string.watch_registered_processing),
+                        getResources().getString(R.string.watch_registered_wait), true);
+                mActivityMain.mOperator.requestToSubHost(mAddRequestToListener, mKidList.get(0).mLabel);
+            } else {
+                Toast.makeText(mActivityMain, "Can't request for self", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

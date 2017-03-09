@@ -1,5 +1,6 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ class WatchOperatorUpdateActivity {
     private List<WatchActivity> mActivities;
     private long mSearchStart;
     private long mSearchEnd;
+    private WatchContact.Kid mKid;
 
     WatchOperatorUpdateActivity(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
@@ -27,6 +29,7 @@ class WatchOperatorUpdateActivity {
 
     public void start(WatchOperator.finishListener listener, int kidId) {
         mListener = listener;
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
@@ -45,6 +48,8 @@ class WatchOperatorUpdateActivity {
             //Log.d("swing", "activityTimeStamp("+activityTimeStamp+") " + WatchOperator.getDefaultTimeString(activityTimeStamp));
         }
 
+        mKid = mOperator.mWatchDatabase.KidGet(kidId);
+
         mServerMachine.activityRetrieveDataByTime(
                 mActivityRetrieveDataByTimeListener,
                 (int) (mSearchStart / 1000),
@@ -55,6 +60,7 @@ class WatchOperatorUpdateActivity {
     private ServerMachine.activityRetrieveDataByTimeListener mActivityRetrieveDataByTimeListener = new ServerMachine.activityRetrieveDataByTimeListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.activity.retrieveDataByTime.response response) {
+
             if (response == null || response.activities == null) {
                 if (mListener != null)
                     mListener.onFinish(null);
@@ -85,6 +91,26 @@ class WatchOperatorUpdateActivity {
                     }
                 }
             }
+
+            mOperator.mWatchDatabase.UploadItemRemoveDone();
+            List<WatchActivityRaw> uploadList = mOperator.mWatchDatabase.UploadItemGet(mKid.mMacId);
+            for (WatchActivityRaw raw : uploadList) {
+                for (WatchActivity act : mActivities) {
+                    long actEnd = act.mIndoor.mTimestamp + 86400000;
+                    if (raw.mTime >= act.mIndoor.mTimestamp && raw.mTime <= actEnd) {
+                        String[] arg = raw.mIndoor.split(",");
+                        int indoor = Integer.valueOf(arg[2]);
+                        arg = raw.mOutdoor.split(",");
+                        int outdoor = Integer.valueOf(arg[2]);
+
+                        act.mIndoor.mSteps += indoor;
+                        act.mOutdoor.mSteps += outdoor;
+
+                        break;
+                    }
+                }
+            }
+
 
             Collections.reverse(mActivities);
             mOperator.setActivityList(mActivities);

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -72,12 +73,22 @@ public class FragmentProfileSearch extends ViewFragment {
     BLEMachine.onSearchListener mOnSearchListener = new BLEMachine.onSearchListener() {
         @Override
         public void onSearch(ArrayList<BLEMachine.Device> result) {
+            List<WatchContact.Kid> bondKids = mActivityMain.mOperator.getKids();
+
             mSearchResult = new ArrayList<>();
             for (BLEMachine.Device dev : result) {
 
                 WatchContact.Kid device = new WatchContact.Kid(null, dev.mAddress);
                 device.mMacId = ServerMachine.getMacID(dev.mAddress);
-                mSearchResult.add(device);
+
+                for (WatchContact.Kid bond : bondKids) {
+                    if (bond.mMacId.equals(device.mMacId)) {
+                        device = null;
+                        break;
+                    }
+                }
+                if (device != null)
+                    mSearchResult.add(device);
             }
 
             if (!enumerateRegisteredMacId(true))

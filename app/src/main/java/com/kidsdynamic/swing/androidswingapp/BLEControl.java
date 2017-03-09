@@ -22,6 +22,8 @@ import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static android.bluetooth.BluetoothGatt.CONNECTION_PRIORITY_HIGH;
+
 public class BLEControl {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt = null;
@@ -361,6 +363,9 @@ public class BLEControl {
             }
             */
             mDiscovering = false;
+            if (Build.VERSION.SDK_INT >= 21) {
+                mBluetoothGatt.requestConnectionPriority(CONNECTION_PRIORITY_HIGH);
+            }
             if (mEventListener != null)
                 mEventListener.onServiceDiscovered();
         }
