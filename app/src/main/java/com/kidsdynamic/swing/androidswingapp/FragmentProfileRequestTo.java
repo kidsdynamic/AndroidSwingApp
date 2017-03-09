@@ -117,8 +117,9 @@ public class FragmentProfileRequestTo extends ViewFragment {
             imm.hideSoftInputFromWindow(mViewMail.getWindowToken(), 0);
 
             String mail = mViewMail.getText().toString();
+            WatchContact.User user = mActivityMain.mOperator.getUser();
 
-            if (!mail.equals("")) {
+            if (!mail.equals("") && !mail.equals(user.mEmail)) {
                 mProcessDialog = ProgressDialog.show(mActivityMain,
                         getResources().getString(R.string.profile_request_to_processing),
                         getResources().getString(R.string.profile_request_to_wait), true);
