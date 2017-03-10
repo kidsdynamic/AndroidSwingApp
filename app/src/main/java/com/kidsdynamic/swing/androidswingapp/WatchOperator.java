@@ -52,6 +52,7 @@ public class WatchOperator {
 
     interface finishListener {
         void onFinish(Object arg);
+
         void onFailed(String Command, int statusCode);
     }
 
@@ -271,7 +272,7 @@ public class WatchOperator {
             list.get(list.size() - 1).mTodoList = Arrays.asList(
                     new WatchTodo(1, getUser().mId, 0, "1 Todo todo todo todo", WatchTodo.STATUS_DONE),
                     new WatchTodo(2, getUser().mId, 0, "2 Todo todo todo todo", WatchTodo.STATUS_PENDING)
-                    );
+            );
 
             list.add(new WatchEvent(0, getUser().mId, "Name",
                     2017, 2, 18, 10, 0, 2017, 2, 18, 10, 50, WatchEvent.ColorList[1],
@@ -357,7 +358,7 @@ public class WatchOperator {
     }
 
     public WatchActivity getActivityOfDay() {
-        if(mWatchActivityList.isEmpty()) {
+        if (mWatchActivityList.isEmpty()) {
             return new WatchActivity();
         }
 
@@ -368,7 +369,10 @@ public class WatchOperator {
         List<WatchActivity> rtn = new ArrayList<>();
 
         for (int idx = 0; idx < 7; idx++) {
-            rtn.add(mWatchActivityList.get(idx));
+            if (mWatchActivityList.isEmpty())
+                rtn.add(new WatchActivity());
+            else
+                rtn.add(mWatchActivityList.get(idx));
         }
         Collections.reverse(rtn);
 
@@ -379,7 +383,10 @@ public class WatchOperator {
         List<WatchActivity> rtn = new ArrayList<>();
 
         for (int idx = 0; idx < 30; idx++) {
-            rtn.add(mWatchActivityList.get(idx));
+            if (mWatchActivityList.isEmpty())
+                rtn.add(new WatchActivity());
+            else
+                rtn.add(mWatchActivityList.get(idx));
         }
         Collections.reverse(rtn);
 

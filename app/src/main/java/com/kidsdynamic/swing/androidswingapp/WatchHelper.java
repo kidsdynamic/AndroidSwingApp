@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class WatchHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "Swing.db";
-    private static final int DB_VERSION = 7;
+    private static final int DB_VERSION = 8;
 
     private static SQLiteDatabase mDatabase = null;
 
@@ -34,6 +34,7 @@ public class WatchHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(WatchDatabase.CREATE_EVENT_TABLE);
         sqLiteDatabase.execSQL(WatchDatabase.CREATE_TODO_TABLE);
         sqLiteDatabase.execSQL(WatchDatabase.CREATE_EVENT_KIDS_TABLE);
+        sqLiteDatabase.execSQL(WatchDatabase.CREATE_ACTIVITY_TABLE);
     }
 
     @Override
@@ -44,6 +45,7 @@ public class WatchHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_EVENT);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_TODO);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_EVENT_KITS);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WatchDatabase.TABLE_ACTIVITY);
 
         onCreate(sqLiteDatabase);
     }

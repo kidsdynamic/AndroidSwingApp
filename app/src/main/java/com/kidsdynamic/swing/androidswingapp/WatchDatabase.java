@@ -22,6 +22,7 @@ class WatchDatabase {
     static final String TABLE_EVENT = "Event";
     static final String TABLE_TODO = "Todo";
     static final String TABLE_EVENT_KITS = "EventKits";
+    static final String TABLE_ACTIVITY = "Activity";
 
     private static String ID = "ID";
     private static String EMAIL = "EMAIL";
@@ -51,6 +52,10 @@ class WatchDatabase {
     private static String TIME = "TIME";
     private static String INDOOR_ACTIVITY = "INDOOR_ACTIVITY";
     private static String OUTDOOR_ACTIVITY = "OUTDOOR_ACTIVITY";
+    private static String INDOOR_ID = "INDOOR_ID";
+    private static String OUTDOOR_ID = "OUTDOOR_ID";
+    private static String INDOOR_STEP = "INDOOR_STEP";
+    private static String OUTDOOR_STEP = "OUTDOOR_STEP";
 
     static final String CREATE_USER_TABLE =
             "CREATE TABLE " + TABLE_USER + " (" +
@@ -114,6 +119,16 @@ class WatchDatabase {
                     KID_ID + " INTEGER NOT NULL, " +
                     EVENT_ID + " INTEGER NOT NULL)";
 
+    static final String CREATE_ACTIVITY_TABLE =
+            "CREATE TABLE " + TABLE_ACTIVITY + " (" +
+                    INDOOR_ID + " INTEGER NOT NULL, " +
+                    INDOOR_STEP+ " INTEGER NOT NULL, " +
+                    OUTDOOR_ID + " INTEGER NOT NULL, " +
+                    OUTDOOR_STEP + " INTEGER NOT NULL, " +
+                    MAC_ID + " TEXT NOT NULL, " +
+                    KID_ID + " INTEGER NOT NULL, " +
+                    TIME + " INTEGER NOT NULL)";
+
     private SQLiteDatabase mDatabase;
 
     WatchDatabase(Context context) {
@@ -127,6 +142,7 @@ class WatchDatabase {
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_KITS);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ACTIVITY);
 
         mDatabase.execSQL(CREATE_USER_TABLE);
         mDatabase.execSQL(CREATE_KIDS_TABLE);
@@ -134,6 +150,7 @@ class WatchDatabase {
         mDatabase.execSQL(CREATE_EVENT_TABLE);
         mDatabase.execSQL(CREATE_TODO_TABLE);
         mDatabase.execSQL(CREATE_EVENT_KIDS_TABLE);
+        mDatabase.execSQL(CREATE_ACTIVITY_TABLE);
     }
 
     long UserAdd(WatchContact.User user) {
@@ -698,5 +715,54 @@ class WatchDatabase {
                 cursor.getLong(5),
                 cursor.getLong(6)
         );
+    }
+
+    public void activityDeleteByKidId(int kidId) {
+        mDatabase.delete(TABLE_ACTIVITY, KID_ID + "=" + kidId, null);
+    }
+
+    public void activityImport(List<WatchActivity> watchActivities) {
+        ContentValues contentValues = new ContentValues();
+
+        for (WatchActivity watchActivity : watchActivities) {
+            contentValues.put(INDOOR_ID, watchActivity.mIndoor.mId);
+            contentValues.put(INDOOR_STEP, watchActivity.mIndoor.mSteps);
+            contentValues.put(OUTDOOR_ID, watchActivity.mOutdoor.mId);
+            contentValues.put(OUTDOOR_STEP, watchActivity.mOutdoor.mSteps);
+            contentValues.put(MAC_ID, watchActivity.mIndoor.mMacId);
+            contentValues.put(KID_ID, Integer.valueOf(watchActivity.mIndoor.mKidId));
+            contentValues.put(TIME, watchActivity.mIndoor.mTimestamp);
+
+            mDatabase.insert(TABLE_ACTIVITY, null, contentValues);
+        }
+    }
+
+    public List<WatchActivity> activityExport(int KidId) {
+        List<WatchActivity> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_ACTIVITY + " WHERE " + KID_ID + "=" + KidId, null);
+
+        while (cursor.moveToNext())
+            result.add(cursorActivity(cursor));
+
+        cursor.close();
+
+        return result;
+    }
+
+    private WatchActivity cursorActivity(Cursor cursor) {
+        WatchActivity watchActivity = new WatchActivity();
+
+        watchActivity.mIndoor.mId = cursor.getInt(0);
+        watchActivity.mIndoor.mSteps = cursor.getInt(1);
+        watchActivity.mOutdoor.mId = cursor.getInt(2);
+        watchActivity.mOutdoor.mSteps = cursor.getInt(3);
+        watchActivity.mIndoor.mMacId = cursor.getString(4);
+        watchActivity.mOutdoor.mMacId = watchActivity.mIndoor.mMacId;
+        watchActivity.mIndoor.mKidId = String.valueOf(cursor.getInt(5));
+        watchActivity.mOutdoor.mKidId = watchActivity.mIndoor.mKidId;
+        watchActivity.mIndoor.mTimestamp = cursor.getInt(6);
+        watchActivity.mOutdoor.mTimestamp = watchActivity.mIndoor.mTimestamp;
+
+        return watchActivity;
     }
 }
