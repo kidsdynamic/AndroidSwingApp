@@ -108,6 +108,11 @@ public class WatchOperatorSetKid {
                     mFinishListener.onFinish(null);
             }
         }
+
+        @Override
+        public void onBattery(byte value) {
+
+        }
     };
 
     ServerMachine.userAvatarUploadKidListener mUserAvatarUploadKidListener = new ServerMachine.userAvatarUploadKidListener() {

@@ -407,6 +407,12 @@ public class FragmentDashboardProgress extends ViewFragment {
             }
 
         }
+
+        @Override
+        public void onBattery(byte value) {
+            mActivityMain.mOperator.mFocusBatteryName = mDevice.mName;
+            mActivityMain.mOperator.mFocusBatteryValue = value;
+        }
     };
 
     WatchOperator.finishListener mActivityUpdateListener = new WatchOperator.finishListener() {

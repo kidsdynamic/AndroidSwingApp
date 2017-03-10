@@ -424,4 +424,7 @@ public class WatchOperator {
         }
         return rtn;
     }
+
+    public String mFocusBatteryName = "";
+    public int mFocusBatteryValue = 0;
 }

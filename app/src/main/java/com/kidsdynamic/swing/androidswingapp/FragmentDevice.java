@@ -30,7 +30,6 @@ public class FragmentDevice extends ViewFragment {
     private ViewCircle mViewProgress;
 
     private Handler mHandler;
-    private boolean mPause = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,18 +61,23 @@ public class FragmentDevice extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        mPause = false;
-        mHandler.postDelayed(mRunnable, 1000);
+        if (mActivityMain.mOperator.mFocusBatteryName.equals("")) {
+            mHandler.postDelayed(mRunnable, 1000);
 
-        if (mActivityMain.mOperator.getFocusKid() != null) {
-            setStatus(STATUS_SEARCH);
-            setTitle(mActivityMain.mOperator.getFocusKid().mName);
+            if (mActivityMain.mOperator.getFocusKid() != null) {
+                setStatus(STATUS_SEARCH);
+                setTitle(mActivityMain.mOperator.getFocusKid().mName);
 
-            mViewProgress.setStrokeBeginEnd(0, 10);
-            mViewProgress.startProgress(30, -1, -1);
+                mViewProgress.setStrokeBeginEnd(0, 10);
+                mViewProgress.startProgress(30, -1, -1);
+            } else {
+                setStatus(STATUS_NOKID);
+                mViewProgress.setActive(false);
+            }
         } else {
-            setStatus(STATUS_NOKID);
-            mViewProgress.setActive(false);
+            setTitle(mActivityMain.mOperator.mFocusBatteryName);
+            setStatus(STATUS_FOUND);
+            setCapacity(mActivityMain.mOperator.mFocusBatteryValue);
         }
     }
 
@@ -84,7 +88,7 @@ public class FragmentDevice extends ViewFragment {
         mViewProgress.stopProgress();
 
         mHandler.removeCallbacksAndMessages(null);
-        mPause = true;
+        mHandler.removeCallbacks(mRunnable);
     }
 
     private void setStatus(int status) {
@@ -114,9 +118,6 @@ public class FragmentDevice extends ViewFragment {
     private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mPause)
-                return;
-
             WatchContact.Kid kid = mActivityMain.mOperator.getFocusKid();
             if (kid != null)
                 mActivityMain.mBLEMachine.Battery(mOnBatteryListener, ServerMachine.getMacAddress(kid.mMacId));
@@ -134,8 +135,10 @@ public class FragmentDevice extends ViewFragment {
             } else {
                 setStatus(STATUS_FOUND);
                 setCapacity(value);
+
+                mActivityMain.mOperator.mFocusBatteryName = mActivityMain.mOperator.getFocusKid().mName;
+                mActivityMain.mOperator.mFocusBatteryValue = value;
             }
-            //mHandler.postDelayed(mRunnable, 10000);
         }
     };
 

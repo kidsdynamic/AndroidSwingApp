@@ -42,7 +42,7 @@ public class ServerPushService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("ServiceUpload", "onStartCommand");
         mHandler.removeCallbacks(DoPush);
-        if (!intent.getBooleanExtra("PAUSE", false))
+        if (intent != null && !intent.getBooleanExtra("PAUSE", false))
             mHandler.postDelayed(DoPush, 1000);
 
         return START_STICKY;
@@ -69,6 +69,8 @@ public class ServerPushService extends Service {
 
         @Override
         public void onFail(String command, int statusCode) {
+            if (statusCode == 409)
+                mWatchDatabase.UploadItemDone(mUploadItem);
             mUploadItem = null;
         }
     };

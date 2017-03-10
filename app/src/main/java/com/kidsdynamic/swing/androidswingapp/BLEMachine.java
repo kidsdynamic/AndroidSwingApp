@@ -263,6 +263,9 @@ class BLEMachine extends BLEControl {
                             mState = STATE_SET_TIME;
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
+
+                            if (mOnSyncListener != null)
+                                mOnSyncListener.onBattery(mRelationDevice.mState.mBattery);
                         }
 
                     } else if (!mRelationDevice.mState.mConnected) {
@@ -299,6 +302,7 @@ class BLEMachine extends BLEControl {
 
     interface onSyncListener {
         void onSync(int resultCode, ArrayList<WatchActivityRaw> result);
+        void onBattery(byte value);
     }
 
     interface onBatteryListener {
