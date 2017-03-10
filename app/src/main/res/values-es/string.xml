@@ -1,13 +1,6 @@
 <resources>
     <string name="app_name">"AndroidSwingApp"</string>
 
-    <!-- Language: Warning DO NOT translate below -->
-    <string name="language_en_us" translatable="false">"English"</string>
-    <string name="language_zh_tw" translatable="false">"繁體中文"</string>
-    <string name="language_zh_cn" translatable="false">"简体中文"</string>
-    <string name="language_ru" translatable="false">"русский"</string>
-    <string name="language_es" translatable="false">"español"</string>
-
     <!-- ActivityMain -->
     <string name="activity_main_synchronize">"Synchronize"</string>
     <string name="activity_main_wait">"Please Wait&#8230;"</string>
@@ -208,7 +201,7 @@
     <string name="signup_language_select">"Select"</string>
 
     <!-- FragmentSignupLogin -->
-    <string name="signup_login_login">"Sign Up / Login"</string>
+    <string name="signup_login_login">\"Registrate e inicia secion\"</string>
     <string name="signup_login_or">"or"</string>
     <string name="signup_login_facebook">"Login with Facebook"</string>
     <string name="signup_login_google">"Login with Google"</string>

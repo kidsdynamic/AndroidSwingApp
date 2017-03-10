@@ -49,6 +49,8 @@ public class FragmentSignupLanguage extends ViewFragment {
         mWhereList.add(new Where(getResources().getString(R.string.language_en_us), "en", "US"));
         mWhereList.add(new Where(getResources().getString(R.string.language_zh_tw), "zh", "TW"));
         mWhereList.add(new Where(getResources().getString(R.string.language_zh_cn), "zh", "CN"));
+        mWhereList.add(new Where(getResources().getString(R.string.language_ru), "ru", ""));
+        mWhereList.add(new Where(getResources().getString(R.string.language_es), "es", ""));
 
         for (Where where : mWhereList)
             addWhere(where);

@@ -100,6 +100,14 @@ public class FragmentProfileOption extends ViewFragment {
         @Override
         public void onClick(View view) {
             String url = "http://www.kidsdynamic.com";
+            String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
+            switch(language) {
+                case "ru":
+                case "es":
+                    url = "http://www.imaginarium.info/";
+                    break;
+            }
+
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
@@ -110,6 +118,14 @@ public class FragmentProfileOption extends ViewFragment {
         @Override
         public void onClick(View view) {
             String url = "http://www.kidsdynamic.com";
+            String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
+            switch(language) {
+                case "ru":
+                case "es":
+                    url = "http://www.imaginarium.info/";
+                    break;
+            }
+
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
