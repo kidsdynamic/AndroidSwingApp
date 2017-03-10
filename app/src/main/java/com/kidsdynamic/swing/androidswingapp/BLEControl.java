@@ -376,6 +376,9 @@ public class BLEControl {
                 UUID uuidServ = characteristic.getService().getUuid();
                 UUID uuidChar = characteristic.getUuid();
                 byte[] value = characteristic.getValue();
+
+                Log("R : " + uuidChar.toString() + " < " + bytesToHex(value));
+
                 mEventListener.onCharacteristicRead(uuidServ, uuidChar, value);
             }
             mTaskQueue.pop(true);
@@ -396,6 +399,9 @@ public class BLEControl {
             if (mEventListener != null) {
                 UUID uuidServ = characteristic.getService().getUuid();
                 UUID uuidChar = characteristic.getUuid();
+
+                Log("W : " + uuidChar.toString() + " > " + bytesToHex(characteristic.getValue()));
+
                 mEventListener.onCharacteristicWrite(uuidServ, uuidChar);
             }
 
@@ -486,7 +492,7 @@ public class BLEControl {
             if (item.mObject instanceof BluetoothGattCharacteristic) {
 
                 if (item.mWrite) {
-                    //Log("WRITE : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString());
+                    //Log("WRITE : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString() + " " + bytesToHex(((BluetoothGattCharacteristic)item.mObject).getValue()));
                     mBluetoothGatt.writeCharacteristic((BluetoothGattCharacteristic) item.mObject);
                 } else {
                     //Log("READ : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString());
@@ -510,5 +516,16 @@ public class BLEControl {
             return false;
         }
 
+    }
+
+    private static String bytesToHex(byte[] in) {
+        if (in == null || in.length == 0)
+            return "";
+
+        final StringBuilder builder = new StringBuilder();
+        for (byte b : in) {
+            builder.append(String.format("0x%02X ", b));
+        }
+        return builder.toString();
     }
 }
