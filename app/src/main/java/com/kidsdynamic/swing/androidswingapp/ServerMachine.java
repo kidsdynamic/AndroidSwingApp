@@ -103,6 +103,12 @@ public class ServerMachine {
         return true;
     }
 
+    boolean Restart() {
+        Stop();
+        Start();
+        return true;
+    }
+
     private int mState;
     private TaskItem mCurrentTask;
 

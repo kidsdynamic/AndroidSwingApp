@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,13 +25,13 @@ import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCE
 public class FragmentDashboardProgress extends ViewFragment {
     private final int PROGRESS_INTERVAL = 100;
 
-    private final int SEARCH_TIMEOUT = 150;     // 150 * PROGRESS_INTERVAL milliseconds
+    private final static int SEARCH_TIMEOUT = 150;     // 150 * PROGRESS_INTERVAL milliseconds
     private int mSearchTimeout;
-    private final int SYNC_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
+    private final static int SYNC_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
     private int mSyncTimeout;
-    private final int UPLOAD_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
+    private final static int UPLOAD_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
     private int mUploadTimeout;
-    private final int DOWNLOAD_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
+    private final static int DOWNLOAD_TIMEOUT = 1000;      // 1000 * PROGRESS_INTERVAL milliseconds
     private int mDownloadTimeout;
 
 
@@ -44,17 +46,17 @@ public class FragmentDashboardProgress extends ViewFragment {
     private String mMacAddress;
     private BLEMachine.Device mSearchResult = null;
     private List<BLEMachine.VoiceAlert> mVoiceAlertList;
-    private boolean mSyncFinish = false;
+    private final static int SYNC_STATE_INIT = 0;
+    private final static int SYNC_STATE_SUCCESS = 1;
+    private final static int SYNC_STATE_FAIL = 2;
+    private int mSyncState = SYNC_STATE_INIT;
     private boolean mActivityUpdateFinish = false;
+    private boolean mServerSyncFinish = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
-
-        Intent intent = new Intent(mActivityMain, ServerPushService.class);
-        intent.putExtra("PAUSE", true);
-        mActivityMain.startService(intent);
     }
 
     @Override
@@ -74,7 +76,9 @@ public class FragmentDashboardProgress extends ViewFragment {
     public void onResume() {
         super.onResume();
 
-        viewSearching();
+        Intent intent = new Intent(mActivityMain, ServerPushService.class);
+        intent.putExtra("PAUSE", true);
+        mActivityMain.startService(intent);
 
         mDevice = mActivityMain.mContactStack.isEmpty() ?
                 new WatchContact.Kid() :
@@ -86,14 +90,38 @@ public class FragmentDashboardProgress extends ViewFragment {
             mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
 
         mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
-        bleSearchStart();
+
+        viewSync();
+        mServerSyncFinish = false;
+        mActivityMain.mOperator.resumeSync(mFinishListener, "", "");
     }
 
     @Override
     public void onPause() {
         bleSearchCancel();
+        mActivityMain.mBLEMachine.Disconnect();
+
+        if (!mServerSyncFinish)
+            mActivityMain.mServiceMachine.Restart();
+
+        Intent intent = new Intent(mActivityMain, ServerPushService.class);
+        mActivityMain.startService(intent);
+
         super.onPause();
     }
+
+    WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
+        @Override
+        public void onFinish(Object arg) {
+            mServerSyncFinish = true;
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            mServerSyncFinish = true;
+        }
+    };
+
 
     @Override
     public ViewFragmentConfig getConfig() {
@@ -106,6 +134,16 @@ public class FragmentDashboardProgress extends ViewFragment {
     public void onToolbarAction1() {
         mActivityMain.popFragment();
     }
+
+    private ViewCircle.OnProgressListener mServerSyncProgressListener = new ViewCircle.OnProgressListener() {
+        @Override
+        public void onProgress(ViewCircle view, int begin, int end) {
+            if (mServerSyncFinish) {
+                viewSearching();
+                bleSearchStart();
+            }
+        }
+    };
 
     private ViewCircle.OnProgressListener mSearchProgressListener = new ViewCircle.OnProgressListener() {
         @Override
@@ -126,9 +164,9 @@ public class FragmentDashboardProgress extends ViewFragment {
         public void onProgress(ViewCircle view, int begin, int end) {
             //mSyncTimeout--;
 
-            if (mSyncFinish) {
+            if (mSyncState == SYNC_STATE_SUCCESS) {
                 viewUpload();
-            } else if (mSyncTimeout == 0) {
+            } else if (mSyncTimeout == 0 || mSyncState == SYNC_STATE_FAIL) {
                 viewNotFound();
                 bleSyncCancel();
             }
@@ -143,10 +181,6 @@ public class FragmentDashboardProgress extends ViewFragment {
             if (true) {
                 viewDownload();
 
-                //Intent intent = new Intent(mActivityMain, ServerPushService.class);
-                //intent.putExtra("PAUSE", true);
-                //mActivityMain.startService(intent);
-
                 mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
             } else if (mUploadTimeout == 0) {
                 viewServerFailed();
@@ -160,9 +194,6 @@ public class FragmentDashboardProgress extends ViewFragment {
             mDownloadTimeout--;
 
             if (mActivityUpdateFinish) {
-                Intent intent = new Intent(mActivityMain, ServerPushService.class);
-                mActivityMain.startService(intent);
-
                 viewCompleted();
             } else if (mDownloadTimeout == 0) {
                 viewServerFailed();
@@ -205,11 +236,25 @@ public class FragmentDashboardProgress extends ViewFragment {
     private void bleSyncStart() {
         if (mSearchResult != null)
             mActivityMain.mBLEMachine.Sync(mOnSyncListener, mSearchResult, mVoiceAlertList);
-        mSyncFinish = false;
+        mSyncState = SYNC_STATE_INIT;
     }
 
     private void bleSyncCancel() {
         mActivityMain.mBLEMachine.Disconnect();
+    }
+
+    private void viewSync() {
+        mViewLabel.setText(getResources().getString(R.string.signup_profile_processing));
+
+        mViewButton1.setVisibility(View.INVISIBLE);
+        mViewButton1.setOnClickListener(null);
+
+        mViewButton2.setVisibility(View.INVISIBLE);
+        mViewButton2.setOnClickListener(null);
+
+        mViewProgress.setOnProgressListener(mServerSyncProgressListener);
+        mViewProgress.setStrokeBeginEnd(0, 10);
+        mViewProgress.startProgress(PROGRESS_INTERVAL, -1, -1);
     }
 
     private void viewSearching() {
@@ -355,14 +400,12 @@ public class FragmentDashboardProgress extends ViewFragment {
                 for (WatchActivityRaw res : result) {
                     mActivityMain.mOperator.pushUploadItem(res);
                 }
-
-                mSyncFinish = true;
+                mSyncState = SYNC_STATE_SUCCESS;
             } else {
                 // Todo : first connect?
-                mSyncFinish = true;
+                mSyncState = SYNC_STATE_FAIL;
             }
-            //Intent intent = new Intent(mActivityMain, ServerPushService.class);
-            //mActivityMain.startService(intent);
+
         }
     };
 

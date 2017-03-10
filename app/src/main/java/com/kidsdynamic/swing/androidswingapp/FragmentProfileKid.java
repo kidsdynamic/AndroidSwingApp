@@ -108,7 +108,6 @@ public class FragmentProfileKid extends ViewFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        mActivityMain.mIgnoreSyncOnce = true;
         if (resultCode != Activity.RESULT_OK)
             return;
 

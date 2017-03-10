@@ -57,7 +57,6 @@ public class WatchOperator {
 
     //-------------------------------------------------------------------------
     public void resumeSync(WatchOperator.finishListener listener, String email, String password) {
-        ResetBitmapCache();
         new WatchOperatorResumeSync(mActivity).start(listener, email, password);
     }
 

@@ -58,10 +58,6 @@ public class ActivityMain extends AppCompatActivity
     public Stack<WatchEvent> mEventStack;
     public BLEMachine mBLEMachine = null;
     public ServerMachine mServiceMachine = null;
-    private Dialog mProcessDialog = null;
-    private String mCurrentFragment = "";
-    public boolean mIgnoreSyncOnce = false;
-    private boolean mIsForeground = false;
 
     private View mViewDevice;
     private View mViewCalendar;
@@ -126,6 +122,8 @@ public class ActivityMain extends AppCompatActivity
         mViewToolbar = findViewById(R.id.main_toolbar);
 
         mViewBackground = (ImageView) findViewById(R.id.main_background);
+
+        selectFragment(FragmentBoot.class.getName(), null);
     }
 
     @Override
@@ -139,7 +137,7 @@ public class ActivityMain extends AppCompatActivity
             setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
         }
 
-        mIsForeground = true;
+        //mIsForeground = true;
 
         requestPermission();
 
@@ -154,68 +152,18 @@ public class ActivityMain extends AppCompatActivity
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
-
-        if (!mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("") && !mIgnoreSyncOnce) {
-            if (mProcessDialog == null) {
-                mProcessDialog = ProgressDialog.show(this,
-                        getResources().getString(R.string.activity_main_synchronize),
-                        getResources().getString(R.string.activity_main_wait), true);
-
-                mOperator.resumeSync(mFinishListener, "", "");
-            }
-        } else {
-            if (mCurrentFragment.equals(""))
-                selectFragment(FragmentBoot.class.getName(), null);
-        }
-
-        mIgnoreSyncOnce = false;
     }
 
     @Override
     public void onPause() {
         Log.d("ActivityMain", "onPause()");
-        if (mProcessDialog == null) {
-            if (mBLEMachine != null)
-                mBLEMachine.Stop();
-            if (mServiceMachine != null)
-                mServiceMachine.Stop();
-        }
+        if (mBLEMachine != null)
+            mBLEMachine.Stop();
+        if (mServiceMachine != null)
+            mServiceMachine.Stop();
 
-        mIsForeground = false;
-        mIgnoreSyncOnce = false;
         super.onPause();
     }
-
-    private void loadFirstPage() {
-        if (mProcessDialog != null)
-            mProcessDialog.dismiss();
-        mProcessDialog = null;
-
-        if (mIsForeground) {
-            if (mCurrentFragment.equals("")) {
-                selectFragment(FragmentBoot.class.getName(), null);
-            } else {
-                getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                selectFragment(FragmentDashboardMain.class.getName(), null);
-            }
-        }
-    }
-
-    WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
-        @Override
-        public void onFinish(Object arg) {
-            eventTest();
-            Log.d("ActivityMain", "+++++++++++++++onFinish");
-            loadFirstPage();
-        }
-
-        @Override
-        public void onFailed(String Command, int statusCode) {
-            Toast.makeText(getApplicationContext(), Command, Toast.LENGTH_SHORT).show();
-            Log.d("ActivityMain", "+++++++++++++++onFailed");
-            loadFirstPage();
-        }
-    };
 
     private void initPermissionList() {
         mPermissionList = new ArrayList<>();
@@ -252,18 +200,12 @@ public class ActivityMain extends AppCompatActivity
 
     public void selectFragment(String className, Bundle args) {
         Fragment fragment = Fragment.instantiate(this, className, args);
-        mCurrentFragment = className;
 
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, className)
                 .addToBackStack(null)
                 .commit();
-
-        if (mProcessDialog != null) {
-            mProcessDialog.dismiss();
-            mProcessDialog = null;
-        }
     }
 
     public ViewFragment getTopViewFragment() {

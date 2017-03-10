@@ -97,9 +97,9 @@ class BLEMachine extends BLEControl {
                         mActivities = new ArrayList<>();
                         mRelationDevice.mState.mTick = 150;
                         //if (GetBondState(mRelationDevice.mAddress)) {
-                            EnableBondStateReceiver(false);
-                            mState = STATE_CONNECTING;
-                            Connect(mRelationDevice.mAddress);
+                        EnableBondStateReceiver(false);
+                        mState = STATE_CONNECTING;
+                        Connect(mRelationDevice.mAddress);
                         //} else {
                         //    mState = STATE_BONDING;
                         //    EnableBondStateReceiver(true);
@@ -142,17 +142,9 @@ class BLEMachine extends BLEControl {
 
                 case STATE_DISCOVERY:
                     if (mRelationDevice.mState.mDiscovered) {
-                        if (mRelationDevice.mAction.mBattery) {
-                            mState = STATE_GET_BATTERY;
-                            mRelationDevice.mState.mBatteryUpdated = false;
-                            Read(BLECustomAttributes.BATTERY_SERVICE, BLECustomAttributes.BATTERY_LEVEL);
-                        } else {
-                            int currentTime = (int) (getCurrentTime() / 1000);
-                            byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
-                            mState = STATE_SET_TIME;
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
-                        }
+                        mState = STATE_GET_BATTERY;
+                        mRelationDevice.mState.mBatteryUpdated = false;
+                        Read(BLECustomAttributes.BATTERY_SERVICE, BLECustomAttributes.BATTERY_LEVEL);
                     } else if (!mRelationDevice.mState.mConnected) {
                         syncFailProcess();
                     }
@@ -258,12 +250,23 @@ class BLEMachine extends BLEControl {
 
                 case STATE_GET_BATTERY:
                     if (mRelationDevice.mState.mBatteryUpdated) {
-                        mRelationDevice.mAction.mBattery = false;
-                        Disconnect();
+                        if (mRelationDevice.mAction.mBattery) {
+                            mRelationDevice.mAction.mBattery = false;
+                            Disconnect();
 
-                        if (mOnBatteryListener != null)
-                            mOnBatteryListener.onBattery(mRelationDevice.mState.mBattery);
-                        mState = STATE_INIT;
+                            if (mOnBatteryListener != null)
+                                mOnBatteryListener.onBattery(mRelationDevice.mState.mBattery);
+                            mState = STATE_INIT;
+                        } else {
+                            int currentTime = (int) (getCurrentTime() / 1000);
+                            byte[] timeInByte = new byte[]{(byte) (currentTime), (byte) (currentTime >> 8), (byte) (currentTime >> 16), (byte) (currentTime >> 24)};
+                            mState = STATE_SET_TIME;
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
+                        }
+
+                    } else if (!mRelationDevice.mState.mConnected) {
+                        syncFailProcess();
                     }
                     break;
             }
@@ -494,6 +497,8 @@ class BLEMachine extends BLEControl {
                 }
             } else if (service.toString().equals(BLECustomAttributes.BATTERY_SERVICE)) {
                 if (characteristic.toString().equals(BLECustomAttributes.BATTERY_LEVEL)) {
+                    Log("Battery " + value[0]);
+
                     mRelationDevice.mState.mBattery = value[0];
                     mRelationDevice.mState.mBatteryUpdated = true;
                 }

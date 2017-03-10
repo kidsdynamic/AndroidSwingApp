@@ -285,6 +285,8 @@ public class WatchOperatorResumeSync {
             else
                 Log.d("Operator", "mFinishListener is null");
 
+            mOperator.ResetBitmapCache();
+
         } else {
             mServerMachine.getAvatar(mGetAvatarListener, mAvatarToGet.get(0));
             mAvatarToGet.remove(0);
