@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -563,6 +564,21 @@ class WatchDatabase {
         }
 
         return result;
+    }
+
+    void EventTest() {
+        List<WatchEvent> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT, null);
+
+        while (cursor.moveToNext())
+            result.add(cursorToEvent(cursor));
+
+        cursor.close();
+
+        for (WatchEvent r : result) {
+            Log.d("TEST", r.mName + " " + r.mAlertTimeStamp);
+        }
+
     }
 
     List<WatchEvent> EventGet(long startTimeStamp, long endTimeStamp) {

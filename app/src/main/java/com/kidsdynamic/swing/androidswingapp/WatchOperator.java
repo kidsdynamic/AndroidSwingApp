@@ -172,10 +172,14 @@ public class WatchOperator {
         long startTimeStamp = cal.getTimeInMillis();
         cal.add(Calendar.MONTH, 2);
         long endTimeStamp = cal.getTimeInMillis();
+
         List<WatchEvent> list = mWatchDatabase.EventGet(startTimeStamp, endTimeStamp);
         List<WatchEvent> rtn = new ArrayList<>();
         for (WatchEvent watchEvent : list) {
-            if (watchEvent.containsKid(kid.mId))
+            //if (watchEvent.containsKid(kid.mId))
+            //    rtn.add(watchEvent);
+            Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!!");
+            if (watchEvent.mAlertTimeStamp > startTimeStamp)//watchEvent.containsKid(kid.mId)
                 rtn.add(watchEvent);
         }
 

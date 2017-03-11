@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static com.kidsdynamic.swing.androidswingapp.BLEMachine.SYNC_RESULT_SUCCESS;
@@ -81,15 +82,22 @@ public class FragmentDashboardProgress extends ViewFragment {
         mActivityMain.startService(intent);
 
         mDevice = mActivityMain.mContactStack.isEmpty() ?
-                new WatchContact.Kid() :
+                mActivityMain.mOperator.getFocusKid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();
+
+        if (mDevice == null)
+            mDevice = new WatchContact.Kid();
+
 
         List<WatchEvent> eventList = mActivityMain.mOperator.getEventsForSync(mDevice);
         mVoiceAlertList = new ArrayList<>();
-        for (WatchEvent event : eventList)
+        for (WatchEvent event : eventList) {
+            Log.d("TEST", "event " + event.mName);
             mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
+        }
 
         mMacAddress = ServerMachine.getMacAddress(mDevice.mMacId);
+        Log.d("swing", "Kid mac " + mMacAddress);
 
         viewSync();
         mServerSyncFinish = false;

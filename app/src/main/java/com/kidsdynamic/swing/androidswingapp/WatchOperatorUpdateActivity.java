@@ -21,6 +21,7 @@ class WatchOperatorUpdateActivity {
     private long mSearchStart;
     private long mSearchEnd;
     private WatchContact.Kid mKid;
+    private int mTimezoneOffset;
 
     WatchOperatorUpdateActivity(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
@@ -31,13 +32,15 @@ class WatchOperatorUpdateActivity {
         mListener = listener;
 
         Calendar cal = Calendar.getInstance();
+        mTimezoneOffset = cal.getTimeZone().getOffset(cal.getTimeInMillis());
+
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
-        mSearchEnd = cal.getTimeInMillis();
+        mSearchEnd = cal.getTimeInMillis() + mTimezoneOffset;
         cal.add(Calendar.YEAR, -1);
         cal.add(Calendar.SECOND, 1);
-        mSearchStart = cal.getTimeInMillis();
+        mSearchStart = cal.getTimeInMillis() + mTimezoneOffset;
         mActivities = new ArrayList<>();
 
         //Log.d("swing", "Start Time("+mSearchStart+") " + WatchOperator.getDefaultTimeString(mSearchStart));
@@ -93,6 +96,12 @@ class WatchOperatorUpdateActivity {
             }
 
             Collections.reverse(mActivities);
+
+            for (WatchActivity act : mActivities) {
+                act.mIndoor.mTimestamp -= mTimezoneOffset;
+                act.mOutdoor.mTimestamp -= mTimezoneOffset;
+            }
+
             mOperator.setActivityList(mKid.mId, mActivities);
             if (mListener != null)
                 mListener.onFinish(null);

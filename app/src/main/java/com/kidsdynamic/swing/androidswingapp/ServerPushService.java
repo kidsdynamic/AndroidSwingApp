@@ -89,7 +89,7 @@ public class ServerPushService extends Service {
 
             } else if (mUploadItem == null && mWatchDatabase.UploadItemCount() > 0) {
                 mUploadItem = mWatchDatabase.UploadItemGet();
-                Log.d("PushService", " MAC " + mUploadItem.mMacId + " time " + mUploadItem.mTime);
+                Log.d("PushService", " MAC " + mUploadItem.mMacId + " time " + mUploadItem.mTime + " indoor " + mUploadItem.mIndoor);
                 mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
             }
             if (!stop)

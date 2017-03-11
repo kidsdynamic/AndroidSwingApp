@@ -135,6 +135,13 @@ class BLEMachine extends BLEControl {
                     mRelationDevice.mState.mTick--;
                     if (mRelationDevice.mState.mConnected) {
                         mState = STATE_DISCOVERY;
+                    } else if (mRelationDevice.mState.mDetectTimes == 1) {
+                        // Retry...
+                        mState = STATE_INIT;
+                        if(++mRelationDevice.mState.mRetryTimes > 3)
+                            syncFailProcess();
+                        else
+                            mState = STATE_INIT;
                     } else if (mRelationDevice.mState.mTick == 0) {
                         syncFailProcess();
                     }
@@ -169,7 +176,7 @@ class BLEMachine extends BLEControl {
                 case STATE_SEND_ALERT:
                     if (!mRelationDevice.mState.mConnected) {
                         syncFailProcess();
-                    } else if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 250) {
+                    } else if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 100) {
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
 
@@ -179,8 +186,9 @@ class BLEMachine extends BLEControl {
                     } else {
                         VoiceAlert alert = mVoiceAlerts.get(0);
                         mVoiceAlerts.remove(0);
-                        Calendar cal = Calendar.getInstance();
-                        int countdown = (int) ((alert.mTimeStamp - cal.getTimeInMillis()) / 1000);
+                        //Calendar cal = Calendar.getInstance();
+                        //int countdown = (int) ((alert.mTimeStamp - cal.getTimeInMillis()) / 1000);
+                        int countdown = toWatchTime(alert.mTimeStamp);
                         if (countdown > 0) {
                             byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
@@ -392,6 +400,8 @@ class BLEMachine extends BLEControl {
             boolean mFoundSearchAddress;
             boolean mBatteryUpdated;
             byte mBattery;
+            int mDetectTimes;
+            int mRetryTimes;
         }
 
         void resetFlag() {
@@ -401,6 +411,8 @@ class BLEMachine extends BLEControl {
             mState.mBonded = false;
             mState.mConnected = false;
             mState.mDiscovered = false;
+            mState.mDetectTimes = 0;
+            mState.mRetryTimes = 0;
         }
 
         Device() {
@@ -450,6 +462,7 @@ class BLEMachine extends BLEControl {
         public void onConnectionStateChange(String name, String address, boolean bonded, boolean connected) {
             if (address.equals(mRelationDevice.mAddress)) {
                 mRelationDevice.mState.mConnected = connected;
+                mRelationDevice.mState.mDetectTimes++;
 
                 if (!connected) {
                     if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
@@ -491,10 +504,10 @@ class BLEMachine extends BLEControl {
                         if (value != null) {
                             if (mRelationDevice.mState.mData1 == null) {
                                 mRelationDevice.mState.mData1 = value;
-                                //Log("Data1 " + bytesToHex(value));
+                                Log("Data1 " + bytesToHex(value));
                             } else {
                                 mRelationDevice.mState.mData2 = value;
-                                //Log("Data2 " + bytesToHex(value));
+                                Log("Data2 " + bytesToHex(value));
                             }
                         }
                         break;
@@ -537,5 +550,17 @@ class BLEMachine extends BLEControl {
         Calendar now = Calendar.getInstance();
         int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
         return now.getTimeInMillis() + offset;
+    }
+
+    private static int toWatchTime(long utc) {
+        Calendar now = Calendar.getInstance();
+        int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+        return (int)((utc + offset) / 1000);
+    }
+
+    public static long toUtcTime(int time) {
+        Calendar now = Calendar.getInstance();
+        int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+        return (time - offset) * 1000;
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -303,7 +304,9 @@ public class ServerGson {
                     outdoorActivity = pOutdoorActivity;
                     time = pTime;
                     macId = pMacId;
-                    timeZoneOffset = 0;
+                    Calendar now = Calendar.getInstance();
+                    int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+                    timeZoneOffset = offset / 60 / 1000;
                 }
             }
 
