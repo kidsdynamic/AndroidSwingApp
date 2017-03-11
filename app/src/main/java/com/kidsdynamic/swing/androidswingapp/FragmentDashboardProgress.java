@@ -135,12 +135,29 @@ public class FragmentDashboardProgress extends ViewFragment {
         mActivityMain.popFragment();
     }
 
+    private int mServerSyncState = 0;
     private ViewCircle.OnProgressListener mServerSyncProgressListener = new ViewCircle.OnProgressListener() {
         @Override
         public void onProgress(ViewCircle view, int begin, int end) {
-            if (mServerSyncFinish) {
-                viewSearching();
-                bleSearchStart();
+            switch(mServerSyncState) {
+                case 0:
+                    if (mServerSyncFinish) {
+                        mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
+                        mServerSyncState = 1;
+                    }
+                    break;
+                case 1:
+                    if (mActivityUpdateFinish) {
+                        viewSearching();
+                        bleSearchStart();
+                        mServerSyncState = 2;
+                    }
+                    break;
+                case 2:
+                    mServerSyncFinish = false;
+                    mActivityUpdateFinish = false;
+                    mServerSyncState = 0;
+                    break;
             }
         }
     };
@@ -165,7 +182,7 @@ public class FragmentDashboardProgress extends ViewFragment {
             //mSyncTimeout--;
 
             if (mSyncState == SYNC_STATE_SUCCESS) {
-                viewUpload();
+                viewCompleted();
             } else if (mSyncTimeout == 0 || mSyncState == SYNC_STATE_FAIL) {
                 viewNotFound();
                 bleSyncCancel();
@@ -179,9 +196,9 @@ public class FragmentDashboardProgress extends ViewFragment {
             mUploadTimeout--;
 
             if (true) {
+                // Gio Say: asynchronous upload
                 viewDownload();
 
-                mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
             } else if (mUploadTimeout == 0) {
                 viewServerFailed();
             }
