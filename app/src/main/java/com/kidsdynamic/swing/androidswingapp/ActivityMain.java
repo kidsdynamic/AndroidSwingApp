@@ -156,10 +156,13 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onPause() {
         Log.d("ActivityMain", "onPause()");
+        // GioChen Todo : Temporary solution, fix asap.
+        /*
         if (mBLEMachine != null)
             mBLEMachine.Stop();
         if (mServiceMachine != null)
             mServiceMachine.Stop();
+        */
 
         super.onPause();
     }
