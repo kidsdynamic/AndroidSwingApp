@@ -68,8 +68,9 @@ public class FragmentProfileMain extends ViewFragment {
         delAllContact(mViewRequestFromContainer);
 
         WatchContact.User parent = mActivityMain.mOperator.getUser();
-        mViewName.setText(parent.mLabel);
-        if (parent.mPhoto != null) {
+        if (parent != null)
+            mViewName.setText(parent.mLabel);
+        if (parent != null && parent.mPhoto != null) {
             mViewPhoto.setBitmap(parent.mPhoto);
         }
 
