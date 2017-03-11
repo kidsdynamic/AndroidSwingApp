@@ -478,23 +478,23 @@ class BLEMachine extends BLEControl {
                     case BLECustomAttributes.HEADER:
                         if (value != null) {
                             mRelationDevice.mState.mHeader = value;
-                            Log("Header " + bytesToHex(value));
+                            //Log("Header " + bytesToHex(value));
                         }
                         break;
                     case BLECustomAttributes.TIME:
                         if (value != null) {
                             mRelationDevice.mState.mTime = value;
-                            Log("Time " + bytesToHex(value));
+                            //Log("Time " + bytesToHex(value));
                         }
                         break;
                     case BLECustomAttributes.DATA:
                         if (value != null) {
                             if (mRelationDevice.mState.mData1 == null) {
                                 mRelationDevice.mState.mData1 = value;
-                                Log("Data1 " + bytesToHex(value));
+                                //Log("Data1 " + bytesToHex(value));
                             } else {
                                 mRelationDevice.mState.mData2 = value;
-                                Log("Data2 " + bytesToHex(value));
+                                //Log("Data2 " + bytesToHex(value));
                             }
                         }
                         break;

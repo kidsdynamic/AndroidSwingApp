@@ -359,39 +359,82 @@ public class WatchOperator {
         new WatchOperatorUpdateActivity(mActivity).start(listener, kid);
     }
 
-    public WatchActivity getActivityOfDay() {
-        WatchContact.Kid kid = getFocusKid();
-        if (kid == null)
-            return new WatchActivity();
+    public List<WatchActivity> loadActivityWithLocal(WatchContact.Kid kid) {
+        List<WatchActivity> rtn = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        long end = cal.getTimeInMillis();
+        cal.add(Calendar.YEAR, -1);
+        cal.add(Calendar.SECOND, 1);
+        long start = cal.getTimeInMillis();
 
-        List<WatchActivity> list = mWatchDatabase.activityExport(kid.mId);
-        if (list.isEmpty())
-            return new WatchActivity();
+        start = (start / 1000) * 1000;
+        end = (end / 1000) * 1000;
+
+        while (start < end) {
+            //Log.d("swing", "Start Time(" + start + ") " + WatchOperator.getDefaultTimeString(start));
+            rtn.add(new WatchActivity(kid == null ? 0 : kid.mId, start));
+            start += 86400000;
+        }
+
+        Collections.reverse(rtn);
+
+        if (kid == null)
+            return rtn;
+
+        List<WatchActivity> exportList = mWatchDatabase.activityExport(kid.mId);
+
+        for (WatchActivity exportActivity : exportList) {
+            for (WatchActivity preloadActivity : rtn) {
+                long actEnd = preloadActivity.mIndoor.mTimestamp + 86400000;
+                if (exportActivity.mIndoor.mTimestamp >= preloadActivity.mIndoor.mTimestamp && exportActivity.mIndoor.mTimestamp < actEnd) {
+                    preloadActivity.mIndoor.mSteps += exportActivity.mIndoor.mSteps;
+                    preloadActivity.mOutdoor.mSteps += exportActivity.mOutdoor.mSteps;
+                    break;
+                }
+            }
+        }
+
+        mWatchDatabase.UploadItemRemoveDone();
+        List<WatchActivityRaw> uploadList = mWatchDatabase.UploadItemGet(kid.mMacId);
+        for (WatchActivityRaw raw : uploadList) {
+            for (WatchActivity preloadActivity : rtn) {
+                long actEnd = preloadActivity.mIndoor.mTimestamp + 86400000;
+                long rawTime = raw.mTime;
+                rawTime *= 1000;
+
+                if (rawTime >= preloadActivity.mIndoor.mTimestamp && rawTime < actEnd) {
+                    String[] arg = raw.mIndoor.split(",");
+                    int indoor = Integer.valueOf(arg[2]);
+                    arg = raw.mOutdoor.split(",");
+                    int outdoor = Integer.valueOf(arg[2]);
+
+                    preloadActivity.mIndoor.mSteps += indoor;
+                    preloadActivity.mOutdoor.mSteps += outdoor;
+
+                    break;
+                }
+            }
+        }
+
+        return rtn;
+    }
+
+    public WatchActivity getActivityOfDay() {
+        List<WatchActivity> list = loadActivityWithLocal(getFocusKid());
 
         return list.get(0);
     }
 
     public List<WatchActivity> getActivityOfWeek() {
         List<WatchActivity> rtn = new ArrayList<>();
+        List<WatchActivity> list = loadActivityWithLocal(getFocusKid());
 
-        WatchContact.Kid kid = getFocusKid();
-        List<WatchActivity> list;
-        if (kid == null)
-            list = new ArrayList<>();
-        else
-            list = mWatchDatabase.activityExport(kid.mId);
+        for (int idx = 0; idx < 7; idx++)
+            rtn.add(list.get(idx));
 
-        Calendar cal = Calendar.getInstance();
-        long timeStamp = cal.getTimeInMillis();
-        for (int idx = 0; idx < 7; idx++) {
-
-            if (list.isEmpty() || list.size() <= idx) {
-                rtn.add(new WatchActivity(kid.mId, timeStamp));
-            } else {
-                rtn.add(list.get(idx));
-            }
-            timeStamp += 86400000;
-        }
         Collections.reverse(rtn);
 
         return rtn;
@@ -399,23 +442,10 @@ public class WatchOperator {
 
     public List<WatchActivity> getActivityOfMonth() {
         List<WatchActivity> rtn = new ArrayList<>();
+        List<WatchActivity> list = loadActivityWithLocal(getFocusKid());
 
-        WatchContact.Kid kid = getFocusKid();
-        List<WatchActivity> list;
-        if (kid == null)
-            list = new ArrayList<>();
-        else
-            list = mWatchDatabase.activityExport(kid.mId);
-
-        Calendar cal = Calendar.getInstance();
-        long timeStamp = cal.getTimeInMillis();
-        for (int idx = 0; idx < 30; idx++) {
-            if (list.isEmpty() || list.size() <= idx)
-                rtn.add(new WatchActivity(kid.mId, timeStamp));
-            else
-                rtn.add(list.get(idx));
-            timeStamp += 86400000;
-        }
+        for (int idx = 0; idx < 30; idx++)
+            rtn.add(list.get(idx));
         Collections.reverse(rtn);
 
         return rtn;

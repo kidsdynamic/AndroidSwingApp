@@ -92,26 +92,6 @@ class WatchOperatorUpdateActivity {
                 }
             }
 
-            mOperator.mWatchDatabase.UploadItemRemoveDone();
-            List<WatchActivityRaw> uploadList = mOperator.mWatchDatabase.UploadItemGet(mKid.mMacId);
-            for (WatchActivityRaw raw : uploadList) {
-                for (WatchActivity act : mActivities) {
-                    long actEnd = act.mIndoor.mTimestamp + 86400000;
-                    if (raw.mTime >= act.mIndoor.mTimestamp && raw.mTime <= actEnd) {
-                        String[] arg = raw.mIndoor.split(",");
-                        int indoor = Integer.valueOf(arg[2]);
-                        arg = raw.mOutdoor.split(",");
-                        int outdoor = Integer.valueOf(arg[2]);
-
-                        act.mIndoor.mSteps += indoor;
-                        act.mOutdoor.mSteps += outdoor;
-
-                        break;
-                    }
-                }
-            }
-
-
             Collections.reverse(mActivities);
             mOperator.setActivityList(mKid.mId, mActivities);
             if (mListener != null)

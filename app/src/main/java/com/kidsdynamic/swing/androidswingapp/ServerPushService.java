@@ -93,7 +93,7 @@ public class ServerPushService extends Service {
                 mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
             }
             if (!stop)
-                mHandler.postDelayed(this, 1000);
+                mHandler.postDelayed(this, 100);
         }
     };
 

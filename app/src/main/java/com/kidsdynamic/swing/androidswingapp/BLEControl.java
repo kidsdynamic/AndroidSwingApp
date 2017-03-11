@@ -492,10 +492,10 @@ public class BLEControl {
             if (item.mObject instanceof BluetoothGattCharacteristic) {
 
                 if (item.mWrite) {
-                    //Log("WRITE : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString() + " " + bytesToHex(((BluetoothGattCharacteristic)item.mObject).getValue()));
+                    Log("WRITE : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString() + " " + bytesToHex(((BluetoothGattCharacteristic)item.mObject).getValue()));
                     mBluetoothGatt.writeCharacteristic((BluetoothGattCharacteristic) item.mObject);
                 } else {
-                    //Log("READ : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString());
+                    Log("READ : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString());
                     mBluetoothGatt.readCharacteristic((BluetoothGattCharacteristic) item.mObject);
                 }
 

@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -136,8 +137,6 @@ public class ActivityMain extends AppCompatActivity
         if (!language.equals("")) {
             setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
         }
-
-        //mIsForeground = true;
 
         requestPermission();
 
@@ -407,12 +406,42 @@ public class ActivityMain extends AppCompatActivity
         }
     };
 
-    private List<WatchActivityRaw> crateFakeData() {
+    private boolean fakeDone = false;
+    private void createYesterdayData() {
+        if (fakeDone)
+            return;
+
+        fakeDone = true;
+
+        if ( mOperator.getFocusKid() != null) {
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, -1);
+            int timeStemp = (int) (cal.getTimeInMillis() / 1000);
+
+            WatchActivityRaw fake = new WatchActivityRaw();
+            fake.mTime = timeStemp;
+            fake.mMacId = mOperator.getFocusKid().mMacId + "";
+            fake.mIndoor = timeStemp + ",0,234,2,3,4";
+            fake.mOutdoor = timeStemp + ",1,345,2,3,4";
+            mOperator.pushUploadItem(fake);
+
+            Intent intent = new Intent(this, ServerPushService.class);
+            startService(intent);
+
+            Log.d("XXXXX", "Create yesterday data done!");
+        }
+    }
+
+    private void crateFakeData() {
+        if (fakeDone || mOperator.getFocusKid() == null)
+            return;
+
+        fakeDone = true;
+
         Calendar cal = Calendar.getInstance();
         long endTime = cal.getTimeInMillis();
         cal.add(Calendar.DATE, -365);
         long time = cal.getTimeInMillis();
-        List<WatchActivityRaw> rtn = new ArrayList<>();
         String macId = mOperator.getFocusKid().mMacId + "";
 
         Log.d("swing", time + " start " + WatchOperator.getTimeString(time));
@@ -421,19 +450,21 @@ public class ActivityMain extends AppCompatActivity
 
         while (time <= endTime) {
             WatchActivityRaw fake = new WatchActivityRaw();
-            cal = Calendar.getInstance();
-            long step = cal.getTimeInMillis() % 3000;
+            int step = (int) (Math.random() * 7500);
+            int step1 = (int) (Math.random() * 7500);
 
             fake.mTime = (int) (time / 1000);
             fake.mMacId = macId;
-            fake.mIndoor = fake.mTime + ",0," + (int) (Math.random() * 7500) + ",2,3,4";
-            fake.mOutdoor = fake.mTime + ",1," + (int) (Math.random() * 7500) + ",2,3,4";
-            rtn.add(fake);
+            fake.mIndoor = fake.mTime + ",0," + step + ",2,3,4";
+            fake.mOutdoor = fake.mTime + ",1," + step1 + ",2,3,4";
+            Log.d("swing", "insert ("+fake.mTime+") " + WatchOperator.getTimeString(fake.mTime) + " in " + step + " out " + step1);
+            mOperator.pushUploadItem(fake);
 
             time += 86400000;
         }
 
-        return rtn;
+        Intent intent = new Intent(this, ServerPushService.class);
+        startService(intent);
     }
 
     ServerMachine.activityUploadRawDataListener mActivityUploadRawDataListener = new ServerMachine.activityUploadRawDataListener() {

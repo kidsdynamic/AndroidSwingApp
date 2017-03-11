@@ -741,13 +741,27 @@ class WatchDatabase {
         List<WatchActivity> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_ACTIVITY + " WHERE " + KID_ID + "=" + KidId, null);
 
-        while (cursor.moveToNext())
+        while (cursor.moveToNext()) {
             result.add(cursorActivity(cursor));
+        }
 
         cursor.close();
 
         return result;
     }
+
+    int activityCount() {
+        int result = 0;
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_ACTIVITY, null);
+
+        if (cursor.moveToNext())
+            result = cursor.getInt(0);
+
+        cursor.close();
+
+        return result;
+    }
+
 
     private WatchActivity cursorActivity(Cursor cursor) {
         WatchActivity watchActivity = new WatchActivity();
@@ -760,7 +774,7 @@ class WatchDatabase {
         watchActivity.mOutdoor.mMacId = watchActivity.mIndoor.mMacId;
         watchActivity.mIndoor.mKidId = String.valueOf(cursor.getInt(5));
         watchActivity.mOutdoor.mKidId = watchActivity.mIndoor.mKidId;
-        watchActivity.mIndoor.mTimestamp = cursor.getInt(6);
+        watchActivity.mIndoor.mTimestamp = cursor.getLong(6);
         watchActivity.mOutdoor.mTimestamp = watchActivity.mIndoor.mTimestamp;
 
         return watchActivity;
