@@ -113,7 +113,7 @@ class WatchOperatorUpdateActivity {
 
 
             Collections.reverse(mActivities);
-            mOperator.setActivityList(mActivities);
+            mOperator.setActivityList(mKid.mId, mActivities);
             if (mListener != null)
                 mListener.onFinish(null);
         }

@@ -25,14 +25,14 @@ public class WatchOperator {
     private ActivityMain mActivity;
     private List<WatchContact.User> mRequestToList;
     private List<WatchContact.User> mRequestFromList;
-    private List<WatchActivity> mWatchActivityList;
+    //private List<WatchActivity> mWatchActivityList;
 
     WatchOperator(Context context) {
         mActivity = (ActivityMain) context;
         mWatchDatabase = new WatchDatabase(context);
         mRequestToList = new ArrayList<>();
         mRequestFromList = new ArrayList<>();
-        mWatchActivityList = new ArrayList<>();
+        //mWatchActivityList = new ArrayList<>();
     }
 
     void setRequestList(List<WatchContact.User> to, List<WatchContact.User> from) {
@@ -40,8 +40,10 @@ public class WatchOperator {
         mRequestFromList = from;
     }
 
-    void setActivityList(List<WatchActivity> list) {
-        mWatchActivityList = list;
+    void setActivityList(int kidId, List<WatchActivity> list) {
+        mWatchDatabase.activityDeleteByKidId(kidId);
+        mWatchDatabase.activityImport(list);
+        //mWatchActivityList = list;
         /*
         Log.d("swing", "download " + mWatchActivityList.size());
         for (WatchActivity act : mWatchActivityList) {
@@ -358,21 +360,37 @@ public class WatchOperator {
     }
 
     public WatchActivity getActivityOfDay() {
-        if (mWatchActivityList.isEmpty()) {
+        WatchContact.Kid kid = getFocusKid();
+        if (kid == null)
             return new WatchActivity();
-        }
 
-        return mWatchActivityList.get(0);
+        List<WatchActivity> list = mWatchDatabase.activityExport(kid.mId);
+        if (list.isEmpty())
+            return new WatchActivity();
+
+        return list.get(0);
     }
 
     public List<WatchActivity> getActivityOfWeek() {
         List<WatchActivity> rtn = new ArrayList<>();
 
+        WatchContact.Kid kid = getFocusKid();
+        List<WatchActivity> list;
+        if (kid == null)
+            list = new ArrayList<>();
+        else
+            list = mWatchDatabase.activityExport(kid.mId);
+
+        Calendar cal = Calendar.getInstance();
+        long timeStamp = cal.getTimeInMillis();
         for (int idx = 0; idx < 7; idx++) {
-            if (mWatchActivityList.isEmpty())
-                rtn.add(new WatchActivity());
-            else
-                rtn.add(mWatchActivityList.get(idx));
+
+            if (list.isEmpty() || list.size() <= idx) {
+                rtn.add(new WatchActivity(kid.mId, timeStamp));
+            } else {
+                rtn.add(list.get(idx));
+            }
+            timeStamp += 86400000;
         }
         Collections.reverse(rtn);
 
@@ -382,11 +400,21 @@ public class WatchOperator {
     public List<WatchActivity> getActivityOfMonth() {
         List<WatchActivity> rtn = new ArrayList<>();
 
+        WatchContact.Kid kid = getFocusKid();
+        List<WatchActivity> list;
+        if (kid == null)
+            list = new ArrayList<>();
+        else
+            list = mWatchDatabase.activityExport(kid.mId);
+
+        Calendar cal = Calendar.getInstance();
+        long timeStamp = cal.getTimeInMillis();
         for (int idx = 0; idx < 30; idx++) {
-            if (mWatchActivityList.isEmpty())
-                rtn.add(new WatchActivity());
+            if (list.isEmpty() || list.size() <= idx)
+                rtn.add(new WatchActivity(kid.mId, timeStamp));
             else
-                rtn.add(mWatchActivityList.get(idx));
+                rtn.add(list.get(idx));
+            timeStamp += 86400000;
         }
         Collections.reverse(rtn);
 
@@ -397,6 +425,13 @@ public class WatchOperator {
         List<WatchActivity> rtn = new ArrayList<>();
         long startTimestamp;
         long endTimestamp;
+
+        WatchContact.Kid kid = getFocusKid();
+        List<WatchActivity> list;
+        if (kid == null)
+            list = new ArrayList<>();
+        else
+            list = mWatchDatabase.activityExport(kid.mId);
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.YEAR, -1);
@@ -417,7 +452,7 @@ public class WatchOperator {
             //Log.d("swing", "End Time("+endTimestamp+") " + WatchOperator.getDefaultTimeString(endTimestamp));
             WatchActivity watchActivity = new WatchActivity(0, startTimestamp);
 
-            for (WatchActivity src : mWatchActivityList)
+            for (WatchActivity src : list)
                 watchActivity.addInTimeRange(src, startTimestamp, endTimestamp);
             rtn.add(watchActivity);
 

@@ -437,7 +437,7 @@ class BLEMachine extends BLEControl {
                 return;
 
             for (Device dev : mScanResult) {
-                if (dev.mName.equals(name)) {
+                if (dev.mName.equals(name) && dev.mAddress.equals(address)) {
                     dev.mRssi = rssi;
                     return;
                 }
