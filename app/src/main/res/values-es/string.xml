@@ -10,10 +10,10 @@
     <string name="title_calendar">Calendario</string>
     <string name="title_dashboard">Inicio</string>
     <string name="title_photo">Foto</string>
-    <string name="title_profile">Opciones</string>
-    <string name="title_option">Contraseña</string>
-    <string name="title_password">Petición de</string>
-    <string name="title_request_from">Perfil</string>
+    <string name="title_profile">Perfil</string>
+    <string name="title_option">Opciones</string>
+    <string name="title_password">Contraseña</string>
+    <string name="title_request_from">Petición de</string>
     <string name="title_request_to">Enviar petición a</string>
     <string name="title_search_device">Buscando tu reloj</string>
     <string name="title_sync">Sincronizar</string>

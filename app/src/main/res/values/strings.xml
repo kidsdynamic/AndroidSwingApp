@@ -17,10 +17,10 @@
     <string name="title_calendar">Calendar</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_photo">Photo</string>
-    <string name="title_profile">Option</string>
-    <string name="title_option">Password</string>
-    <string name="title_password">Request From</string>
-    <string name="title_request_from">Profile</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_option">Option</string>
+    <string name="title_password">Password</string>
+    <string name="title_request_from">Request From</string>
     <string name="title_request_to">Send Requests To</string>
     <string name="title_search_device">Search Device</string>
     <string name="title_sync">Sync</string>

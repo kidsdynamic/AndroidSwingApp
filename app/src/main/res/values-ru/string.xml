@@ -10,10 +10,10 @@
     <string name="title_calendar">Календарь</string>
     <string name="title_dashboard">Начало</string>
     <string name="title_photo">фотографию</string>
-    <string name="title_profile">Опции</string>
-    <string name="title_option">Пароль</string>
-    <string name="title_password">Запрос от</string>
-    <string name="title_request_from">профиль</string>
+    <string name="title_profile">профиль</string>
+    <string name="title_option">Опции</string>
+    <string name="title_password">Пароль</string>
+    <string name="title_request_from">Запрос от</string>
     <string name="title_request_to">Отправить запрос</string>
     <string name="title_search_device">Идет поиск часов</string>
     <string name="title_sync">Синхронизация</string>
@@ -352,6 +352,8 @@
     <string name="error_subhost_deny_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_403">Отсутствует разрешение. У пользователя нет разрешения</string>
+
+
 
 
 </resources>
