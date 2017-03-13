@@ -58,7 +58,7 @@ class BLEMachine extends BLEControl {
         return true;
     }
 
-    private static final int TRANSITION_GAP = 100;
+    private static final int TRANSITION_GAP = 5;
 
     private static final int STATE_INIT = 0;
     private static final int STATE_SCAN = 1;
@@ -73,6 +73,7 @@ class BLEMachine extends BLEControl {
     private static final int STATE_GET_DATA1 = 10;
     private static final int STATE_GET_DATA2 = 11;
     private static final int STATE_GET_BATTERY = 12;
+    private static final int STATE_PRE_INIT = 13;
 
     private Device mRelationDevice = new Device();
     private int mState;
@@ -81,11 +82,36 @@ class BLEMachine extends BLEControl {
     private List<VoiceAlert> mVoiceAlerts = new ArrayList<>();
     private int mVoiceAlertCount = 0;
 
+    private long mTransmissionTick;
+
+    private void setTimeout(int value) {
+        Calendar cal = Calendar.getInstance();
+        mTransmissionTick = cal.getTimeInMillis() + value;
+    }
+
+    private boolean isTimeout() {
+        Calendar cal = Calendar.getInstance();
+        long currentTick = cal.getTimeInMillis();
+        return currentTick >= mTransmissionTick;
+    }
+
+
     private Runnable stateTransition = new Runnable() {
 
         @Override
         public void run() {
             switch (mState) {
+                case STATE_PRE_INIT:
+                    if (!mRelationDevice.mState.mConnected) {
+                        mRelationDevice.mState.mDiscovered = false;
+                        mState = STATE_INIT;
+                        if (mHandler != null) {
+                            mHandler.postDelayed(this, 100);
+                            return;
+                        }
+                    }
+                    break;
+
                 case STATE_INIT:
                     if (mRelationDevice.mAction.mScanTime != 0) {
                         mState = STATE_SCAN;
@@ -95,7 +121,7 @@ class BLEMachine extends BLEControl {
 
                     } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
                         mActivities = new ArrayList<>();
-                        mRelationDevice.mState.mTick = 150;
+                        mRelationDevice.mState.mTick = 1000;
                         //if (GetBondState(mRelationDevice.mAddress)) {
                         EnableBondStateReceiver(false);
                         mState = STATE_CONNECTING;
@@ -135,20 +161,22 @@ class BLEMachine extends BLEControl {
                     mRelationDevice.mState.mTick--;
                     if (mRelationDevice.mState.mConnected) {
                         mState = STATE_DISCOVERY;
-                    } else if (mRelationDevice.mState.mDetectTimes == 1) {
-                        // Retry...
-                        mState = STATE_INIT;
-                        if(++mRelationDevice.mState.mRetryTimes > 3)
+
+                        mRelationDevice.mState.mConnectionDetect = false;
+                    } else if (mRelationDevice.mState.mConnectionDetect || mRelationDevice.mState.mTick == 0) {
+
+                        mState = STATE_PRE_INIT;
+                        if(++mRelationDevice.mState.mRetryTimes > 20)
                             syncFailProcess();
                         else
-                            mState = STATE_INIT;
-                    } else if (mRelationDevice.mState.mTick == 0) {
-                        syncFailProcess();
+                            Log.d("XXXXX", "Connect failed, retry " + mRelationDevice.mState.mRetryTimes);
+                        mRelationDevice.mState.mConnectionDetect = false;
                     }
                     break;
 
                 case STATE_DISCOVERY:
                     if (mRelationDevice.mState.mDiscovered) {
+                        setTimeout(4500);
                         mState = STATE_GET_BATTERY;
                         mRelationDevice.mState.mBatteryUpdated = false;
                         Read(BLECustomAttributes.BATTERY_SERVICE, BLECustomAttributes.BATTERY_LEVEL);
@@ -199,7 +227,12 @@ class BLEMachine extends BLEControl {
                     break;
 
                 case STATE_GET_HEADER:
-                    if (mRelationDevice.mState.mHeader != null) {
+                    if (isTimeout()) {
+                        // The throughput of device becomes very slow when the communication for more than 5 seconds.
+                        Disconnect();
+                        mRelationDevice.mState.mRetryTimes = 0;
+                        mState = STATE_PRE_INIT;
+                    } else if (mRelationDevice.mState.mHeader != null) {
                         if (mRelationDevice.mState.mHeader[0] == 1 && mRelationDevice.mState.mHeader[1] == 0) {
                             mRelationDevice.mState.mTime = null;
                             Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME);
@@ -244,7 +277,9 @@ class BLEMachine extends BLEControl {
 
                 case STATE_GET_DATA2:
                     if (mRelationDevice.mState.mData2 != null) {
-                        mActivities.add(new WatchActivityRaw(ServerMachine.getMacID(mRelationDevice.mAddress), mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2));
+                        WatchActivityRaw activityRaw = new WatchActivityRaw(ServerMachine.getMacID(mRelationDevice.mAddress), mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2);
+                        //Log.d("XXXXX", "Raw " + activityRaw.mTime + " " + WatchOperator.getTimeString(((long)activityRaw.mTime) * 1000));
+                        mActivities.add(activityRaw);
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
                         mRelationDevice.mState.mHeader = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
@@ -400,7 +435,7 @@ class BLEMachine extends BLEControl {
             boolean mFoundSearchAddress;
             boolean mBatteryUpdated;
             byte mBattery;
-            int mDetectTimes;
+            boolean mConnectionDetect;
             int mRetryTimes;
         }
 
@@ -411,7 +446,7 @@ class BLEMachine extends BLEControl {
             mState.mBonded = false;
             mState.mConnected = false;
             mState.mDiscovered = false;
-            mState.mDetectTimes = 0;
+            mState.mConnectionDetect = false;
             mState.mRetryTimes = 0;
         }
 
@@ -462,7 +497,7 @@ class BLEMachine extends BLEControl {
         public void onConnectionStateChange(String name, String address, boolean bonded, boolean connected) {
             if (address.equals(mRelationDevice.mAddress)) {
                 mRelationDevice.mState.mConnected = connected;
-                mRelationDevice.mState.mDetectTimes++;
+                mRelationDevice.mState.mConnectionDetect = true;
 
                 if (!connected) {
                     if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery) {
@@ -485,7 +520,7 @@ class BLEMachine extends BLEControl {
                     case BLECustomAttributes.ADDRESS:
                         if (value != null) {
                             mRelationDevice.mState.mAddress = value;
-                            Log("Address " + bytesToHex(value));
+                            //Log("Address " + bytesToHex(value));
                         }
                         break;
                     case BLECustomAttributes.HEADER:
@@ -504,10 +539,10 @@ class BLEMachine extends BLEControl {
                         if (value != null) {
                             if (mRelationDevice.mState.mData1 == null) {
                                 mRelationDevice.mState.mData1 = value;
-                                Log("Data1 " + bytesToHex(value));
+                                //Log("Data1 " + bytesToHex(value));
                             } else {
                                 mRelationDevice.mState.mData2 = value;
-                                Log("Data2 " + bytesToHex(value));
+                                //Log("Data2 " + bytesToHex(value));
                             }
                         }
                         break;

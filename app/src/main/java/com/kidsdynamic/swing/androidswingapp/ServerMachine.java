@@ -531,6 +531,14 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_GET_AVATAR, listener, filename));
     }
 
+    private static String bytesToHex(byte[] in) {
+        final StringBuilder builder = new StringBuilder();
+        for (byte b : in) {
+            builder.append(String.format("0x%02X ", b));
+        }
+        return builder.toString();
+    }
+
     Response.Listener<NetworkResponse> mSuccessListener = new Response.Listener<NetworkResponse>() {
         @Override
         public void onResponse(NetworkResponse response) {
@@ -543,13 +551,13 @@ public class ServerMachine {
                 bitmap = BitmapFactory.decodeByteArray(response.data, 0, response.data.length, decodeOptions);
             } else {
                 try {
-                    responseString = new String(
-                            new String(
-                                    response.data,
-                                    HttpHeaderParser.parseCharset(response.headers)
-                            ).getBytes("ISO-8859-1"),
-                            "utf-8"
-                    );
+                    //Log.d("XXXXX", "--------------------------------" + mCurrentTask.mCommand+"--------------------------------");
+                    //for (Map.Entry<String,String> entry : response.headers.entrySet()) {
+                    //    Log.d("XXXXX", "Header " + entry.getKey() + " Value " + entry.getValue());
+                    //}
+                    //Log.d("XXXXX", "Data " +  bytesToHex(response.data));
+                    responseString = new String(response.data, "utf-8");
+                    //Log.d("XXXXX", "String " + responseString);
                     responseCode = response.statusCode;
                 } catch (Exception e) {
                     e.printStackTrace();

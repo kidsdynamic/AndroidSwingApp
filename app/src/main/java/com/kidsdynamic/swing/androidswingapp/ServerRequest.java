@@ -150,6 +150,7 @@ public class ServerRequest extends Request<NetworkResponse> {
         if (mAuthToken!=null && !mAuthToken.equals("")) {
             Map<String,String> map = new HashMap<>();
             map.put("x-auth-token", mAuthToken);
+            map.put("Content-Type", "application/json; charset=UTF-8");
             return map;
         } else {
             return super.getHeaders();

@@ -377,7 +377,7 @@ public class BLEControl {
                 UUID uuidChar = characteristic.getUuid();
                 byte[] value = characteristic.getValue();
 
-                Log("R : " + uuidChar.toString() + " < " + bytesToHex(value));
+                //Log("R : " + uuidChar.toString() + " < " + bytesToHex(value));
 
                 mEventListener.onCharacteristicRead(uuidServ, uuidChar, value);
             }
@@ -400,7 +400,7 @@ public class BLEControl {
                 UUID uuidServ = characteristic.getService().getUuid();
                 UUID uuidChar = characteristic.getUuid();
 
-                Log("W : " + uuidChar.toString() + " > " + bytesToHex(characteristic.getValue()));
+                //Log("W : " + uuidChar.toString() + " > " + bytesToHex(characteristic.getValue()));
 
                 mEventListener.onCharacteristicWrite(uuidServ, uuidChar);
             }
@@ -492,10 +492,10 @@ public class BLEControl {
             if (item.mObject instanceof BluetoothGattCharacteristic) {
 
                 if (item.mWrite) {
-                    Log("WRITE : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString() + " " + bytesToHex(((BluetoothGattCharacteristic)item.mObject).getValue()));
+                    //Log("WRITE : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString() + " " + bytesToHex(((BluetoothGattCharacteristic)item.mObject).getValue()));
                     mBluetoothGatt.writeCharacteristic((BluetoothGattCharacteristic) item.mObject);
                 } else {
-                    Log("READ : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString());
+                    //Log("READ : " + ((BluetoothGattCharacteristic)item.mObject).getUuid().toString());
                     mBluetoothGatt.readCharacteristic((BluetoothGattCharacteristic) item.mObject);
                 }
 
