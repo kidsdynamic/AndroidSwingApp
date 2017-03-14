@@ -313,6 +313,45 @@
     <string name="event_repeat_weekly">"每周"</string>
     <string name="event_repeat_daily">"每日"</string>
     <string name="event_repeat_never">"从不"</string>
+    <string name="profile_request_to_users">用戶</string>
+
+    <!-- API Error -->
+    <string name="error_api_unknown">Unknown Error</string>
+    <string name="error_api_user_login_400">Bad Request. Login Failed</string>
+    <string name="error_api_user_is_token_valid_403">Bad request. The Token is Invalid</string>
+    <string name="error_api_user_register_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_user_register_409">Conflict. The Email is Already Registered</string>
+    <string name="error_api_user_is_email_available_to_register_409">Conflict. The Email is Already Registered</string>
+    <string name="error_api_user_update_profile_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_user_retrieve_user_profile_400">Bad request. The Token is Invalid</string>
+    <string name="error_api_user_find_by_email_400">Bad Request. The Email Parameter is Missing</string>
+    <string name="error_api_user_find_by_email_404">Not Found. Can\'t Find User by the Email</string>
+    <string name="error_api_user_avatar_upload_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_user_avatar_upload_kid_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_add_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_add_409">Conflict. The MAC ID is Already Registered</string>
+    <string name="error_api_kid_update_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_delete_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_kid_list_403">User is not Signed In</string>
+    <string name="error_api_kid_who_registered_mac_id_404">User not Found; MAC ID is not Registered by Anyone</string>
+    <string name="error_api_kid_who_registered_mac_id_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_activity_update_raw_data_400">Bad Request. Missing Some Parameters</string>
+    <string name="error_api_activity_update_raw_data_404">Conflict. The Data is Already Exist</string>
+    <string name="error_api_activity_retrieve_data_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_activity_retrieve_data_by_time_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_add_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_add_403">Forbidden. The User Doesn\'t Have Permission to Add Event</string>
+    <string name="error_api_event_update_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_update_403">Forbidden. The user Doesn\'t Have Permission to Update</string>
+    <string name="error_api_event_delete_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_api_event_delete_403">Forbidden. The User Doesn\'t Have Permission to Delete</string>
+    <string name="error_api_event_todo_done_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_add_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_add_409">Conflict. The Request is Already Existed</string>
+    <string name="error_subhost_accept_400">Bad Request. Missing Some Parameters, or the type is wrong. Or the logged in user doesn\'t have permission</string>
+    <string name="error_subhost_deny_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
+    <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
 
 </resources>
 
