@@ -226,14 +226,12 @@ public class FragmentCalendarEvent extends ViewFragment {
             mViewSave.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
             mViewSave.requestLayout();
 
-            mViewRepeatLine.setVisibility(View.VISIBLE);
             mViewDescriptionLine.setVisibility(View.VISIBLE);
             mViewTodoLine.setVisibility(View.VISIBLE);
         } else {
             mViewSave.getLayoutParams().width = 0;  // by weight
             mViewSave.requestLayout();
 
-            mViewRepeatLine.setVisibility(View.INVISIBLE);
             mViewDescriptionLine.setVisibility(View.INVISIBLE);
             mViewTodoLine.setVisibility(View.INVISIBLE);
         }
