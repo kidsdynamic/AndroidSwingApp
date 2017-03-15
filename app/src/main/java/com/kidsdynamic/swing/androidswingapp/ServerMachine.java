@@ -570,7 +570,9 @@ public class ServerMachine {
             String responseString = "";
             Bitmap bitmap = null;
             int responseCode = 0;
-            if (mCurrentTask.mCommand.equals(CMD_GET_AVATAR)) {
+            if (mCurrentTask == null || mCurrentTask.mCommand == null) {
+                return;
+            } else if (mCurrentTask.mCommand.equals(CMD_GET_AVATAR)) {
                 BitmapFactory.Options decodeOptions = new BitmapFactory.Options();
                 decodeOptions.inPreferredConfig = Bitmap.Config.RGB_565;
                 bitmap = BitmapFactory.decodeByteArray(response.data, 0, response.data.length, decodeOptions);
@@ -987,7 +989,7 @@ public class ServerMachine {
     };
 
     private class TaskItem {
-        String mCommand = "";
+        String mCommand;
         Request<NetworkResponse> mRequest;
         Object mResponseListener;
         String mImageFile;
