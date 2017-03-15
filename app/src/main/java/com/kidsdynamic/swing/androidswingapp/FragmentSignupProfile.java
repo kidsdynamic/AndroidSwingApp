@@ -38,7 +38,6 @@ public class FragmentSignupProfile extends ViewFragment {
     private EditText mViewFirstName;
     private EditText mViewLastName;
     private EditText mViewPhone;
-    private EditText mViewZip;
     private ImageView mViewBack;
 
     AlertDialog mDialog;
@@ -84,9 +83,6 @@ public class FragmentSignupProfile extends ViewFragment {
 
         mViewPhone = (EditText) mViewMain.findViewById(R.id.signup_profile_phone);
         mViewPhone.setOnEditorActionListener(mEdittextActionListener);
-
-        mViewZip = (EditText) mViewMain.findViewById(R.id.signup_profile_zip);
-        mViewZip.setOnEditorActionListener(mEdittextActionListener);
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -175,18 +171,14 @@ public class FragmentSignupProfile extends ViewFragment {
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            if (view == mViewZip && actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 String firstName = mViewFirstName.getText().toString();
                 String lastName = mViewLastName.getText().toString();
                 String phoneNumber = mViewPhone.getText().toString();
-                String zipCode = mViewZip.getText().toString();
 
                 if (mRegisterMail != null && !mRegisterMail.equals("") &&
                         mRegisterPassword != null && !mRegisterPassword.equals("") &&
-                        !firstName.equals("") &&
-                        !lastName.equals("") &&
-                        !phoneNumber.equals("") &&
-                        !zipCode.equals("")) {
+                        !firstName.equals("") && !lastName.equals("")) {
 
                     processDialog = ProgressDialog.show(mActivityMain,
                             getResources().getString(R.string.signup_profile_processing),
@@ -199,7 +191,7 @@ public class FragmentSignupProfile extends ViewFragment {
                             firstName,
                             lastName,
                             phoneNumber,
-                            zipCode,
+                            "",
                             mRegisterAvatar);
                 }
             }

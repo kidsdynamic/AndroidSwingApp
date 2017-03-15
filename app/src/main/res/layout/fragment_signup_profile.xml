@@ -80,23 +80,9 @@
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:hint="@string/signup_profile_phone_number"
-            android:imeOptions="actionNext"
-            android:inputType="phone"
-            android:nextFocusForward="@+id/registration_info_zip" />
-
-        <EditText
-            android:id="@+id/signup_profile_zip"
-            style="@style/edittext_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_profile_sponge"
-            android:layout_alignStart="@+id/signup_profile_sponge"
-            android:layout_below="@+id/signup_profile_phone"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:hint="@string/signup_profile_zip_code"
             android:imeOptions="actionDone"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:nextFocusForward="@+id/signup_profile_first" />
 
     </RelativeLayout>
 
