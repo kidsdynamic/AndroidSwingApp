@@ -214,7 +214,7 @@ public class ViewCalendarSelector extends ViewCalendar implements View.OnClickLi
         else if (mode == MODE_DAY || mode == MODE_WEEK)
             format = "MMM dd, yyyy";
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format, Locale.getDefault());
 
         return simpleDateFormat.format(date);
     }
