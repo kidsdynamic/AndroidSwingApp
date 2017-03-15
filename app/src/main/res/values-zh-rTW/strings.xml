@@ -129,6 +129,7 @@
     <string name="profile_kid_remove">"移除"</string>
     <string name="profile_kid_processing">"處理中"</string>
     <string name="profile_kid_wait">"請稍候&#8230;"</string>
+    <string name="profile_kid_name_not_blank">The Name Field Can Not be Blank!</string>
 
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">"我的裝置"</string>

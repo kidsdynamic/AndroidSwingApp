@@ -136,6 +136,7 @@
     <string name="profile_kid_remove">Remove</string>
     <string name="profile_kid_processing">Processing</string>
     <string name="profile_kid_wait">Please Wait&#8230;</string>
+    <string name="profile_kid_name_not_blank">The Name Field Can Not be Blank!</string>
 
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">My Hosting Watch</string>

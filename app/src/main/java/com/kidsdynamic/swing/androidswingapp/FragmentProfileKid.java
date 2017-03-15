@@ -81,7 +81,10 @@ public class FragmentProfileKid extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
-        saveContact(mKid);
+        if (!mKid.mBound)
+            requestAddKid(mKid);
+        else
+            requestUpdateKid(mKid);
     }
 
     @Override
@@ -242,36 +245,13 @@ public class FragmentProfileKid extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewName && actionId == EditorInfo.IME_ACTION_DONE) {
-                if (!mKid.mBound) {
-                    mKid.mName = mViewName.getText().toString();
-
-                    if (!mKid.mName.equals("")) {
-                        mProcessDialog = ProgressDialog.show(mActivityMain,
-                                getResources().getString(R.string.profile_kid_processing),
-                                getResources().getString(R.string.profile_kid_wait), true);
-                        String macId = ServerMachine.getMacID(mKid.mLabel);
-                        mActivityMain.mOperator.setKid(mAddKidListener, mKid.mName, macId, mAvatarBitmap);
-                    }
-                }
+                if (!mKid.mBound)
+                    requestAddKid(mKid);
+                else
+                    requestUpdateKid(mKid);
             }
 
             return false;
-        }
-    };
-
-    WatchOperator.finishListener mAddKidListener = new WatchOperator.finishListener() {
-        @Override
-        public void onFinish(Object arg) {
-            mProcessDialog.dismiss();
-            Bundle bundle = new Bundle();
-            bundle.putString(ViewFragment.BUNDLE_KEY_AVATAR, ServerMachine.GetAvatarFilePath() + mKid.mProfile);
-            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), bundle);
-        }
-
-        @Override
-        public void onFailed(String Command, int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -307,7 +287,38 @@ public class FragmentProfileKid extends ViewFragment {
         mViewRemove.setVisibility(View.INVISIBLE);
     }
 
-    private void saveContact(WatchContact.Kid kid) {
+    private void requestAddKid(WatchContact.Kid kid) {
+        if (mKid == null)
+            return;
+
+        mKid.mName = mViewName.getText().toString();
+        if (!mKid.mName.equals("")) {
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.profile_kid_processing),
+                    getResources().getString(R.string.profile_kid_wait), true);
+            String macId = ServerMachine.getMacID(mKid.mLabel);
+            mActivityMain.mOperator.setKid(mAddKidListener, mKid.mName, macId, mAvatarBitmap);
+        } else {
+            Toast.makeText(mActivityMain, getResources().getString(R.string.profile_kid_name_not_blank), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    WatchOperator.finishListener mAddKidListener = new WatchOperator.finishListener() {
+        @Override
+        public void onFinish(Object arg) {
+            mProcessDialog.dismiss();
+            mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
+            mActivityMain.updateFocusAvatar();
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private void requestUpdateKid(WatchContact.Kid kid) {
         if (mKid == null)
             return;
 
@@ -318,7 +329,7 @@ public class FragmentProfileKid extends ViewFragment {
                     getResources().getString(R.string.profile_kid_wait), true);
             mActivityMain.mOperator.setKid(mUpdateKidListener, mKid.mId, mKid.mName, mAvatarBitmap);
         } else {
-            mActivityMain.popFragment();
+            Toast.makeText(mActivityMain, getResources().getString(R.string.profile_kid_name_not_blank), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -334,7 +345,6 @@ public class FragmentProfileKid extends ViewFragment {
         public void onFailed(String Command, int statusCode) {
             mProcessDialog.dismiss();
             Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
-            mActivityMain.popFragment();
         }
     };
 }
