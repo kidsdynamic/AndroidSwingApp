@@ -151,6 +151,13 @@ public class ActivityMain extends AppCompatActivity
 
         if (mServiceMachine != null)
             mServiceMachine.Start();
+
+        if (!mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
+            mServiceMachine.userIsTokenValid(
+                    mUserIsTokenValidListener,
+                    mConfig.getString(ActivityConfig.KEY_MAIL),
+                    mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
+        }
     }
 
     @Override
@@ -377,6 +384,33 @@ public class ActivityMain extends AppCompatActivity
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
+    private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
+        @Override
+        public void onValidState(boolean valid) {
+            if (valid) {
+                mServiceMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
+            } else {
+                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
+            }
+        }
+
+        @Override
+        public void onFail(String command, int statusCode) {
+        }
+    };
+
+    private ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
+        @Override
+        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
+            mServiceMachine.setAuthToken(result.access_token);
+        }
+
+        @Override
+        public void onFail(String command, int statusCode) {
+        }
+    };
 
     private void eventTest() {
         //mActivityList = crateFakeData();
