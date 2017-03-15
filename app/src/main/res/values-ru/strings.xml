@@ -129,7 +129,7 @@
     <string name="profile_kid_remove">Удалить</string>
     <string name="profile_kid_processing">Идет обработка</string>
     <string name="profile_kid_wait">Пожалуйста, подождите&#8230;</string>
-    <string name="profile_kid_name_not_blank">The Name Field Can Not be Blank!</string>
+    <string name="profile_kid_name_not_blank">Профиль - пустое имя</string>
 
     <!-- FragmentProfileMain -->
     <string name="profile_main_hosting">Мои часы</string>
