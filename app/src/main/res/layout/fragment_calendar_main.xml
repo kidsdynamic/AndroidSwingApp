@@ -77,12 +77,29 @@
             android:layout_centerInParent="true"
             app:shrinkWidth="0.7" />
 
+        <com.kidsdynamic.swing.androidswingapp.ViewCircle
+            android:id="@+id/calendar_main_alert"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/calendar_main_alert_sponge"
+            android:layout_alignStart="@+id/calendar_main_alert_sponge"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="10dp"
+            app:strokeBegin="-1"
+            app:strokeColorActive="@color/color_orange"
+            app:strokeColorNormal="@color/color_white_snow"
+            app:strokeCount="60"
+            app:strokeEnd="-1"
+            app:strokeWidth="12dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignEnd="@+id/calendar_main_alert_sponge"
             android:layout_alignStart="@+id/calendar_main_alert_sponge"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp">
 
             <TextView
                 android:id="@+id/calendar_main_alert_time"
@@ -104,21 +121,6 @@
                 android:gravity="center_horizontal|top" />
 
         </LinearLayout>
-
-        <com.kidsdynamic.swing.androidswingapp.ViewCircle
-            android:id="@+id/calendar_main_alert"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/calendar_main_alert_sponge"
-            android:layout_alignStart="@+id/calendar_main_alert_sponge"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="10dp"
-            app:strokeBegin="-1"
-            app:strokeColorActive="@color/color_orange"
-            app:strokeColorNormal="@color/color_white_snow"
-            app:strokeCount="60"
-            app:strokeEnd="-1"
-            app:strokeWidth="12dp" />
 
     </RelativeLayout>
 
