@@ -65,10 +65,6 @@ public class ViewCalendarDaily extends ViewCalendar {
         LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         Calendar cale = Calendar.getInstance();
-        cale.set(Calendar.HOUR_OF_DAY, 23);
-        cale.set(Calendar.MINUTE, 59);
-        cale.set(Calendar.SECOND, 59);
-        long todayEnd = cale.getTimeInMillis();
 
         cale.setTimeInMillis(event.mStartDate);
         layoutParams.start_hour = cale.get(Calendar.HOUR_OF_DAY);
@@ -77,8 +73,7 @@ public class ViewCalendarDaily extends ViewCalendar {
         long endDate = event.mEndDate;
         if (Math.abs(endDate - event.mStartDate) < 1800000) // 30*60*1000 = 30M, Make event at least 30 minutes in calendar
             endDate = event.mStartDate + 1800000;
-        if(endDate > todayEnd)
-            endDate = todayEnd;
+        endDate = Math.min(endDate, getDateEnd());
 
         cale.setTimeInMillis(endDate);
         layoutParams.end_hour = cale.get(Calendar.HOUR_OF_DAY);
