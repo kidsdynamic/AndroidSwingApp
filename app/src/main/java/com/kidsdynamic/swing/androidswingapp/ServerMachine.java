@@ -109,6 +109,11 @@ public class ServerMachine {
         return true;
     }
 
+    boolean cancelByTag(String tag) {
+        mRequestQueue.cancelAll(tag);
+        return true;
+    }
+
     private int mState;
     private TaskItem mCurrentTask;
 
@@ -164,6 +169,15 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_LOGIN, map, null), CMD_USER_LOGIN, listener));
     }
 
+    public void userLogin(userLoginListener listener, String email, String password, String tag) {
+        Map<String, String> map = new HashMap<>();
+        map.put("json", ServerGson.user.login.toJson(email, password));
+
+        Request<NetworkResponse> request = NewRequest(Request.Method.POST, CMD_USER_LOGIN, map, null);
+        request.setTag(tag);
+        mTaskQueue.add(new TaskItem(request, CMD_USER_LOGIN, listener));
+    }
+
     public interface userRegisterListener {
         void onSuccess(int statusCode);
 
@@ -189,6 +203,17 @@ public class ServerMachine {
         addressForGet += "&token=" + token;
         //map.put("JSON", ServerGson.user.isTokenValid.toJson(email, token));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_USER_IS_TOKEN_VALID, listener));
+    }
+
+    public void userIsTokenValid(userIsTokenValidListener listener, String email, String token, String tag) {
+        Map<String, String> map = new HashMap<>();
+        String addressForGet = CMD_USER_IS_TOKEN_VALID + "?";
+        addressForGet += "email=" + email;
+        addressForGet += "&token=" + token;
+
+        Request<NetworkResponse> request = NewRequest(Request.Method.GET, addressForGet, map, null);
+        request.setTag(tag);
+        mTaskQueue.add(new TaskItem(request, CMD_USER_IS_TOKEN_VALID, listener));
     }
 
     public interface userIsMailAvailableToRegisterListener {
