@@ -77,17 +77,20 @@ public class FragmentProfileEditor extends ViewFragment {
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
                 getResources().getString(R.string.title_profile), true, true, false,
-                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
+                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, R.mipmap.icon_ok);
     }
 
     @Override
     public void onToolbarAction1() {
+        mActivityMain.popFragment();
+    }
+
+    @Override
+    public void onToolbarAction2() {
         processDialog = ProgressDialog.show(mActivityMain,
                 getResources().getString(R.string.profile_editor_processing),
                 getResources().getString(R.string.profile_editor_wait), true);
         profileSave();
-
-        //mActivityMain.popFragment();
     }
 
     @Override
