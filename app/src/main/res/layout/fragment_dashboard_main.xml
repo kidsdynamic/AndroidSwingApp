@@ -13,30 +13,30 @@
         android:layout_weight="4"
         android:gravity="center"
         android:text="@string/dashboard_main_message" />
-<!--
-    <com.kidsdynamic.swing.androidswingapp.LayoutDrawer
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:background="@color/color_red">
-
-        <TextView
-            android:id="@+id/text1"
+    <!--
+        <com.kidsdynamic.swing.androidswingapp.LayoutDrawer
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Text1" />
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:background="@color/color_red">
 
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="Text2" />
-    </com.kidsdynamic.swing.androidswingapp.LayoutDrawer>
--->
+            <TextView
+                android:id="@+id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Text1" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Text2" />
+        </com.kidsdynamic.swing.androidswingapp.LayoutDrawer>
+    -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -79,7 +79,8 @@
             android:layout_alignStart="@+id/dashboard_main_sponge"
             android:layout_below="@+id/dashboard_main_no"
             android:layout_marginBottom="10dp"
-            android:text="@string/dashboard_main_another" />
+            android:text="@string/dashboard_main_another"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>
