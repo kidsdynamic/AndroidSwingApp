@@ -570,6 +570,8 @@ class WatchDatabase {
                         break;
                 }
                 event.mAlertTimeStamp = alertDate.getTimeInMillis();
+                event.mStartDate = startDate.getTimeInMillis();
+                event.mEndDate = endDate.getTimeInMillis();
             } while (event.mAlertTimeStamp <= endTimeStamp);
         }
 
