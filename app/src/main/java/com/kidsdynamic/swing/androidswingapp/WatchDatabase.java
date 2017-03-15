@@ -540,26 +540,36 @@ class WatchDatabase {
         }
 
         List<WatchEvent> result = new ArrayList<>();
-        Calendar cal = Calendar.getInstance();
+        Calendar alertDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance();
 
         for (WatchEvent event : repeatResult) {
-            cal.setTimeInMillis(event.mAlertTimeStamp);
+            alertDate.setTimeInMillis(event.mAlertTimeStamp);
+            startDate.setTimeInMillis(event.mStartDate);
+            endDate.setTimeInMillis(event.mEndDate);
             do {
                 if (event.mAlertTimeStamp >= startTimeStamp && event.mAlertTimeStamp <= endTimeStamp) {
                     result.add(new WatchEvent(event));
                 }
                 switch (repeat) {
                     case WatchEvent.REPEAT_DAILY:
-                        cal.add(Calendar.DATE, 1);
+                        alertDate.add(Calendar.DATE, 1);
+                        startDate.add(Calendar.DATE, 1);
+                        endDate.add(Calendar.DATE, 1);
                         break;
                     case WatchEvent.REPEAT_WEEKLY:
-                        cal.add(Calendar.DATE, 7);
+                        alertDate.add(Calendar.DATE, 7);
+                        startDate.add(Calendar.DATE, 7);
+                        endDate.add(Calendar.DATE, 7);
                         break;
                     case WatchEvent.REPEAT_MONTHLY:
-                        cal.add(Calendar.MONTH, 1);
+                        alertDate.add(Calendar.MONTH, 1);
+                        startDate.add(Calendar.MONTH, 1);
+                        endDate.add(Calendar.MONTH, 1);
                         break;
                 }
-                event.mAlertTimeStamp = cal.getTimeInMillis();
+                event.mAlertTimeStamp = alertDate.getTimeInMillis();
             } while (event.mAlertTimeStamp <= endTimeStamp);
         }
 
