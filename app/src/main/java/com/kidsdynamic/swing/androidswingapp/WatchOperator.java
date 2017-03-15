@@ -43,6 +43,7 @@ public class WatchOperator {
     void setActivityList(int kidId, List<WatchActivity> list) {
         mWatchDatabase.activityDeleteByKidId(kidId);
         mWatchDatabase.activityImport(list);
+        mWatchDatabase.UploadItemRemoveDone();
         //mWatchActivityList = list;
         /*
         Log.d("swing", "download " + mWatchActivityList.size());
@@ -401,7 +402,6 @@ public class WatchOperator {
             }
         }
 
-        mWatchDatabase.UploadItemRemoveDone();
         List<WatchActivityRaw> uploadList = mWatchDatabase.UploadItemGet(kid.mMacId);
         for (WatchActivityRaw raw : uploadList) {
             for (WatchActivity preloadActivity : rtn) {
