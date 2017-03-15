@@ -43,6 +43,7 @@ public class WatchOperator {
     void setActivityList(int kidId, List<WatchActivity> list) {
         mWatchDatabase.activityDeleteByKidId(kidId);
         mWatchDatabase.activityImport(list);
+        mWatchDatabase.UploadItemRemoveDone();
         //mWatchActivityList = list;
         /*
         Log.d("swing", "download " + mWatchActivityList.size());
@@ -175,10 +176,11 @@ public class WatchOperator {
 
         List<WatchEvent> list = mWatchDatabase.EventGet(startTimeStamp, endTimeStamp);
         List<WatchEvent> rtn = new ArrayList<>();
+        Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!! " + startTimeStamp);
         for (WatchEvent watchEvent : list) {
             //if (watchEvent.containsKid(kid.mId))
             //    rtn.add(watchEvent);
-            Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!!");
+
             if (watchEvent.mAlertTimeStamp > startTimeStamp)//watchEvent.containsKid(kid.mId)
                 rtn.add(watchEvent);
         }
@@ -401,7 +403,6 @@ public class WatchOperator {
             }
         }
 
-        mWatchDatabase.UploadItemRemoveDone();
         List<WatchActivityRaw> uploadList = mWatchDatabase.UploadItemGet(kid.mMacId);
         for (WatchActivityRaw raw : uploadList) {
             for (WatchActivity preloadActivity : rtn) {

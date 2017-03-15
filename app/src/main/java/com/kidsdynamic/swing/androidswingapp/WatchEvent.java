@@ -130,6 +130,7 @@ public class WatchEvent implements Serializable {
         init(src.mId, src.mUserId, src.mKids, src.mName, src.mStartDate, src.mEndDate, src.mColor, src.mStatus, src.mDescription,
                 src.mAlert, src.mRepeat, src.mTimezoneOffset, src.mDateCreated, src.mLastUpdated);
 
+        mAlertTimeStamp = src.mAlertTimeStamp;
         for (WatchTodo todo : src.mTodoList)
             mTodoList.add(new WatchTodo(todo));
     }
