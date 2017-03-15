@@ -40,6 +40,8 @@ public class ActivityMain extends AppCompatActivity
     public final static int ACCESS_COARSE_LOCATION_PERMISSION = 0x1005;
     public final static int ACCESS_FINE_LOCATION_PERMISSION = 0x1006;
 
+    public final static String RESUME_CHECK_TAG = "RESUME_CHECK_TAG";
+
     private class permission {
         String mName;
         int mResult;
@@ -130,6 +132,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("ActivityMain", "onResume()");
         boolean activeBLE = true;
         boolean activeService = true;
 
@@ -156,13 +159,15 @@ public class ActivityMain extends AppCompatActivity
             mServiceMachine.userIsTokenValid(
                     mUserIsTokenValidListener,
                     mConfig.getString(ActivityConfig.KEY_MAIL),
-                    mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
+                    mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN),
+                    RESUME_CHECK_TAG);
         }
     }
 
     @Override
     public void onPause() {
         Log.d("ActivityMain", "onPause()");
+        mServiceMachine.cancelByTag(RESUME_CHECK_TAG);
         // GioChen Todo : Temporary solution, fix asap.
         /*
         if (mBLEMachine != null)
@@ -391,7 +396,7 @@ public class ActivityMain extends AppCompatActivity
             if (valid) {
                 mServiceMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
             } else {
-                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
+                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD), RESUME_CHECK_TAG);
             }
         }
 

@@ -92,7 +92,6 @@ public class FragmentDashboardProgress extends ViewFragment {
         List<WatchEvent> eventList = mActivityMain.mOperator.getEventsForSync(mDevice);
         mVoiceAlertList = new ArrayList<>();
         for (WatchEvent event : eventList) {
-            Log.d("TEST", "event " + event.mName);
             mVoiceAlertList.add(new BLEMachine.VoiceAlert((byte) event.mAlert, event.mAlertTimeStamp));
         }
 
