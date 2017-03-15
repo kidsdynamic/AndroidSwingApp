@@ -1,11 +1,15 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/4.
@@ -80,14 +84,25 @@ public class FragmentCalendarMonth extends ViewFragment {
 
         List<WatchEvent> list = mActivityMain.mOperator.getEventList(start, end);
 
-        for (WatchEvent event : list)
+        for (WatchEvent event : list) {
+/*
+            Calendar cale = Calendar.getInstance();
+            cale.setTimeInMillis(event.mStartDate);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.US);
+            String s = sdf.format(cale.getTimeInMillis());
+            cale.setTimeInMillis(event.mEndDate);
+            String e = sdf.format(cale.getTimeInMillis());
+            Log.d("xxx", "Event:" + event.mName + "," + s + "--" + e );
+*/
             mViewCalendar.addEvent(event);
+        }
     }
 
     private ViewCalendarSelector.OnSelectListener mSelectorListener = new ViewCalendarSelector.OnSelectListener() {
         @Override
         public void OnSelect(View view, long offset, long date) {
             mViewCalendar.setDate(date);
+            loadEventList(mViewCalendar.getDateBegin(), mViewCalendar.getDateEnd());
         }
     };
 
