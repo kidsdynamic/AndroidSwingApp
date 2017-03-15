@@ -176,10 +176,11 @@ public class WatchOperator {
 
         List<WatchEvent> list = mWatchDatabase.EventGet(startTimeStamp, endTimeStamp);
         List<WatchEvent> rtn = new ArrayList<>();
+        Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!! " + startTimeStamp);
         for (WatchEvent watchEvent : list) {
             //if (watchEvent.containsKid(kid.mId))
             //    rtn.add(watchEvent);
-            Log.d("Sync", "!!!!!!!!! ignore kid !!!!!!!!");
+
             if (watchEvent.mAlertTimeStamp > startTimeStamp)//watchEvent.containsKid(kid.mId)
                 rtn.add(watchEvent);
         }
