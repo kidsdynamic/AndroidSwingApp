@@ -987,7 +987,7 @@ public class ServerMachine {
     };
 
     private class TaskItem {
-        String mCommand;
+        String mCommand = "";
         Request<NetworkResponse> mRequest;
         Object mResponseListener;
         String mImageFile;
@@ -1052,7 +1052,7 @@ public class ServerMachine {
             avatarFilename = dir + "/" + filename + extension;
 
             File myFile = new File(avatarFilename);
-            if(myFile.exists())
+            if (myFile.exists())
                 result = myFile.delete();
 
             out = new FileOutputStream(avatarFilename);
@@ -1076,7 +1076,7 @@ public class ServerMachine {
     }
 
     public String getErrorMessage(String command, int statusCode) {
-        switch(command) {
+        switch (command) {
             case CMD_USER_LOGIN:
                 if (statusCode == 400)
                     return mContext.getResources().getString(R.string.error_api_user_login_400);
