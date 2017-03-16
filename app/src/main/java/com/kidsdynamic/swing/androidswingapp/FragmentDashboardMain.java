@@ -63,7 +63,7 @@ public class FragmentDashboardMain extends ViewFragment {
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
                 getResources().getString(R.string.title_sync), true, true, false,
-                R.mipmap.city_overall, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
+                R.mipmap.city_california, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
     private Button.OnClickListener mOnYesListener = new View.OnClickListener() {

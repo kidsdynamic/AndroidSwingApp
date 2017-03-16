@@ -56,7 +56,7 @@ public class FragmentDashboardWatch extends ViewFragment {
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig(
                 getResources().getString(R.string.title_sync), true, true, false,
-                R.mipmap.city_florida, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
+                R.mipmap.city_california, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override

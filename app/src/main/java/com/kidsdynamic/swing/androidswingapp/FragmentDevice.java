@@ -54,7 +54,7 @@ public class FragmentDevice extends ViewFragment {
     @Override
     public ViewFragmentConfig getConfig() {
         return new ViewFragmentConfig("", true, true, false,
-                R.mipmap.city_illinois, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
+                R.mipmap.city_california, ActivityMain.RESOURCE_HIDE, ActivityMain.RESOURCE_HIDE);
     }
 
     @Override
