@@ -64,6 +64,7 @@
     <string name="dashboard_chart_message_below">Don\'t Give Up. You Can Do This!</string>
     <string name="dashboard_chart_message_almost">One More Time. You Are Almost There!</string>
     <string name="dashboard_chart_message_excellent">Woohoo! You\'ve Reached Your Goal!</string>
+    <string name="dashboard_chart_steps">Steps</string>
 
     <!-- FragmentDashboardMain -->
     <string name="dashboard_main_message">Would You Like to Sync Now?</string>
@@ -111,7 +112,7 @@
 
     <!-- FragmentPhotoClip -->
     <string name="photo_clip_cancel">Cancel</string>
-    <string name="photo_clip_take_photo">Take a Photo</string>
+    <string name="photo_clip_take_photo">Use Photo</string>
 
     <!-- FragmentProfileAdded -->
     <string name="profile_added_added">Added</string>

@@ -206,7 +206,7 @@ public class ViewChartKDBar extends ViewChart {
 
         cale.setTimeInMillis(date);
 
-        SimpleDateFormat month_date = new SimpleDateFormat("MMM", Locale.US);
+        SimpleDateFormat month_date = new SimpleDateFormat("MMM", Locale.getDefault());
         String text = month_date.format(date);
 
         mPaint.reset();

@@ -57,6 +57,7 @@
     <string name="dashboard_chart_message_below">Не сдавайся! Ты можешь сделать это!</string>
     <string name="dashboard_chart_message_almost">Еще раз! Ты почти у цели!</string>
     <string name="dashboard_chart_message_excellent">Браво! У тебя получилось!</string>
+    <string name="dashboard_chart_steps">Шаги</string>
 
     <!-- FragmentDashboardMain -->
     <string name="dashboard_main_message">Провести синхронизацию сейчас?</string>

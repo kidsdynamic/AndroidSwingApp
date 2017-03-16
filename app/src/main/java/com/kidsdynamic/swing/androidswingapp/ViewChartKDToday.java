@@ -215,7 +215,7 @@ public class ViewChartKDToday extends ViewChart {
         path.close();
 
         canvas.drawPath(path, mPaint);
-
+/*
         int textX, textY;
         Rect textRect = new Rect();
         String text = "Goal";
@@ -234,6 +234,7 @@ public class ViewChartKDToday extends ViewChart {
         textY = posY - (size - textRect.height()) / 2;
 
         canvas.drawText(text, textX, textY, mPaint);
+*/
     }
 
     private Rect makeAxisXRect() {
