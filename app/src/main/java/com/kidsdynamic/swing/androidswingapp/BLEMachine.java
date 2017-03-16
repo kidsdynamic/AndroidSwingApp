@@ -195,6 +195,8 @@ class BLEMachine extends BLEControl {
                     if (mRelationDevice.mState.mAddress != null) {
                         mState = STATE_SEND_ALERT;
                         mVoiceAlertCount = 0;
+                        mRelationDevice.mState.mAlertDataDone = true;
+                        mRelationDevice.mState.mAlertTimeDone = true;
                     } else if (!mRelationDevice.mState.mConnected) {
                         syncFailProcess();
                     }
@@ -211,7 +213,9 @@ class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mHeader = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
                         mState = STATE_GET_HEADER;
-                    } else {
+                    } else if (mRelationDevice.mState.mAlertDataDone && mRelationDevice.mState.mAlertDataDone) {
+                        mRelationDevice.mState.mAlertDataDone = false;
+                        mRelationDevice.mState.mAlertTimeDone = false;
                         VoiceAlert alert = mVoiceAlerts.get(0);
                         mVoiceAlerts.remove(0);
                         //Calendar cal = Calendar.getInstance();
@@ -435,6 +439,8 @@ class BLEMachine extends BLEControl {
             boolean mFoundSearchAddress;
             boolean mBatteryUpdated;
             byte mBattery;
+            boolean mAlertTimeDone;
+            boolean mAlertDataDone;
             boolean mConnectionDetect;
             int mRetryTimes;
         }
@@ -448,6 +454,8 @@ class BLEMachine extends BLEControl {
             mState.mDiscovered = false;
             mState.mConnectionDetect = false;
             mState.mRetryTimes = 0;
+            mState.mAlertDataDone = false;
+            mState.mAlertTimeDone = false;
         }
 
         Device() {
@@ -564,7 +572,16 @@ class BLEMachine extends BLEControl {
 
         @Override
         public void onCharacteristicWrite(UUID service, UUID characteristic) {
-
+            if (service.toString().equals(BLECustomAttributes.WATCH_SERVICE)) {
+                switch (characteristic.toString()) {
+                    case BLECustomAttributes.VOICE_ALERT:
+                        mRelationDevice.mState.mAlertDataDone = true;
+                        break;
+                    case BLECustomAttributes.VOICE_EVET_ALERT_TIME:
+                        mRelationDevice.mState.mAlertTimeDone = true;
+                        break;
+                }
+            }
         }
 
         @Override
