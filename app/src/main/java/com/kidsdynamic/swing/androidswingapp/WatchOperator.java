@@ -171,7 +171,7 @@ public class WatchOperator {
     List<WatchEvent> getEventsForSync(WatchContact.Kid kid) {
         Calendar cal = Calendar.getInstance();
         long startTimeStamp = cal.getTimeInMillis();
-        cal.add(Calendar.MONTH, 2);
+        cal.add(Calendar.MONTH, 1);
         long endTimeStamp = cal.getTimeInMillis();
 
         List<WatchEvent> list = mWatchDatabase.EventGet(startTimeStamp, endTimeStamp);
