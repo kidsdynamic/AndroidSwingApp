@@ -62,16 +62,6 @@ public class FragmentSignupProfile extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_signup_profile, container, false);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            mRegisterMail = bundle.getString(ViewFragment.BUNDLE_KEY_MAIL);
-            mRegisterPassword = bundle.getString(ViewFragment.BUNDLE_KEY_PASSWORD);
-            // GioChen Todo : If mail and password are not null, userRegister below.
-            Log.d("swing", "mail " + mRegisterMail);
-        } else {
-            Log.d("TEST", "bundle null");
-        }
-
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.signup_profile_photo);
         mViewPhoto.setOnClickListener(mPhotoClickListener);
 
@@ -113,6 +103,9 @@ public class FragmentSignupProfile extends ViewFragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        mRegisterMail = mActivityMain.mConfig.getString(ActivityConfig.KEY_MAIL);
+        mRegisterPassword = mActivityMain.mConfig.getString(ActivityConfig.KEY_MAIL);
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
             mRegisterAvatar = mActivityMain.mBitmapStack.pop();

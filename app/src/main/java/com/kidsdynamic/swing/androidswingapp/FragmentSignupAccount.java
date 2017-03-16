@@ -93,7 +93,6 @@ public class FragmentSignupAccount extends ViewFragment {
                 if (mMail.equals("") || mPassword.equals("")) {
                     Toast.makeText(mActivityMain,
                             getResources().getString(R.string.signup_account_login_failed), Toast.LENGTH_SHORT).show();
-                    //mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
                 } else {
                     mProcessDialog = ProgressDialog.show(mActivityMain,
                             getResources().getString(R.string.signup_account_processing),
@@ -110,11 +109,9 @@ public class FragmentSignupAccount extends ViewFragment {
         @Override
         public void onValidState(boolean valid) {
             if (valid) {
-                Bundle bundle = new Bundle();
-                bundle.putString(ViewFragment.BUNDLE_KEY_MAIL, mMail);
-                bundle.putString(ViewFragment.BUNDLE_KEY_PASSWORD, mPassword);
-
-                mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), bundle);
+                mActivityMain.mConfig.setString(ActivityConfig.KEY_MAIL, mMail);
+                mActivityMain.mConfig.setString(ActivityConfig.KEY_PASSWORD, mPassword);
+                mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
             } else {
                 mActivityMain.mOperator.resumeSync(mFinishListener, mMail, mPassword);
             }
