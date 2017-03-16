@@ -145,7 +145,7 @@
     <string name="profile_option_about">О</string>
     <string name="profile_option_contact_us">Свяжись с нами</string>
     <string name="profile_option_privacy_policy">Политика конфиденциальности</string>
-    <string name="profile_option_manual">User Manual</string>
+    <string name="profile_option_manual">Руководство пользователя</string>
     <string name="profile_option_version">Версия</string>
 
     <!-- FragmentProfilePassword -->
