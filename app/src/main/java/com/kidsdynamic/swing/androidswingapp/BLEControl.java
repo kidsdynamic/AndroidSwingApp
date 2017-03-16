@@ -251,6 +251,15 @@ public class BLEControl {
         mConnecting = false;
         mBluetoothGatt.disconnect();
         mDeviceAddress = null;
+
+
+        String name = mBluetoothGatt.getDevice().getName();
+        String address = mBluetoothGatt.getDevice().getAddress();
+
+        Close();
+        if (mEventListener != null)
+            mEventListener.onConnectionStateChange(name, address, false, false);
+
         return true;
     }
 
