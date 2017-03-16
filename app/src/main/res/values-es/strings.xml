@@ -145,6 +145,7 @@
     <string name="profile_option_about">Acerca de</string>
     <string name="profile_option_contact_us">Contacta con nosotros</string>
     <string name="profile_option_privacy_policy">Política de privacidad</string>
+    <string name="profile_option_manual">User Manual</string>
     <string name="profile_option_version">Versión</string>
 
     <!-- FragmentProfilePassword -->

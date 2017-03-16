@@ -22,6 +22,7 @@ public class FragmentProfileOption extends ViewFragment {
     private View mViewLogout;
     private View mViewContact;
     private View mViewPrivacy;
+    private View mViewManual;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,9 @@ public class FragmentProfileOption extends ViewFragment {
 
         mViewPrivacy = mViewMain.findViewById(R.id.profile_option_privacy);
         mViewPrivacy.setOnClickListener(mPrivacyListener);
+
+        mViewManual = mViewMain.findViewById(R.id.profile_option_manual);
+        mViewManual.setOnClickListener(mManualListener);
 
         TextView view = (TextView) mViewMain.findViewById(R.id.profile_option_version);
         view.setText(BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE);
@@ -132,4 +136,21 @@ public class FragmentProfileOption extends ViewFragment {
         }
     };
 
+    private View.OnClickListener mManualListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_User_Guide.pdf";
+            String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
+            switch(language) {
+                case "ru":
+                case "es":
+                    url = "http://www.imaginarium.info/";
+                    break;
+            }
+
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+    };
 }
