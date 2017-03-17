@@ -220,7 +220,7 @@ class BLEMachine extends BLEControl {
                         mVoiceAlerts.remove(0);
                         //Calendar cal = Calendar.getInstance();
                         //int countdown = (int) ((alert.mTimeStamp - cal.getTimeInMillis()) / 1000);
-                        int countdown = toWatchTime(alert.mTimeStamp);
+                        long countdown = toWatchTime(alert.mTimeStamp);
                         if (countdown > 0) {
                             byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
