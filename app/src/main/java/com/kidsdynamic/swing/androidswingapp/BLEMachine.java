@@ -213,7 +213,7 @@ class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mHeader = null;
                         Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
                         mState = STATE_GET_HEADER;
-                    } else if (mRelationDevice.mState.mAlertDataDone && mRelationDevice.mState.mAlertDataDone) {
+                    } else if (mRelationDevice.mState.mAlertDataDone && mRelationDevice.mState.mAlertTimeDone) {
                         mRelationDevice.mState.mAlertDataDone = false;
                         mRelationDevice.mState.mAlertTimeDone = false;
                         VoiceAlert alert = mVoiceAlerts.get(0);
