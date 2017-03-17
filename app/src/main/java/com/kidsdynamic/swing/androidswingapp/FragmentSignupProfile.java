@@ -105,7 +105,7 @@ public class FragmentSignupProfile extends ViewFragment {
         super.onResume();
 
         mRegisterMail = mActivityMain.mConfig.getString(ActivityConfig.KEY_MAIL);
-        mRegisterPassword = mActivityMain.mConfig.getString(ActivityConfig.KEY_MAIL);
+        mRegisterPassword = mActivityMain.mConfig.getString(ActivityConfig.KEY_PASSWORD);
 
         if (!mActivityMain.mBitmapStack.isEmpty()) {
             mRegisterAvatar = mActivityMain.mBitmapStack.pop();
