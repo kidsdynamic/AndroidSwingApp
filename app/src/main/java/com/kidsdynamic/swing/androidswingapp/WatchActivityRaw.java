@@ -13,28 +13,23 @@ public class WatchActivityRaw {
     String mOutdoor;
     String mIndoor;
 
-    int mOffset = 0;
+    private int mOffset = 0;
 
     WatchActivityRaw() {
         init("", 0, "", "");
-
     }
 
     WatchActivityRaw(String macId, byte[] time, byte[] outdoor, byte[] indoor) {
+        Calendar now = Calendar.getInstance();
+        int mOffset = (now.getTimeZone().getOffset(now.getTimeInMillis()))/1000;
+
         init(macId,
                 (byteToDec(time[0], time[1], time[2], time[3]) - mOffset),
                 rawString(outdoor),
                 rawString(indoor));
     }
 
-    WatchActivityRaw(String macId, int time, String outdoor, String indoor) {
-        init(macId, time, outdoor, indoor);
-    }
-
     private void init(String macId, int time, String outdoor, String indoor) {
-        Calendar now = Calendar.getInstance();
-        mOffset = (now.getTimeZone().getOffset(now.getTimeInMillis()))/1000;
-
         mMacId = macId;
         mTime = time;
         mOutdoor = outdoor;
