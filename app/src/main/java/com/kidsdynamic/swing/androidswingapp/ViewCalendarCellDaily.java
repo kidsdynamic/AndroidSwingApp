@@ -78,7 +78,10 @@ public class ViewCalendarCellDaily extends ViewCalendarCell {
 
         getPaint().getTextBounds(getText().toString(), 0, getText().length(), mRect);
 
-        if (mRect.height() > getMeasuredHeight()) {
+        Paint.FontMetrics fm = getPaint().getFontMetrics();
+        float height = fm.descent - fm.ascent;
+
+        if (height > getMeasuredHeight()) {
             drawEllipsize(canvas, getMeasuredHeight() / 2);
         } else if (mRect.width() > getMeasuredWidth()) {
             super.onDraw(canvas);
