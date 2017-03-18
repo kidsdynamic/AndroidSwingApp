@@ -206,26 +206,28 @@ class BLEMachine extends BLEControl {
                 case STATE_SEND_ALERT:
                     if (!mRelationDevice.mState.mConnected) {
                         syncFailProcess();
-                    } else if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 100) {
-                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
-                        Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
-
-                        mRelationDevice.mState.mHeader = null;
-                        Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
-                        mState = STATE_GET_HEADER;
                     } else if (mRelationDevice.mState.mAlertDataDone && mRelationDevice.mState.mAlertTimeDone) {
-                        mRelationDevice.mState.mAlertDataDone = false;
-                        mRelationDevice.mState.mAlertTimeDone = false;
-                        VoiceAlert alert = mVoiceAlerts.get(0);
-                        mVoiceAlerts.remove(0);
-                        //Calendar cal = Calendar.getInstance();
-                        //int countdown = (int) ((alert.mTimeStamp - cal.getTimeInMillis()) / 1000);
-                        long countdown = toWatchTime(alert.mTimeStamp);
-                        if (countdown > 0) {
-                            byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
-                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
-                            mVoiceAlertCount++;
+                        if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 100) {
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{0});
+                            Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, new byte[]{0, 0, 0, 0});
+
+                            mRelationDevice.mState.mHeader = null;
+                            Read(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.HEADER);
+                            mState = STATE_GET_HEADER;
+                        } else {
+                            mRelationDevice.mState.mAlertDataDone = false;
+                            mRelationDevice.mState.mAlertTimeDone = false;
+                            VoiceAlert alert = mVoiceAlerts.get(0);
+                            mVoiceAlerts.remove(0);
+                            //Calendar cal = Calendar.getInstance();
+                            //int countdown = (int) ((alert.mTimeStamp - cal.getTimeInMillis()) / 1000);
+                            long countdown = toWatchTime(alert.mTimeStamp);
+                            if (countdown > 0) {
+                                byte[] timeInByte = new byte[]{(byte) (countdown), (byte) (countdown >> 8), (byte) (countdown >> 16), (byte) (countdown >> 24)};
+                                Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
+                                Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
+                                mVoiceAlertCount++;
+                            }
                         }
                     }
                     break;

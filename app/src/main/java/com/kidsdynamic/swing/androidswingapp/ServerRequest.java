@@ -80,11 +80,11 @@ public class ServerRequest extends Request<NetworkResponse> {
         if (mHttpEntity == null) {
             switch(mMethod) {
                 case Method.POST:
-                    return "application/json";
+                    return "application/json; charset=UTF-8";
                 case Method.GET:
                     return "";
                 case Method.PUT:
-                    return "application/json";
+                    return "application/json; charset=UTF-8";
                 case Method.DELETE:
                     return "";
                 default:
@@ -150,7 +150,7 @@ public class ServerRequest extends Request<NetworkResponse> {
         if (mAuthToken!=null && !mAuthToken.equals("")) {
             Map<String,String> map = new HashMap<>();
             map.put("x-auth-token", mAuthToken);
-            map.put("Content-Type", "application/json; charset=UTF-8");
+            //map.put("Content-Type", "application/json; charset=UTF-8");
             return map;
         } else {
             return super.getHeaders();
