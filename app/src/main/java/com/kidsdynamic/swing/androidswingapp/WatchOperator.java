@@ -211,6 +211,24 @@ public class WatchOperator {
         return cal.getTimeInMillis();
     }
 
+    static long getLocalTimeStamp(String dateString) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        Date date;
+        try {
+            date = format.parse(dateString);
+        } catch (Exception e) {
+            e.printStackTrace();
+            date = null;
+        }
+        if (date == null)
+            return 0;
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+
+        return cal.getTimeInMillis();
+    }
+
     static String getTimeString(long timeStamp) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
