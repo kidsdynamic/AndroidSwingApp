@@ -316,7 +316,7 @@ public class WatchEvent implements Serializable {
     }
 
     final static Alarm[] AlarmList = new Alarm[]{
-            new Alarm(0, R.string.event_alarm_app, R.mipmap.icon_alert),
+            new Alarm(0, R.string.event_alarm_app, 0),
             new Alarm(36, R.string.event_alarm_good_morning, R.mipmap.icon_alert),
             new Alarm(37, R.string.event_alarm_make_bed, R.mipmap.icon_sound),
             new Alarm(38, R.string.event_alarm_get_dress, R.mipmap.icon_sound),
