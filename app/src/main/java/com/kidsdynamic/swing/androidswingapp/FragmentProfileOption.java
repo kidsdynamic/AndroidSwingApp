@@ -3,6 +3,7 @@ package com.kidsdynamic.swing.androidswingapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,12 +106,15 @@ public class FragmentProfileOption extends ViewFragment {
         public void onClick(View view) {
             String url = "http://www.kidsdynamic.com";
             String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
-            switch(language) {
+            switch (language) {
                 case "ru":
                 case "es":
                     url = "http://www.imaginarium.info/";
                     break;
             }
+
+            // force to KD's customer webpage
+            url = "http://www.imaginarium.info/";
 
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
@@ -123,7 +127,8 @@ public class FragmentProfileOption extends ViewFragment {
         public void onClick(View view) {
             String url = "http://www.kidsdynamic.com";
             String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
-            switch(language) {
+
+            switch (language) {
                 case "ru":
                 case "es":
                     url = "http://www.imaginarium.info/";
@@ -141,12 +146,15 @@ public class FragmentProfileOption extends ViewFragment {
         public void onClick(View view) {
             String url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_User_Guide.pdf";
             String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
-            switch(language) {
+            switch (language) {
                 case "ru":
                 case "es":
                     url = "http://www.imaginarium.info/";
                     break;
             }
+
+            // force to KD's customer webpage
+            url = "http://www.imaginarium.info/";
 
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));

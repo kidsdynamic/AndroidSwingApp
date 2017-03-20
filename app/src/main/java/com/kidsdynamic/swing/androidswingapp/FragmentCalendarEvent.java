@@ -561,19 +561,14 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private boolean loadAlarm() {
-        Log.d("xxx", "alarm id:" + mEvent.mAlert);
-
         for (WatchEvent.Alarm target : WatchEvent.AlarmList) {
             if (target.mId == mEvent.mAlert) {
-                Log.d("xxx", "name:" + getResources().getString(target.mName));
                 mEvent.mAlert = target.mId;
                 mEvent.mName = getResources().getString(target.mName);   // multi-dependence issue, cause from KD.
                 return true;
             }
         }
 
-
-        Log.d("xxx", "return failed");
         return false;
     }
 
