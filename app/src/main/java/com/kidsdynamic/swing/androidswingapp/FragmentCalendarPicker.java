@@ -95,6 +95,9 @@ public class FragmentCalendarPicker extends ViewFragment {
         else
             mEvent.mEndDate = mDate;
 
+        if ((mEvent.mEndDate - mEvent.mStartDate) < 1800000) // 30*60*1000 = 30M, Make event is at least 30 minutes in calendar
+            mEvent.mEndDate = mEvent.mStartDate + 1800000;
+
         mActivityMain.mEventStack.push(mEvent);
         mActivityMain.popFragment();
     }

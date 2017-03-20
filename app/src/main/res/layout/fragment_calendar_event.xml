@@ -75,7 +75,8 @@
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:paddingBottom="10dp"
-                    android:paddingTop="10dp" />
+                    android:paddingTop="10dp"
+                    android:text="@string/calendar_event_event"/>
 
                 <com.kidsdynamic.swing.androidswingapp.ViewShape
                     android:id="@+id/calendar_event_alarm_icon"
