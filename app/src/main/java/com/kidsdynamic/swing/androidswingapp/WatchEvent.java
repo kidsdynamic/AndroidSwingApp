@@ -49,10 +49,9 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        Alarm alarm = AlarmList[0];
         int color = ColorList[0];
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long date) {
@@ -71,19 +70,17 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        Alarm alarm = AlarmList[0];
         int color = ColorList[0];
 
-        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
 
-        Alarm alarm = AlarmList[0];
         int color = ColorList[0];
 
-        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, colorToString(color), "", "", alarm.mId, REPEAT_NEVER, 0, now, now);
+        init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
 
     public WatchEvent(int id, int userId, String name,
@@ -315,6 +312,7 @@ public class WatchEvent implements Serializable {
         }
     }
 
+    public final static int ALARM_INVALID = -1;
     final static Alarm[] AlarmList = new Alarm[]{
             new Alarm(0, R.string.event_alarm_app, 0),
             new Alarm(36, R.string.event_alarm_good_morning, R.mipmap.icon_alert),

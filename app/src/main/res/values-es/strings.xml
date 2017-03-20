@@ -28,6 +28,7 @@
     <!-- FragmentCalendarEvent -->
     <string name="calendar_event_creator">Autor/a</string>
     <string name="calendar_event_assign">Asignar a</string>
+    <string name="calendar_event_event">Seleccionar evento</string>
     <string name="calendar_event_start">Empieza</string>
     <string name="calendar_event_end">Termina</string>
     <string name="calendar_event_color">Etiqueta de color</string>
@@ -36,6 +37,7 @@
     <string name="calendar_event_todo_list">Lista de tareas</string>
     <string name="calendar_event_save">Guardar</string>
     <string name="calendar_event_advance">Avanzado</string>
+    <string name="calendar_event_please_select_event">Por favor Seleccionar evento</string>
 
     <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">Agenda de hoy</string>

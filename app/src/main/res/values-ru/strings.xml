@@ -28,6 +28,7 @@
     <!-- FragmentCalendarEvent -->
     <string name="calendar_event_creator">Автор</string>
     <string name="calendar_event_assign">Назначить в</string>
+    <string name="calendar_event_event">Выбрать событие</string>
     <string name="calendar_event_start">Начинается</string>
     <string name="calendar_event_end">Заканчивается</string>
     <string name="calendar_event_color">Цветная этикетка</string>
@@ -36,6 +37,7 @@
     <string name="calendar_event_todo_list">Список задач</string>
     <string name="calendar_event_save">Сохранить</string>
     <string name="calendar_event_advance">Продвинутый уровень</string>
+    <string name="calendar_event_please_select_event">пожалуйста Выбрать событие</string>
 
     <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">Календарь на сегодня</string>

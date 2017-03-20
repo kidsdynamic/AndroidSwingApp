@@ -35,6 +35,7 @@
     <!-- FragmentCalendarEvent -->
     <string name="calendar_event_creator">Creator</string>
     <string name="calendar_event_assign">Assign To</string>
+    <string name="calendar_event_event">Select Event</string>
     <string name="calendar_event_start">Start</string>
     <string name="calendar_event_end">End</string>
     <string name="calendar_event_color">Color Label</string>
@@ -43,6 +44,7 @@
     <string name="calendar_event_todo_list">To Do List</string>
     <string name="calendar_event_save">Save</string>
     <string name="calendar_event_advance">Advance</string>
+    <string name="calendar_event_please_select_event">Please select event</string>
 
     <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">Today\'s Schedule</string>

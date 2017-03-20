@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -169,8 +170,12 @@ public class FragmentCalendarEvent extends ViewFragment {
         if (getArguments() != null)
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
 
-        mEvent = mActivityMain.mEventStack.isEmpty() ?
-                new WatchEvent(mDefaultDate) : mActivityMain.mEventStack.pop();
+        if (mActivityMain.mEventStack.isEmpty()) {
+            mEvent = new WatchEvent(mDefaultDate);
+            mEvent.mUserId = mActivityMain.mOperator.getUser().mId;
+        } else {
+            mEvent = mActivityMain.mEventStack.pop();
+        }
 
         loadWatchEvent();
     }
@@ -451,6 +456,10 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mSaveListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            if (!loadAlarm()) {
+                Toast.makeText(mActivityMain, R.string.calendar_event_please_select_event, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             mProcessDialog = ProgressDialog.show(mActivityMain, "Processing", "Please wait...", true);
             mActivityMain.mOperator.setEvent(mSetEventListener, mEvent);
@@ -551,21 +560,21 @@ public class FragmentCalendarEvent extends ViewFragment {
             mViewUserName.setText("Others (" + mEvent.mUserId + ")");
     }
 
-    private void loadAlarm() {
-        WatchEvent.Alarm alarm = null;
+    private boolean loadAlarm() {
+        Log.d("xxx", "alarm id:" + mEvent.mAlert);
 
         for (WatchEvent.Alarm target : WatchEvent.AlarmList) {
             if (target.mId == mEvent.mAlert) {
-                alarm = target;
-                break;
+                Log.d("xxx", "name:" + getResources().getString(target.mName));
+                mEvent.mAlert = target.mId;
+                mEvent.mName = getResources().getString(target.mName);   // multi-dependence issue, cause from KD.
+                return true;
             }
         }
 
-        if (alarm == null)
-            alarm = WatchEvent.AlarmList[0];
 
-        mEvent.mName = getResources().getString(alarm.mName);   // multi-dependence issue, cause from KD.
-        mViewAlarm.setText(mEvent.mName);
+        Log.d("xxx", "return failed");
+        return false;
     }
 
     private void loadAssign() {
@@ -638,7 +647,6 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     private void loadWatchEvent() {
         loadUser();
-        loadAlarm();
         loadAssign();
         loadDate();
         loadColor();

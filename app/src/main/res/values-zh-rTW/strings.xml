@@ -28,6 +28,7 @@
     <!-- FragmentCalendarEvent -->
     <string name="calendar_event_creator">"建立者"</string>
     <string name="calendar_event_assign">"指派"</string>
+    <string name="calendar_event_event">事件選擇</string>
     <string name="calendar_event_start">"開始時間"</string>
     <string name="calendar_event_end">"結束時間"</string>
     <string name="calendar_event_color">"顏色標籤"</string>
@@ -36,6 +37,7 @@
     <string name="calendar_event_todo_list">"待辦事項列表"</string>
     <string name="calendar_event_save">"存檔"</string>
     <string name="calendar_event_advance">"進階"</string>
+    <string name="calendar_event_please_select_event">請選擇事件</string>
 
     <!-- FragmentCalendarMain -->
     <string name="calendar_main_today_schedule">"今日行程"</string>
