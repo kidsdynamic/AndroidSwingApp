@@ -123,7 +123,7 @@ class WatchDatabase {
     static final String CREATE_ACTIVITY_TABLE =
             "CREATE TABLE " + TABLE_ACTIVITY + " (" +
                     INDOOR_ID + " INTEGER NOT NULL, " +
-                    INDOOR_STEP+ " INTEGER NOT NULL, " +
+                    INDOOR_STEP + " INTEGER NOT NULL, " +
                     OUTDOOR_ID + " INTEGER NOT NULL, " +
                     OUTDOOR_STEP + " INTEGER NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
@@ -548,31 +548,50 @@ class WatchDatabase {
             alertDate.setTimeInMillis(event.mAlertTimeStamp);
             startDate.setTimeInMillis(event.mStartDate);
             endDate.setTimeInMillis(event.mEndDate);
+            int repeatCount = 0;
+            boolean repeatEnough = false;
             do {
                 if (event.mAlertTimeStamp >= startTimeStamp && event.mAlertTimeStamp <= endTimeStamp) {
                     result.add(new WatchEvent(event));
+                    repeatCount++;
                 }
                 switch (repeat) {
                     case WatchEvent.REPEAT_DAILY:
                         alertDate.add(Calendar.DATE, 1);
                         startDate.add(Calendar.DATE, 1);
                         endDate.add(Calendar.DATE, 1);
+                        repeatEnough = repeatCount >= 30;
                         break;
                     case WatchEvent.REPEAT_WEEKLY:
                         alertDate.add(Calendar.DATE, 7);
                         startDate.add(Calendar.DATE, 7);
                         endDate.add(Calendar.DATE, 7);
+                        repeatEnough = repeatCount >= 52;
                         break;
                     case WatchEvent.REPEAT_MONTHLY:
+                        int date = alertDate.get(Calendar.DATE);
                         alertDate.add(Calendar.MONTH, 1);
                         startDate.add(Calendar.MONTH, 1);
                         endDate.add(Calendar.MONTH, 1);
+
+                        if (date != alertDate.get(Calendar.DATE)) {
+                            alertDate.add(Calendar.MONTH, 1);
+                            startDate.add(Calendar.MONTH, 1);
+                            endDate.add(Calendar.MONTH, 1);
+
+                            alertDate.set(Calendar.DATE, date);
+                            startDate.set(Calendar.DATE, date);
+                            endDate.set(Calendar.DATE, date);
+                            repeatCount++;
+                        }
+
+                        repeatEnough = repeatCount >= 12;
                         break;
                 }
                 event.mAlertTimeStamp = alertDate.getTimeInMillis();
                 event.mStartDate = startDate.getTimeInMillis();
                 event.mEndDate = endDate.getTimeInMillis();
-            } while (event.mAlertTimeStamp <= endTimeStamp);
+            } while (event.mAlertTimeStamp <= endTimeStamp && !repeatEnough);
         }
 
         return result;
@@ -708,19 +727,20 @@ class WatchDatabase {
     private long TodoDelete(int eventId) {
         return mDatabase.delete(TABLE_TODO, EVENT_ID + "=" + eventId, null);
     }
-/*
-    public WatchTodo TodoGet(int eventId, int todoId) {
-        WatchTodo result = null;
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + ID + "=" + todoId + " AND " + EVENT_ID + "=" + eventId, null);
 
-        if (cursor.moveToNext())
-            result = cursorToTodo(cursor);
+    /*
+        public WatchTodo TodoGet(int eventId, int todoId) {
+            WatchTodo result = null;
+            Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + ID + "=" + todoId + " AND " + EVENT_ID + "=" + eventId, null);
 
-        cursor.close();
+            if (cursor.moveToNext())
+                result = cursorToTodo(cursor);
 
-        return result;
-    }
-*/
+            cursor.close();
+
+            return result;
+        }
+    */
     private List<WatchTodo> TodoGetByUser(int eventId, int userId) {
         List<WatchTodo> result = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_TODO + " WHERE " + EVENT_ID + "=" + eventId + " AND " + USER_ID + "=" + userId, null);
