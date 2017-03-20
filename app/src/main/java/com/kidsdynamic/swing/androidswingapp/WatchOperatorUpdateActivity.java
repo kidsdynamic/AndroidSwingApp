@@ -71,7 +71,7 @@ class WatchOperatorUpdateActivity {
             }
 
             for (ServerGson.activityData activity : response.activities) {
-                long timestamp = WatchOperator.getTimeStamp(activity.receivedDate);
+                long timestamp = WatchOperator.getLocalTimeStamp(activity.receivedDate);
                 if (timestamp < mSearchStart || timestamp > mSearchEnd) {
                     Log.d("swing", "Retrieve activity wrong time! " + activity.receivedDate);
                     continue;
