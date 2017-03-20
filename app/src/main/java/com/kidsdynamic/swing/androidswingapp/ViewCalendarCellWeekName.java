@@ -2,8 +2,10 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/1.
@@ -30,6 +32,8 @@ public class ViewCalendarCellWeekName extends ViewCalendarCell {
     }
 
     static final String dayName[] = new String[]{"?", "S", "M", "T", "W", "T", "F", "S"};
+    static final String dayName_ru[] = new String[]{"?", "В", "П", "В", "С", "Ч", "П", "С"};
+    static final String dayName_es[] = new String[]{"?", "D", "L", "M", "X", "J", "V", "S"};
 
     @Override
     public void setDate(long date) {
@@ -39,6 +43,13 @@ public class ViewCalendarCellWeekName extends ViewCalendarCell {
         calc.setTimeInMillis(mDate);
 
         int weekDay = calc.get(Calendar.DAY_OF_WEEK);
-        setText(dayName[weekDay]);
+        String lang = Locale.getDefault().getLanguage();
+
+        if (lang.equals("ru"))
+            setText(dayName_ru[weekDay]);
+        else if (lang.equals("es"))
+            setText(dayName_es[weekDay]);
+        else
+            setText(dayName[weekDay]);
     }
 }
