@@ -69,6 +69,7 @@ public class FragmentDashboardChart extends ViewFragment {
         mViewChartYear = (ViewChartKDBar) mViewMain.findViewById(R.id.dashboard_chart_year);
 
         mViewChartWeek.setTitle(getResources().getString(R.string.dashboard_chart_steps));
+        mViewChartMonth.setTitle(getResources().getString(R.string.dashboard_chart_steps));
         mViewChartYear.setTitle(getResources().getString(R.string.dashboard_chart_steps));
 
         mViewIndoor = (ViewBorderButton) mViewMain.findViewById(R.id.dashboard_chart_indoor);
