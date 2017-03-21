@@ -69,8 +69,11 @@ public class ServerPushService extends Service {
 
         @Override
         public void onFail(String command, int statusCode) {
-            if (statusCode == 409)
+            if (statusCode == 409) {
                 mWatchDatabase.UploadItemDone(mUploadItem);
+            } else if (statusCode == 403) {
+                sendBroadcast(new Intent("SWING_LOGOUT"));
+            }
             mUploadItem = null;
         }
     };
@@ -81,7 +84,7 @@ public class ServerPushService extends Service {
             boolean stop = false;
             if (!token_available) {
                 if (mConfig.getString(ActivityConfig.KEY_MAIL).equals("") || mConfig.getString(ActivityConfig.KEY_PASSWORD).equals("") || mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
-                    Log.d("PushService", "No login information.");
+                    //Log.d("PushService", "No login information.");
                 } else {
                     mServiceMachine.userIsTokenValid(mUserIsTokenValidListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
                     stop = true;

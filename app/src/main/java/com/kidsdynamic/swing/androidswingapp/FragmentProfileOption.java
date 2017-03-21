@@ -89,6 +89,8 @@ public class FragmentProfileOption extends ViewFragment {
     private View.OnClickListener mLogoutListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            mActivityMain.logout();
+            /*
             mActivityMain.mConfig.loadDefaultTable();
             mActivityMain.mOperator.ResetDatabase();
             mActivityMain.mServiceMachine.setAuthToken(null);
@@ -98,6 +100,7 @@ public class FragmentProfileOption extends ViewFragment {
                     .getLaunchIntentForPackage(mActivityMain.getBaseContext().getPackageName());
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
+            */
         }
     };
 

@@ -4,10 +4,14 @@ import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -54,6 +58,7 @@ public class ActivityMain extends AppCompatActivity
 
     private List<permission> mPermissionList;
 
+    private Context mContext;
     public ActivityConfig mConfig;
     public WatchOperator mOperator;
     public Stack<Bitmap> mBitmapStack;
@@ -75,6 +80,8 @@ public class ActivityMain extends AppCompatActivity
 
     private int mControlHeight;
     private int mToolbarHeight;
+    private Dialog mProcessDialog = null;
+    private Handler mHandler = new Handler();
 
     final private int mTransitionDuration = 500;
 
@@ -86,6 +93,7 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mContext = this;
         mConfig = new ActivityConfig(this, null);
 
         setContentView(R.layout.activity_main);
@@ -127,6 +135,9 @@ public class ActivityMain extends AppCompatActivity
         mViewBackground = (ImageView) findViewById(R.id.main_background);
 
         selectFragment(FragmentBoot.class.getName(), null);
+
+        Intent intent = new Intent(this, ServerPushService.class);
+        startService(intent);
     }
 
     @Override
@@ -162,12 +173,16 @@ public class ActivityMain extends AppCompatActivity
                     mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN),
                     RESUME_CHECK_TAG);
         }
+
+        IntentFilter filter = new IntentFilter("SWING_LOGOUT");
+        registerReceiver(mLogoutReceiver, filter);
     }
 
     @Override
     public void onPause() {
         Log.d("ActivityMain", "onPause()");
         mServiceMachine.cancelByTag(RESUME_CHECK_TAG);
+        unregisterReceiver(mLogoutReceiver);
         // GioChen Todo : Temporary solution, fix asap.
         /*
         if (mBLEMachine != null)
@@ -175,6 +190,9 @@ public class ActivityMain extends AppCompatActivity
         if (mServiceMachine != null)
             mServiceMachine.Stop();
         */
+
+        if (mProcessDialog != null)
+            mProcessDialog.dismiss();
 
         super.onPause();
     }
@@ -402,6 +420,8 @@ public class ActivityMain extends AppCompatActivity
 
         @Override
         public void onFail(String command, int statusCode) {
+            if (statusCode == 403)
+                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD), RESUME_CHECK_TAG);
         }
     };
 
@@ -416,115 +436,50 @@ public class ActivityMain extends AppCompatActivity
         public void onFail(String command, int statusCode) {
         }
     };
-
-    private void eventTest() {
-        //mActivityList = crateFakeData();
-        //nextActivity();
-
-        //mOperator.updateActivity(mUpdateActivityListener, mOperator.getFocusKid().mId);
-    }
-
-    List<WatchActivityRaw> mActivityList;
-
-    private void nextActivity() {
-
-        if (!mActivityList.isEmpty()) {
-            WatchActivityRaw raw = mActivityList.get(0);
-            mActivityList.remove(0);
-            mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, raw.mIndoor, raw.mOutdoor, raw.mTime, raw.mMacId);
-        }
-
-    }
-
-    WatchOperator.finishListener mUpdateActivityListener = new WatchOperator.finishListener() {
+/*
+    ServerMachine.stateListener mServerMachineStateListener = new ServerMachine.stateListener() {
         @Override
-        public void onFinish(Object arg) {
-            mOperator.getActivityOfYear();
+        public void onTokenFailed() {
+            mProcessDialog = ProgressDialog.show(mContext,
+                    getResources().getString(R.string.profile_option_logout),
+                    getResources().getString(R.string.activity_main_wait), true);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //mProcessDialog.dismiss();
+                    logout();
+                }
+            }, 1000);
         }
+    };
+*/
 
+    BroadcastReceiver mLogoutReceiver = new BroadcastReceiver() {
         @Override
-        public void onFailed(String Command, int statusCode) {
-
+        public void onReceive(Context context, Intent intent) {
+            mProcessDialog = ProgressDialog.show(mContext,
+                    getResources().getString(R.string.profile_option_logout),
+                    getResources().getString(R.string.activity_main_wait), true);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mProcessDialog.dismiss();
+                    logout();
+                }
+            }, 1000);
         }
     };
 
-    private boolean fakeDone = false;
-    private void createYesterdayData() {
-        if (fakeDone)
-            return;
+    public void logout() {
+        mConfig.loadDefaultTable();
+        mOperator.ResetDatabase();
+        mServiceMachine.setAuthToken(null);
+        ServerMachine.ResetAvatar();
 
-        fakeDone = true;
-
-        if ( mOperator.getFocusKid() != null) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -1);
-            int timeStemp = (int) (cal.getTimeInMillis() / 1000);
-
-            WatchActivityRaw fake = new WatchActivityRaw();
-            fake.mTime = timeStemp;
-            fake.mMacId = mOperator.getFocusKid().mMacId + "";
-            fake.mIndoor = timeStemp + ",0,234,2,3,4";
-            fake.mOutdoor = timeStemp + ",1,345,2,3,4";
-            mOperator.pushUploadItem(fake);
-
-            Intent intent = new Intent(this, ServerPushService.class);
-            startService(intent);
-
-            Log.d("XXXXX", "Create yesterday data done!");
-        }
+        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
-
-    private void crateFakeData() {
-        if (fakeDone || mOperator.getFocusKid() == null)
-            return;
-
-        fakeDone = true;
-
-        Calendar cal = Calendar.getInstance();
-        long endTime = cal.getTimeInMillis();
-        cal.add(Calendar.DATE, -365);
-        long time = cal.getTimeInMillis();
-        String macId = mOperator.getFocusKid().mMacId + "";
-
-        Log.d("swing", time + " start " + WatchOperator.getTimeString(time));
-        Log.d("swing", endTime + " end " + WatchOperator.getTimeString(endTime));
-
-
-        while (time <= endTime) {
-            WatchActivityRaw fake = new WatchActivityRaw();
-            int step = (int) (Math.random() * 7500);
-            int step1 = (int) (Math.random() * 7500);
-
-            fake.mTime = (int) (time / 1000);
-            fake.mMacId = macId;
-            fake.mIndoor = fake.mTime + ",0," + step + ",2,3,4";
-            fake.mOutdoor = fake.mTime + ",1," + step1 + ",2,3,4";
-            Log.d("swing", "insert ("+fake.mTime+") " + WatchOperator.getTimeString(fake.mTime) + " in " + step + " out " + step1);
-            mOperator.pushUploadItem(fake);
-
-            time += 86400000;
-        }
-
-        Intent intent = new Intent(this, ServerPushService.class);
-        startService(intent);
-    }
-
-    ServerMachine.activityUploadRawDataListener mActivityUploadRawDataListener = new ServerMachine.activityUploadRawDataListener() {
-        @Override
-        public void onSuccess(int statusCode) {
-            nextActivity();
-        }
-
-        @Override
-        public void onConflict(int statusCode) {
-            nextActivity();
-        }
-
-        @Override
-        public void onFail(String command, int statusCode) {
-            nextActivity();
-        }
-    };
 
     public void setLocale(String language, String region) {
         Locale locale = new Locale(language, region);
