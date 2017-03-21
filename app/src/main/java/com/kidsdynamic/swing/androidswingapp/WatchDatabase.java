@@ -570,20 +570,13 @@ class WatchDatabase {
                         break;
                     case WatchEvent.REPEAT_MONTHLY:
                         int date = alertDate.get(Calendar.DATE);
-                        alertDate.add(Calendar.MONTH, 1);
-                        startDate.add(Calendar.MONTH, 1);
-                        endDate.add(Calendar.MONTH, 1);
-
-                        if (date != alertDate.get(Calendar.DATE)) {
-                            alertDate.add(Calendar.MONTH, 1);
-                            startDate.add(Calendar.MONTH, 1);
-                            endDate.add(Calendar.MONTH, 1);
-
-                            alertDate.set(Calendar.DATE, date);
-                            startDate.set(Calendar.DATE, date);
-                            endDate.set(Calendar.DATE, date);
-                            repeatCount++;
-                        }
+                        int newDate;
+                        do {
+                            alertDate.add(Calendar.DATE, 1);
+                            startDate.add(Calendar.DATE, 1);
+                            endDate.add(Calendar.DATE, 1);
+                            newDate = alertDate.get(Calendar.DATE);
+                        } while(newDate != date);
 
                         repeatEnough = repeatCount >= 12;
                         break;
