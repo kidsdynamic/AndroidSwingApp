@@ -145,16 +145,6 @@ public class FragmentProfileOption extends ViewFragment {
         @Override
         public void onClick(View view) {
             String url = "https://childrenlab.s3.amazonaws.com/pdf/Swing_User_Guide.pdf";
-            String language = mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE);
-            switch (language) {
-                case "ru":
-                case "es":
-                    url = "http://www.imaginarium.info/";
-                    break;
-            }
-
-            // force to KD's customer webpage
-            url = "http://www.imaginarium.info/";
 
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
