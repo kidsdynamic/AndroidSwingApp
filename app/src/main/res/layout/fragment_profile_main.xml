@@ -91,7 +91,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/profile_main_shared" />
+            android:text="@string/profile_main_shared"
+            android:visibility="invisible" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -121,7 +122,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/profile_main_request_to" />
+            android:text="@string/profile_main_request_to"
+            android:visibility="invisible" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -170,7 +172,8 @@
             style="@style/textview_profile_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:gravity="center"
+            android:visibility="invisible" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
