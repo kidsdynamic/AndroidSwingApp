@@ -113,7 +113,7 @@ public class FragmentSignupAccount extends ViewFragment {
                 mActivityMain.mConfig.setString(ActivityConfig.KEY_PASSWORD, mPassword);
                 mActivityMain.selectFragment(FragmentSignupProfile.class.getName(), null);
             } else {
-                mActivityMain.mOperator.resumeSync(mFinishListener, mMail, mPassword);
+                mActivityMain.mOperator.resumeSync(mResumeSyncListener, mMail, mPassword);
             }
         }
 
@@ -125,7 +125,25 @@ public class FragmentSignupAccount extends ViewFragment {
         }
     };
 
-    WatchOperator.finishListener mFinishListener = new WatchOperator.finishListener() {
+    WatchOperator.finishListener mResumeSyncListener = new WatchOperator.finishListener() {
+        @Override
+        public void onFinish(Object arg) {
+            WatchContact.Kid kid = mActivityMain.mOperator.getFocusKid();
+            if (kid != null)
+                mActivityMain.mOperator.updateActivity(mActivityUpdateListener, kid.mId);
+            else
+                mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
+        }
+
+        @Override
+        public void onFailed(String Command, int statusCode) {
+            mProcessDialog.dismiss();
+            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+    WatchOperator.finishListener mActivityUpdateListener = new WatchOperator.finishListener() {
         @Override
         public void onFinish(Object arg) {
             mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
@@ -133,8 +151,7 @@ public class FragmentSignupAccount extends ViewFragment {
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            mProcessDialog.dismiss();
-            Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
+            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
         }
     };
 }

@@ -23,6 +23,7 @@ public class FragmentProfileMain extends ViewFragment {
     private ViewCircle mViewDeviceAdd;
     private ViewCircle mViewRequestToAdd;
     private TextView mViewName;
+    private TextView mViewMail;
     private TextView mViewRequestFromTitle;
     private LinearLayout mViewDeviceContainer;
     private LinearLayout mViewSharedContainer;
@@ -41,6 +42,7 @@ public class FragmentProfileMain extends ViewFragment {
 
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.profile_main_photo);
         mViewName = (TextView) mViewMain.findViewById(R.id.profile_main_name);
+        mViewMail = (TextView) mViewMain.findViewById(R.id.profile_main_mail);
 
         mViewDeviceContainer = (LinearLayout) mViewMain.findViewById(R.id.profile_main_device_container);
         mViewDeviceAdd = (ViewCircle) mViewMain.findViewById(R.id.profile_main_device_add);
@@ -68,8 +70,10 @@ public class FragmentProfileMain extends ViewFragment {
         delAllContact(mViewRequestFromContainer);
 
         WatchContact.User parent = mActivityMain.mOperator.getUser();
-        if (parent != null)
+        if (parent != null) {
             mViewName.setText(parent.mLabel);
+            mViewMail.setText(parent.mEmail);
+        }
         if (parent != null && parent.mPhoto != null) {
             mViewPhoto.setBitmap(parent.mPhoto);
         }
