@@ -21,7 +21,7 @@ public class WatchActivityRaw {
 
     WatchActivityRaw(String macId, byte[] time, byte[] outdoor, byte[] indoor) {
         Calendar now = Calendar.getInstance();
-        int mOffset = (now.getTimeZone().getOffset(now.getTimeInMillis()))/1000;
+        mOffset = (now.getTimeZone().getOffset(now.getTimeInMillis()))/1000;
 
         init(macId,
                 (byteToDec(time[0], time[1], time[2], time[3]) - mOffset),

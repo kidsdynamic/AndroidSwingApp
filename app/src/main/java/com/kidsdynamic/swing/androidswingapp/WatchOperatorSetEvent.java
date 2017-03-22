@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ public class WatchOperatorSetEvent {
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private WatchOperator.finishListener mListener = null;
+    private int mTimeZoneOffset;
 
     WatchOperatorSetEvent(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
@@ -18,6 +20,11 @@ public class WatchOperatorSetEvent {
     }
 
     public void start(WatchOperator.finishListener listener, WatchEvent event) {
+
+        Calendar now = Calendar.getInstance();
+        int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+        mTimeZoneOffset = offset / 60 / 1000;
+
         mListener = listener;
         List<String> todos = new ArrayList<>();
         for (WatchTodo todo : event.mTodoList)
@@ -34,7 +41,7 @@ public class WatchOperatorSetEvent {
                     event.mDescription,
                     event.mAlert,
                     event.mRepeat,
-                    0,
+                    mTimeZoneOffset,
                     todos);
         } else {
             mServerMachine.eventUpdate(
@@ -47,7 +54,7 @@ public class WatchOperatorSetEvent {
                     event.mDescription,
                     event.mAlert,
                     event.mRepeat,
-                    0,
+                    mTimeZoneOffset,
                     todos);
         }
     }

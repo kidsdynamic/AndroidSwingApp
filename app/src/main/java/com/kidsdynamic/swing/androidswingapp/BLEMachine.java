@@ -253,7 +253,7 @@ class BLEMachine extends BLEControl {
                                 Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_ALERT, new byte[]{alert.mAlert});
                                 Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.VOICE_EVET_ALERT_TIME, timeInByte);
                                 mVoiceAlertCount++;
-                                Log("Event count " + mVoiceAlertCount);
+                                Log("Event[" + mVoiceAlertCount + "] " + alert.mAlert + " " + countdown);
                             }
                         }
                     }
@@ -314,6 +314,8 @@ class BLEMachine extends BLEControl {
                 case STATE_GET_DATA2:
                     if (mRelationDevice.mState.mData2 != null) {
                         WatchActivityRaw activityRaw = new WatchActivityRaw(ServerMachine.getMacID(mRelationDevice.mAddress), mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2);
+                        Log("Activity " + activityRaw.mTime + " " + activityRaw.mIndoor + " " + activityRaw.mOutdoor);
+
                         //Log.d("XXXXX", "Raw " + activityRaw.mTime + " " + WatchOperator.getTimeString(((long)activityRaw.mTime) * 1000));
                         mActivities.add(activityRaw);
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
