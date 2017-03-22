@@ -361,7 +361,9 @@ public class ServerGson {
                     description = pDescription;
                     alert = pAlert;
                     repeat = pRepeat;
-                    timezoneOffset = pTimezoneOffset;
+                    Calendar now = Calendar.getInstance();
+                    int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+                    timezoneOffset = offset / 60 / 1000;
                     todo = pTodo;
                 }
             }
@@ -406,7 +408,9 @@ public class ServerGson {
                     description = pDescription;
                     alert = pAlert;
                     repeat = pRepeat;
-                    timezoneOffset = pTimezoneOffset;
+                    Calendar now = Calendar.getInstance();
+                    int offset = now.getTimeZone().getOffset(now.getTimeInMillis());
+                    timezoneOffset = offset / 60 / 1000;
                     todo = pTodo;
                 }
             }
