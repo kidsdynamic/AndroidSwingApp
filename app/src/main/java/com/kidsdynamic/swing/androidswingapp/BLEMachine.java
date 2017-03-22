@@ -58,7 +58,7 @@ class BLEMachine extends BLEControl {
         return true;
     }
 
-    private static final int TRANSITION_GAP = 5;
+    private static final int TRANSITION_GAP = 1;
 
     private static final int STATE_INIT = 0;
     private static final int STATE_SCAN = 1;
@@ -131,6 +131,11 @@ class BLEMachine extends BLEControl {
                         //    EnableBondStateReceiver(true);
                         //    Connect(mRelationDevice.mAddress);
                         //}
+                    } else {
+                        if (mHandler != null) {
+                            mHandler.postDelayed(this, 100);
+                            return;
+                        }
                     }
                     break;
 

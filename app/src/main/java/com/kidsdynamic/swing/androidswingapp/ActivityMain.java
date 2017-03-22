@@ -476,9 +476,12 @@ public class ActivityMain extends AppCompatActivity
         mServiceMachine.setAuthToken(null);
         ServerMachine.ResetAvatar();
 
-        Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(i);
+        Intent intent = new Intent(this, ServerPushService.class);
+        stopService(intent);
+
+        intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     public void setLocale(String language, String region) {
