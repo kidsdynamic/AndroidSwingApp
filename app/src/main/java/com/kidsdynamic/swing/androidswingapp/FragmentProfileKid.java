@@ -81,10 +81,12 @@ public class FragmentProfileKid extends ViewFragment {
 
     @Override
     public void onToolbarAction2() {
-        if (!mKid.mBound)
-            requestAddKid(mKid);
-        else
-            requestUpdateKid(mKid);
+        if (mKid != null) {
+            if (!mKid.mBound)
+                requestAddKid(mKid);
+            else
+                requestUpdateKid(mKid);
+        }
     }
 
     @Override
