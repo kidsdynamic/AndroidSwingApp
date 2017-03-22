@@ -6,11 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by weichigio on 2017/2/12.
@@ -518,7 +523,6 @@ class WatchDatabase {
         return 0;
     }
 
-
     private List<WatchEvent> EventGetRepeat(long startTimeStamp, long endTimeStamp, String repeat) {
         List<WatchEvent> repeatResult = new ArrayList<>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
@@ -544,54 +548,65 @@ class WatchDatabase {
         Calendar startDate = Calendar.getInstance();
         Calendar endDate = Calendar.getInstance();
 
+        Calendar untilDate = Calendar.getInstance();
+        long untilTimeStamp;
+
         for (WatchEvent event : repeatResult) {
             alertDate.setTimeInMillis(event.mAlertTimeStamp);
             startDate.setTimeInMillis(event.mStartDate);
             endDate.setTimeInMillis(event.mEndDate);
-            int repeatCount = 0;
-            boolean repeatEnough = false;
+
+            untilDate.setTimeInMillis(event.mAlertTimeStamp);
+            switch (event.mRepeat) {
+                case WatchEvent.REPEAT_MONTHLY:
+                    untilDate.add(Calendar.YEAR, 1);
+                    break;
+
+                case WatchEvent.REPEAT_WEEKLY:
+                    untilDate.add(Calendar.YEAR, 1);
+                    break;
+
+                default:
+                case WatchEvent.REPEAT_DAILY:
+                    untilDate.add(Calendar.MONTH, 1);
+                    break;
+            }
+            untilTimeStamp = untilDate.getTimeInMillis();
+
             do {
                 if (event.mAlertTimeStamp >= startTimeStamp && event.mAlertTimeStamp <= endTimeStamp) {
                     result.add(new WatchEvent(event));
-                    repeatCount++;
                 }
+
                 switch (repeat) {
                     case WatchEvent.REPEAT_DAILY:
                         alertDate.add(Calendar.DATE, 1);
                         startDate.add(Calendar.DATE, 1);
                         endDate.add(Calendar.DATE, 1);
-                        repeatEnough = repeatCount >= 30;
                         break;
                     case WatchEvent.REPEAT_WEEKLY:
                         alertDate.add(Calendar.DATE, 7);
                         startDate.add(Calendar.DATE, 7);
                         endDate.add(Calendar.DATE, 7);
-                        repeatEnough = repeatCount >= 52;
                         break;
                     case WatchEvent.REPEAT_MONTHLY:
-                        int date = alertDate.get(Calendar.DATE);
-                        alertDate.add(Calendar.MONTH, 1);
-                        startDate.add(Calendar.MONTH, 1);
-                        endDate.add(Calendar.MONTH, 1);
+                        int day1 = alertDate.get(Calendar.DAY_OF_MONTH);
+                        int day2 = 100;
 
-                        if (date != alertDate.get(Calendar.DATE)) {
-                            alertDate.add(Calendar.MONTH, 1);
-                            startDate.add(Calendar.MONTH, 1);
-                            endDate.add(Calendar.MONTH, 1);
+                        while (day1 != day2) {
+                            alertDate.add(Calendar.DATE, 1);
+                            startDate.add(Calendar.DATE, 1);
+                            endDate.add(Calendar.DATE, 1);
 
-                            alertDate.set(Calendar.DATE, date);
-                            startDate.set(Calendar.DATE, date);
-                            endDate.set(Calendar.DATE, date);
-                            repeatCount++;
+                            day2 = alertDate.get(Calendar.DAY_OF_MONTH);
                         }
-
-                        repeatEnough = repeatCount >= 12;
                         break;
                 }
                 event.mAlertTimeStamp = alertDate.getTimeInMillis();
                 event.mStartDate = startDate.getTimeInMillis();
                 event.mEndDate = endDate.getTimeInMillis();
-            } while (event.mAlertTimeStamp <= endTimeStamp && !repeatEnough);
+            }
+            while (event.mAlertTimeStamp <= endTimeStamp && event.mAlertTimeStamp < untilTimeStamp);
         }
 
         return result;
