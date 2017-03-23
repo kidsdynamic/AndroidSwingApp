@@ -79,15 +79,17 @@ public class ServerMachine {
     private Handler mHandler = new Handler();
     private Context mContext;
     private String mAuthToken = null;
+    private onForbiddenListener mOnForbiddenListener;
 
     private void Log(String msg) {
         Log.i("ServerMachine", msg);
     }
 
-    public ServerMachine(Context context, String tag) {
+    public ServerMachine(Context context, String tag, onForbiddenListener listener) {
         mContext = context;
         mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
         mTag = tag;
+        mOnForbiddenListener = listener;
     }
 
     boolean Start() {
@@ -155,6 +157,10 @@ public class ServerMachine {
 
     public String getAuthToken() {
         return mAuthToken;
+    }
+
+    interface onForbiddenListener {
+        void onForbidden();
     }
 
     public interface userLoginListener {
@@ -845,6 +851,9 @@ public class ServerMachine {
                 }
             }
 
+            if (responseCode == 403 && mOnForbiddenListener != null)
+                mOnForbiddenListener.onForbidden();
+
             mCurrentTask = null;
         }
     };
@@ -983,6 +992,9 @@ public class ServerMachine {
 
                 }
             }
+
+            if (responseCode == 403 && mOnForbiddenListener != null)
+                mOnForbiddenListener.onForbidden();
 
             mCurrentTask = null;
         }

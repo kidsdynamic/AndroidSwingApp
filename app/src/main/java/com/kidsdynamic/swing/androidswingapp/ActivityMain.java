@@ -158,7 +158,7 @@ public class ActivityMain extends AppCompatActivity
             mBLEMachine = new BLEMachine(this);
 
         if (activeService && mServiceMachine == null)
-            mServiceMachine = new ServerMachine(this, REQUEST_TAG);
+            mServiceMachine = new ServerMachine(this, REQUEST_TAG, mServerMachineListener);
 
         if (mBLEMachine != null)
             mBLEMachine.Start();
@@ -411,48 +411,22 @@ public class ActivityMain extends AppCompatActivity
     private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
         @Override
         public void onValidState(boolean valid) {
-            if (valid) {
+            if (valid)
                 mServiceMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
-            } else {
-                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD), RESUME_CHECK_TAG);
-            }
-        }
-
-        @Override
-        public void onFail(String command, int statusCode) {
-            if (statusCode == 403)
-                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD), RESUME_CHECK_TAG);
-        }
-    };
-
-    private ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
-            mServiceMachine.setAuthToken(result.access_token);
         }
 
         @Override
         public void onFail(String command, int statusCode) {
         }
     };
-/*
-    ServerMachine.stateListener mServerMachineStateListener = new ServerMachine.stateListener() {
+
+    ServerMachine.onForbiddenListener mServerMachineListener = new ServerMachine.onForbiddenListener() {
         @Override
-        public void onTokenFailed() {
-            mProcessDialog = ProgressDialog.show(mContext,
-                    getResources().getString(R.string.profile_option_logout),
-                    getResources().getString(R.string.activity_main_wait), true);
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //mProcessDialog.dismiss();
-                    logout();
-                }
-            }, 1000);
+        public void onForbidden() {
+            sendBroadcast(new Intent("SWING_LOGOUT"));
         }
     };
-*/
+
 
     BroadcastReceiver mLogoutReceiver = new BroadcastReceiver() {
         @Override
@@ -463,7 +437,8 @@ public class ActivityMain extends AppCompatActivity
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mProcessDialog.dismiss();
+                    if (mProcessDialog != null)
+                        mProcessDialog.dismiss();
                     logout();
                 }
             }, 1000);

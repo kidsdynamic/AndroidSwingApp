@@ -14,7 +14,7 @@ import static com.kidsdynamic.swing.androidswingapp.ServerMachine.REQUEST_UPLOAD
 
 public class ServerPushService extends Service {
     private WatchDatabase mWatchDatabase;
-    private boolean token_available = false;
+    private boolean mTokenAvailable = false;
     public ServerMachine mServiceMachine;
     public ActivityConfig mConfig;
     private Handler mHandler = new Handler();
@@ -27,7 +27,7 @@ public class ServerPushService extends Service {
         Log.d("ServiceUpload", "onCreate");
         mConfig = new ActivityConfig(this, null);
         mWatchDatabase = new WatchDatabase(this);
-        mServiceMachine = new ServerMachine(this, REQUEST_UPLOAD_TAG);
+        mServiceMachine = new ServerMachine(this, REQUEST_UPLOAD_TAG, null);
         mServiceMachine.Start();
     }
 
@@ -82,7 +82,7 @@ public class ServerPushService extends Service {
         @Override
         public void run() {
             boolean stop = false;
-            if (!token_available) {
+            if (!mTokenAvailable) {
                 if (mConfig.getString(ActivityConfig.KEY_MAIL).equals("") || mConfig.getString(ActivityConfig.KEY_PASSWORD).equals("") || mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
                     //Log.d("PushService", "No login information.");
                 } else {
@@ -105,31 +105,15 @@ public class ServerPushService extends Service {
         public void onValidState(boolean valid) {
             if (valid) {
                 mServiceMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
-                token_available = true;
+                mTokenAvailable = true;
                 mHandler.postDelayed(DoPush, 1);
             } else {
-                mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
+                mHandler.postDelayed(DoPush, 1000);
             }
         }
 
         @Override
         public void onFail(String command, int statusCode) {
-            mServiceMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
-        }
-    };
-
-    ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
-        @Override
-        public void onSuccess(int statusCode, ServerGson.user.login.response result) {
-            token_available = true;
-            mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
-            mServiceMachine.setAuthToken(result.access_token);
-            mHandler.postDelayed(DoPush, 1);
-        }
-
-        @Override
-        public void onFail(String command, int statusCode) {
-            Log.d("PushService", "Login failed!");
             mHandler.postDelayed(DoPush, 1000);
         }
     };

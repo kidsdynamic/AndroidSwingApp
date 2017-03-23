@@ -27,33 +27,13 @@ public class WatchOperatorResumeSync {
     void start(WatchOperator.finishListener listener, String email, String password) {
         mFinishListener = listener;
         if (email.equals("") && password.equals("")) {
-            mServerMachine.userIsTokenValid(
-                    mUserIsTokenValidListener,
-                    mConfig.getString(ActivityConfig.KEY_MAIL),
-                    mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
+            mServerMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
         } else {
             mConfig.setString(ActivityConfig.KEY_MAIL, email);
             mConfig.setString(ActivityConfig.KEY_PASSWORD, password);
             mServerMachine.userLogin(mUserLoginListener, email, password);
         }
     }
-
-    private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
-        @Override
-        public void onValidState(boolean valid) {
-            if (valid) {
-                mServerMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
-                mServerMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
-            } else {
-                mServerMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
-            }
-        }
-
-        @Override
-        public void onFail(String command, int statusCode) {
-            mServerMachine.userLogin(mUserLoginListener, mConfig.getString(ActivityConfig.KEY_MAIL), mConfig.getString(ActivityConfig.KEY_PASSWORD));
-        }
-    };
 
     private ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
         @Override
