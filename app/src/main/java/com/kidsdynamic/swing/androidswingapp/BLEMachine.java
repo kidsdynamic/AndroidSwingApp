@@ -75,6 +75,7 @@ class BLEMachine extends BLEControl {
     private static final int STATE_GET_BATTERY = 12;
     private static final int STATE_PRE_INIT = 13;
     private static final int STATE_BYPASS_ALERT = 14;
+    private static final int STATE_CANCEL = 15;
 
     private Device mRelationDevice = new Device();
     private int mState;
@@ -101,7 +102,25 @@ class BLEMachine extends BLEControl {
 
         @Override
         public void run() {
+
+            if (mRelationDevice.mAction.mCancel) {
+                if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mSendEvent) {
+                    // Some phone need time to release device's connection.
+                    mState = STATE_CANCEL;
+                    setTimeout(5000);
+                }
+                Disconnect();
+                mRelationDevice.mAction.mCancel = false;
+            }
+
             switch (mState) {
+                case STATE_CANCEL:
+                    if (isTimeout()) {
+                        mState = STATE_INIT;
+                        mRelationDevice.resetFlag();
+                    }
+                    break;
+
                 case STATE_PRE_INIT:
                     if (!mRelationDevice.mState.mConnected) {
                         mRelationDevice.mState.mDiscovered = false;
@@ -169,7 +188,7 @@ class BLEMachine extends BLEControl {
                     } else if (mRelationDevice.mState.mConnectionDetect || isTimeout()) {
 
                         mState = STATE_PRE_INIT;
-                        if (++mRelationDevice.mState.mRetryTimes > 20)
+                        if (++mRelationDevice.mState.mRetryTimes > 10)
                             syncFailProcess();
                         else
                             Log.d("XXXXX", "Connect failed, retry " + mRelationDevice.mState.mRetryTimes);
@@ -186,7 +205,7 @@ class BLEMachine extends BLEControl {
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
                         } else {
-                            setTimeout(4500);
+                            setTimeout(4800);
                             mState = STATE_GET_BATTERY;
                             mRelationDevice.mState.mBatteryUpdated = false;
                             Read(BLECustomAttributes.BATTERY_SERVICE, BLECustomAttributes.BATTERY_LEVEL);
@@ -232,6 +251,7 @@ class BLEMachine extends BLEControl {
                         syncFailProcess();
                     } else if (mRelationDevice.mState.mAlertDataDone && mRelationDevice.mState.mAlertTimeDone) {
                         if (mVoiceAlerts.isEmpty() || mVoiceAlertCount >= 100) {
+                            Log("Event finish");
                             mRelationDevice.mAction.mSendEvent = false;
                             Disconnect();
                             mState = STATE_PRE_INIT;
@@ -314,8 +334,6 @@ class BLEMachine extends BLEControl {
                     if (mRelationDevice.mState.mData2 != null) {
                         WatchActivityRaw activityRaw = new WatchActivityRaw(ServerMachine.getMacID(mRelationDevice.mAddress), mRelationDevice.mState.mTime, mRelationDevice.mState.mData1, mRelationDevice.mState.mData2);
                         Log("Activity " + activityRaw.mTime + " " + activityRaw.mIndoor + " " + activityRaw.mOutdoor);
-
-                        //Log.d("XXXXX", "Raw " + activityRaw.mTime + " " + WatchOperator.getTimeString(((long)activityRaw.mTime) * 1000));
                         mActivities.add(activityRaw);
                         Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.CHECKSUM, new byte[]{1});
                         mRelationDevice.mState.mHeader = null;
@@ -439,6 +457,11 @@ class BLEMachine extends BLEControl {
         return 0;
     }
 
+    boolean Cancel() {
+        mRelationDevice.mAction.mCancel = true;
+        return true;
+    }
+
     static class VoiceAlert {
         byte mAlert;
         long mTimeStamp;
@@ -461,6 +484,7 @@ class BLEMachine extends BLEControl {
             boolean mSync;
             boolean mBattery;
             boolean mSendEvent;
+            boolean mCancel;
         }
 
         class State {
@@ -486,6 +510,7 @@ class BLEMachine extends BLEControl {
             mAction.mSync = false;
             mAction.mSendEvent = false;
             mAction.mBattery = false;
+            mAction.mCancel = false;
             mState.mBonded = false;
             mState.mConnected = false;
             mState.mDiscovered = false;

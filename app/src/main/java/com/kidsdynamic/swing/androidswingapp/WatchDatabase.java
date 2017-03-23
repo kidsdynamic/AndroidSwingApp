@@ -320,7 +320,22 @@ class WatchDatabase {
         return item;
     }
 
+    WatchActivityRaw UploadItemGetByTime(long time) {
+        WatchActivityRaw watchActivityRaw = null;
+
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_UPLOAD + " WHERE " + TIME + "=" + time, null);
+        if (cursor.moveToNext()) {
+            watchActivityRaw = cursorToUpload(cursor);
+        }
+        cursor.close();
+
+        return watchActivityRaw;
+    }
+
     long UploadItemAdd(WatchActivityRaw item) {
+        if (UploadItemGetByTime(item.mTime) != null)
+            return 0;
+
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(TIME, item.mTime);

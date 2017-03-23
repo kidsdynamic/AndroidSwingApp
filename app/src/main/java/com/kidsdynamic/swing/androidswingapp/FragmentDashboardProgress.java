@@ -106,7 +106,7 @@ public class FragmentDashboardProgress extends ViewFragment {
     @Override
     public void onPause() {
         bleSearchCancel();
-        mActivityMain.mBLEMachine.Disconnect();
+        mActivityMain.mBLEMachine.Cancel();
 
         if (!mServerSyncFinish)
             mActivityMain.mServiceMachine.Restart();

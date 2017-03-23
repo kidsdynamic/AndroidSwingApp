@@ -241,8 +241,8 @@ public class WatchOperatorResumeSync {
                     for (ServerGson.kidData kidData : eventData.kid)
                         watchEvent.mKids.add(kidData.id);
                     watchEvent.mName = eventData.name;
-                    watchEvent.mStartDate = WatchOperator.getTimeStamp(eventData.startDate);
-                    watchEvent.mEndDate = WatchOperator.getTimeStamp(eventData.endDate);
+                    watchEvent.mStartDate = WatchOperator.getLocalTimeStamp(eventData.startDate); // #032217-2 Local
+                    watchEvent.mEndDate = WatchOperator.getLocalTimeStamp(eventData.endDate); // #032217-2 Local
                     watchEvent.mColor = eventData.color;
                     watchEvent.mStatus = eventData.status;
                     watchEvent.mDescription = eventData.description;

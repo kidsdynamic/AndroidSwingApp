@@ -229,7 +229,7 @@ public class WatchOperator {
         return cal.getTimeInMillis();
     }
 
-    static String getTimeString(long timeStamp) {
+    static String getUtcTimeString(long timeStamp) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         format.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date date = new Date();
@@ -237,7 +237,7 @@ public class WatchOperator {
         return format.format(date);
     }
 
-    static String getDefaultTimeString(long timeStamp) {
+    static String getLocalTimeString(long timeStamp) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         Date date = new Date();
         date.setTime(timeStamp);
