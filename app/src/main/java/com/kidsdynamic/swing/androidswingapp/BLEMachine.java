@@ -121,7 +121,6 @@ class BLEMachine extends BLEControl {
                         Scan(true);
 
                     } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery || mRelationDevice.mAction.mSendEvent) {
-                        mActivities = new ArrayList<>();
                         setTimeout(10000);
                         //if (GetBondState(mRelationDevice.mAddress)) {
                         EnableBondStateReceiver(false);
@@ -420,6 +419,7 @@ class BLEMachine extends BLEControl {
         mRelationDevice = new Device(device.mName, device.mAddress, 0);
         mRelationDevice.mAction.mSync = true;
         mVoiceAlerts = alerts;
+        mActivities = new ArrayList<>();
         return 0;
     }
 
@@ -428,6 +428,7 @@ class BLEMachine extends BLEControl {
         mRelationDevice = new Device("Swing", macAddress, 0);
         mRelationDevice.mAction.mSync = true;
         mVoiceAlerts = new ArrayList<>();
+        mActivities = new ArrayList<>();
         return 0;
     }
 
