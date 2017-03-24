@@ -2,6 +2,7 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +50,12 @@ public class FragmentBoot extends ViewFragment {
             }
 
             if (mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE).equals("")) {
-                mActivityMain.selectFragment(FragmentSignupLanguage.class.getName(), null);
+                mActivityMain.clearFragment(FragmentSignupLanguage.class.getName(), null);
             } else {
                 if (mActivityMain.mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN).equals("")) {
-                    mActivityMain.selectFragment(FragmentSignupLogin.class.getName(), null);
+                    mActivityMain.clearFragment(FragmentSignupLogin.class.getName(), null);
                 } else {
-                    mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
+                    mActivityMain.clearFragment(FragmentDashboardMain.class.getName(), null);
                 }
             }
         }

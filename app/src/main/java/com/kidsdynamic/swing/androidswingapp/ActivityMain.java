@@ -186,13 +186,6 @@ public class ActivityMain extends AppCompatActivity
         Log.d("ActivityMain", "onPause()");
         mServiceMachine.cancelByTag(RESUME_CHECK_TAG);
         unregisterReceiver(mLogoutReceiver);
-        // GioChen Todo : Temporary solution, fix asap.
-        /*
-        if (mBLEMachine != null)
-            mBLEMachine.Stop();
-        if (mServiceMachine != null)
-            mServiceMachine.Stop();
-        */
 
         if (mProcessDialog != null)
             mProcessDialog.dismiss();
@@ -240,6 +233,16 @@ public class ActivityMain extends AppCompatActivity
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, className)
                 .addToBackStack(null)
+                .commit();
+    }
+
+    public void clearFragment(String className, Bundle args) {
+        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        Fragment fragment = Fragment.instantiate(this, className, args);
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_fragment, fragment, className)
                 .commit();
     }
 

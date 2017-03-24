@@ -132,7 +132,7 @@ public class FragmentSignupAccount extends ViewFragment {
             if (kid != null)
                 mActivityMain.mOperator.updateActivity(mActivityUpdateListener, kid.mId);
             else
-                mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
+                mActivityMain.clearFragment(FragmentDashboardMain.class.getName(), null);
         }
 
         @Override
@@ -146,12 +146,12 @@ public class FragmentSignupAccount extends ViewFragment {
     WatchOperator.finishListener mActivityUpdateListener = new WatchOperator.finishListener() {
         @Override
         public void onFinish(Object arg) {
-            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardMain.class.getName(), null);
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
-            mActivityMain.selectFragment(FragmentDashboardMain.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardMain.class.getName(), null);
         }
     };
 }

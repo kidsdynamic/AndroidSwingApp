@@ -196,7 +196,7 @@ public class FragmentSignupProfile extends ViewFragment {
         @Override
         public void onFinish(Object arg) {
             processDialog.dismiss();
-            mActivityMain.selectFragment(FragmentWatchHave.class.getName(), null);
+            mActivityMain.clearFragment(FragmentWatchHave.class.getName(), null);
         }
 
         @Override

@@ -128,7 +128,7 @@ public class FragmentWatchRequest extends ViewFragment {
     private Button.OnClickListener mOnDashboardListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardEmotion.class.getName(), null);
         }
     };
 
@@ -155,17 +155,17 @@ public class FragmentWatchRequest extends ViewFragment {
     ServerMachine.subHostAddListener mSubHostAddListener = new ServerMachine.subHostAddListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.hostData response) {
-            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardEmotion.class.getName(), null);
         }
 
         @Override
         public void onConflict(int statusCode) {
-            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardEmotion.class.getName(), null);
         }
 
         @Override
         public void onFail(String command, int statusCode) {
-            mActivityMain.selectFragment(FragmentDashboardEmotion.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardEmotion.class.getName(), null);
             Toast.makeText(mActivityMain,
                     mActivityMain.mServiceMachine.getErrorMessage(command, statusCode) + "(" + statusCode + ").", Toast.LENGTH_SHORT).show();
 

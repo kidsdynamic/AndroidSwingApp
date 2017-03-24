@@ -42,7 +42,7 @@ public class FragmentDashboardMain extends ViewFragment {
         super.onResume();
 
         if (mActivityMain.mOperator.getFocusKid() == null) {
-            mActivityMain.selectFragment(FragmentDashboardRequest.class.getName(), null);
+            mActivityMain.clearFragment(FragmentDashboardRequest.class.getName(), null);
         } else {
             mButtonYes.setOnClickListener(mOnYesListener);
             mButtonNo.setOnClickListener(mOnNoListener);
