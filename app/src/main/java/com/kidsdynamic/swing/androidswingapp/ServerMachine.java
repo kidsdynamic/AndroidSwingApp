@@ -851,7 +851,7 @@ public class ServerMachine {
                 }
             }
 
-            if (responseCode == 403 && mOnForbiddenListener != null)
+            if (responseCode == 403 && mOnForbiddenListener != null && mCurrentTask.mCommand.contains(SERVER_ADDRESS))
                 mOnForbiddenListener.onForbidden();
 
             mCurrentTask = null;
@@ -993,7 +993,7 @@ public class ServerMachine {
                 }
             }
 
-            if (responseCode == 403 && mOnForbiddenListener != null)
+            if (responseCode == 403 && mOnForbiddenListener != null && mCurrentTask.mCommand.contains(SERVER_ADDRESS))
                 mOnForbiddenListener.onForbidden();
 
             mCurrentTask = null;
