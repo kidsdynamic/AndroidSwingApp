@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Created by 03543 on 2017/2/4.
@@ -154,8 +156,8 @@ public class ViewCalendarMonth extends ViewCalendar implements View.OnClickListe
             return;
 
         ViewCalendarCellMonth cell = (ViewCalendarCellMonth) view;
-        setDate(cell.getDate());
         mSelectListener.onSelect(mThis, cell);
+//        setDate(cell.getDate());
     }
 
     public void setOnSelectListener(ViewCalendarMonth.OnSelectListener listener) {
