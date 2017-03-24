@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -88,6 +89,8 @@ public class ActivityMain extends AppCompatActivity
     final static int RESOURCE_IGNORE = 0;
     final static int RESOURCE_HIDE = -1;
     private int mBackgroundRes, mIconRes1, mIconRes2;
+
+    private int mBackgroundPositionMinimum, mBackgroundPositionMaximum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -365,14 +368,35 @@ public class ActivityMain extends AppCompatActivity
         mIconRes2 = resource;
     }
 
-    public void backgroundSet(int resource) {
-        if (resource == mBackgroundRes || resource == RESOURCE_IGNORE)
-            return;
+    public void backgroundShuffle() {
+        double random = Math.random();
+        int pos = (int) Math.floor(random * (mBackgroundPositionMaximum - mBackgroundPositionMinimum));
 
-        if (resource == RESOURCE_HIDE) {
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mViewBackground.getLayoutParams();
+        layoutParams.setMarginStart(-pos);
+        mViewBackground.setLayoutParams(layoutParams);
+    }
+
+    public void backgroundSet(int resource) {
+        if (resource == RESOURCE_IGNORE) {
+            return;
+        } else if (resource == RESOURCE_HIDE) {
             mViewBackground.setImageDrawable(null);
+        } else if (resource == mBackgroundRes) {
+            backgroundShuffle();
         } else {
+            mBackgroundPositionMinimum = 0;
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
             mViewBackground.setImageResource(resource);
+
+            mBackgroundPositionMaximum = ((BitmapDrawable)mViewBackground.getDrawable()).getBitmap().getWidth();
+            mBackgroundPositionMaximum -= displayMetrics.widthPixels;
+            mBackgroundPositionMaximum = Math.max(mBackgroundPositionMaximum, 0);
+
+            backgroundShuffle();
         }
 
         mBackgroundRes = resource;
