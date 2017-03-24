@@ -104,7 +104,7 @@ class BLEMachine extends BLEControl {
         public void run() {
 
             if (mRelationDevice.mAction.mCancel) {
-                if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mSendEvent) {
+                if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mSendEvent || mRelationDevice.mAction.mBattery) {
                     // Some phone need time to release device's connection.
                     mState = STATE_CANCEL;
                     setTimeout(5000);

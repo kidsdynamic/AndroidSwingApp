@@ -84,6 +84,7 @@ public class FragmentDevice extends ViewFragment {
     @Override
     public void onPause() {
         super.onPause();
+        mActivityMain.mBLEMachine.Cancel();
 
         mViewProgress.stopProgress();
 
