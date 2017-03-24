@@ -184,15 +184,13 @@ class BLEMachine extends BLEControl {
                     if (mRelationDevice.mState.mConnected) {
                         mState = STATE_DISCOVERY;
 
-                        mRelationDevice.mState.mConnectionDetect = false;
-                    } else if (mRelationDevice.mState.mConnectionDetect || isTimeout()) {
+                    } else if (isTimeout()) {
 
                         mState = STATE_PRE_INIT;
                         if (++mRelationDevice.mState.mRetryTimes > 10)
                             syncFailProcess();
                         else
                             Log.d("XXXXX", "Connect failed, retry " + mRelationDevice.mState.mRetryTimes);
-                        mRelationDevice.mState.mConnectionDetect = false;
                     }
                     break;
 
@@ -501,7 +499,6 @@ class BLEMachine extends BLEControl {
             byte mBattery;
             boolean mAlertTimeDone;
             boolean mAlertDataDone;
-            boolean mConnectionDetect;
             int mRetryTimes;
         }
 
@@ -514,7 +511,6 @@ class BLEMachine extends BLEControl {
             mState.mBonded = false;
             mState.mConnected = false;
             mState.mDiscovered = false;
-            mState.mConnectionDetect = false;
             mState.mRetryTimes = 0;
             mState.mAlertDataDone = false;
             mState.mAlertTimeDone = false;
@@ -567,7 +563,6 @@ class BLEMachine extends BLEControl {
         public void onConnectionStateChange(String name, String address, boolean bonded, boolean connected) {
             if (address.equals(mRelationDevice.mAddress)) {
                 mRelationDevice.mState.mConnected = connected;
-                mRelationDevice.mState.mConnectionDetect = true;
 
                 if (!connected) {
                     if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery || mRelationDevice.mAction.mSendEvent) {
