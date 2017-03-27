@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"AndroidSwingApp"</string>
+    <string name="app_name">Swing Watch</string>
 
     <!-- Language: Warning DO NOT translate below -->
     <string name="language_en_us" translatable="false">"English"</string>
@@ -152,6 +152,7 @@
     <string name="profile_option_kid">Edit Your Kid\'s Profile</string>
     <string name="profile_option_password">Change Password</string>
     <string name="profile_option_logout">Logout</string>
+    <string name="profile_option_ota" translatable="false">Update Firmware</string>
     <string name="profile_option_about">About</string>
     <string name="profile_option_contact_us">Contact Us</string>
     <string name="profile_option_privacy_policy">Privacy Policy</string>

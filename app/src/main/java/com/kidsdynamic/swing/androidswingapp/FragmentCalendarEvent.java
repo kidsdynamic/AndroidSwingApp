@@ -564,10 +564,12 @@ public class FragmentCalendarEvent extends ViewFragment {
         for (WatchEvent.Alarm target : WatchEvent.AlarmList) {
             if (target.mId == mEvent.mAlert) {
                 mEvent.mAlert = target.mId;
-                mEvent.mName = getResources().getString(target.mName);   // multi-dependence issue, cause from KD.
+                mEvent.mName = getResources().getString(target.mName);
+                mViewAlarm.setText(mEvent.mName);
                 return true;
             }
         }
+
 
         return false;
     }
@@ -648,6 +650,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         loadRepeat();
         loadDescription();
         loadTodo();
+        loadAlarm();
 
         viewAdvance(mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
         viewEnable(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);

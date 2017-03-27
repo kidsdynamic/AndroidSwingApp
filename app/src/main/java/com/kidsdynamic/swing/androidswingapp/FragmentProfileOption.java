@@ -24,6 +24,7 @@ public class FragmentProfileOption extends ViewFragment {
     private View mViewContact;
     private View mViewPrivacy;
     private View mViewManual;
+    private View mViewOTA;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,9 @@ public class FragmentProfileOption extends ViewFragment {
 
         mViewManual = mViewMain.findViewById(R.id.profile_option_manual);
         mViewManual.setOnClickListener(mManualListener);
+
+        mViewOTA = mViewMain.findViewById(R.id.profile_option_ota);
+        mViewOTA.setOnClickListener(mOTAListener);
 
         TextView view = (TextView) mViewMain.findViewById(R.id.profile_option_version);
         view.setText(BuildConfig.VERSION_NAME + " " + BuildConfig.BUILD_TYPE);
@@ -152,6 +156,17 @@ public class FragmentProfileOption extends ViewFragment {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
             startActivity(i);
+        }
+    };
+
+    private View.OnClickListener mOTAListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+//            Log.d("Click event", "Click on OTA");
+//            Intent intent = new Intent(getActivity(), FragmentOTA.class);
+//            mActivityMain.startService(intent);
+            mActivityMain.selectFragment(FragmentOTA.class.getName(), null);
+
         }
     };
 }

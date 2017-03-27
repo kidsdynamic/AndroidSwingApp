@@ -76,6 +76,7 @@ class BLEMachine extends BLEControl {
     private static final int STATE_PRE_INIT = 13;
     private static final int STATE_BYPASS_ALERT = 14;
     private static final int STATE_CANCEL = 15;
+    private static final int STATE_FIRMWARE = 16;
 
     private Device mRelationDevice = new Device();
     private int mState;
@@ -368,6 +369,11 @@ class BLEMachine extends BLEControl {
                         syncFailProcess();
                     }
                     break;
+
+                case STATE_FIRMWARE:
+                    if(mRelationDevice.mState.mFirmwareChecked) {
+
+                    }
             }
 
             if (mHandler != null)
@@ -500,6 +506,7 @@ class BLEMachine extends BLEControl {
             boolean mAlertTimeDone;
             boolean mAlertDataDone;
             int mRetryTimes;
+            boolean mFirmwareChecked;
         }
 
         void resetFlag() {
@@ -514,6 +521,7 @@ class BLEMachine extends BLEControl {
             mState.mRetryTimes = 0;
             mState.mAlertDataDone = false;
             mState.mAlertTimeDone = false;
+            mState.mFirmwareChecked = false;
         }
 
         Device() {
