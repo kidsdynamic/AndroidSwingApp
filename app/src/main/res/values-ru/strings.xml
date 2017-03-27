@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"AndroidSwingApp"</string>
+    <string name="app_name">Swing</string>
 
     <!-- ActivityMain -->
     <string name="activity_main_synchronize">Синхронизация</string>
