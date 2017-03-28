@@ -1,8 +1,10 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.animation.ValueAnimator;
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -81,7 +83,6 @@ public class ActivityMain extends AppCompatActivity
 
     private int mControlHeight;
     private int mToolbarHeight;
-    private Dialog mProcessDialog = null;
     private Handler mHandler = new Handler();
 
     final private int mTransitionDuration = 500;
@@ -186,9 +187,6 @@ public class ActivityMain extends AppCompatActivity
         Log.d("ActivityMain", "onPause()");
         mServiceMachine.cancelByTag(RESUME_CHECK_TAG);
         unregisterReceiver(mLogoutReceiver);
-
-        if (mProcessDialog != null)
-            mProcessDialog.dismiss();
 
         super.onPause();
     }
@@ -458,14 +456,10 @@ public class ActivityMain extends AppCompatActivity
     BroadcastReceiver mLogoutReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mProcessDialog = ProgressDialog.show(mContext,
-                    getResources().getString(R.string.profile_option_logout),
-                    getResources().getString(R.string.activity_main_wait), true);
+            Toast.makeText(mContext, getResources().getString(R.string.profile_option_logout), Toast.LENGTH_SHORT).show();
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mProcessDialog != null)
-                        mProcessDialog.dismiss();
                     logout();
                 }
             }, 1000);
@@ -481,9 +475,16 @@ public class ActivityMain extends AppCompatActivity
         Intent intent = new Intent(this, ServerPushService.class);
         stopService(intent);
 
-        intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        //intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //startActivity(intent);
+
+        Intent restartIntent = mContext.getPackageManager().getLaunchIntentForPackage(mContext.getPackageName());
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                mContext, 0, restartIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + 1, pendingIntent);
+        System.exit(2);
     }
 
     public void setLocale(String language, String region) {

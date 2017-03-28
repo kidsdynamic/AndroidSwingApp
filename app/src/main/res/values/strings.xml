@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">"AndroidSwingApp"</string>
+    <string name="app_name">Swing</string>
 
     <!-- Language: Warning DO NOT translate below -->
     <string name="language_en_us" translatable="false">"English"</string>
