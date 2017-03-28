@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +44,7 @@ import java.util.UUID;
 import util.ConstValue;
 import util.Conversion;
 
-public class FragmentOTA extends ViewFragment {
-    private ActivityMain mActivityMain;
-    private View mViewMain;
+public class FragmentOTA extends AppCompatActivity {
     private TextView mViewProgressText;
 
     private boolean mProgramming = false;
@@ -59,6 +58,7 @@ public class FragmentOTA extends ViewFragment {
     private BluetoothGattCharacteristic mCharIdentify = null;
     private BluetoothGattCharacteristic mCharBlock = null;
     private IntentFilter mIntentFilter;
+    private Button goBackButton;
 
     private boolean mDiscovering = false;
     private boolean mConnecting = false;
@@ -98,14 +98,40 @@ public class FragmentOTA extends ViewFragment {
         }
     }
 
-    public void restartScan(){
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        mViewProgressText = (TextView) mViewMain.findViewById(R.id.progressText);
-        DisplayLog("On Create View");
+        setContentView(R.layout.fragment_profile_ota);
+        DisplayLog("On onCreate");
 
-        getActivity().getApplicationContext().registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+        goBackButton = (Button) findViewById(R.id.goBackButton);
 
-        mBluetoothAdapter = ((BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+        goBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        mViewProgressText = (TextView) findViewById(R.id.progressText);
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            macAddress = bundle.getString("mac_address", null);
+        }
+        startScan();
+    }
+
+    public void startScan(){
+        Log("On start sacn");
+        try {
+            Thread.sleep(1000);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        getApplicationContext().registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+
+        mBluetoothAdapter = ((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
         while (!mBluetoothAdapter.isEnabled()) {
             mBluetoothAdapter.enable();
             try {
@@ -121,10 +147,8 @@ public class FragmentOTA extends ViewFragment {
             startActivityForResult(enableBtIntent, ConstValue.REQUEST_ENABLE_BT);
         }
 
-        mHandler = new Handler();
-
         initIntentFilter();
-        getActivity().registerReceiver(mBroadcastReceiver, mIntentFilter);
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
 
         if(macAddress != null) {
             Connect(macAddress);
@@ -134,73 +158,50 @@ public class FragmentOTA extends ViewFragment {
 
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        mActivityMain = (ActivityMain) getActivity();
-        DisplayLog("On onCreate");
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            macAddress = bundle.getString("mac_address", null);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mViewMain = inflater.inflate(R.layout.fragment_profile_ota, container, false);
-        restartScan();
-        return mViewMain;
-    }
-
-    @Override
-    public ViewFragmentConfig getConfig() {
-        return new ViewFragmentConfig(
-                getResources().getString(R.string.title_option), true, true, false,
-                ActivityMain.RESOURCE_IGNORE, R.mipmap.icon_left, ActivityMain.RESOURCE_HIDE);
-    }
 
     @Override
     public void onResume() {
-        getActivity().registerReceiver(mBroadcastReceiver, mIntentFilter);
+        registerReceiver(mBroadcastReceiver, mIntentFilter);
         super.onResume();
-        restartScan();
+//        startScan();
 
     }
 
     @Override
     public void onPause() {
 //        getFragmentManager().popBackStack();
-        getActivity().getApplicationContext().unregisterReceiver(mBroadcastReceiver);
-        getActivity().unregisterReceiver(mBroadcastReceiver);
+//        getApplicationContext().unregisterReceiver(mBroadcastReceiver);
+//        unregisterReceiver(mBroadcastReceiver);
+
+/*        mBluetoothGatt.disconnect();
+        mBluetoothAdapter.cancelDiscovery();
+        mBluetoothGatt = null;
+        mBluetoothAdapter = null;
+        Close();*/
+        DisplayLog("On Pause");
+        super.onPause();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+//        getApplicationContext().unregisterReceiver(mBroadcastReceiver);
+//        unregisterReceiver(mBroadcastReceiver);
 
         mBluetoothGatt.disconnect();
         mBluetoothAdapter.cancelDiscovery();
         mBluetoothGatt = null;
         mBluetoothAdapter = null;
         Close();
-        DisplayLog("On Pause");
-        super.onPause();
+        DisplayLog("On Stop");
     }
 
     @Override
-    public void onDestroyView(){
-
-        if(mBluetoothGatt != null) {
-            mBluetoothGatt.disconnect();
-        }
-        if(mBluetoothAdapter != null) {
-            mBluetoothAdapter.cancelDiscovery();
-        }
-
-        mBluetoothGatt = null;
-        mBluetoothAdapter = null;
-        Close();
-
-        super.onDestroyView();
-
+    public void onDestroy() {
+        super.onDestroy();
     }
+
 
     private void initIntentFilter() {
         mIntentFilter = new IntentFilter();
@@ -286,7 +287,7 @@ public class FragmentOTA extends ViewFragment {
             // Read the file raw into a buffer
             InputStream stream;
             if (isAsset) {
-                stream = getActivity().getAssets().open(filepath);
+                stream = getAssets().open(filepath);
             } else {
                 File f = new File(filepath);
                 stream = new FileInputStream(f);
@@ -460,13 +461,12 @@ public class FragmentOTA extends ViewFragment {
                 if (uuidStr.equals(mCharBlock.getUuid().toString())) {
                     if(!gotImageInfo){
                         gotImageInfo = true;
-                        try{
-                            Thread.sleep(150);
+/*                        try{
+                            Thread.sleep(50);
                         } catch(Exception e) {
                             e.printStackTrace();
-                        }
+                        }*/
                     }
-
                     DisplayLog("Action data notified - mCharBlock");
                     DisplayLog(String.format("NB: %02x%02x", value[1], value[0]));
                     if (mProgramming == true)
@@ -489,7 +489,7 @@ public class FragmentOTA extends ViewFragment {
         intent.putExtra(ConstValue.EXTRA_UUID, characteristic.getUuid().toString());
         intent.putExtra(ConstValue.EXTRA_DATA, characteristic.getValue());
         intent.putExtra(ConstValue.EXTRA_STATUS, status);
-        getActivity().sendBroadcast(intent);
+        sendBroadcast(intent);
     }
 
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
@@ -498,6 +498,10 @@ public class FragmentOTA extends ViewFragment {
             switch (newState) {
                 case BluetoothProfile.STATE_DISCONNECTED:
                     DisplayLog("STATE_DISCONNECTED Address : " + gatt.getDevice().getAddress());
+                    if(mProgInfo.iBlocks+10 < mProgInfo.nBlocks) {
+                        UpdateText("Device Disconnected for some reason");
+                    }
+
                     if(mConnecting) {
                         Connect(gatt.getDevice().getAddress());
                     }
@@ -547,7 +551,7 @@ public class FragmentOTA extends ViewFragment {
                         @Override
                         public void run() {
                             try{
-                                Thread.sleep(1000);
+                                Thread.sleep(50);
                             }catch(Exception e) {
                                 e.printStackTrace();
                             }
@@ -644,6 +648,7 @@ public class FragmentOTA extends ViewFragment {
             } else {
                 mProgramming = false;
                 msg = "GATT writeCharacteristic failed\n";
+                Log(msg);
                 UpdateText("Fail to update Firmware");
                 mBluetoothGatt.disconnect();
                 mBluetoothAdapter.cancelDiscovery();
@@ -678,7 +683,7 @@ public class FragmentOTA extends ViewFragment {
         BluetoothDevice dev = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
 
         Close();
-        mBluetoothGatt = dev.connectGatt(getActivity(), false, mGattCallback);
+        mBluetoothGatt = dev.connectGatt(this, false, mGattCallback);
 
         return true;
     }
@@ -722,7 +727,7 @@ public class FragmentOTA extends ViewFragment {
     }
 
     private void UpdateText(final String text) {
-        getActivity().runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mViewProgressText.setText(text);

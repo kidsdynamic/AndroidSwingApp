@@ -391,7 +391,11 @@ class BLEMachine extends BLEControl {
                         if(!mRelationDevice.mState.firmware.equals("Test")) {
                             Log("In Firmware updating");
                             if (mOnSyncListener != null){
-
+                                try{
+                                    Thread.sleep(1000);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 mOnSyncListener.onSync(SYNC_FIRMWARE, mActivities);
                             }
                         }

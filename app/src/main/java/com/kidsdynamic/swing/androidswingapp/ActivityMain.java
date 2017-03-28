@@ -46,6 +46,7 @@ public class ActivityMain extends AppCompatActivity
     public final static int ACCESS_FINE_LOCATION_PERMISSION = 0x1006;
 
     public final static String RESUME_CHECK_TAG = "RESUME_CHECK_TAG";
+    static final int OTA_REQUEST = 1;
 
     private class permission {
         String mName;
@@ -484,6 +485,12 @@ public class ActivityMain extends AppCompatActivity
         intent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+    }
+
+    public void startOTA(String macAddress){
+        Intent intent = new Intent(this, FragmentOTA.class);
+        intent.putExtra("mac_address", macAddress);
+        startActivityForResult(intent, OTA_REQUEST);
     }
 
     public void setLocale(String language, String region) {

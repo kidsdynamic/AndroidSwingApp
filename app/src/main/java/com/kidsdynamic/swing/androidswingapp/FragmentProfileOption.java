@@ -162,10 +162,8 @@ public class FragmentProfileOption extends ViewFragment {
     private View.OnClickListener mOTAListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            Log.d("Click event", "Click on OTA");
-//            Intent intent = new Intent(getActivity(), FragmentOTA.class);
-//            mActivityMain.startService(intent);
-            mActivityMain.selectFragment(FragmentOTA.class.getName(), null);
+            mActivityMain.startOTA(null);
+//            mActivityMain.selectFragment(FragmentOTA.class.getName(), null);
 
         }
     };
