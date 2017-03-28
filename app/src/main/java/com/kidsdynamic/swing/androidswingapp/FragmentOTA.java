@@ -74,8 +74,6 @@ public class FragmentOTA extends ViewFragment {
     private ProgInfo mProgInfo = new ProgInfo();
     private TimerTask mTimerTask = null;
 
-    private String macAddress;
-
 
     private class ImgHdr {
         short ver;
@@ -125,26 +123,15 @@ public class FragmentOTA extends ViewFragment {
 
         initIntentFilter();
         getActivity().registerReceiver(mBroadcastReceiver, mIntentFilter);
-
-        if(macAddress != null) {
-            Connect(macAddress);
-        } else {
-            Scan(true);
-        }
-
+        Scan(true);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mActivityMain = (ActivityMain) getActivity();
         DisplayLog("On onCreate");
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            macAddress = bundle.getString("mac_address", null);
-        }
     }
 
     @Override
@@ -163,9 +150,9 @@ public class FragmentOTA extends ViewFragment {
 
     @Override
     public void onResume() {
-        getActivity().registerReceiver(mBroadcastReceiver, mIntentFilter);
         super.onResume();
         restartScan();
+//        getActivity().registerReceiver(mBroadcastReceiver, mIntentFilter);
 
     }
 
@@ -180,24 +167,15 @@ public class FragmentOTA extends ViewFragment {
         mBluetoothGatt = null;
         mBluetoothAdapter = null;
         Close();
+
         DisplayLog("On Pause");
         super.onPause();
     }
 
     @Override
     public void onDestroyView(){
-
-        if(mBluetoothGatt != null) {
-            mBluetoothGatt.disconnect();
-        }
-        if(mBluetoothAdapter != null) {
-            mBluetoothAdapter.cancelDiscovery();
-        }
-
         mBluetoothGatt = null;
         mBluetoothAdapter = null;
-        Close();
-
         super.onDestroyView();
 
     }
@@ -268,7 +246,7 @@ public class FragmentOTA extends ViewFragment {
                         break;
                     }
                     try{
-                        Thread.sleep(10);
+                        Thread.sleep(300);
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
@@ -326,57 +304,45 @@ public class FragmentOTA extends ViewFragment {
         // Prepare data for request (try image A and B respectively, only one of
         // them will give a notification with the image info)
 
-        while(!gotImageInfo) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if(mBluetoothGatt == null) {
-                        gotImageInfo = true;
-                        return;
-                    }
-                    try{
-                        Thread.sleep(500);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    DisplayLog("working on First one");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(3000);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                DisplayLog("working on First one");
+                byte[] val = new byte[1];
+                val[0] = (byte) 0;
+                mCharIdentify.setValue(val);
+                mBluetoothGatt.writeCharacteristic(mCharIdentify);
+
+            }
+        }).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Thread.sleep(7000);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                if(!gotImageInfo) {
+                    imageType = "B";
+                    mBluetoothGatt.setCharacteristicNotification(mCharIdentify, true);
+                    DisplayLog("working on second one");
                     byte[] val = new byte[1];
-                    val[0] = (byte) 0;
+                    val[0] = (byte) 1;
                     mCharIdentify.setValue(val);
                     mBluetoothGatt.writeCharacteristic(mCharIdentify);
-
+                    gotImageInfo = true;
                 }
-            }).start();
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        Thread.sleep(2000);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    if(!gotImageInfo) {
-                        imageType = "B";
-                        mBluetoothGatt.setCharacteristicNotification(mCharIdentify, true);
-                        DisplayLog("working on second one");
-                        byte[] val = new byte[1];
-                        val[0] = (byte) 1;
-                        mCharIdentify.setValue(val);
-                        mBluetoothGatt.writeCharacteristic(mCharIdentify);
-
-                    }
 
 
-                }
-            }).start();
-            try{
-                Thread.sleep(4000);
-            }catch(Exception e){
-                e.printStackTrace();
             }
-        }
-
+        }).start();
     }
 
     private void startProgramming() {
@@ -398,8 +364,6 @@ public class FragmentOTA extends ViewFragment {
 
         // Initialize stats
         mProgInfo.reset();
-
-
     }
 
     private BluetoothAdapter.LeScanCallback mLeScanResult = new BluetoothAdapter.LeScanCallback() {
@@ -458,15 +422,7 @@ public class FragmentOTA extends ViewFragment {
                     }*/
                 }
                 if (uuidStr.equals(mCharBlock.getUuid().toString())) {
-                    if(!gotImageInfo){
-                        gotImageInfo = true;
-                        try{
-                            Thread.sleep(150);
-                        } catch(Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
+                    gotImageInfo = true;
                     DisplayLog("Action data notified - mCharBlock");
                     DisplayLog(String.format("NB: %02x%02x", value[1], value[0]));
                     if (mProgramming == true)
@@ -508,10 +464,7 @@ public class FragmentOTA extends ViewFragment {
                     mDiscovering = true;
                     mConnecting = false;
                     UpdateText("Connected...");
-                    if(mBluetoothGatt != null) {
-                        mBluetoothGatt.discoverServices();
-                    }
-
+                    mBluetoothGatt.discoverServices();
                     break;
             }
 
@@ -644,9 +597,6 @@ public class FragmentOTA extends ViewFragment {
             } else {
                 mProgramming = false;
                 msg = "GATT writeCharacteristic failed\n";
-                UpdateText("Fail to update Firmware");
-                mBluetoothGatt.disconnect();
-                mBluetoothAdapter.cancelDiscovery();
             }
             if (!success) {
                 DisplayLog(msg);
