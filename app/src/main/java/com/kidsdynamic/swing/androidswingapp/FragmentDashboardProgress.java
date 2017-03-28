@@ -50,6 +50,7 @@ public class FragmentDashboardProgress extends ViewFragment {
     private final static int SYNC_STATE_INIT = 0;
     private final static int SYNC_STATE_SUCCESS = 1;
     private final static int SYNC_STATE_FAIL = 2;
+    private final static int SYNC_FIRMWARE = 3;
     private int mSyncState = SYNC_STATE_INIT;
     private boolean mActivityUpdateFinish = false;
     private boolean mServerSyncFinish = false;
@@ -420,11 +421,18 @@ public class FragmentDashboardProgress extends ViewFragment {
     BLEMachine.onSyncListener mOnSyncListener = new BLEMachine.onSyncListener() {
         @Override
         public void onSync(int resultCode, ArrayList<WatchActivityRaw> result) {
+            Log.d("On Sync", " On Sync Result: " + resultCode);
             if (resultCode == SYNC_RESULT_SUCCESS) {
                 for (WatchActivityRaw res : result) {
                     mActivityMain.mOperator.pushUploadItem(res);
                 }
                 mSyncState = SYNC_STATE_SUCCESS;
+            } else if(resultCode == SYNC_FIRMWARE) {
+                mSyncState = SYNC_FIRMWARE;
+                Bundle bundle = new Bundle();
+                bundle.putString("mac_address", mMacAddress);
+                mActivityMain.selectFragment(FragmentOTA.class.getName(), bundle);
+
             } else {
                 // Todo : first connect?
                 mSyncState = SYNC_STATE_FAIL;

@@ -292,9 +292,14 @@ class BLEMachine extends BLEControl {
                         } else {
                             mRelationDevice.mAction.mSync = false;
                             mRelationDevice.mAction.mSendEvent = true;
-                            Disconnect();
+
                             mRelationDevice.mState.mRetryTimes = 0;
-                            mState = STATE_PRE_INIT;
+//                            mState = STATE_PRE_INIT;
+
+//                            Disconnect();
+                            mState = STATE_FIRMWARE;
+                            mRelationDevice.mState.mFirmwareChecked = false;
+                            Read(BLECustomAttributes.FIRMWARE_SERVICE, BLECustomAttributes.FIRMWARE_UUID);
 
                             //if (mOnSyncListener != null)
                             //    mOnSyncListener.onSync(SYNC_RESULT_SUCCESS, mActivities);
@@ -371,8 +376,26 @@ class BLEMachine extends BLEControl {
                     break;
 
                 case STATE_FIRMWARE:
+                    Log("State_Firmware: "+ String.valueOf(mRelationDevice.mState.mFirmwareChecked));
                     if(mRelationDevice.mState.mFirmwareChecked) {
 
+                        mRelationDevice.mAction.mSync = false;
+                        mRelationDevice.mAction.mSendEvent = true;
+                        mState = STATE_INIT;
+                        mRelationDevice.mState.mRetryTimes = 0;
+                        Disconnect();
+                        if (mOnSyncListener != null)
+                            mOnSyncListener.onSync(SYNC_RESULT_SUCCESS, mActivities);
+
+
+                        if(!mRelationDevice.mState.firmware.equals("Test")) {
+                            Log("In Firmware updating");
+                            if (mOnSyncListener != null){
+
+                                mOnSyncListener.onSync(SYNC_FIRMWARE, mActivities);
+                            }
+                        }
+                        mState = STATE_INIT;
                     }
             }
 
@@ -395,6 +418,7 @@ class BLEMachine extends BLEControl {
     }
 
     final static int SYNC_RESULT_SUCCESS = 0xFFFFFFFF;
+    final static int SYNC_FIRMWARE = 3;
 
     interface onSearchListener {
         void onSearch(ArrayList<Device> result);
@@ -507,6 +531,7 @@ class BLEMachine extends BLEControl {
             boolean mAlertDataDone;
             int mRetryTimes;
             boolean mFirmwareChecked;
+            String firmware;
         }
 
         void resetFlag() {
@@ -631,6 +656,11 @@ class BLEMachine extends BLEControl {
 
                     mRelationDevice.mState.mBatteryUpdated = true;
                 }
+            } else if(service.toString().equals(BLECustomAttributes.FIRMWARE_SERVICE)) {
+                String firmwareVersion = new String(value);
+                Log("Firmware: " + firmwareVersion);
+                mRelationDevice.mState.firmware = firmwareVersion;
+                mRelationDevice.mState.mFirmwareChecked = true;
             }
         }
 

@@ -18,5 +18,7 @@ public class BLECustomAttributes {
     public final static String VOICE_ALERT = "0000ffa7-0000-1000-8000-00805f9b34fb";
     public final static String VOICE_EVET_ALERT_TIME = "0000ffa8-0000-1000-8000-00805f9b34fb";
     public final static String HEADER = "0000ffa9-0000-1000-8000-00805f9b34fb";
+    public final static String FIRMWARE_SERVICE = "0000180a-0000-1000-8000-00805f9b34fb";
+    public final static String FIRMWARE_UUID = "00002a26-0000-1000-8000-00805f9b34fb";
 }
 
