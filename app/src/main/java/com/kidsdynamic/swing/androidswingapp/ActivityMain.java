@@ -386,7 +386,7 @@ public class ActivityMain extends AppCompatActivity
         } else if (resource == RESOURCE_HIDE) {
             mViewBackground.setImageDrawable(null);
         } else if (resource == mBackgroundRes) {
-            backgroundShuffle();
+            //backgroundShuffle();
         } else {
             mBackgroundPositionMinimum = 0;
 
@@ -399,7 +399,7 @@ public class ActivityMain extends AppCompatActivity
             mBackgroundPositionMaximum -= displayMetrics.widthPixels;
             mBackgroundPositionMaximum = Math.max(mBackgroundPositionMaximum, 0);
 
-            backgroundShuffle();
+            //backgroundShuffle();
         }
 
         mBackgroundRes = resource;
