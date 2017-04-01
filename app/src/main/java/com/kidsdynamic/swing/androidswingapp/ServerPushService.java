@@ -108,7 +108,7 @@ public class ServerPushService extends Service {
                 mTokenAvailable = true;
                 mHandler.postDelayed(DoPush, 1);
             } else {
-                mHandler.postDelayed(DoPush, 1000);
+                mHandler.postDelayed(DoPush, 10000);
             }
         }
 

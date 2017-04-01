@@ -655,8 +655,8 @@ class BLEMachine extends BLEControl {
 
                     if (value != null && value.length > 0)
                         mRelationDevice.mState.mBattery = value[0];
-                    else
-                        mRelationDevice.mState.mBattery = 0;
+                    //else
+                    //    mRelationDevice.mState.mBattery = 0;
 
                     mRelationDevice.mState.mBatteryUpdated = true;
                 }
