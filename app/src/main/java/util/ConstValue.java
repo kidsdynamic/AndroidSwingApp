@@ -30,8 +30,8 @@ public class ConstValue {
     public final static String ACTION_GATT_SERVICES_DISCOVERED = "com.kidsdynamic.ota.ACTION_GATT_SERVICES_DISCOVERED";
     public final static String ACTION_DATA_READ = "com.kidsdynamic.ota.ACTION_DATA_READ";
 
-    public static final short OAD_CONN_INTERVAL = 30; // 15 milliseconds
-    public static final short OAD_SUPERVISION_TIMEOUT = 1000; // 500 milliseconds
+    public static final short OAD_CONN_INTERVAL = 25; // 15 milliseconds
+    public static final short OAD_SUPERVISION_TIMEOUT = 500; // 500 milliseconds
     public static final int GATT_WRITE_TIMEOUT = 300; // Milliseconds
 
     public final static int BLUETOOTH_PERMISSION = 0x1000;

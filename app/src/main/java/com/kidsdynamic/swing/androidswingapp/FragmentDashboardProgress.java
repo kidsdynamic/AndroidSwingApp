@@ -427,6 +427,7 @@ public class FragmentDashboardProgress extends ViewFragment {
                 }
                 mSyncState = SYNC_STATE_SUCCESS;
             } else if(resultCode == SYNC_FIRMWARE) {
+
                 mSyncState = SYNC_FIRMWARE;
                 mActivityMain.startOTA(mMacAddress);
 

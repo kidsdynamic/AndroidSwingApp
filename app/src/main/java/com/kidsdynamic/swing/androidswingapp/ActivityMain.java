@@ -490,7 +490,7 @@ public class ActivityMain extends AppCompatActivity
     public void startOTA(String macAddress){
         Intent intent = new Intent(this, FragmentOTA.class);
         intent.putExtra("mac_address", macAddress);
-        startActivityForResult(intent, OTA_REQUEST);
+        startActivity(intent);
     }
 
     public void setLocale(String language, String region) {

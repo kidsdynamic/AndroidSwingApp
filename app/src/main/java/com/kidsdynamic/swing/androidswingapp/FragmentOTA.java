@@ -1,69 +1,42 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 
-import android.Manifest;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGatt;
-import android.bluetooth.BluetoothGattCallback;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.polidea.rxandroidble.RxBleClient;
+import com.polidea.rxandroidble.RxBleConnection;
+import com.polidea.rxandroidble.RxBleDevice;
+import com.polidea.rxandroidble.internal.RxBleLog;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.UUID;
 
+import rx.Subscription;
 import util.ConstValue;
 import util.Conversion;
 
 public class FragmentOTA extends AppCompatActivity {
     private TextView mViewProgressText;
 
-    private boolean mProgramming = false;
-    private String mDeviceAddress = null;
-    private boolean gotImageInfo = false;
-    private String imageType = "A";
-    private BluetoothAdapter mBluetoothAdapter;
-    private BluetoothGatt mBluetoothGatt = null;
+    RxBleDevice rxBleDevice;
+    RxBleClient rxBleClient;
+    Subscription scanSubscription;
+    Subscription connectSubscription;
+    RxBleConnection rxBleConnection;
 
-    private BluetoothGattService mOadService;
-    private BluetoothGattCharacteristic mCharIdentify = null;
-    private BluetoothGattCharacteristic mCharBlock = null;
-    private IntentFilter mIntentFilter;
     private Button goBackButton;
-
-    private boolean mDiscovering = false;
-    private boolean mConnecting = false;
-
-    private Handler mHandler;
+    private boolean gotImageType = false;
+    private boolean mProgramming = false;
 
     // Programming
     private final byte[] mFileBuffer = new byte[ConstValue.FILE_BUFFER_SIZE];
@@ -105,180 +78,201 @@ public class FragmentOTA extends AppCompatActivity {
         setContentView(R.layout.fragment_profile_ota);
         DisplayLog("On onCreate");
 
+        rxBleClient = RxBleClient.create(this);
+
         goBackButton = (Button) findViewById(R.id.goBackButton);
 
-        goBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
+        goBackButton.setOnClickListener(view -> {
+            Disconnect();
+            finish();
         });
         mViewProgressText = (TextView) findViewById(R.id.progressText);
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             macAddress = bundle.getString("mac_address", null);
+            rxBleDevice = rxBleClient.getBleDevice(macAddress);
+            Connect();
+
         }
-        startScan();
+        Start();
     }
 
-    public void startScan(){
-        Log("On start sacn");
-        try {
-            Thread.sleep(1000);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+    public void Start(){
+        scanSubscription = rxBleClient.scanBleDevices()
+                .subscribe(
+                        rxBleScanResult -> {
 
-        getApplicationContext().registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
+                            if (rxBleScanResult.getBleDevice().getName() != null) {
+                                if (rxBleScanResult.getBleDevice().getMacAddress().equals(macAddress)) {
+                                    Connect(rxBleScanResult.getBleDevice());
+                                    StopScan();
+                                }
+                            }
 
-        mBluetoothAdapter = ((BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
-        while (!mBluetoothAdapter.isEnabled()) {
-            mBluetoothAdapter.enable();
-            try {
-                Thread.sleep(10);
-            } catch (Exception e) {
-                DisplayLog("Error: " + e.toString());
-                e.printStackTrace();
-            }
-        }
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on scanning device. " + throwable.toString())
+                );
+    }
 
-        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, ConstValue.REQUEST_ENABLE_BT);
-        }
 
-        initIntentFilter();
-        registerReceiver(mBroadcastReceiver, mIntentFilter);
+    private void Connect(RxBleDevice device) {
+        this.rxBleDevice = device;
+        Connect();
+    }
 
-        if(macAddress != null) {
-            Connect(macAddress);
+    private void Connect() {
+        connectSubscription = rxBleDevice.establishConnection(false)
+                .subscribe(
+                        rxBleConnection -> {
+                            this.rxBleConnection = rxBleConnection;
+                            StopScan();
+                            ReadFirmware();
+
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on connecting device")
+                );
+    }
+
+
+    private void ReadFirmware() {
+        rxBleConnection.readCharacteristic(ConstValue.FIRMWARE_UUID)
+                .subscribe(
+                        characteristicValue -> {
+                            // All GATT operations are done through the rxBleConnection.
+                            DisplayLog("Received From Value: " + new String(characteristicValue));
+                            setConnectionParameters();
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on getting F. " + throwable.toString())
+                );
+    }
+
+    private void SetupNotification() {
+        rxBleConnection.setupNotification(ConstValue.oadImageNotify_UUID)
+                .doOnNext(notificationObservable -> {
+                    // Notification has been set up
+                    DisplayLog("Completed setup notification for notify");
+                    GetTargetImageInfo();
+
+
+                })
+                .flatMap(notificationObservable -> notificationObservable)
+                .subscribe(
+                        bytes -> {
+
+                            if(!gotImageType) {
+                                DisplayLog("Action data notified - mCharIdentify");
+                                gotImageType = true;
+                                mTargImgHdr.ver = Conversion.buildUint16(bytes[1], bytes[0]);
+                                mTargImgHdr.imgType = ((mTargImgHdr.ver & 1) == 1) ? 'B' : 'A';
+                                mTargImgHdr.len = Conversion.buildUint16(bytes[3], bytes[2]);
+                                SetupBlockNotification();
+                                if (loadFile(mTargImgHdr.imgType == 'B' ? ConstValue.FW_FILE_A : ConstValue.FW_FILE_B, true)) {
+                                    startProgramming();
+                                }
+                            }
+
+
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on identify notification")
+
+                );
+    }
+
+    private void SetupBlockNotification() {
+        rxBleConnection.setupNotification(ConstValue.oadBlockRequest_UUID)
+                .flatMap(notificationObservable -> notificationObservable)
+                .subscribe(
+                        bytes -> {
+                            DisplayLog("Action data notified - mCharBlock");
+                            DisplayLog(String.format("NB: %02x%02x", bytes[1], bytes[0]));
+                            if(mProgramming) {
+                                programBlock(((bytes[1] << 8) & 0xff00) + (bytes[0] & 0x00ff));
+                            }
+
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on block notification")
+
+                );
+    }
+
+    private void programBlock(int block) {
+        DisplayLog("iBlocks: " + mProgInfo.iBlocks + "  nBlocks: " + mProgInfo.nBlocks);
+
+        if (mProgInfo.iBlocks < mProgInfo.nBlocks) {
+            mProgramming = true;
+
+            mProgInfo.iBlocks = (short) block;
+
+            // Prepare block
+            mOadBuffer[0] = Conversion.loUint16(mProgInfo.iBlocks);
+            mOadBuffer[1] = Conversion.hiUint16(mProgInfo.iBlocks);
+            System.arraycopy(mFileBuffer, mProgInfo.iBytes, mOadBuffer, 2, ConstValue.OAD_BLOCK_SIZE);
+
+            // Send block
+            DisplayLog("FwUpdateActivity" + String.format("TX Block %02x%02x", mOadBuffer[1], mOadBuffer[0]));
+
+            rxBleConnection.writeCharacteristic(ConstValue.oadBlockRequest_UUID, mOadBuffer)
+                    .subscribe(
+                            characteristicValue -> {
+                                // Characteristic value confirmed.
+                                DisplayLog("Sent block success");
+                                mProgInfo.iBlocks++;
+                                mProgInfo.iBytes += ConstValue.OAD_BLOCK_SIZE;
+                                final String message = "Progress: " + (mProgInfo.iBlocks * 100) / mProgInfo.nBlocks;
+                                UpdateText(message);
+                                if (mProgInfo.iBlocks == mProgInfo.nBlocks) {
+                                    DisplayLog("Programming finished!!!!!!!!!!");
+                                }
+
+                            },
+                            throwable -> ErrorHandler(throwable, "Error on sending block")
+                    );
+
         } else {
-            Scan(true);
+            mProgramming = false;
         }
 
-    }
-
-
-
-    @Override
-    public void onResume() {
-        registerReceiver(mBroadcastReceiver, mIntentFilter);
-        super.onResume();
-//        startScan();
-
-    }
-
-    @Override
-    public void onPause() {
-//        getFragmentManager().popBackStack();
-//        getApplicationContext().unregisterReceiver(mBroadcastReceiver);
-//        unregisterReceiver(mBroadcastReceiver);
-
-/*        mBluetoothGatt.disconnect();
-        mBluetoothAdapter.cancelDiscovery();
-        mBluetoothGatt = null;
-        mBluetoothAdapter = null;
-        Close();*/
-        DisplayLog("On Pause");
-        super.onPause();
-    }
-
-    @Override
-    public void onStop(){
-        super.onStop();
-//        getApplicationContext().unregisterReceiver(mBroadcastReceiver);
-//        unregisterReceiver(mBroadcastReceiver);
-
-        mBluetoothGatt.disconnect();
-        mBluetoothAdapter.cancelDiscovery();
-        mBluetoothGatt = null;
-        mBluetoothAdapter = null;
-        Close();
-        DisplayLog("On Stop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-
-    private void initIntentFilter() {
-        mIntentFilter = new IntentFilter();
-        mIntentFilter.addAction(ConstValue.ACTION_DATA_NOTIFY);
-        mIntentFilter.addAction(ConstValue.ACTION_DATA_WRITE);
-    }
-
-    public boolean Scan(boolean enable) {
-        final long SCAN_PERIOD = 10000;
-
-        if (enable) {
-            mBluetoothAdapter.startLeScan(mLeScanResult);
-            DisplayLog("Start scan...");
-        } else {
-            mBluetoothAdapter.stopLeScan(mLeScanResult);
-            DisplayLog("Stop scan");
+        if (!mProgramming) {
+            DisplayLog("Stopped Programming");
         }
-
-        return true;
     }
 
-    private void readFirmeware() {
-        BluetoothGattService service = mBluetoothGatt.getService(ConstValue.FIRMWARE_SERVICE);
-        if (service == null) {
-            Log("Error. Can't find firmware service");
-            return;
-        }
+    private void GetTargetImageInfo() {
+        byte[] val = new byte[1];
+        val[0] = (byte) 0;
+        rxBleConnection.writeCharacteristic(ConstValue.oadImageNotify_UUID, val)
+                .subscribe(
+                        characteristicValue -> {
+                            DisplayLog("Check - A");
 
-        BluetoothGattCharacteristic character = service.getCharacteristic(ConstValue.FIRMWARE_UUID);
-        if (character == null) {
-            Log("Error. Can't find firmware character");
-            return;
-        }
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on Checking A")
+                );
 
-        mBluetoothGatt.readCharacteristic(character);
 
-    }
+        new Thread(() -> {
+            try{
+                Thread.sleep(1500);
+                if(!gotImageType) {
+                    byte[] vl = new byte[1];
+                    vl[0] = (byte) 1;
+                    rxBleConnection.writeCharacteristic(ConstValue.oadImageNotify_UUID, vl)
+                            .subscribe(
+                                    characteristicValue -> {
+                                        DisplayLog("Check - B");
 
-    private void setupCharacteristic(){
-        mOadService = mBluetoothGatt.getService(ConstValue.oadService_UUID);
-        mCharIdentify = mOadService.getCharacteristic(ConstValue.oadImageNotify_UUID);
-        mCharBlock = mOadService.getCharacteristic(ConstValue.oadBlockRequest_UUID);
-        mCharBlock.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
-        mBluetoothGatt.setCharacteristicNotification(mCharBlock, true);
-
-        BluetoothGattDescriptor descriptor = mCharBlock.getDescriptor(ConstValue.CLIENT_CHARACTERISTIC_CONFIG);
-        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-        mBluetoothGatt.writeDescriptor(descriptor);
-
-        getTargetImageInfo();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(true) {
-                    if(gotImageInfo) {
-                        String imageFile;
-                        if(imageType.equals("A")){
-                            imageFile = ConstValue.FW_FILE_A;
-                        } else {
-                            imageFile = ConstValue.FW_FILE_B;
-                        }
-                        if(loadFile(imageFile, true)){
-                            startProgramming();
-                        }
-                        break;
-                    }
-                    try{
-                        Thread.sleep(10);
-                    } catch(Exception e) {
-                        e.printStackTrace();
-                    }
-
+                                    },
+                                    throwable -> ErrorHandler(throwable, "Error on Checking B")
+                            );
                 }
 
-            }
-        }).start();
 
+            } catch (Exception e ){
+                e.printStackTrace();
+                ErrorHandler(null, "Error on sending second Check - B");
+            }
+
+        }).start();
     }
 
     private boolean loadFile(String filepath, boolean isAsset) {
@@ -317,73 +311,10 @@ public class FragmentOTA extends AppCompatActivity {
         return true;
     }
 
-    private void getTargetImageInfo() {
-        // Enable notification
-        mCharIdentify.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-        mBluetoothGatt.setCharacteristicNotification(mCharIdentify, true);
-        BluetoothGattDescriptor descriptor = mCharIdentify.getDescriptor(ConstValue.CLIENT_CHARACTERISTIC_CONFIG);
-        descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-        mBluetoothGatt.writeDescriptor(descriptor);
-        // Prepare data for request (try image A and B respectively, only one of
-        // them will give a notification with the image info)
-
-        while(!gotImageInfo) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    if(mBluetoothGatt == null) {
-                        gotImageInfo = true;
-                        return;
-                    }
-                    try{
-                        Thread.sleep(500);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    DisplayLog("working on First one");
-                    byte[] val = new byte[1];
-                    val[0] = (byte) 0;
-                    mCharIdentify.setValue(val);
-                    mBluetoothGatt.writeCharacteristic(mCharIdentify);
-
-                }
-            }).start();
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        Thread.sleep(2000);
-                    }catch(Exception e){
-                        e.printStackTrace();
-                    }
-                    if(!gotImageInfo) {
-                        imageType = "B";
-                        mBluetoothGatt.setCharacteristicNotification(mCharIdentify, true);
-                        DisplayLog("working on second one");
-                        byte[] val = new byte[1];
-                        val[0] = (byte) 1;
-                        mCharIdentify.setValue(val);
-                        mBluetoothGatt.writeCharacteristic(mCharIdentify);
-
-                    }
-
-
-                }
-            }).start();
-            try{
-                Thread.sleep(4000);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-
-    }
-
     private void startProgramming() {
         DisplayLog("Programming started\n");
-        mProgramming = true;
 
+        mProgramming = true;
         // Prepare image notification
         byte[] buf = new byte[ConstValue.OAD_IMG_HDR_SIZE + 2 + 2];
         buf[0] = Conversion.loUint16(mFileImgHdr.ver);
@@ -393,299 +324,18 @@ public class FragmentOTA extends AppCompatActivity {
         System.arraycopy(mFileImgHdr.uid, 0, buf, 4, 4);
 
         // Send image notification
-        mCharIdentify.setValue(buf);
-        mBluetoothGatt.requestConnectionPriority(BluetoothGatt.CONNECTION_PRIORITY_HIGH);
-        mBluetoothGatt.writeCharacteristic(mCharIdentify);
+        rxBleConnection.writeCharacteristic(ConstValue.oadImageNotify_UUID, buf)
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            DisplayLog("Sent image notification");
+
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on sending image notification")
+                );
 
         // Initialize stats
         mProgInfo.reset();
-
-
-    }
-
-    private BluetoothAdapter.LeScanCallback mLeScanResult = new BluetoothAdapter.LeScanCallback() {
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-
-            final String name = device.getName();
-            final String address = device.getAddress();
-
-
-            DisplayLog("Found Device Name: " + name + "  Address: " + address);
-            if (name == null || address == null)
-                return;
-
-            final int rssii = rssi;
-
-            if (name.contains("SWING")) {
-                Scan(false);
-                UpdateText("Found Device \n " + address);
-                DisplayLog("Found - Device Name: " + name + " Device Address: " + address);
-
-                try {
-                    Connect(device.getAddress());
-                    UpdateText("Connecting to \n " + address);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    DisplayLog(e.getMessage());
-                }
-
-            }
-
-
-        }
-    };
-
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            final String action = intent.getAction();
-            DisplayLog("Action data notified : " + action);
-            if (ConstValue.ACTION_DATA_NOTIFY.equals(action)) {
-                byte[] value = intent.getByteArrayExtra(ConstValue.EXTRA_DATA);
-                String uuidStr = intent.getStringExtra(ConstValue.EXTRA_UUID);
-
-                if (uuidStr.equals(mCharIdentify.getUuid().toString())) {
-                    DisplayLog("Action data notified - mCharIdentify");
-                    // Image info notification
-                    mTargImgHdr.ver = Conversion.buildUint16(value[1], value[0]);
-                    mTargImgHdr.imgType = ((mTargImgHdr.ver & 1) == 1) ? 'B' : 'A';
-                    mTargImgHdr.len = Conversion.buildUint16(value[3], value[2]);
-                    displayImageInfo(mTargImgHdr);
-
-/*                    if(loadFile(mTargImgHdr.imgType, true)){
-                        startProgramming();
-                    }*/
-                }
-                if (uuidStr.equals(mCharBlock.getUuid().toString())) {
-                    if(!gotImageInfo){
-                        gotImageInfo = true;
-/*                        try{
-                            Thread.sleep(50);
-                        } catch(Exception e) {
-                            e.printStackTrace();
-                        }*/
-                    }
-                    DisplayLog("Action data notified - mCharBlock");
-                    DisplayLog(String.format("NB: %02x%02x", value[1], value[0]));
-                    if (mProgramming == true)
-                        programBlock(((value[1] << 8) & 0xff00) + (value[0] & 0x00ff));
-
-                }
-            } else if (ConstValue.ACTION_DATA_WRITE.equals(action)) {
-                int status = intent.getIntExtra(ConstValue.EXTRA_STATUS, BluetoothGatt.GATT_SUCCESS);
-                if (status != BluetoothGatt.GATT_SUCCESS) {
-                    Toast.makeText(context, "GATT error: status=" + status, Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        }
-
-    };
-
-    private void broadcastUpdate(final String action, final BluetoothGattCharacteristic characteristic, final int status) {
-        final Intent intent = new Intent(action);
-        intent.putExtra(ConstValue.EXTRA_UUID, characteristic.getUuid().toString());
-        intent.putExtra(ConstValue.EXTRA_DATA, characteristic.getValue());
-        intent.putExtra(ConstValue.EXTRA_STATUS, status);
-        sendBroadcast(intent);
-    }
-
-    private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
-        @Override
-        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-            switch (newState) {
-                case BluetoothProfile.STATE_DISCONNECTED:
-                    DisplayLog("STATE_DISCONNECTED Address : " + gatt.getDevice().getAddress());
-                    if(mProgInfo.iBlocks+10 < mProgInfo.nBlocks) {
-                        UpdateText("Device Disconnected for some reason");
-                    }
-
-                    if(mConnecting) {
-                        Connect(gatt.getDevice().getAddress());
-                    }
-                    mDiscovering = false;
-                    break;
-                case BluetoothProfile.STATE_CONNECTED:
-                    DisplayLog("STATE_CONNECTED Address : " + gatt.getDevice().getAddress());
-                    mDiscovering = true;
-                    mConnecting = false;
-                    UpdateText("Connected...");
-                    if(mBluetoothGatt != null) {
-                        mBluetoothGatt.discoverServices();
-                    }
-
-                    break;
-            }
-
-        }
-
-        @Override
-        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
-            mDiscovering = false;
-            DisplayLog("Discovered");
-
-//            enableDevice();
-            readFirmeware();
-//            displayGattServices(gatt.getServices());
-        }
-
-
-        @Override
-        public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-
-            UUID uuidServ = characteristic.getService().getUuid();
-            UUID uuidChar = characteristic.getUuid();
-            byte[] value = characteristic.getValue();
-            DisplayLog("On Characters Read. Service: " + uuidServ.toString() + "   Character: " + uuidChar.toString() + " Status: " + status);
-            try {
-
-
-                if (uuidChar.toString().equals(ConstValue.FIRMWARE_UUID.toString())) {
-                    String version = new String(value);
-
-                    DisplayLog("Firmware Version: " + version);
-                    UpdateText("Firmware Version \n " + version + "\n Getting Start...");
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try{
-                                Thread.sleep(50);
-                            }catch(Exception e) {
-                                e.printStackTrace();
-                            }
-                            setupCharacteristic();
-                        }
-                    }).start();
-
-
-                }
-
-
-            } catch (Exception e) {
-                DisplayLog("Error: " + e.toString());
-                e.printStackTrace();
-            }
-
-        }
-
-        @Override
-        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-            UUID uuidServ = characteristic.getService().getUuid();
-            UUID uuidChar = characteristic.getUuid();
-            DisplayLog("On Characters Changed. Service: " + uuidServ.toString() + "   Character: " + uuidChar.toString());
-
-            broadcastUpdate(ConstValue.ACTION_DATA_NOTIFY, characteristic, BluetoothGatt.GATT_SUCCESS);
-        }
-
-
-        @Override
-        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-            UUID uuidServ = characteristic.getService().getUuid();
-            UUID uuidChar = characteristic.getUuid();
-            DisplayLog("On Characters Write. Service: " + uuidServ.toString() + "   Character: " + uuidChar.toString() + " Status: " + status);
-
-
-        }
-
-        @Override
-        public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            DisplayLog("On onDescriptorRead: " + status);
-
-        }
-
-        @Override
-        public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
-            DisplayLog("On onDescriptorWrite: " + status);
-        }
-
-        @Override
-        public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
-            final int finalRssi = rssi;
-            DisplayLog(String.valueOf(finalRssi));
-        }
-
-    };
-
-          /*
-   * Called when a notification with the current image info has been received
-   */
-
-    private void programBlock(int block) {
-        if (!mProgramming)
-            return;
-
-        DisplayLog("iBlocks: " + mProgInfo.iBlocks + "  nBlocks: " + mProgInfo.nBlocks);
-
-        if (mProgInfo.iBlocks < mProgInfo.nBlocks) {
-            mProgramming = true;
-            String msg = new String();
-
-            mProgInfo.iBlocks = (short) block;
-
-            // Prepare block
-            mOadBuffer[0] = Conversion.loUint16(mProgInfo.iBlocks);
-            mOadBuffer[1] = Conversion.hiUint16(mProgInfo.iBlocks);
-            System.arraycopy(mFileBuffer, mProgInfo.iBytes, mOadBuffer, 2, ConstValue.OAD_BLOCK_SIZE);
-
-            // Send block
-            mCharBlock.setValue(mOadBuffer);
-            DisplayLog("FwUpdateActivity" + String.format("TX Block %02x%02x", mOadBuffer[1], mOadBuffer[0]));
-
-            boolean success = mBluetoothGatt.writeCharacteristic(mCharBlock);
-
-            if (success) {
-                // Update stats
-                mProgInfo.iBlocks++;
-                mProgInfo.iBytes += ConstValue.OAD_BLOCK_SIZE;
-                String progressStep = "Progress: " + (mProgInfo.iBlocks * 100) / mProgInfo.nBlocks + "%";
-//                DisplayLog("Progress: " + (mProgInfo.iBlocks * 100) / mProgInfo.nBlocks);
-                UpdateText(progressStep);
-                if (mProgInfo.iBlocks == mProgInfo.nBlocks) {
-                    DisplayLog("Programming finished!!!!!!!!!!");
-                }
-            } else {
-                mProgramming = false;
-                msg = "GATT writeCharacteristic failed\n";
-                Log(msg);
-                UpdateText("Fail to update Firmware");
-                mBluetoothGatt.disconnect();
-                mBluetoothAdapter.cancelDiscovery();
-            }
-            if (!success) {
-                DisplayLog(msg);
-            }
-        } else {
-            mProgramming = false;
-        }
-
-        if (!mProgramming) {
-            DisplayLog("Stopped Programming");
-        }
-    }
-
-
-    public boolean Connect(String address) {
-        mDeviceAddress = address;
-        mConnecting = true;
-        DisplayLog("Connecting to: " + mDeviceAddress);
-        return Connect();
-    }
-
-    public synchronized boolean Connect() {
-        if (mBluetoothAdapter == null || mDeviceAddress == null) {
-            DisplayLog("mBluetoothAdapter == null or address == null");
-            return false;
-        }
-        DisplayLog("Connecting");
-
-        BluetoothDevice dev = mBluetoothAdapter.getRemoteDevice(mDeviceAddress);
-
-        Close();
-        mBluetoothGatt = dev.connectGatt(this, false, mGattCallback);
-
-        return true;
     }
 
     private void displayImageInfo(ImgHdr h) {
@@ -695,15 +345,79 @@ public class FragmentOTA extends AppCompatActivity {
 
     }
 
-    private boolean Close() {
-        if (mBluetoothGatt == null)
-            return false;
+    private boolean setConnectionParameters() {
+        // Make sure connection interval is long enough for OAD (Android default connection interval is 7.5 ms)
+        byte[] value = {Conversion.loUint16(ConstValue.OAD_CONN_INTERVAL), Conversion.hiUint16(ConstValue.OAD_CONN_INTERVAL), Conversion.loUint16(ConstValue.OAD_CONN_INTERVAL),
+                Conversion.hiUint16(ConstValue.OAD_CONN_INTERVAL), 0, 0, Conversion.loUint16(ConstValue.OAD_SUPERVISION_TIMEOUT), Conversion.hiUint16(ConstValue.OAD_SUPERVISION_TIMEOUT)};
 
-        mBluetoothGatt.close();
-        mBluetoothGatt = null;
+        rxBleConnection.writeCharacteristic(ConstValue.oadBlockRequest_UUID, value)
+                .subscribe(
+                        characteristicValue -> {
+                            // Characteristic value confirmed.
+                            DisplayLog("write connection parameters successfully");
+                            DisplayLog(new String(characteristicValue));
+                            SetupNotification();
+
+                        },
+                        throwable -> ErrorHandler(throwable, "Error on writing connection parameters")
+                );
 
         return true;
     }
+
+
+
+    private void StopScan() {
+        if(scanSubscription != null && !scanSubscription.isUnsubscribed()) {
+            scanSubscription.unsubscribe();
+        }
+
+    }
+
+    private void Disconnect() {
+        if(scanSubscription != null && !scanSubscription.isUnsubscribed()) {
+            scanSubscription.unsubscribe();
+        }
+        if(connectSubscription != null && !connectSubscription.isUnsubscribed()) {
+            connectSubscription.unsubscribe();
+        }
+
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DisplayLog("On Resume");
+        if(connectSubscription != null && connectSubscription.isUnsubscribed()) {
+            UpdateText("Reconnecting to your watch");
+            Connect();
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        DisplayLog("On Pause");
+        Disconnect();
+
+        super.onPause();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Disconnect();
+        DisplayLog("On Stop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        DisplayLog("On Destory");
+    }
+
 
     private void DisplayLog(final String text) {
 /*
@@ -724,6 +438,12 @@ public class FragmentOTA extends AppCompatActivity {
         }, 1000);*/
 
         Log(text);
+    }
+
+    private void ErrorHandler(Throwable throwable, String message) {
+        throwable.printStackTrace();
+        DisplayLog(message);
+        Disconnect();
     }
 
     private void UpdateText(final String text) {
