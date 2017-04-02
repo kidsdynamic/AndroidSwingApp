@@ -126,7 +126,7 @@ class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mDiscovered = false;
                         mState = STATE_INIT;
                         if (mHandler != null) {
-                            mHandler.postDelayed(this, 100);
+                            mHandler.postDelayed(this, 1000);
                             return;
                         }
                     }
@@ -203,13 +203,14 @@ class BLEMachine extends BLEControl {
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
                         } else {
-                            setTimeout(4800);
+                            setTimeout(4500);
                             mState = STATE_GET_BATTERY;
                             mRelationDevice.mState.mBatteryUpdated = false;
                             Read(BLECustomAttributes.BATTERY_SERVICE, BLECustomAttributes.BATTERY_LEVEL);
                         }
                     } else if (!mRelationDevice.mState.mConnected) {
-                        syncFailProcess();
+                        mState = STATE_PRE_INIT;
+                        //syncFailProcess();
                     }
                     break;
 

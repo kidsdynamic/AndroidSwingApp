@@ -248,6 +248,8 @@ public class BLEControl {
     public synchronized boolean Disconnect() {
         if(mBluetoothGatt == null)
             return false;
+
+        Log("Disconnect()+");
         mConnecting = false;
         mBluetoothGatt.disconnect();
         mDeviceAddress = null;
