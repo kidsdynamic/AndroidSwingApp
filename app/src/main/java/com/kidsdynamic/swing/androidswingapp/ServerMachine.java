@@ -16,6 +16,7 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,6 +68,8 @@ public class ServerMachine {
     private final static String CMD_SUBHOST_DENY = SERVER_ADDRESS + "/subHost/deny";
     private final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
     private final static String CMD_SUBHOST_REMOVE_KID = SERVER_ADDRESS + "/subHost/removeKid";
+
+    private final static String CMD_USER_REGISTRATION_ID = "/user/updateAndroidRegistrationId";
 
     private final static String CMD_GET_AVATAR = BuildConfig.PHOTO_BASE_URL;
 
@@ -182,6 +185,16 @@ public class ServerMachine {
         Request<NetworkResponse> request = NewRequest(Request.Method.POST, CMD_USER_LOGIN, map, null);
         request.setTag(tag);
         mTaskQueue.add(new TaskItem(request, CMD_USER_LOGIN, listener));
+    }
+
+    public void updateRegistrationId(String registrationId){
+        Map<String, String> IdMap = new HashMap<>();
+        IdMap.put("registrationId", registrationId);
+
+        Map<String, String> map = new HashMap<>();
+        Gson gson = new Gson();
+        map.put("json", gson.toJson(IdMap));
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_USER_REGISTRATION_ID, map, null), CMD_USER_REGISTRATION_ID, null));
     }
 
     public interface userRegisterListener {

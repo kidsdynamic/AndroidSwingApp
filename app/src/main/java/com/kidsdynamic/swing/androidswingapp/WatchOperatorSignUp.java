@@ -2,6 +2,9 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.graphics.Bitmap;
 import android.util.Log;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.io.File;
 
 /**
@@ -62,6 +65,9 @@ public class WatchOperatorSignUp {
             mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
             mServerMachine.setAuthToken(result.access_token);
             mServerMachine.userUpdateProfile(mUpdateProfileListener, mFirstName, mLastName, mPhone, mZip);
+
+            String registrationId = FirebaseInstanceId.getInstance().getId();
+            mServerMachine.updateRegistrationId(registrationId);
         }
 
         @Override
