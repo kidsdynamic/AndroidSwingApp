@@ -17,13 +17,16 @@ import android.os.Build;
 import android.util.Log;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static android.bluetooth.BluetoothGatt.CONNECTION_PRIORITY_HIGH;
 
+/**
+ * 基本的BLE控制，最低限度的包裝Android的BLE相關功能，包含對BLE裝置的Scan, Connect, Disconnect, Read及
+ * Write。 此外，對BLE的讀及寫，使用同步化的佇列。
+ */
 public class BLEControl {
     private BluetoothAdapter mBluetoothAdapter;
     private BluetoothGatt mBluetoothGatt = null;
@@ -43,25 +46,10 @@ public class BLEControl {
         Log.i("BLEControl", msg);
     }
 
-
-    public BLEControl(Context context, OnEventListener listener) {
-        mContext = context;
-
-        mBluetoothAdapter = ((BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
-        while (!mBluetoothAdapter.isEnabled()) {
-            mBluetoothAdapter.enable();
-            try {
-                Thread.sleep(10);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        mEventListener = listener;
-
-        mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
-    }
-
+    /**
+     * Constructor
+     * @param context App's context.
+     */
     protected BLEControl(Context context) {
         mContext = context;
 
@@ -76,17 +64,29 @@ public class BLEControl {
         }
     }
 
+    /**
+     * Initialization
+     * @param listener The callback function.
+     */
     protected void Init(OnEventListener listener) {
         mEventListener = listener;
         //mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED));
     }
 
+    /**
+     * Deinitialization
+     */
     protected void Deinit() {
         mEventListener = null;
         //mContext.unregisterReceiver(mBroadcastReceiver);
     }
 
     boolean mBondStateReceiverEnabled = false;
+
+    /**
+     * Enable broadcast receiver for bonding state.
+     * @param enable true for enable, or false to disable
+     */
     protected synchronized void EnableBondStateReceiver(boolean enable) {
         if (mBondStateReceiverEnabled == enable)
             return;
@@ -100,6 +100,9 @@ public class BLEControl {
         }
     }
 
+    /**
+     * Broadcast receiver for bonding state.
+     */
     private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -130,18 +133,6 @@ public class BLEControl {
                     m.invoke(device, pin);
                     device.getClass().getMethod("setPairingConfirmation", boolean.class).invoke(device, true);
 
-/*
-                    int pin=intent.getIntExtra("android.bluetooth.device.extra.PAIRING_KEY", 0);
-                    //the pin in case you need to accept for an specific pin
-                    Log.d("PIN", " " + intent.getIntExtra("android.bluetooth.device.extra.PAIRING_KEY",0));
-                    //maybe you look for a name or address
-                    Log.d("Bonded", device.getName());
-                    byte[] pinBytes;
-                    pinBytes = (""+pin).getBytes("UTF-8");
-                    device.setPin(pinBytes);
-                    */
-                    //setPairing confirmation if neeeded
-                    //device.setPairingConfirmation(true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -150,6 +141,9 @@ public class BLEControl {
 
     };
 
+    /**
+     * Callback interface used to deliver LE scan results.
+     */
     private BluetoothAdapter.LeScanCallback mLeScanResult = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
@@ -166,6 +160,11 @@ public class BLEControl {
         }
     };
 
+    /**
+     * Start/Stop a scan for Bluetooth LE devices.
+     * @param enable true for start, or false to stop.
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     public boolean Scan(boolean enable) {
 
         if (enable == mScanning)
@@ -181,6 +180,11 @@ public class BLEControl {
         return true;
     }
 
+    /**
+     * Get the bond state of the remote device.
+     * @param address MAC address of remote device.
+     * @return Bond state
+     */
     public boolean GetBondState(String address) {
         if (mBluetoothAdapter == null)
             return false;
@@ -190,6 +194,10 @@ public class BLEControl {
         return dev.getBondState() == BluetoothDevice.BOND_BONDED;
     }
 
+    /**
+     * Connect to GATT server by mDeviceAddress.
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     public synchronized boolean Connect() {
         if (mBluetoothAdapter == null || mDeviceAddress == null) {
             Log("mBluetoothAdapter == null or address == null");
@@ -230,11 +238,20 @@ public class BLEControl {
         return true;
     }
 
+    /**
+     * Connect to GATT server by address.
+     * @param address MAC address of the remote device
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     public boolean Connect(String address) {
         mDeviceAddress = address;
         return Connect();
     }
 
+    /**
+     * Close this Bluetooth GATT client.
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     private boolean Close() {
         if (mBluetoothGatt == null)
             return false;
@@ -245,6 +262,11 @@ public class BLEControl {
         return true;
     }
 
+    /**
+     * Disconnects an established connection, or cancels a connection attempt
+     * currently in progress.
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     public synchronized boolean Disconnect() {
         if(mBluetoothGatt == null)
             return false;
@@ -265,6 +287,12 @@ public class BLEControl {
         return true;
     }
 
+    /**
+     * Put the read request in the task queue.
+     * @param service The UUID for GATT service that offer characteristic.
+     * @param characteristic The UUID for characteristic.
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     public boolean Read(String service, String characteristic) {
         if(service == null || characteristic == null || !IsConnected())
             return false;
@@ -282,6 +310,13 @@ public class BLEControl {
         return false;
     }
 
+    /**
+     * Put the write request in the task queue.
+     * @param service The UUID for GATT service that offer characteristic.
+     * @param characteristic The UUID for characteristic.
+     * @param value The value to be write
+     * @return Upon successful completion return true. Otherwise, return false.
+     */
     public boolean Write(String service, String characteristic, byte[] value) {
         if (service == null || characteristic == null || value == null || !IsConnected())
             return false;
@@ -331,10 +366,13 @@ public class BLEControl {
         return false;
     }
 
-    public boolean IsConnected() {
+    private boolean IsConnected() {
         return (mBluetoothGatt != null && mConnectionState == BluetoothProfile.STATE_CONNECTED && !mDiscovering);
     }
 
+    /**
+     * BluetoothGatt callback.
+     */
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -439,6 +477,9 @@ public class BLEControl {
 
     };
 
+    /**
+     * The interface is used to implement BLEControl callbacks.
+     */
     public interface OnEventListener {
         void onBondStateChange(int bondState);
 
@@ -457,6 +498,9 @@ public class BLEControl {
         void onRssiUpdate(int rssi);
     }
 
+    /**
+     * Task queue item.
+     */
     private class TaskItem {
         Object mObject;
         boolean mWrite;
@@ -467,6 +511,9 @@ public class BLEControl {
         }
     }
 
+    /**
+     * 對BLE裝置讀寫的工作佇列
+     */
     private class TaskQueue {
         boolean mDeviceAccess = false;
         Queue<TaskItem> mDeviceAccessQueue = new ConcurrentLinkedQueue<>();
