@@ -637,6 +637,7 @@ class WatchDatabase {
 
     List<WatchEvent> EventGet(long startTimeStamp, long endTimeStamp) {
         List<WatchEvent> result = new ArrayList<>();
+        // 先取得不是repeat，且時間符合的event
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_EVENT +
                 " WHERE " + REPEAT + "=''" + " AND " +
                 "((" + startTimeStamp + ">=" + START_DATE + " AND " + startTimeStamp + "<=" + END_DATE + ") OR" +
@@ -657,6 +658,8 @@ class WatchDatabase {
                 event.mKids.add(eventKid.mKidId);
         }
 
+        // 分別取得Daily, Weekly及Monthly的event, 此回傳列表已會展開repeat, 換言之，若有Daily，則會直接
+        // 展成一個月的events.
         List<WatchEvent> dailyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "DAILY");
         List<WatchEvent> weeklyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "WEEKLY");
         List<WatchEvent> monthlyResult = EventGetRepeat(startTimeStamp, endTimeStamp, "MONTHLY");
@@ -670,6 +673,7 @@ class WatchDatabase {
         for (WatchEvent event : monthlyResult)
             result.add(event);
 
+        // 反序，符合UI需求
         Collections.sort(result, new Comparator<WatchEvent>() {
             @Override
             public int compare(WatchEvent t1, WatchEvent t2) {

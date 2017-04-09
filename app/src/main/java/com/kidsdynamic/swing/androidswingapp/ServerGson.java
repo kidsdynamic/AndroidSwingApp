@@ -8,21 +8,17 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by weichigio on 2017/1/23.
+ * 和backend的JSON定義及轉換
+ * 參考API的方式
+ * 以/user/login為例:
+ *  ServerGson.user.login
+ *  產生上傳JSON -> ServerGson.user.login.toJson
+ *  分析接收JSON -> ServerGson.user.login.fromJson
+ *
+ * 其它的API依此類推，而若該API無上傳JSON或無回的JSON，則無對應之method.
  */
 
 public class ServerGson {
-
-    public static class error {
-        static final class e1 {
-            String message;
-            String error;
-        }
-
-        public static e1 E1FromJson(String json) {
-            return new Gson().fromJson(json, e1.class);
-        }
-    }
 
     static final class kidData {
         int id;
@@ -106,6 +102,7 @@ public class ServerGson {
     public static class user {
 
         public static class login {
+            // 參考backend的定義，此階層為/user/login
             private static class c {
                 String email;
                 String password;

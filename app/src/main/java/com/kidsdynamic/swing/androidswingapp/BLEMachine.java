@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by weichigio on 2017/1/11.
+ * BLE有限狀態機
  */
 
 class BLEMachine extends BLEControl {
     private Handler mHandler = new Handler();
-    private onSearchListener mOnSearchListener = null;
-    private onSyncListener mOnSyncListener = null;
-    private onBatteryListener mOnBatteryListener = null;
-    private boolean mRunning = false;
-    private ArrayList<WatchActivityRaw> mActivities;
+    private onSearchListener mOnSearchListener = null;      // 搜尋裝置時的callback
+    private onSyncListener mOnSyncListener = null;          // 同步時的callback
+    private onBatteryListener mOnBatteryListener = null;    // 取得電量時的callback
+    private boolean mRunning = false;                       // 狀態機是否運行中
+    private ArrayList<WatchActivityRaw> mActivities;        // 同步時，由手表取得activity的暫存列表
 
 
     private void Log(String msg) {
@@ -77,14 +77,14 @@ class BLEMachine extends BLEControl {
     private static final int STATE_BYPASS_ALERT = 14;
     private static final int STATE_CANCEL = 15;
 
-    private Device mRelationDevice = new Device();
-    private int mState;
-    private ArrayList<Device> mScanResult;
+    private Device mRelationDevice = new Device();          // 狀態機當前使用的手表
+    private int mState;                                     // 狀態機的狀態
+    private ArrayList<Device> mScanResult;                  // 搜尋到的手表列表
 
-    private List<VoiceAlert> mVoiceAlerts = new ArrayList<>();
-    private int mVoiceAlertCount = 0;
+    private List<VoiceAlert> mVoiceAlerts = new ArrayList<>();  // 欲同步的event列表
+    private int mVoiceAlertCount = 0;                           // 已同步的event計數
 
-    private long mTransmissionTick;
+    private long mTransmissionTick;                         // timeout的tick
 
     private void setTimeout(int value) {
         Calendar cal = Calendar.getInstance();
@@ -407,6 +407,12 @@ class BLEMachine extends BLEControl {
         void onBattery(byte value);
     }
 
+    /**
+     * 用在搜尋裝置，時間到會停步搜尋，並回傳裝置列表
+     * @param listener 回傳裝置列表的callback
+     * @param second 想要搜尋的時間，以秒數計
+     * @return 搜尋的時間
+     */
     int Search(onSearchListener listener, int second) {
         if (listener == null) {
             mOnSearchListener = null;
@@ -419,6 +425,12 @@ class BLEMachine extends BLEControl {
         return mRelationDevice.mAction.mScanTime;
     }
 
+    /**
+     * 用以搜尋特定手表，搜尋到該手表或10秒未找到，會停止搜尋
+     * @param listener 回傳裝置列表的callback回傳裝置列表的callback
+     * @param address 想要尋的手表MAC
+     * @return 搜尋的時間
+     */
     int Search(onSearchListener listener, String address) {
         if (listener == null) {
             mOnSearchListener = null;
@@ -431,6 +443,13 @@ class BLEMachine extends BLEControl {
         return mRelationDevice.mAction.mScanTime;
     }
 
+    /**
+     * 同步手表
+     * @param listener 同步完成的callback
+     * @param device 欲同步的手表
+     * @param alerts event列表
+     * @return always 0
+     */
     int Sync(onSyncListener listener, Device device, List<VoiceAlert> alerts) {
         mOnSyncListener = listener;
         mRelationDevice = new Device(device.mName, device.mAddress, 0);
@@ -440,6 +459,12 @@ class BLEMachine extends BLEControl {
         return 0;
     }
 
+    /**
+     * 同步手表，用於第一次連線
+     * @param listener 同步完成的callback
+     * @param macAddress 欲同步的手表MAC
+     * @return always 0
+     */
     int Sync(onSyncListener listener, String macAddress) {
         mOnSyncListener = listener;
         mRelationDevice = new Device("Swing", macAddress, 0);
@@ -449,6 +474,12 @@ class BLEMachine extends BLEControl {
         return 0;
     }
 
+    /**
+     * 取得手表電量
+     * @param listener 取得手表電量的callback
+     * @param macAddress 欲取得電量的手表MAC
+     * @return always 0
+     */
     int Battery(onBatteryListener listener, String macAddress) {
         mOnBatteryListener = listener;
         mRelationDevice = new Device("Swing", macAddress, 0);

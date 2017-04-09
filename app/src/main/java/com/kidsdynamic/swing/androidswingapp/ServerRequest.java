@@ -1,9 +1,8 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 /**
- * Created by weichigio on 2017/1/10.
+ * Volley的包裝類別
  */
-
 import android.content.Context;
 import android.util.Log;
 

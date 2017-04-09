@@ -17,9 +17,9 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /**
- * Created by 03543 on 2017/1/23.
+ * API, 手表及本地資料庫操作類別
+ * APP內的各項需求不會直接和API，手表或是本地資料庫索取，皆會通過此類別
  */
-
 public class WatchOperator {
     public WatchDatabase mWatchDatabase;
     private ActivityMain mActivity;
@@ -351,7 +351,7 @@ public class WatchOperator {
         }
     }
 
-    private ArrayList<bitmapCache> mBitmapCacheList = new ArrayList<>();
+    private ArrayList<bitmapCache> mBitmapCacheList = new ArrayList<>(); // Avatar快取，避免OOM
 
     public void ResetBitmapCache() {
         for (bitmapCache bc : mBitmapCacheList) {

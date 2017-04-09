@@ -27,7 +27,11 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * Created by weichigio on 2017/1/17.
+ * 和backend通訊的狀態機
+ * 參考API的方式
+ * 以/user/login為例:
+ *  ServerMachine.userLogin會產生出Request並將其置入佇列中，待狀態機實際發出該API，而API的回應會透過
+ *  ServerMachine.userLogin回傳。
  */
 
 public class ServerMachine {
@@ -74,12 +78,12 @@ public class ServerMachine {
     final static String REQUEST_UPLOAD_TAG = "REQUEST_UPLOAD_TAG";
 
     private String mTag = "";
-    private RequestQueue mRequestQueue;
-    Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();
+    private RequestQueue mRequestQueue;                             // Volley的通訊佇列
+    Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();     // 狀態機的Request佇列
     private Handler mHandler = new Handler();
     private Context mContext;
     private String mAuthToken = null;
-    private onForbiddenListener mOnForbiddenListener;
+    private onForbiddenListener mOnForbiddenListener;               // 產生403的意外處理
 
     private void Log(String msg) {
         Log.i("ServerMachine", msg);

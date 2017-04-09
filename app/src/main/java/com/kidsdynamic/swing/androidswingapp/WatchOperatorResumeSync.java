@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by weichigio on 2017/2/13.
+ * 和backend同步帳號資訊
+ * WatchOperatorXXX的類別的結構，從第一個API發出開始後，都是由callback來串接下一個動作
  */
-
 public class WatchOperatorResumeSync {
 
     private WatchOperator mOperator;
     private ServerMachine mServerMachine;
     private ActivityConfig mConfig;
     private WatchOperator.finishListener mFinishListener = null;
-    private List<String> mAvatarToGet;
+    private List<String> mAvatarToGet;  // 同步過程中，user, kid, 及subHost等等的頭像需要抓取的，都會先
+                                        // 放在這裡，在所有資訊同步完成後一次取得
 
     WatchOperatorResumeSync(ActivityMain activityMain) {
         mOperator = activityMain.mOperator;
@@ -38,6 +39,7 @@ public class WatchOperatorResumeSync {
     private ServerMachine.userLoginListener mUserLoginListener = new ServerMachine.userLoginListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.login.response result) {
+            // 成功，設定token, 並發送下個API
             mConfig.setString(ActivityConfig.KEY_AUTH_TOKEN, result.access_token);
             mServerMachine.setAuthToken(result.access_token);
             mServerMachine.userRetrieveUserProfile(mRetrieveUserProfileListener);
@@ -53,6 +55,7 @@ public class WatchOperatorResumeSync {
     private ServerMachine.userRetrieveUserProfileListener mRetrieveUserProfileListener = new ServerMachine.userRetrieveUserProfileListener() {
         @Override
         public void onSuccess(int statusCode, ServerGson.user.retrieveUserProfile.response response) {
+            // 接收成功，重置本地avatar
             ServerMachine.ResetAvatar();
             mAvatarToGet = new ArrayList<>();
             mOperator.setUser(

@@ -9,9 +9,8 @@ import android.util.Log;
 import static com.kidsdynamic.swing.androidswingapp.ServerMachine.REQUEST_UPLOAD_TAG;
 
 /**
- * Created by weichigio on 2017/2/1.
+ * Activity upload service
  */
-
 public class ServerPushService extends Service {
     private WatchDatabase mWatchDatabase;
     private boolean mTokenAvailable = false;
