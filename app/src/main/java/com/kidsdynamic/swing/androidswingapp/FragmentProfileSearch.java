@@ -96,6 +96,7 @@ public class FragmentProfileSearch extends ViewFragment {
         }
     };
 
+    // For Debug, 產生假MAC
     private boolean enumerateRegisteredMacId(boolean searchStart) {
         boolean rtn = true;
 
@@ -145,6 +146,7 @@ public class FragmentProfileSearch extends ViewFragment {
         mActivityMain.selectFragment(FragmentProfileSelect.class.getName(), null);
     }
 
+    // For debug, 註冊一個假手錶
     private View.OnClickListener mFakeListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {

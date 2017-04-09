@@ -41,6 +41,7 @@ public class FragmentDashboardMain extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        // 用戶並沒有任何kid
         if (mActivityMain.mOperator.getFocusKid() == null) {
             mActivityMain.clearFragment(FragmentDashboardRequest.class.getName(), null);
         } else {

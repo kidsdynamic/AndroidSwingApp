@@ -94,6 +94,7 @@ public class FragmentCalendarTodo extends ViewFragment {
         mViewSelector.setDate(mDefaultDate);
         mViewCalendar.setDate(mDefaultDate);
 
+        // 載入需要編輯的事件
         if (mActivityMain.mEventStack.isEmpty())
             mEvent = new WatchEvent();
         else

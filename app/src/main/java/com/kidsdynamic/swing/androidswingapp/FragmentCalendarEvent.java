@@ -167,9 +167,12 @@ public class FragmentCalendarEvent extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        // 由帶入的參數表示事件預設的日期, 顯示在UI之上
         if (getArguments() != null)
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
 
+        // 若Stack不為空, 表示Stack中保存當前需進行編輯的事件
+        // 若為空, 表示需要新增一個新的事件
         if (mActivityMain.mEventStack.isEmpty()) {
             mEvent = new WatchEvent(mDefaultDate);
             mEvent.mUserId = mActivityMain.mOperator.getUser().mId;
@@ -198,6 +201,8 @@ public class FragmentCalendarEvent extends ViewFragment {
         mActivityMain.mOperator.deleteEvent(mDeleteEventListener, mEvent.mId);
     }
 
+    // 啟動或關閉事件的Enabled狀態, 若enable時, 表示事件是可以被編輯的, UI欄位為開放狀態,
+    // 若disable時, 表示事件不可以被編輯, UI欄位為關閉狀態, 通常因事件的擁有者為其它人時, 需為disable狀態
     private void viewEnable(boolean enable) {
         mViewAlarmLine.setEnabled(enable);
         mViewAssignLine.setEnabled(enable);
@@ -222,10 +227,13 @@ public class FragmentCalendarEvent extends ViewFragment {
         mViewButtonLine.setVisibility(enable ? View.VISIBLE : View.INVISIBLE);
     }
 
+    // 啟動或關閉UI中, 刪除事件的按鈕, 若事件為新增的事件或是事件擁有者並非用戶本人,
+    // 則不顯示刪除鈕, 若事件擁有人為用戶本人時.
     private void ViewDelete(boolean enable) {
         mActivityMain.toolbarSetIcon2(enable ? R.mipmap.icon_delete : ActivityMain.RESOURCE_HIDE);
     }
 
+    // 啟動或關閉UI的Advance模式.
     private void viewAdvance(boolean visible) {
         if (visible) {
             mViewSave.getLayoutParams().width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -244,6 +252,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         viewTodoList(mViewTodoContainer.getChildCount() != 0);
     }
 
+    // 關啟或關閉TodoList的編輯區
     private void viewTodoList(boolean visible) {
         if (visible) {
             mViewTodoOption.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;

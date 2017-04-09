@@ -71,6 +71,7 @@ public class FragmentCalendarMonth extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        // 判定帶入的參數是否包含日期, 若有則作為當前日期的依據
         if (getArguments() != null)
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
         mViewSelector.setDate(mDefaultDate);

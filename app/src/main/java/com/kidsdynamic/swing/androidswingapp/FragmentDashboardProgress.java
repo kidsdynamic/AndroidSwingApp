@@ -88,7 +88,6 @@ public class FragmentDashboardProgress extends ViewFragment {
         if (mDevice == null)
             mDevice = new WatchContact.Kid();
 
-
         List<WatchEvent> eventList = mActivityMain.mOperator.getEventsForSync(mDevice);
         mVoiceAlertList = new ArrayList<>();
         for (WatchEvent event : eventList) {

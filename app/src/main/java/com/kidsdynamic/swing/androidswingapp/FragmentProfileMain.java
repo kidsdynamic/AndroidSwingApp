@@ -78,17 +78,21 @@ public class FragmentProfileMain extends ViewFragment {
             mViewPhoto.setBitmap(parent.mPhoto);
         }
 
+        // 載入用戶的所有手錶
         for (WatchContact device : mActivityMain.mOperator.getDeviceList())
             addContact(mViewDeviceContainer, device, mContactListener);
 
+        // 載入所有其它用戶與當前用戶分享的手錶
         for (WatchContact device : mActivityMain.mOperator.getSharedList())
             addContact(mViewSharedContainer, device, mContactListener);
 
+        // 載入用戶發出需求的用戶
         for (WatchContact user : mActivityMain.mOperator.getRequestToList()) {
             if (((WatchContact.User) user).mRequestStatus.equals(WatchContact.User.STATUS_PENDING))
                 addContact(mViewRequestToContainer, user, null);
         }
 
+        // 載入所用向用戶發出請求的用戶
         for (WatchContact user : mActivityMain.mOperator.getRequestFromList()) {
             //if (((WatchContact.User) user).mRequestStatus.equals("WatchContact.User.STATUS_PENDING"))
             addContact(mViewRequestFromContainer, user, mContactListener);

@@ -14,6 +14,7 @@ import android.view.View;
  * Created by 03543 on 2017/2/19.
  */
 
+// 圓點進度指示物件
 public class ViewDotIndicator extends View {
 
     private int mDesiredSize = 50;

@@ -10,6 +10,7 @@ import android.view.View;
  * Created by 03543 on 2016/12/31.
  */
 
+// 依父物件動態計算大小之空間物件
 public class ViewSponge extends View {
     private float mShrinkWidth = 1.0f;
     private float mShrinkHeight = 1.0f;

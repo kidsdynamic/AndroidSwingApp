@@ -14,6 +14,7 @@ import android.view.View;
  * Created by 03543 on 2017/2/6.
  */
 
+// 幾何圖形物件
 public class ViewShape extends View {
     public final static int SHAPE_CIRCLE = 0;
     public final static int SHAPE_RECTANGLE = 1;

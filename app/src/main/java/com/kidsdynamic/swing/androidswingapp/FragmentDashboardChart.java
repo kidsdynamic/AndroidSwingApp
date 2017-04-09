@@ -94,6 +94,7 @@ public class FragmentDashboardChart extends ViewFragment {
 
         int step = getStepToday(INDOOR).mSteps + getStepToday(OUTDOOR).mSteps;
 
+        // 依KD要求, 12000為達標, 我自己認為6000算是接近吧.
         int emotion = EMOTION_LOW;
         if (step > 6000)
             emotion = EMOTION_ALMOST;

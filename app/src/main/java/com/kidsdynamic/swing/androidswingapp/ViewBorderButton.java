@@ -20,6 +20,8 @@ import android.widget.Button;
  * Created by 03543 on 2017/2/19.
  */
 
+// 用於FragmentDashboardChart下方的indoor, outdoor等兩個按鈕, 具底色於外框.
+// 當press時, 互換底色與外框
 public class ViewBorderButton extends Button {
     private int mFloorColor = Color.GRAY;
     private int mBorderColor = Color.WHITE;

@@ -15,6 +15,7 @@ import java.util.List;
  * Created by 03543 on 2017/2/19.
  */
 
+// 圖表物件的基礎類別, 主要用來處理來自XML的屬性
 public abstract class ViewChart extends View {
 
     public int mChartColor = Color.BLACK;

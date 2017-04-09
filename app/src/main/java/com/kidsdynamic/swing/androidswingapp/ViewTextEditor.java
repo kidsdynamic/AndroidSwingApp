@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
  * Created by 03543 on 2017/1/24.
  */
 
+// 帶圖示之文字編輯物件
 public class ViewTextEditor extends RelativeLayout {
 
     private int mDesiredWidth;

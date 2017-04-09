@@ -68,6 +68,7 @@ public class FragmentCalendarDaily extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        // 帶入的Arguments, 表示日曆需設置的日期
         if (getArguments() != null)
             mDefaultDate = getArguments().getLong(BUNDLE_KEY_DATE);
         mViewSelector.setDate(mDefaultDate);
@@ -82,8 +83,10 @@ public class FragmentCalendarDaily extends ViewFragment {
 
         long start = ViewCalendar.stripTime(date);
         long end = start + 86400000 - 1;
+        // 依起迄時間載入事件列表
         List<WatchEvent> list = mActivityMain.mOperator.getEventList(start, end);
 
+        // 載入當日的所有事件
         for (WatchEvent event : list)
             mViewSchedule.addEvent(event);
     }

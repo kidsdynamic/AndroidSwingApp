@@ -26,6 +26,8 @@ import java.util.concurrent.Semaphore;
  * Created by 03543 on 2017/2/2.
  */
 
+// ViewCircle: 圓形外框的物件, 用來指示進度或比例. 具有點模式與線模式.
+// 線模式時, 以360度圖周計算位置, 點模式時, 以設置的點數做為比例計算.
 public class ViewCircle extends View {
     private final float DEGREE_START = 270;
 

@@ -18,6 +18,8 @@ import java.util.Locale;
  * Created by 03543 on 2017/1/31.
  */
 
+// Calendar物件的基礎類別, 所有ViewCalendarXXX均是繼承自ViewCalendar
+// 主要用以處理XML帶入之參數, 日期運算等.
 public class ViewCalendar extends TableLayout {
 
     protected int mTextSize = 20;

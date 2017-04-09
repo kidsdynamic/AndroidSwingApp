@@ -50,15 +50,7 @@ public class FragmentProfileShare extends ViewFragment {
 
             String title = String.format(Locale.getDefault(), getResources().getString(R.string.profile_share_who), mRequestTo.mLabel);
             mViewTitle.setText(title);
-
-            // Todo: Load Kids of mRequestTo and insert into container. like test below
         }
-
-        // Test
-        //addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_green), "Green Monster"));
-        //addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_yellow), "Yellow Monster"));
-        //addDevice(new WatchContact.Kid(BitmapFactory.decodeResource(getResources(), R.mipmap.monster_purple), "Purple Monster"));
-        ///////////////////////
 
         return mViewMain;
     }
@@ -80,7 +72,6 @@ public class FragmentProfileShare extends ViewFragment {
         public void onClick(View view) {
             ArrayList<WatchContact.Kid> list = getSelectList();
             for (WatchContact.Kid kid : list) {
-                // Todo: emit request.
             }
 
             mActivityMain.popFragment();

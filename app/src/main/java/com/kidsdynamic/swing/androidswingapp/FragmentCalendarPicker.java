@@ -58,6 +58,7 @@ public class FragmentCalendarPicker extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        // 依帶入參數及Stack中, 判定當前picker所設置的是事件的起迄時間.
         mIsStartDate = getArguments().getBoolean(BUNDLE_KEY_START_DATE, false);
 
         mEvent = mActivityMain.mEventStack.pop();

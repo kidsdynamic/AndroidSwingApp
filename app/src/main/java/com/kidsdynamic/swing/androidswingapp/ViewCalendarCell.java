@@ -11,6 +11,7 @@ import java.util.Calendar;
  * Created by 03543 on 2017/2/1.
  */
 
+// ViewCalendar物件中, 各日期(欄位)的物件.
 public class ViewCalendarCell extends TextView {
     protected long mDate;
     protected ViewCalendar mViewCalendar = null;

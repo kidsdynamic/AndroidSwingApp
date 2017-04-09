@@ -71,6 +71,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
     public void onResume() {
         super.onResume();
 
+        // 若由Stack非空, 則可取出處於編輯狀態下的Event
         if (!mActivityMain.mEventStack.isEmpty())
             mEvent = mActivityMain.mEventStack.pop();
         else
@@ -94,6 +95,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         addAlarm(alarm.mId, getResources().getString(alarm.mName), alarm.mResource, listener);
     }
 
+    // 在UI新增一個Alarm
     private void addAlarm(int id, String title, int resource, View.OnClickListener listener) {
         RelativeLayout.LayoutParams layoutParams;
 
@@ -130,6 +132,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         addSeparator();
     }
 
+    // 在UI新增一個routine
     private void addRoutine(String label) {
         RelativeLayout.LayoutParams layoutParams;
 
@@ -154,6 +157,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         addSeparator();
     }
 
+    // 新增UI上的標題列
     private void addTitle(String label) {
         RelativeLayout.LayoutParams layoutParams;
 
@@ -178,6 +182,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         addSeparator();
     }
 
+    // 新增UI上的分隔線
     private void addSeparator() {
         View viewSeparator = new View(mActivityMain);
         viewSeparator.setBackgroundColor(ContextCompat.getColor(mActivityMain, R.color.color_gray));

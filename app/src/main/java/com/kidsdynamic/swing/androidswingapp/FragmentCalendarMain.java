@@ -101,6 +101,7 @@ public class FragmentCalendarMain extends ViewFragment {
         updateAlert();
     }
 
+    // 更新中央coming soon的事件, 載入原則為今日即將發生的事件
     private void updateAlert() {
         Calendar cale = Calendar.getInstance();
 

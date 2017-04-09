@@ -49,6 +49,9 @@ public class FragmentBoot extends ViewFragment {
                 return;
             }
 
+            // 1. KEY_LANGUAGE為空時, 表示用戶首次啟動程式
+            // 2. 若KEY_AUTH_TOKEN為空時, 表示用戶沒有Token, 需要進行登入
+            // 3. 其餘情況一律由FragmentDashboardMain做為第一頁.
             if (mActivityMain.mConfig.getString(ActivityConfig.KEY_LANGUAGE).equals("")) {
                 mActivityMain.clearFragment(FragmentSignupLanguage.class.getName(), null);
             } else {

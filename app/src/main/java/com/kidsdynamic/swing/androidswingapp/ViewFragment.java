@@ -31,12 +31,15 @@ abstract public class ViewFragment extends Fragment {
         activity.toolbarSetIcon2(config.mIcon2);
     }
 
+    // 左上角按鍵事件
     public void onToolbarAction1() {
     }
 
+    // 右上角按鍵事件
     public void onToolbarAction2() {
     }
 
+    // 正上方抬頭文字觸控事件
     public void onToolbarTitle() {
     }
 

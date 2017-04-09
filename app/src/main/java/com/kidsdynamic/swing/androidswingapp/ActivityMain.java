@@ -62,14 +62,17 @@ public class ActivityMain extends AppCompatActivity
     private List<permission> mPermissionList;
 
     private Context mContext;
-    public ActivityConfig mConfig;
-    public WatchOperator mOperator;
+    public ActivityConfig mConfig;                  // 系統設置物件
+    public WatchOperator mOperator;                 // 手機運作控制物件
+    public BLEMachine mBLEMachine = null;           // 藍牙運作有限狀態機
+    public ServerMachine mServiceMachine = null;    // 伺服器運作有限狀態機
+
+    // Stack<XXX> 用以保存資料做為Fragment交換時, 數據交換時的暫時保存區
     public Stack<Bitmap> mBitmapStack;
     public Stack<WatchContact> mContactStack;
     public Stack<WatchEvent> mEventStack;
-    public BLEMachine mBLEMachine = null;
-    public ServerMachine mServiceMachine = null;
 
+    // mViewXXX UI物件
     private View mViewDevice;
     private View mViewCalendar;
     private View mViewDashboard;
@@ -147,6 +150,7 @@ public class ActivityMain extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
+
         Log.d("ActivityMain", "onResume()");
         boolean activeBLE = true;
         boolean activeService = true;
@@ -393,7 +397,7 @@ public class ActivityMain extends AppCompatActivity
 
             mViewBackground.setImageResource(resource);
 
-            mBackgroundPositionMaximum = ((BitmapDrawable)mViewBackground.getDrawable()).getBitmap().getWidth();
+            mBackgroundPositionMaximum = ((BitmapDrawable) mViewBackground.getDrawable()).getBitmap().getWidth();
             mBackgroundPositionMaximum -= displayMetrics.widthPixels;
             mBackgroundPositionMaximum = Math.max(mBackgroundPositionMaximum, 0);
 
@@ -491,6 +495,7 @@ public class ActivityMain extends AppCompatActivity
         Locale locale = new Locale(language, region);
         Locale.setDefault(locale);
 
+        // 依 language, regin 設置應用程式當前語系
         android.content.res.Configuration config = new android.content.res.Configuration();
         config.setLocale(locale);
 
