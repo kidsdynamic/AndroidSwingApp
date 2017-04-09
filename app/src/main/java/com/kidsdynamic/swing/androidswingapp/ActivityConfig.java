@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
- * Created by 03543 on 2017/1/1.
+ * AutivityConfig
+ * 保存系統設置的 SharedPreferences
  */
 
 public class ActivityConfig {
@@ -39,6 +40,8 @@ public class ActivityConfig {
 
         String name = mSharedPreferences.getString(KEY_APPNAME, "__ERROR__");
         String version = mSharedPreferences.getString(KEY_APPVERSION, "__ERROR__");
+        // 當DEF_APPNAME, DEF_APPVERSION與SharedPreference中不同時, 載入預設值.
+        // 若要在新版本發行時, 要求用戶端重新載入配置時, 應修改DEV_APVERSION
         if (!name.equals(DEF_APPNAME) || !version.equals(DEF_APPVERSION)) {
             loadDefaultTable();
         }
@@ -110,6 +113,7 @@ public class ActivityConfig {
     }
 
     public ArrayList<String> getStringList(String key) {
+        // 保存字串陣列時, 以組合字串保存
         String pref = getString(key);
         ArrayList<String> list = new ArrayList<>();
         StringTokenizer st = new StringTokenizer(pref, PREFS_SPLIT);
