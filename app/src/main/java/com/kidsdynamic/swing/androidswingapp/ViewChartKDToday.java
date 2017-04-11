@@ -165,6 +165,9 @@ public class ViewChartKDToday extends ViewChart {
         int posY = rect.bottom;
         int size = mChartTextSize + 1;
 
+        if( posX > rect.right)
+            posX = rect.right;
+
         mPaint.reset();
         mPaint.setAntiAlias(true);
         mPaint.setColor(mChartColor);
