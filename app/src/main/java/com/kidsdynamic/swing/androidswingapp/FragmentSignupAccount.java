@@ -1,13 +1,17 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ public class FragmentSignupAccount extends ViewFragment {
     private EditText mViewEmail;
     private EditText mViewPassword;
     private ImageView mViewBack;
+    private Button mSignupButton;
 
     private Dialog mProcessDialog = null;
     private String mMail = "";
@@ -49,6 +54,14 @@ public class FragmentSignupAccount extends ViewFragment {
         mViewPassword = (EditText) mViewMain.findViewById(R.id.signup_account_password);
         mViewPassword.setText(password);
         mViewPassword.setOnEditorActionListener(mEdittextActionListener);
+
+        mSignupButton = (Button) mViewMain.findViewById(R.id.signup_account_submit);
+        mSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signupSubmit();
+            }
+        });
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
@@ -87,23 +100,39 @@ public class FragmentSignupAccount extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (view == mViewPassword && actionId == EditorInfo.IME_ACTION_DONE) {
-                mMail = mViewEmail.getText().toString();
-                mPassword = mViewPassword.getText().toString();
-
-                if (mMail.equals("") || mPassword.equals("")) {
-                    Toast.makeText(mActivityMain,
-                            getResources().getString(R.string.signup_account_login_failed), Toast.LENGTH_SHORT).show();
-                } else {
-                    mProcessDialog = ProgressDialog.show(mActivityMain,
-                            getResources().getString(R.string.signup_account_processing),
-                            getResources().getString(R.string.signup_account_wait), true);
-                    mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
-                }
+                signupSubmit();
             }
 
             return false;
         }
     };
+
+    public boolean isValidEmail(CharSequence target) {
+        if (TextUtils.isEmpty(target)) {
+            return false;
+        } else {
+            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        }
+    }
+
+    private void signupSubmit(){
+        mMail = mViewEmail.getText().toString();
+        mPassword = mViewPassword.getText().toString();
+        if (mMail.equals("") || mPassword.equals("") || !isValidEmail(mMail)) {
+            Toast.makeText(mActivityMain,
+                    getResources().getString(R.string.signup_account_login_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            View view = mViewMain.getRootView();
+            InputMethodManager imm = (InputMethodManager) mViewMain.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.signup_account_processing),
+                    getResources().getString(R.string.signup_account_wait), true);
+            mActivityMain.mServiceMachine.userIsMailAvailableToRegister(mMailCheckListener, mMail);
+
+        }
+    }
 
     ServerMachine.userIsMailAvailableToRegisterListener mMailCheckListener = new ServerMachine.userIsMailAvailableToRegisterListener() {
         @Override

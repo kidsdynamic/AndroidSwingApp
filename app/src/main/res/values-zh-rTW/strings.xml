@@ -207,6 +207,7 @@
 
     <!-- FragmentSignupLogin -->
     <string name="signup_login_login">"登入 / 註冊"</string>
+    <string name="signup">註冊</string>
     <string name="signup_login_or">"或"</string>
     <string name="signup_login_facebook">"以Facebook帳號登入"</string>
     <string name="signup_login_google">"以Google帳號登入"</string>

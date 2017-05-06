@@ -7,206 +7,217 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="4">
+        android:layout_height="match_parent">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/profile_editor_photo_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewCircle
-            android:id="@+id/profile_editor_photo"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/profile_editor_photo_sponge"
-            android:layout_alignStart="@+id/profile_editor_photo_sponge"
-            android:layout_gravity="center"
-            app:crossWidth="2dp"
-            app:strokeColorNormal="@color/color_white" />
-    </RelativeLayout>
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_pen" />
+                <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                    android:id="@+id/profile_editor_photo_sponge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:shrinkWidth="0.7" />
 
-        <EditText
-            android:id="@+id/profile_editor_first"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_first_name" />
-    </LinearLayout>
+                <com.kidsdynamic.swing.androidswingapp.ViewCircle
+                    android:id="@+id/profile_editor_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignEnd="@+id/profile_editor_photo_sponge"
+                    android:layout_alignStart="@+id/profile_editor_photo_sponge"
+                    android:layout_gravity="center"
+                    app:crossWidth="2dp"
+                    app:strokeColorNormal="@color/color_white" />
+            </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/contact_background">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_null" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_pen" />
 
-        <EditText
-            android:id="@+id/profile_editor_last"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_last_name" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/profile_editor_first"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_first_name" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/contact_background">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_pen" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_null" />
 
-        <EditText
-            android:id="@+id/profile_editor_phone"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_phone"
-            android:inputType="phone" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/profile_editor_last"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_last_name" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/contact_background">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_pen" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_pen" />
 
-        <EditText
-            android:id="@+id/profile_editor_mail"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_mail_address" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/profile_editor_phone"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_phone"
+                    android:inputType="phone" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/contact_background">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_pen" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_pen" />
 
-        <EditText
-            android:id="@+id/profile_editor_address1"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_address1" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/profile_editor_mail"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_mail_address" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/contact_background">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_pen" />
+
+                <EditText
+                    android:id="@+id/profile_editor_address1"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_address1" />
+            </LinearLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/contact_background">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:adjustViewBounds="true"
-            android:src="@mipmap/icon_null" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:adjustViewBounds="true"
+                    android:src="@mipmap/icon_null" />
 
-        <EditText
-            android:id="@+id/profile_editor_address2"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_address2" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/profile_editor_address2"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_address2" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/profile_editor_city"
-            style="@style/edittext_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/contact_background"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_city" />
+                <EditText
+                    android:id="@+id/profile_editor_city"
+                    style="@style/edittext_profile"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:background="@drawable/contact_background"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_city" />
 
-        <EditText
-            android:id="@+id/profile_editor_zip"
-            style="@style/edittext_profile"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/contact_background"
-            android:gravity="center_vertical"
-            android:hint="@string/profile_editor_zip" />
+                <EditText
+                    android:id="@+id/profile_editor_zip"
+                    style="@style/edittext_profile"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
+                    android:paddingLeft="5dp"
+                    android:background="@drawable/contact_background"
+                    android:gravity="center_vertical"
+                    android:hint="@string/profile_editor_zip" />
 
-    </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
 </LinearLayout>

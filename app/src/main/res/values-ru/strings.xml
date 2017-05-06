@@ -208,6 +208,7 @@
 
     <!-- FragmentSignupLogin -->
     <string name="signup_login_login">Начать сеанс</string>
+    <string name="signup">Начать</string>
     <string name="signup_login_or">или</string>
     <string name="signup_login_facebook">Начать через Facebook</string>
     <string name="signup_login_google">Начать через Google</string>

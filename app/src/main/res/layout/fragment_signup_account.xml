@@ -54,9 +54,22 @@
             android:layout_alignStart="@+id/signup_account_sponge"
             android:layout_below="@+id/signup_account_email"
             android:gravity="center"
+            android:layout_marginBottom="10dp"
             android:hint="@string/signup_account_password"
             android:imeOptions="actionDone"
             android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/signup_account_submit"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_account_sponge"
+            android:layout_alignStart="@+id/signup_account_sponge"
+            android:layout_below="@+id/signup_account_password"
+            android:gravity="center"
+            android:text="@string/signup_login_login" />
+
     </RelativeLayout>
 
 

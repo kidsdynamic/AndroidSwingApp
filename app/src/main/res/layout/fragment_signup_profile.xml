@@ -84,6 +84,18 @@
             android:inputType="phone"
             android:nextFocusForward="@+id/signup_profile_first" />
 
+        <Button
+            android:id="@+id/signup_profile_submit"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/signup_profile_sponge"
+            android:layout_alignStart="@+id/signup_profile_sponge"
+            android:layout_below="@+id/signup_profile_phone"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="@string/signup" />
+
     </RelativeLayout>
 
 </LinearLayout>

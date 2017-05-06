@@ -215,6 +215,7 @@
 
     <!-- FragmentSignupLogin -->
     <string name="signup_login_login">Sign Up/ Login</string>
+    <string name="signup">Sign Up</string>
     <string name="signup_login_or">or</string>
     <string name="signup_login_facebook">Login with Facebook</string>
     <string name="signup_login_google">Login with Google</string>

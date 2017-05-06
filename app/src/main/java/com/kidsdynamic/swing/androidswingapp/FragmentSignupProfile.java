@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +41,7 @@ public class FragmentSignupProfile extends ViewFragment {
     private EditText mViewLastName;
     private EditText mViewPhone;
     private ImageView mViewBack;
+    private Button mSignupButton;
 
     AlertDialog mDialog;
 
@@ -76,6 +79,14 @@ public class FragmentSignupProfile extends ViewFragment {
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
+
+        mSignupButton = (Button) mViewMain.findViewById(R.id.signup_profile_submit);
+        mSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signupSubmit();
+            }
+        });
 
         return mViewMain;
     }
@@ -161,32 +172,40 @@ public class FragmentSignupProfile extends ViewFragment {
         }
     };
 
+    private void signupSubmit() {
+        String firstName = mViewFirstName.getText().toString();
+        String lastName = mViewLastName.getText().toString();
+        String phoneNumber = mViewPhone.getText().toString();
+
+        if (mRegisterMail != null && !mRegisterMail.equals("") &&
+                mRegisterPassword != null && !mRegisterPassword.equals("") &&
+                !firstName.equals("") && !lastName.equals("")) {
+
+            View view = mViewMain.getRootView();
+            InputMethodManager imm = (InputMethodManager) mViewMain.getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+            processDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.signup_profile_processing),
+                    getResources().getString(R.string.signup_profile_wait), true);
+
+            mActivityMain.mOperator.signUp(
+                    mSignUpListener,
+                    mRegisterMail,
+                    mRegisterPassword,
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    "",
+                    mRegisterAvatar);
+        }
+    }
+
     private EditText.OnEditorActionListener mEdittextActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                String firstName = mViewFirstName.getText().toString();
-                String lastName = mViewLastName.getText().toString();
-                String phoneNumber = mViewPhone.getText().toString();
-
-                if (mRegisterMail != null && !mRegisterMail.equals("") &&
-                        mRegisterPassword != null && !mRegisterPassword.equals("") &&
-                        !firstName.equals("") && !lastName.equals("")) {
-
-                    processDialog = ProgressDialog.show(mActivityMain,
-                            getResources().getString(R.string.signup_profile_processing),
-                            getResources().getString(R.string.signup_profile_wait), true);
-
-                    mActivityMain.mOperator.signUp(
-                            mSignUpListener,
-                            mRegisterMail,
-                            mRegisterPassword,
-                            firstName,
-                            lastName,
-                            phoneNumber,
-                            "",
-                            mRegisterAvatar);
-                }
+                signupSubmit();
             }
 
             return false;
