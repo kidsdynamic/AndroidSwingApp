@@ -44,6 +44,7 @@ public class ServerMachine {
     private final static String CMD_USER_UPDATE_PROFILE = SERVER_ADDRESS + "/user/updateProfile";
     private final static String CMD_USER_RETRIEVE_USER_PROFILE = SERVER_ADDRESS + "/user/retrieveUserProfile";
     private final static String CMD_USER_FIND_BY_EMAIL = SERVER_ADDRESS + "/user/findByEmail";
+    private final static String CMD_USER_RESET_PASSWORD = SERVER_ADDRESS + "/user/sendResetPasswordEmail";
 
     private final static String CMD_AVATAR_UPLOAD = SERVER_ADDRESS + "/user/avatar/upload";
     private final static String CMD_AVATAR_UPLOAD_KID = SERVER_ADDRESS + "/user/avatar/uploadKid";
@@ -273,6 +274,10 @@ public class ServerMachine {
         String addressForGet = CMD_USER_FIND_BY_EMAIL + "?";
         addressForGet += "email=" + email;
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_USER_FIND_BY_EMAIL, listener));
+    }
+
+    public void userResetPassword() {
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_USER_RESET_PASSWORD, null, null), CMD_USER_RESET_PASSWORD, null));
     }
 
     public interface userAvatarUploadListener {

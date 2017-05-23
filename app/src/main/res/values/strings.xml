@@ -230,6 +230,8 @@
     <string name="signup_profile_login_failed">Login Failed</string>
     <string name="signup_profile_update_failed">Update failed</string>
     <string name="signup_profile_avatar_failed">Update Failed</string>
+    <string name="signup_profile_next">Next</string>
+    <string name="signup_profile_done">Done</string>
 
     <!-- FragmentWatchAdded -->
     <string name="watch_added_added">Added</string>

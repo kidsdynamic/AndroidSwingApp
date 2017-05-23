@@ -103,12 +103,15 @@ public class ServerRequest extends Request<NetworkResponse> {
                 case Method.PUT:
                 case Method.POST: {
                     try {
-                        for (Map.Entry<String, String> entry : mMap.entrySet()) {
-                            if (entry.getKey().equals("json")) {
-                                encodedParams.append(entry.getValue());
-                                break;
+                        if(mMap != null) {
+                            for (Map.Entry<String, String> entry : mMap.entrySet()) {
+                                if (entry.getKey().equals("json")) {
+                                    encodedParams.append(entry.getValue());
+                                    break;
+                                }
                             }
                         }
+
                         rtn = encodedParams.toString().getBytes(getParamsEncoding());
                     } catch (Exception e) {
                         e.printStackTrace();

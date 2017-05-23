@@ -358,6 +358,8 @@
     <string name="error_subhost_deny_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
+    <string name="signup_profile_next">下一步</string>
+    <string name="signup_profile_done">完成</string>
 
 </resources>
 

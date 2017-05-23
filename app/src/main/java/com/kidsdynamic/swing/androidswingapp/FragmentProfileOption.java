@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by 03543 on 2017/1/24.
@@ -24,11 +27,13 @@ public class FragmentProfileOption extends ViewFragment {
     private View mViewContact;
     private View mViewPrivacy;
     private View mViewManual;
+    private ServerMachine mServerMachine;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+        mServerMachine = mActivityMain.mServiceMachine;
     }
 
     @Override
@@ -82,7 +87,26 @@ public class FragmentProfileOption extends ViewFragment {
     private View.OnClickListener mPasswordListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            mActivityMain.selectFragment(FragmentProfilePassword.class.getName(), null);
+//            mActivityMain.selectFragment(FragmentProfilePassword.class.getName(), null);
+            new AlertDialog.Builder(mViewMain.getContext())
+                    .setTitle("Reset Password")
+                    .setMessage("Are you sure you want to reset your password?")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            mServerMachine.userResetPassword();
+                            WatchContact.User user = mActivityMain.mOperator.getUser();
+                            String text ="Please check your email at " + user.mEmail + " for the link to reset your password. This link will expire in 24 hours.\n";
+                            Toast toast = Toast.makeText(mViewMain.getContext(), text, Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
         }
     };
 

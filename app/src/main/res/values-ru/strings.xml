@@ -358,8 +358,8 @@
     <string name="error_subhost_deny_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_400">Неверный запрос. Отсутствуют некоторые параметры, или тип является неверным</string>
     <string name="error_subhost_remove_kid_403">Отсутствует разрешение. У пользователя нет разрешения</string>
-
-
+    <string name="signup_profile_done">сделанный</string>
+    <string name="signup_profile_next">следующий</string>
 
 
 </resources>

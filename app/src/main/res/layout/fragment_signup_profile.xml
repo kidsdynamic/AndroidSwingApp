@@ -94,7 +94,7 @@
             android:layout_below="@+id/signup_profile_phone"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="@string/signup" />
+            android:text="@string/signup_profile_next" />
 
     </RelativeLayout>
 
