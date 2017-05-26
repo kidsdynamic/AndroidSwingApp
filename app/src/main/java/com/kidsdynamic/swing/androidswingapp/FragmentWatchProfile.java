@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ public class FragmentWatchProfile extends ViewFragment {
     private ViewCircle mViewPhoto;
     private EditText mViewName;
     private ImageView mViewBack;
+    private Button mSubmit;
 
     AlertDialog mDialog;
     private Dialog mProcessDialog = null;
@@ -70,6 +72,14 @@ public class FragmentWatchProfile extends ViewFragment {
 
         mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
         mViewBack.setOnClickListener(mBackOnClickListener);
+
+        mSubmit = (Button) mViewMain.findViewById(R.id.watch_profile_submit);
+        mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addKid();
+            }
+        });
 
         return mViewMain;
     }
@@ -174,21 +184,25 @@ public class FragmentWatchProfile extends ViewFragment {
         @Override
         public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addKid();
 
-                mDevice.mName = mViewName.getText().toString();
-
-                if (!mDevice.mName.equals("")) {
-                    mProcessDialog = ProgressDialog.show(mActivityMain,
-                            getResources().getString(R.string.watch_profile_processing),
-                            getResources().getString(R.string.watch_profile_wait), true);
-                    String macId = ServerMachine.getMacID(mDevice.mLabel);
-                    mActivityMain.mOperator.setKid(mAddKidListener, mDevice.mName, macId, mAvatarBitmap);
-                }
             }
 
             return false;
         }
     };
+
+    private void addKid(){
+        mDevice.mName = mViewName.getText().toString();
+        if (!mDevice.mName.equals("")) {
+            mProcessDialog = ProgressDialog.show(mActivityMain,
+                    getResources().getString(R.string.watch_profile_processing),
+                    getResources().getString(R.string.watch_profile_wait), true);
+            String macId = ServerMachine.getMacID(mDevice.mLabel);
+            mActivityMain.mOperator.setKid(mAddKidListener, mDevice.mName, macId, mAvatarBitmap);
+
+        }
+    }
 
     WatchOperator.finishListener mAddKidListener = new WatchOperator.finishListener() {
         @Override

@@ -1,5 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -52,6 +54,8 @@ public class WatchOperatorTodoDone {
         @Override
         public void onSuccess(int statusCode) {
             mOperator.mWatchDatabase.TodoUpdate(mCurrentTodo);
+            mTodoIndex++;
+            mCurrentTodo = null;
             nextTodo(false);
         }
 

@@ -69,7 +69,7 @@
             android:nextFocusForward="@+id/registration_info_last" />
 
         <Button
-            android:id="@+id/signup_profile_submit"
+            android:id="@+id/watch_profile_submit"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
