@@ -360,6 +360,7 @@
     <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
     <string name="signup_profile_next">下一步</string>
     <string name="signup_profile_done">完成</string>
+    <string name="dashboard_add_watch">加我的手錶</string>
 
 </resources>
 

@@ -95,6 +95,7 @@
 
     <!-- FragmentDashboardRequest -->
     <string name="dashboard_request_request">Request Access</string>
+    <string name="dashboard_add_watch">Add a watch</string>
     <string name="dashboard_request_profile">Go to Profile</string>
     <string name="dashboard_request_process">Processing</string>
     <string name="dashboard_request_waiting">Please Wait&#8230;</string>

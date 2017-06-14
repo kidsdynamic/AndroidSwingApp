@@ -4,11 +4,11 @@ android {
     compileSdkVersion 24
     buildToolsVersion '25.0.0'
     defaultConfig {
-        applicationId "com.kidsdynamic.swing.androidswingapp"
+        applicationId "com.kidsdynamic.swing.android"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.2.2"
+        versionCode 33
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

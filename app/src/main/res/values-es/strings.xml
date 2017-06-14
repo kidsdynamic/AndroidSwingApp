@@ -360,4 +360,5 @@
     <string name="error_subhost_remove_kid_403">No autorizado. El usuario no tiene permiso</string>
     <string name="signup_profile_done">hecho</string>
     <string name="signup_profile_next">siguiente</string>
+    <string name="dashboard_add_watch">Agregar un relo</string>
 </resources>

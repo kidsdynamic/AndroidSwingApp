@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="3"
+        android:layout_weight="2"
         android:gravity="center"
         android:paddingEnd="15dp"
         android:paddingStart="15dp"
@@ -46,13 +46,24 @@
             app:shrinkWidth="0.7" />
 
         <Button
-            android:id="@+id/dashboard_request_request"
+            android:id="@+id/dashboard_device_add"
             style="@style/button_main"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/dashboard_request_sponge"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/dashboard_request_sponge"
+            android:layout_marginBottom="10dp"
+            android:text="@string/watch_owner_message" />
+
+        <Button
+            android:id="@+id/dashboard_request_request"
+            style="@style/button_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/dashboard_request_sponge"
+            android:layout_alignStart="@+id/dashboard_request_sponge"
+            android:layout_below="@+id/dashboard_device_add"
             android:layout_marginBottom="10dp"
             android:text="@string/dashboard_request_request" />
 

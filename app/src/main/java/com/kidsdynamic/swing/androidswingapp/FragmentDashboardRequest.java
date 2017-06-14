@@ -24,6 +24,7 @@ public class FragmentDashboardRequest extends ViewFragment {
     private TextView mViewMessage;
     private Button mViewRequest;
     private Button mViewProfile;
+    private Button mAddWatch;
 
     private ProgressDialog mProcessDialog;
 
@@ -44,6 +45,9 @@ public class FragmentDashboardRequest extends ViewFragment {
 
         mViewProfile = (Button) mViewMain.findViewById(R.id.dashboard_request_profile);
         mViewProfile.setOnClickListener(mProfileListener);
+
+        mAddWatch = (Button) mViewMain.findViewById(R.id.dashboard_device_add);
+        mAddWatch.setOnClickListener(mAddDeviceListener);
 
         return mViewMain;
     }
@@ -124,5 +128,13 @@ public class FragmentDashboardRequest extends ViewFragment {
             mActivityMain.selectFragment(FragmentProfileMain.class.getName(), null);
         }
     };
+
+    private View.OnClickListener mAddDeviceListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            mActivityMain.selectFragment(FragmentProfileSearch.class.getName(), null);
+        }
+    };
+
 
 }
