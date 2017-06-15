@@ -12,13 +12,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -33,7 +41,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private TextView mViewUserName;
 
     private View mViewAlarmLine;
-    private TextView mViewAlarm;
+    private TextView mEventAlarmName;
     private ViewShape mViewAlarmIcon;
 
     private View mViewAssignLine;
@@ -75,6 +83,9 @@ public class FragmentCalendarEvent extends ViewFragment {
     private long mDefaultDate = System.currentTimeMillis();
     private WatchEvent mEvent;
 
+    private Calendar mCalendarDate;
+    private Boolean isStarDate = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +103,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         // Line Alarm
         mViewAlarmLine = mViewMain.findViewById(R.id.calendar_event_alarm_line);
         mViewAlarmLine.setOnClickListener(mAlarmListener);
-        mViewAlarm = (TextView) mViewMain.findViewById(R.id.calendar_event_alarm);
+        mEventAlarmName = (TextView) mViewMain.findViewById(R.id.calendar_event_alarm_name);
         mViewAlarmIcon = (ViewShape) mViewMain.findViewById(R.id.calendar_event_alarm_icon);
 
         // Line Assign
@@ -408,22 +419,27 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mStartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(BUNDLE_KEY_START_DATE, true);
+//            Bundle bundle = new Bundle();
+//            bundle.putBoolean(BUNDLE_KEY_START_DATE, true);
+            isStarDate = true;
+            openDatePicker();
 
-            mActivityMain.mEventStack.push(mEvent);
-            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
+//            mActivityMain.mEventStack.push(mEvent);
+//            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
         }
     };
 
     private View.OnClickListener mEndListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Bundle bundle = new Bundle();
+/*            Bundle bundle = new Bundle();
             bundle.putBoolean(BUNDLE_KEY_START_DATE, false);
-
+            isStarDate = false;
             mActivityMain.mEventStack.push(mEvent);
-            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
+            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);*/
+            isStarDate = false;
+            openDatePicker();
+
         }
     };
 
@@ -574,6 +590,7 @@ public class FragmentCalendarEvent extends ViewFragment {
             if (target.mId == mEvent.mAlert) {
                 mEvent.mAlert = target.mId;
                 mEvent.mName = getResources().getString(target.mName);   // multi-dependence issue, cause from KD.
+                mEventAlarmName.setText(mEvent.mName);
                 return true;
             }
         }
@@ -608,7 +625,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private void loadDate() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm a", Locale.US);
 
         mViewStart.setText(simpleDateFormat.format(mEvent.mStartDate));
         mViewEnd.setText(simpleDateFormat.format(mEvent.mEndDate));
@@ -657,6 +674,7 @@ public class FragmentCalendarEvent extends ViewFragment {
         loadRepeat();
         loadDescription();
         loadTodo();
+        loadAlarm();
 
         viewAdvance(mEvent.mRepeat.length() != 0 || mEvent.mDescription.length() != 0 || mEvent.mTodoList.size() != 0);
         viewEnable(mActivityMain.mOperator.getUser().mId == mEvent.mUserId);
@@ -689,4 +707,81 @@ public class FragmentCalendarEvent extends ViewFragment {
             Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
     };
+
+    public void openDatePicker() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                mDateSetListener,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        if(mEvent.mStartDate != 0 && !isStarDate) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(mEvent.mStartDate);
+            dpd.setMinDate(cal);
+        } else {
+            dpd.setMinDate(now);
+        }
+
+        dpd.setAccentColor(ContextCompat.getColor(mViewMain.getContext(), R.color.color_orange_deep));
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    public void openTimePicker() {
+        Calendar now = Calendar.getInstance();
+
+        int minutes = now.get(Calendar.MINUTE);
+        if(!isStarDate) {
+            minutes = 0;
+        }
+
+        TimePickerDialog dpd = TimePickerDialog.newInstance(
+                mTimeSetListener,
+                now.get(Calendar.HOUR),
+                minutes,
+                false
+        );
+
+        now.add(Calendar.MINUTE, 5);
+
+        if(mCalendarDate.get(Calendar.YEAR) == now.get(Calendar.YEAR) &&
+                mCalendarDate.get(Calendar.MONTH) == now.get(Calendar.MONTH) &&
+                mCalendarDate.get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH)) {
+            dpd.setMinTime(now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE), 0);
+        }
+        dpd.setAccentColor(ContextCompat.getColor(mViewMain.getContext(), R.color.color_orange_deep));
+        dpd.show(getFragmentManager(), "Timepickerdialog");
+    }
+
+    TimePickerDialog.OnTimeSetListener mTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+            mCalendarDate.set(mCalendarDate.get(Calendar.YEAR), mCalendarDate.get(Calendar.MONTH), mCalendarDate.get(Calendar.DAY_OF_MONTH), hourOfDay, minute, 0);
+
+            if(isStarDate) {
+                mEvent.mStartDate = mCalendarDate.getTimeInMillis();
+                mCalendarDate.add(Calendar.MINUTE, 10);
+                mEvent.mEndDate = mCalendarDate.getTimeInMillis();
+            } else {
+                mEvent.mEndDate = mCalendarDate.getTimeInMillis();
+            }
+
+            loadDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss", Locale.US);
+            Log.d("Time-Picker -", sdf.format(mCalendarDate.getTime()));
+        }
+    };
+
+    DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+            mCalendarDate = Calendar.getInstance();
+            mCalendarDate.set(year, monthOfYear, dayOfMonth);
+            openTimePicker();
+        }
+    };
+
+
+
 }

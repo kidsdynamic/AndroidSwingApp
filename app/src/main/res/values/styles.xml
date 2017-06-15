@@ -58,7 +58,7 @@
 
     <style name="textview_calendar_hint" parent="textview_calendar_event">
         <item name="android:textColor">@color/color_gray_main</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <style name="textview_calendar_todo_title">

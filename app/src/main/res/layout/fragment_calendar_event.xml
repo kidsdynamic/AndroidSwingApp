@@ -72,11 +72,20 @@
                     style="@style/textview_calendar_event"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="9"
+                    android:layout_weight="5"
                     android:gravity="center_vertical"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
-                    android:text="@string/calendar_event_event"/>
+                    android:text="@string/calendar_event_event" />
+
+                <TextView
+                    android:id="@+id/calendar_event_alarm_name"
+                    style="@style/textview_calendar_hint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="11"
+                    android:gravity="end|center_vertical" />
 
                 <com.kidsdynamic.swing.androidswingapp.ViewShape
                     android:id="@+id/calendar_event_alarm_icon"
