@@ -143,7 +143,7 @@
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Cuenta</string>
     <string name="profile_option_kid">Editar perfil del niño</string>
-    <string name="profile_option_password">Cambiar contraseña</string>
+    <string name="profile_option_password">Restablecer la contraseña</string>
     <string name="profile_option_logout">Cerrar sesión</string>
     <string name="profile_option_about">Acerca de</string>
     <string name="profile_option_contact_us">Contacta con nosotros</string>
@@ -155,6 +155,8 @@
     <string name="profile_password_current">Contraseña actual</string>
     <string name="profile_password_new">Nueva contraseña</string>
     <string name="profile_password_again">Confirmar contraseña</string>
+    <string name="profile_reset_password_confirmation">¿Desea restablecer la contraseña?</string>
+    <string name="profile_reset_password_note">Please check your email at %s for the link to reset your password. This link will expire in 24 hours.</string>
 
     <!-- FragmentProfileRegistered -->
     <string name="profile_registered_registered">Este reloj ha\nsido registrado</string>

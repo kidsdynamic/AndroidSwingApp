@@ -89,13 +89,13 @@ public class FragmentProfileOption extends ViewFragment {
         public void onClick(View view) {
 //            mActivityMain.selectFragment(FragmentProfilePassword.class.getName(), null);
             new AlertDialog.Builder(mViewMain.getContext())
-                    .setTitle("Reset Password")
-                    .setMessage("Are you sure you want to reset your password?")
+                    .setTitle(mActivityMain.getString(R.string.profile_option_password))
+                    .setMessage(mActivityMain.getString(R.string.profile_reset_password_confirmation))
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             mServerMachine.userResetPassword();
                             WatchContact.User user = mActivityMain.mOperator.getUser();
-                            String text ="Please check your email at " + user.mEmail + " for the link to reset your password. This link will expire in 24 hours.\n";
+                            String text = mActivityMain.getString(R.string.profile_reset_password_note, user.mEmail);
                             Toast toast = Toast.makeText(mViewMain.getContext(), text, Toast.LENGTH_LONG);
                             toast.show();
                         }

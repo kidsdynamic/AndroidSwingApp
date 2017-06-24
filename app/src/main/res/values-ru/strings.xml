@@ -143,7 +143,7 @@
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Аккаунт</string>
     <string name="profile_option_kid">Редактировать профиль ребенка</string>
-    <string name="profile_option_password">Изменить пароль</string>
+    <string name="profile_option_password">Сброс пароля</string>
     <string name="profile_option_logout">Завершить сеанс</string>
     <string name="profile_option_about">О</string>
     <string name="profile_option_contact_us">Свяжись с нами</string>
@@ -155,6 +155,8 @@
     <string name="profile_password_current">Текущий пароль</string>
     <string name="profile_password_new">Новый пароль</string>
     <string name="profile_password_again">Подтвердить пароль</string>
+    <string name="profile_reset_password_confirmation">Вы хотите сбросить пароль?</string>
+    <string name="profile_reset_password_note">Please check your email at %s for the link to reset your password. This link will expire in 24 hours.</string>
 
     <!-- FragmentProfileRegistered -->
     <string name="profile_registered_registered">Эти часы\nзарегистрированы</string>

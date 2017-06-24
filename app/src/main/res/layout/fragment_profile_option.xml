@@ -52,7 +52,6 @@
         android:layout_weight="1"
         android:background="@drawable/option_background"
         android:paddingEnd="10dp"
-        android:visibility="gone"
         android:paddingStart="10dp">
 
         <TextView

@@ -143,7 +143,7 @@
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">"账号"</string>
     <string name="profile_option_kid">"编辑小孩信息"</string>
-    <string name="profile_option_password">"密码变更"</string>
+    <string name="profile_option_password">更改密碼</string>
     <string name="profile_option_logout">"注销"</string>
     <string name="profile_option_about">"关于"</string>
     <string name="profile_option_contact_us">"与我们连络"</string>
@@ -155,6 +155,8 @@
     <string name="profile_password_current">"现在密码"</string>
     <string name="profile_password_new">"新密码"</string>
     <string name="profile_password_again">"请再次输入新密码!"</string>
+    <string name="profile_reset_password_confirmation">確定要更新密碼?</string>
+    <string name="profile_reset_password_note">更新密碼的郵件已經寄到您的信箱%s，更新密碼的連結會在24小時後失效</string>
 
     <!-- FragmentProfileRegistered -->
     <string name="profile_registered_registered">"这支手表\n已经被注册了"</string>

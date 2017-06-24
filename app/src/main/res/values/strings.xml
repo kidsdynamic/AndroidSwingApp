@@ -151,7 +151,7 @@
     <!-- FragmentProfileOption -->
     <string name="profile_option_account">Account</string>
     <string name="profile_option_kid">Edit Your Kid\'s Profile</string>
-    <string name="profile_option_password">Change Password</string>
+    <string name="profile_option_password">Reset Password</string>
     <string name="profile_option_logout">Logout</string>
     <string name="profile_option_about">About</string>
     <string name="profile_option_contact_us">Contact Us</string>
@@ -163,6 +163,8 @@
     <string name="profile_password_current">Current Password</string>
     <string name="profile_password_new">New Password</string>
     <string name="profile_password_again">New Password, Again!</string>
+    <string name="profile_reset_password_confirmation">Are you sure you want to reset your password?</string>
+    <string name="profile_reset_password_note">Please check your email at %s for the link to reset your password. This link will expire in 24 hours.</string>
 
     <!-- FragmentProfileRegistered -->
     <string name="profile_registered_registered">This Watch Has\nBeen Registered</string>
