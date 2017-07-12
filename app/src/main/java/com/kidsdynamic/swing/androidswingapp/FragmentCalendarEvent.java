@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
@@ -419,24 +420,15 @@ public class FragmentCalendarEvent extends ViewFragment {
     private View.OnClickListener mStartListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-//            Bundle bundle = new Bundle();
-//            bundle.putBoolean(BUNDLE_KEY_START_DATE, true);
             isStarDate = true;
             openDatePicker();
 
-//            mActivityMain.mEventStack.push(mEvent);
-//            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);
         }
     };
 
     private View.OnClickListener mEndListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-/*            Bundle bundle = new Bundle();
-            bundle.putBoolean(BUNDLE_KEY_START_DATE, false);
-            isStarDate = false;
-            mActivityMain.mEventStack.push(mEvent);
-            mActivityMain.selectFragment(FragmentCalendarPicker.class.getName(), bundle);*/
             isStarDate = false;
             openDatePicker();
 
@@ -684,12 +676,19 @@ public class FragmentCalendarEvent extends ViewFragment {
     WatchOperator.finishListener mSetEventListener = new WatchOperator.finishListener() {
         @Override
         public void onFinish(Object arg) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Event Created");
+            mActivityMain.FirebaseLog(LogEvent.Event.ACTION, bundle);
+
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
         }
 
         @Override
         public void onFailed(String Command, int statusCode) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Event Creation Fail");
+            mActivityMain.FirebaseLog(LogEvent.Event.ACTION, bundle);
             mProcessDialog.dismiss();
             Toast.makeText(mActivityMain, Command, Toast.LENGTH_SHORT).show();
         }
@@ -698,6 +697,9 @@ public class FragmentCalendarEvent extends ViewFragment {
     WatchOperator.finishListener mDeleteEventListener = new WatchOperator.finishListener() {
         @Override
         public void onFinish(Object arg) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Event Deleted");
+            mActivityMain.FirebaseLog(LogEvent.Event.ACTION, bundle);
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
         }

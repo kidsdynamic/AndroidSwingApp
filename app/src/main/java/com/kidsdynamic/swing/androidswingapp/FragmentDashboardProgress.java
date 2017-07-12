@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -70,6 +72,9 @@ public class FragmentDashboardProgress extends ViewFragment {
         mViewButton1 = (Button) mViewMain.findViewById(R.id.dashboard_progress_button1);
         mViewButton2 = (Button) mViewMain.findViewById(R.id.dashboard_progress_button2);
 
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Sync Start");
+        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
         return mViewMain;
     }
 
@@ -148,6 +153,9 @@ public class FragmentDashboardProgress extends ViewFragment {
             switch(mServerSyncState) {
                 case 0:
                     if (mServerSyncFinish) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Server Sync Finished");
+                        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
                         mActivityMain.mOperator.updateActivity(mActivityUpdateListener, mDevice.mId);
                         mServerSyncState = 1;
                     }
@@ -176,6 +184,9 @@ public class FragmentDashboardProgress extends ViewFragment {
             if (mSearchResult != null && mMacAddress.equals(mSearchResult.mAddress)) {
                 viewFound();
             } else if (mSearchTimeout == 0) {
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Search Swing Watch Timeout");
+                mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
                 viewNotFound();
                 bleSearchCancel();
             }
@@ -296,6 +307,11 @@ public class FragmentDashboardProgress extends ViewFragment {
     }
 
     private void viewFound() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Watch Found");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mDevice.mMacId);
+        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
+
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_found));
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_sync_now));
 
@@ -341,6 +357,11 @@ public class FragmentDashboardProgress extends ViewFragment {
     }
 
     private void viewSyncing() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Start to Sync Data");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mDevice.mMacId);
+        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
+
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_syncing));
 
         mViewButton1.setVisibility(View.INVISIBLE);
@@ -356,6 +377,11 @@ public class FragmentDashboardProgress extends ViewFragment {
     }
 
     private void viewCompleted() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Sync Data Completed");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mDevice.mMacId);
+        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
+
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_completed));
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_dashboard));
 
@@ -371,6 +397,11 @@ public class FragmentDashboardProgress extends ViewFragment {
     }
 
     private void viewNotFound() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Swing Watch Not Found");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mDevice.mMacId);
+        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
+
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_not_found));
 
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));
@@ -388,6 +419,11 @@ public class FragmentDashboardProgress extends ViewFragment {
     }
 
     private void viewServerFailed() {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Can't upload data to server");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, mDevice.mMacId);
+        mActivityMain.FirebaseLog(LogEvent.Event.SYNC_WATCH_DATA, bundle);
+
         mViewLabel.setText(getResources().getString(R.string.dashboard_progress_server_not_reach));
 
         mViewButton1.setText(getResources().getString(R.string.dashboard_progress_again));

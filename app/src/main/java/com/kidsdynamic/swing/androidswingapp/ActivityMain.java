@@ -29,8 +29,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
@@ -46,6 +51,8 @@ public class ActivityMain extends AppCompatActivity
     public final static int READ_STORAGE_PERMISSION = 0x1004;
     public final static int ACCESS_COARSE_LOCATION_PERMISSION = 0x1005;
     public final static int ACCESS_FINE_LOCATION_PERMISSION = 0x1006;
+
+    public FirebaseAnalytics mFirebaseAnalytics;
 
     public final static String RESUME_CHECK_TAG = "RESUME_CHECK_TAG";
 
@@ -111,6 +118,27 @@ public class ActivityMain extends AppCompatActivity
         mEventStack = new Stack<>();
 
         initPermissionList();
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        WatchContact.User user = mOperator.getUser();
+        if(user != null) {
+            List<WatchContact.Kid> kids = mOperator.getKids();
+            mFirebaseAnalytics.setUserProperty(LogEvent.UserProperty.EMAIL, user.mEmail);
+            mFirebaseAnalytics.setUserProperty(LogEvent.UserProperty.NAME, user.mFirstName + " " + user.mLastName);
+            Date d = new Date(user.mDateCreated * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+            mFirebaseAnalytics.setUserProperty(LogEvent.UserProperty.SIGNUP_DATE, sdf.format(d));
+            mFirebaseAnalytics.setUserProperty(LogEvent.UserProperty.KID_COUNT, String.valueOf(kids.size()));
+
+            String kidList = "";
+            for(WatchContact.Kid kid : kids) {
+                kidList += kid.mMacId + ", ";
+            }
+            kidList = kidList.substring(0, kidList.length()-2);
+            mFirebaseAnalytics.setUserProperty(LogEvent.UserProperty.MAC_ID_LIST, kidList);
+        }
+
+        FirebaseLog(LogEvent.Event.APP_OPEN, savedInstanceState);
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mControlHeight = metrics.heightPixels / getResources().getInteger(R.integer.console_height_denominator);
@@ -231,6 +259,11 @@ public class ActivityMain extends AppCompatActivity
     public void selectFragment(String className, Bundle args) {
         Fragment fragment = Fragment.instantiate(this, className, args);
 
+        Bundle bundle = new Bundle();
+        String[] pageName = className.split("\\.");
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, pageName[pageName.length-1]);
+
+        FirebaseLog(LogEvent.Event.SWITCH_PAGE, bundle);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, className)
@@ -440,8 +473,11 @@ public class ActivityMain extends AppCompatActivity
     private ServerMachine.userIsTokenValidListener mUserIsTokenValidListener = new ServerMachine.userIsTokenValidListener() {
         @Override
         public void onValidState(boolean valid) {
-            if (valid)
+            if (valid){
                 mServiceMachine.setAuthToken(mConfig.getString(ActivityConfig.KEY_AUTH_TOKEN));
+            }
+            mServiceMachine.updateRegistrationId();
+
         }
 
         @Override
@@ -500,5 +536,10 @@ public class ActivityMain extends AppCompatActivity
         config.setLocale(locale);
 
         getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+    }
+
+    public void FirebaseLog(String logName, Bundle bundle){
+
+        mFirebaseAnalytics.logEvent(logName, bundle);
     }
 }
