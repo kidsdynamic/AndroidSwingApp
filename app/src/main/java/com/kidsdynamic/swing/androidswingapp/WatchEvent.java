@@ -346,10 +346,31 @@ public class WatchEvent implements Serializable {
             new Alarm(64, R.string.event_alarm_review_the_backpack, R.mipmap.icon_sound),
     };
 
-    public static int findAlarmName(int id) {
-        for (Alarm alarm : AlarmList)
-            if (alarm.mId == id)
-                return alarm.mName;
-        return AlarmList[0].mName;
-    }
+    final static Alarm[] AlarmList_ja = new Alarm[]{
+            new Alarm(0, R.string.event_alarm_app, 0),
+            new Alarm(32, R.string.event_alarm_good_morning, R.mipmap.icon_alert),
+            new Alarm(33, R.string.event_alarm_make_bed, R.mipmap.icon_sound),
+            new Alarm(34, R.string.event_alarm_get_dress, R.mipmap.icon_sound),
+            new Alarm(35, R.string.event_alarm_eat_breakfast, R.mipmap.icon_sound),
+            new Alarm(36, R.string.event_alarm_brush_teeth, R.mipmap.icon_sound),
+            new Alarm(37, R.string.event_alarm_get_ready_for_school, R.mipmap.icon_sound),
+            new Alarm(38, R.string.event_alarm_good_night, R.mipmap.icon_sound),
+            new Alarm(39, R.string.event_alarm_collect_toys, R.mipmap.icon_sound),
+            new Alarm(40, R.string.event_alarm_feed_pet, R.mipmap.icon_sound),
+            new Alarm(41, R.string.event_alarm_clean_bedroom, R.mipmap.icon_sound),
+            new Alarm(42, R.string.event_alarm_homework_time, R.mipmap.icon_sound),
+            new Alarm(43, R.string.event_alarm_take_a_nap, R.mipmap.icon_sound),
+            new Alarm(44, R.string.event_alarm_outdoor_play_time, R.mipmap.icon_sound),
+            new Alarm(45, R.string.event_alarm_fun_time, R.mipmap.icon_sound),
+            new Alarm(46, R.string.event_alarm_exercise, R.mipmap.icon_sound),
+            new Alarm(47, R.string.event_alarm_practice_music, R.mipmap.icon_sound),
+            new Alarm(48, R.string.event_alarm_drawing_time, R.mipmap.icon_sound),
+            new Alarm(49, R.string.event_alarm_reading_time, R.mipmap.icon_sound),
+            new Alarm(50, R.string.event_alarm_take_a_bath, R.mipmap.icon_sound),
+            new Alarm(51, R.string.event_alarm_family_time, R.mipmap.icon_sound),
+            new Alarm(52, R.string.event_alarm_lunch_time, R.mipmap.icon_sound),
+            new Alarm(53, R.string.event_alarm_dinner_time, R.mipmap.icon_sound),
+            new Alarm(54, R.string.event_alarm_afternoon_snack_time, R.mipmap.icon_sound),
+            new Alarm(55, R.string.event_alarm_review_the_backpack, R.mipmap.icon_sound),
+    };
 }

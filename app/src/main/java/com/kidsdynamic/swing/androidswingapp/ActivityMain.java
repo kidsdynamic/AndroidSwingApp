@@ -101,6 +101,8 @@ public class ActivityMain extends AppCompatActivity
     final static int RESOURCE_HIDE = -1;
     private int mBackgroundRes, mIconRes1, mIconRes2;
 
+    public String language;
+
     private int mBackgroundPositionMinimum, mBackgroundPositionMaximum;
 
     @Override
@@ -183,7 +185,7 @@ public class ActivityMain extends AppCompatActivity
         boolean activeBLE = true;
         boolean activeService = true;
 
-        String language = mConfig.getString(ActivityConfig.KEY_LANGUAGE);
+        language = mConfig.getString(ActivityConfig.KEY_LANGUAGE);
         if (!language.equals("")) {
             setLocale(language, mConfig.getString(ActivityConfig.KEY_REGION));
         }

@@ -578,7 +578,13 @@ public class FragmentCalendarEvent extends ViewFragment {
     }
 
     private boolean loadAlarm() {
-        for (WatchEvent.Alarm target : WatchEvent.AlarmList) {
+        WatchEvent.Alarm[] alertList;
+        if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
+            alertList = WatchEvent.AlarmList_ja;
+        } else {
+            alertList = WatchEvent.AlarmList;
+        }
+        for (WatchEvent.Alarm target : alertList) {
             if (target.mId == mEvent.mAlert) {
                 mEvent.mAlert = target.mId;
                 mEvent.mName = getResources().getString(target.mName);   // multi-dependence issue, cause from KD.
