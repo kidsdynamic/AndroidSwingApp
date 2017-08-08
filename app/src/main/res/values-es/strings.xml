@@ -363,4 +363,9 @@
     <string name="signup_profile_done">hecho</string>
     <string name="signup_profile_next">siguiente</string>
     <string name="dashboard_add_watch">Agregar un relo</string>
+    <string name="calendar_month_sync">Sincronizar ahora</string>
+    <string name="dialog_sync_content">Sincroniza después de editar el evento</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">Sincronizar</string>
 </resources>

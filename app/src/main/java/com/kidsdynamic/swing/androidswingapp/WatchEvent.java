@@ -49,7 +49,7 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        int color = ColorList[0];
+        int color = ColorList[4];
 
         init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
@@ -70,7 +70,7 @@ public class WatchEvent implements Serializable {
         calc.add(Calendar.HOUR_OF_DAY, 1);
         long end = calc.getTimeInMillis();
 
-        int color = ColorList[0];
+        int color = ColorList[4];
 
         init(0, 0, new ArrayList<Integer>(), "", start, end, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
@@ -78,7 +78,7 @@ public class WatchEvent implements Serializable {
     public WatchEvent(long startDate, long endDate) {
         long now = System.currentTimeMillis();
 
-        int color = ColorList[0];
+        int color = ColorList[4];
 
         init(0, 0, new ArrayList<Integer>(), "", startDate, endDate, colorToString(color), "", "", ALARM_INVALID, REPEAT_NEVER, 0, now, now);
     }
@@ -297,8 +297,8 @@ public class WatchEvent implements Serializable {
         return color;
     }
 
-    final static int[] ColorList = new int[]{
-            0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFF4DC1DF, 0xFF9A989A};
+    final static int[] ColorList = new int[]{//FF7230
+            0xFFFAD13E, 0xFF7572C1, 0xFF00C4B3, 0xFFF54A7E, 0xFFFF7230, 0xFF9A989A};
 
     static public class Alarm {
         int mId;

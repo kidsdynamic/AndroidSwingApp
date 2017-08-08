@@ -2,8 +2,11 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -688,6 +692,8 @@ public class FragmentCalendarEvent extends ViewFragment {
 
             mProcessDialog.dismiss();
             mActivityMain.popFragment();
+
+            showSyncDialog();
         }
 
         @Override
@@ -791,5 +797,35 @@ public class FragmentCalendarEvent extends ViewFragment {
     };
 
 
+    private void showSyncDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivityMain, R.style.AppDialogStyle);
+        builder.setTitle("");
+        builder.setMessage(R.string.dialog_sync_content);
+
+        String positiveText = getString(android.R.string.ok);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+
+        // display dialog
+        dialog.show();
+
+        Button nbutton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setBackgroundColor(getResources().getColor(R.color.color_orange_main));
+        nbutton.setTextColor(Color.WHITE);
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) nbutton.getLayoutParams();
+        params.rightMargin = 50;
+        nbutton.setLayoutParams(params);
+
+        TextView msgText = (TextView) dialog.findViewById(android.R.id.message);
+        msgText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+    }
 
 }

@@ -52,6 +52,9 @@
     <string name="calendar_main_monthly_schedule">Monthly Schedule</string>
     <string name="calendar_main_no_incoming_event">No Event</string>
 
+    <!-- FragmentCalendarMain -->
+    <string name="calendar_month_sync">Sync Now</string>
+
     <!-- FragmentCalendarTodo -->
     <string name="calendar_todo_save">Save</string>
     <string name="calendar_todo_processing">Processing</string>
@@ -372,4 +375,9 @@
     <string name="error_subhost_remove_kid_400">Bad Request. Missing some parameters, or the Type is Wrong</string>
     <string name="error_subhost_remove_kid_403">Forbidden. The User Doesn\'t Have Permission</string>
 
+    <!-- API Error -->
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_content">Please sync after editing event</string>
+    <string name="dialog_sync_sync_button">Sync</string>
+    <string name="dialog_sync_skip_button">Skip</string>
 </resources>

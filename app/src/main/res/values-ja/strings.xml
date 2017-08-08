@@ -36,7 +36,7 @@
     <string name="calendar_event_description">説明</string>
     <string name="calendar_event_todo_list">リストを作る</string>
     <string name="calendar_event_save">セーブ（保存）</string>
-    <string name="calendar_event_advance">一歩進め設定</string>
+    <string name="calendar_event_advance">前へ進む</string>
     <string name="calendar_event_please_select_event">イベントを選ぶ</string>
 
     <!-- FragmentCalendarMain -->
@@ -363,5 +363,10 @@
     <string name="error_subhost_deny_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_400">パラメータエラーかタイプミスです</string>
     <string name="error_subhost_remove_kid_403">ユーザーが許可されていません</string>
+    <string name="calendar_month_sync">接続を始めます</string>
+    <string name="dialog_sync_content">イベントを編集すると、時計のシンクロをして下さい。</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">接続</string>
 
 </resources>

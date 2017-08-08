@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -85,7 +86,7 @@ public class ServerMachine {
     private String mTag = "";
     private RequestQueue mRequestQueue;                             // Volley的通訊佇列
     Queue<TaskItem> mTaskQueue = new ConcurrentLinkedQueue<>();     // 狀態機的Request佇列
-    private Handler mHandler = new Handler();
+    private Handler mHandler;
     private Context mContext;
     private String mAuthToken = null;
     private onForbiddenListener mOnForbiddenListener;               // 產生403的意外處理
@@ -96,6 +97,7 @@ public class ServerMachine {
 
     public ServerMachine(Context context, String tag, onForbiddenListener listener) {
         mContext = context;
+        mHandler = new Handler(Looper.getMainLooper());
         mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
         mTag = tag;
         mOnForbiddenListener = listener;

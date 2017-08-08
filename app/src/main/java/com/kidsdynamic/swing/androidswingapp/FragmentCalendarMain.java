@@ -27,6 +27,7 @@ public class FragmentCalendarMain extends ViewFragment {
     private TextView mViewAlertEvent;
     private Button mViewToday;
     private Button mViewMonthly;
+    private Button mSyncButton;
 
     private long mDefaultDate = System.currentTimeMillis();
 
@@ -57,6 +58,14 @@ public class FragmentCalendarMain extends ViewFragment {
 
         mViewMonthly = (Button) mViewMain.findViewById(R.id.calendar_main_monthly);
         mViewMonthly.setOnClickListener(mMonthlyListener);
+
+        mSyncButton = (Button) mViewMain.findViewById(R.id.dashboard_main_sync);
+        mSyncButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mActivityMain.selectFragment(FragmentDashboardProgress.class.getName(), null);
+            }
+        });
 
         return mViewMain;
     }

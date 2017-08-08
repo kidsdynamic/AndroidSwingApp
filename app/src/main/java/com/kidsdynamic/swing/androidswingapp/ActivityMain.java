@@ -274,13 +274,20 @@ public class ActivityMain extends AppCompatActivity
     }
 
     public void clearFragment(String className, Bundle args) {
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        try{
+            getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
 
         Fragment fragment = Fragment.instantiate(this, className, args);
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, fragment, className)
                 .commit();
+
     }
 
     public ViewFragment getTopViewFragment() {

@@ -363,6 +363,11 @@
     <string name="signup_profile_done">сделанный</string>
     <string name="signup_profile_next">следующий</string>
     <string name="dashboard_add_watch">Добавить часы</string>
+    <string name="calendar_month_sync">Синхронизировать сейчас</string>
+    <string name="dialog_sync_content">Синхронизация после редактирования события</string>
+    <string name="dialog_sync_header">Sync Data</string>
+    <string name="dialog_sync_skip_button">Skip</string>
+    <string name="dialog_sync_sync_button">Синхронизация</string>
 
 
 </resources>

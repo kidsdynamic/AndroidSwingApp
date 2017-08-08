@@ -122,4 +122,11 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="AppDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/color_orange_main</item>
+        <item name="android:textColorPrimary">@color/color_orange_main</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:background">#fff</item>
+    </style>
+
 </resources>
