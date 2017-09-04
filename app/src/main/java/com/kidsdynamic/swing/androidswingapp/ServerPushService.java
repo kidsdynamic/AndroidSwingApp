@@ -19,6 +19,7 @@ public class ServerPushService extends Service {
     private Handler mHandler = new Handler();
 
     private WatchActivityRaw mUploadItem = null;
+    private WatchBattery mWatchBattery = null;
 
     @Override
     public void onCreate() {
@@ -77,7 +78,20 @@ public class ServerPushService extends Service {
         }
     };
 
-    private final Runnable DoPush = new Runnable() {
+    ServerMachine.deviceBatteryUploadListener mDeviceBatteryUploadListener = new ServerMachine.deviceBatteryUploadListener() {
+
+        @Override
+        public void onSuccess(int statusCode) {
+            Log.d("Battery UPloader", "Success");
+        }
+
+        @Override
+        public void onFail(String command, int statudCode) {
+            Log.d("Battery UPloader", "Fail");
+        }
+    };
+
+        private final Runnable DoPush = new Runnable() {
         @Override
         public void run() {
             boolean stop = false;
@@ -89,11 +103,20 @@ public class ServerPushService extends Service {
                     stop = true;
                 }
 
-            } else if (mUploadItem == null && mWatchDatabase.UploadItemCount() > 0) {
-                mUploadItem = mWatchDatabase.UploadItemGet();
-                Log.d("PushService", " MAC " + mUploadItem.mMacId + " time " + mUploadItem.mTime + " indoor " + mUploadItem.mIndoor);
-                mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
+            } else if (mUploadItem == null) {
+                if(mWatchDatabase.UploadItemCount() > 0) {
+                    mUploadItem = mWatchDatabase.UploadItemGet();
+                    Log.d("PushService", " MAC " + mUploadItem.mMacId + " time " + mUploadItem.mTime + " indoor " + mUploadItem.mIndoor);
+                    mServiceMachine.activityUploadRawData(mActivityUploadRawDataListener, mUploadItem.mIndoor, mUploadItem.mOutdoor, mUploadItem.mTime, mUploadItem.mMacId);
+                }
+
+                if(mWatchDatabase.UploadBatteryCount() > 0) {
+                    mWatchBattery = mWatchDatabase.UploadBatteryGet();
+                    mServiceMachine.deviceBatteryUpload(mDeviceBatteryUploadListener, mWatchBattery);
+                }
+
             }
+
             if (!stop)
                 mHandler.postDelayed(this, 100);
         }

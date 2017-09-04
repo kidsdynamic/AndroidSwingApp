@@ -76,6 +76,8 @@ public class ServerMachine {
     private final static String CMD_SUBHOST_LIST = SERVER_ADDRESS + "/subHost/list";
     private final static String CMD_SUBHOST_REMOVE_KID = SERVER_ADDRESS + "/subHost/removeKid";
 
+    private final static String CMD_DEVICE_BATTERY_LIFE = SERVER_ADDRESS + "/kids/batteryStatus";
+
     private final static String CMD_GET_AVATAR = BuildConfig.PHOTO_BASE_URL;
 
     final static String REQUEST_TAG = "SERVER_MACHINE";
@@ -417,6 +419,20 @@ public class ServerMachine {
         addressForGet += "&end=" + end;
         addressForGet += "&kidId=" + kidId;
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.GET, addressForGet, map, null), CMD_ACTIVITY_RETRIEVE_DATA_BY_TIME, listener));
+    }
+
+    public interface deviceBatteryUploadListener {
+        void onSuccess(int statusCode);
+        void onFail(String command, int statudCode);
+    }
+
+    public void deviceBatteryUpload(deviceBatteryUploadListener listener, WatchBattery watchBattery) {
+        Gson gson = new Gson();
+        String json = gson.toJson(watchBattery);
+        Log.d("GSON: ", json);
+        Map<String, String> map = new HashMap<>();
+        map.put("json", json);
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_DEVICE_BATTERY_LIFE, map, null), CMD_DEVICE_BATTERY_LIFE, listener));
     }
 
     public interface eventAddListener {
@@ -875,6 +891,12 @@ public class ServerMachine {
                     case CMD_GET_AVATAR:
                         ((getAvatarListener) mCurrentTask.mResponseListener).onSuccess(bitmap, mCurrentTask.mImageFile);
                         break;
+                    case CMD_DEVICE_BATTERY_LIFE:
+                        if (responseCode == 200)
+                            ((deviceBatteryUploadListener) mCurrentTask.mResponseListener).onSuccess(responseCode);
+                        else if (responseCode == 400)
+                            ((deviceBatteryUploadListener) mCurrentTask.mResponseListener).onFail(CMD_DEVICE_BATTERY_LIFE, responseCode);
+                        break;
                 }
             }
 
@@ -956,6 +978,8 @@ public class ServerMachine {
                     case CMD_ACTIVITY_UPLOAD_RAW_DATA:
                         ((activityUploadRawDataListener) mCurrentTask.mResponseListener).onFail(CMD_ACTIVITY_UPLOAD_RAW_DATA, responseCode);
                         break;
+
+
 
                     case CMD_ACTIVITY_RETRIEVE_DATA:
                         ((activityRetrieveDataListener) mCurrentTask.mResponseListener).onFail(CMD_ACTIVITY_RETRIEVE_DATA, responseCode);

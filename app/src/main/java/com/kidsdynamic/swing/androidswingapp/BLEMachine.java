@@ -361,8 +361,11 @@ class BLEMachine extends BLEControl {
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
 
-                            if (mOnSyncListener != null)
-                                mOnSyncListener.onBattery(mRelationDevice.mState.mBattery);
+                            if (mOnSyncListener != null) {
+                                WatchBattery wb = new WatchBattery(mRelationDevice.mState.mBattery, ServerMachine.getMacID(mRelationDevice.mAddress), timeInByte);
+                                mOnSyncListener.onBattery(wb);
+
+                            }
                         }
 
                     } else if (!mRelationDevice.mState.mConnected) {
@@ -400,7 +403,7 @@ class BLEMachine extends BLEControl {
     interface onSyncListener {
         void onSync(int resultCode, ArrayList<WatchActivityRaw> result);
 
-        void onBattery(byte value);
+        void onBattery(WatchBattery battery);
     }
 
     interface onBatteryListener {

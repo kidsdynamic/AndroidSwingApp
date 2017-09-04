@@ -468,9 +468,12 @@ public class FragmentDashboardProgress extends ViewFragment {
         }
 
         @Override
-        public void onBattery(byte value) {
+        public void onBattery(WatchBattery battery) {
+            Log.d("Battery: ",  String.valueOf(battery));
             mActivityMain.mOperator.mFocusBatteryName = mDevice.mName;
-            mActivityMain.mOperator.mFocusBatteryValue = value;
+            mActivityMain.mOperator.mFocusBatteryValue = battery.batteryLife;
+
+            mActivityMain.mOperator.pushUploadBattery(battery);
         }
     };
 

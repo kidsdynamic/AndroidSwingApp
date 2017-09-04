@@ -110,7 +110,7 @@ public class WatchOperatorSetKid {
         }
 
         @Override
-        public void onBattery(byte value) {
+        public void onBattery(WatchBattery battery) {
 
         }
     };

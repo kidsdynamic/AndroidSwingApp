@@ -192,6 +192,10 @@ public class WatchOperator {
         mWatchDatabase.UploadItemAdd(uploadItem);
     }
 
+    void pushUploadBattery(WatchBattery battery) {
+        mWatchDatabase.UploadBatteryAdd(battery);
+    }
+
     static long getTimeStamp(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         format.setTimeZone(TimeZone.getTimeZone("UTC"));

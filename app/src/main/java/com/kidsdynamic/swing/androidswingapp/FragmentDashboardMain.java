@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ public class FragmentDashboardMain extends ViewFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+        mActivityMain.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     @Override
@@ -56,7 +58,7 @@ public class FragmentDashboardMain extends ViewFragment {
         mButtonYes.setOnClickListener(null);
         mButtonNo.setOnClickListener(null);
         mbuttonAnother.setOnClickListener(null);
-
+        mActivityMain.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onPause();
     }
 

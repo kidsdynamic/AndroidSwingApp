@@ -24,6 +24,7 @@ class WatchDatabase {
     static final String TABLE_TODO = "Todo";
     static final String TABLE_EVENT_KITS = "EventKits";
     static final String TABLE_ACTIVITY = "Activity";
+    static final String TABLE_BATTERY = "Battery";
 
     private static String ID = "ID";
     private static String EMAIL = "EMAIL";
@@ -57,6 +58,9 @@ class WatchDatabase {
     private static String OUTDOOR_ID = "OUTDOOR_ID";
     private static String INDOOR_STEP = "INDOOR_STEP";
     private static String OUTDOOR_STEP = "OUTDOOR_STEP";
+    private static String BATTERY_LIFE = "BATTERY_LIFE";
+    private static String DATE_RECEIVED = "DATE_RECEIVED";
+
 
     static final String CREATE_USER_TABLE =
             "CREATE TABLE " + TABLE_USER + " (" +
@@ -130,6 +134,12 @@ class WatchDatabase {
                     KID_ID + " INTEGER NOT NULL, " +
                     TIME + " INTEGER NOT NULL)";
 
+    static final String CREATE_BATTERY_TABLE =
+            "CREATE TABLE " + TABLE_BATTERY + " (" +
+                    MAC_ID + " TEXT NOT NULL, " +
+                    BATTERY_LIFE + " INTEGER NOT NULL, " +
+                    DATE_RECEIVED + " INTEGER NOT NULL)";
+
     private SQLiteDatabase mDatabase;
 
     WatchDatabase(Context context) {
@@ -152,6 +162,7 @@ class WatchDatabase {
         mDatabase.execSQL(CREATE_TODO_TABLE);
         mDatabase.execSQL(CREATE_EVENT_KIDS_TABLE);
         mDatabase.execSQL(CREATE_ACTIVITY_TABLE);
+        mDatabase.execSQL(CREATE_BATTERY_TABLE);
     }
 
     long UserAdd(WatchContact.User user) {
@@ -347,6 +358,15 @@ class WatchDatabase {
         return mDatabase.insert(TABLE_UPLOAD, null, contentValues);
     }
 
+    long UploadBatteryAdd(WatchBattery battery) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DATE_RECEIVED, battery.dateReceived);
+        contentValues.put(MAC_ID, battery.macId);
+        contentValues.put(BATTERY_LIFE, battery.batteryLife);
+
+        return mDatabase.insert(TABLE_BATTERY, null, contentValues);
+    }
+
     long UploadItemDone(WatchActivityRaw item) {
         ContentValues contentValues = new ContentValues();
 
@@ -388,6 +408,30 @@ class WatchDatabase {
         cursor.close();
 
         return item;
+    }
+
+    int UploadBatteryCount() {
+        int result = 0;
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_BATTERY, null);
+
+        if (cursor.moveToNext())
+            result = cursor.getInt(0);
+
+        cursor.close();
+
+        return result;
+    }
+
+    WatchBattery UploadBatteryGet() {
+        WatchBattery battery = null;
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_BATTERY + " LIMIT 1", null);
+        if(cursor.moveToNext()) {
+            battery = cursorBattery(cursor);
+            mDatabase.delete(TABLE_BATTERY, DATE_RECEIVED + "=?", new String[]{String.valueOf(battery.dateReceived)});
+        }
+
+        cursor.close();
+        return battery;
     }
 
     int UploadItemCount() {
@@ -825,6 +869,19 @@ class WatchDatabase {
         return result;
     }
 
+    public List<WatchBattery> batteryExport(int macId) {
+        List<WatchBattery> result = new ArrayList<>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_BATTERY + " WHERE " + MAC_ID + "=" + macId, null);
+
+        while (cursor.moveToNext()) {
+            result.add(cursorBattery(cursor));
+        }
+
+        cursor.close();
+
+        return result;
+    }
+
     int activityCount() {
         int result = 0;
         Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM " + TABLE_ACTIVITY, null);
@@ -853,5 +910,15 @@ class WatchDatabase {
         watchActivity.mOutdoor.mTimestamp = watchActivity.mIndoor.mTimestamp;
 
         return watchActivity;
+    }
+
+    private WatchBattery cursorBattery(Cursor cursor) {
+        WatchBattery watchBattery = new WatchBattery();
+        watchBattery.batteryLife = cursor.getInt(1);
+        watchBattery.macId = cursor.getString(0);
+        watchBattery.dateReceived = cursor.getInt(2);
+        Log.d("Battery retreive", watchBattery.toString());
+        return watchBattery;
+
     }
 }
