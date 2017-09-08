@@ -109,11 +109,14 @@ public class ActivityMain extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         SqlScoutServer.create(this, getPackageName());
         mContext = this;
         mConfig = new ActivityConfig(this, null);
 
-        setContentView(R.layout.activity_main);
+        if(BuildConfig.DEBUG) {
+            setContentView(R.layout.activity_main);
+        }
 
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();

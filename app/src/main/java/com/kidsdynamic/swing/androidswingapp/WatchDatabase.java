@@ -154,6 +154,7 @@ class WatchDatabase {
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT_KITS);
         mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_ACTIVITY);
+        mDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_BATTERY);
 
         mDatabase.execSQL(CREATE_USER_TABLE);
         mDatabase.execSQL(CREATE_KIDS_TABLE);
