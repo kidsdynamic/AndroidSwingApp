@@ -322,6 +322,7 @@
     <string name="event_repeat_daily">"每日"</string>
     <string name="event_repeat_never">"从不"</string>
     <string name="profile_request_to_users">用戶</string>
+    <string name="event_notification_title">您有一個行程: </string>
 
     <!-- API Error -->
     <string name="error_api_unknown">Unknown Error</string>

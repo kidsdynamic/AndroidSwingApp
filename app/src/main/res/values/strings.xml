@@ -336,6 +336,7 @@
     <string name="event_repeat_weekly">Weekly</string>
     <string name="event_repeat_daily">Daily</string>
     <string name="event_repeat_never">Never</string>
+    <string name="event_notification_title">You have an event: </string>
 
     <!-- API Error -->
     <string name="error_api_unknown">Unknown Error</string>

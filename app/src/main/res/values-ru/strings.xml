@@ -322,6 +322,7 @@
     <string name="event_repeat_weekly">Еженедельно</string>
     <string name="event_repeat_daily">Ежедневно</string>
     <string name="event_repeat_never">Никогда</string>
+    <string name="event_notification_title">у вас есть событие: </string>
 
     <!-- API Error -->
     <string name="error_api_unknown">Неизвестная ошибка</string>

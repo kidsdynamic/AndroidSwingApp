@@ -325,6 +325,7 @@
     <string name="event_repeat_weekly">每週</string>
     <string name="event_repeat_daily">每日</string>
     <string name="event_repeat_never">今回だけ</string>
+    <string name="event_notification_title">あなたにはイベントがあります: </string>
 
     <!-- API Error -->
     <string name="error_api_unknown">原因不明のエラーが発生しました</string>

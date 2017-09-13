@@ -49,8 +49,8 @@ public class SwingMessageService extends FirebaseMessagingService {
             } else {
                 // Handle message within 10 seconds
                 handleNow();
-                sendNotification(remoteMessage.getNotification().getBody());
             }
+            sendNotification(remoteMessage.getData().get("message"));
 
         }
 
@@ -85,8 +85,8 @@ public class SwingMessageService extends FirebaseMessagingService {
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.notification_icon)
-                .setContentTitle("FCM Message")
-                .setContentText(messageBody)
+                .setContentTitle("Swing")
+                .setContentText(getResources().getString(R.string.event_notification_title) + " " + messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);

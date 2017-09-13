@@ -2,10 +2,8 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.animation.ValueAnimator;
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +12,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -30,12 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.idescout.sql.SqlScoutServer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -110,13 +105,11 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SqlScoutServer.create(this, getPackageName());
+//        SqlScoutServer.create(this, getPackageName());
         mContext = this;
         mConfig = new ActivityConfig(this, null);
 
-        if(BuildConfig.DEBUG) {
-            setContentView(R.layout.activity_main);
-        }
+        setContentView(R.layout.activity_main);
 
         mOperator = new WatchOperator(this);
         mBitmapStack = new Stack<>();

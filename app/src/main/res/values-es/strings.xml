@@ -322,6 +322,8 @@
     <string name="event_repeat_weekly">Semanalmente</string>
     <string name="event_repeat_daily">Diariamente</string>
     <string name="event_repeat_never">Nunca</string>
+    <string name="event_notification_title">tienes un evento: </string>
+
 
     <!-- API Error -->
     <string name="error_api_unknown">Error desconocido</string>
