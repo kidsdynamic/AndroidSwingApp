@@ -1,10 +1,12 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -42,6 +44,9 @@ public class FragmentCalendarMain extends ViewFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_main, container, false);
+
+        InputMethodManager imm = (InputMethodManager) mActivityMain.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
 
         mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_main_selector);
         mViewSelector.setOnSelectListener(mSelectorListener);

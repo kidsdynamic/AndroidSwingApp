@@ -5,97 +5,108 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/fragment_back"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="fitStart"
-        android:src="@mipmap/icon_left" />
+        android:layout_height="match_parent">
 
-    <com.kidsdynamic.swing.androidswingapp.ViewCircle
-        android:id="@+id/signup_profile_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="2.5"
-        app:crossWidth="2dp"
-        app:strokeColorNormal="@color/color_orange" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7">
-
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/signup_profile_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
-
-        <EditText
-            android:id="@+id/signup_profile_first"
-            style="@style/edittext_main"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_profile_sponge"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/signup_profile_sponge"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:hint="@string/signup_profile_first_name"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:nextFocusForward="@+id/registration_info_last" />
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/signup_profile_last"
-            style="@style/edittext_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_profile_sponge"
-            android:layout_alignStart="@+id/signup_profile_sponge"
-            android:layout_below="@+id/signup_profile_first"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:hint="@string/signup_profile_last_name"
-            android:imeOptions="actionNext"
-            android:inputType="text"
-            android:nextFocusForward="@+id/registration_info_phone" />
+            <ImageView
+                android:id="@+id/fragment_back"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitStart"
+                android:src="@mipmap/icon_left" />
 
-        <EditText
-            android:id="@+id/signup_profile_phone"
-            style="@style/edittext_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_profile_sponge"
-            android:layout_alignStart="@+id/signup_profile_sponge"
-            android:layout_below="@+id/signup_profile_last"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:hint="@string/signup_profile_phone_number"
-            android:imeOptions="actionDone"
-            android:inputType="phone"
-            android:nextFocusForward="@+id/signup_profile_first" />
+            <com.kidsdynamic.swing.androidswingapp.ViewCircle
+                android:id="@+id/signup_profile_photo"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_gravity="center"
+                app:crossWidth="2dp"
+                app:strokeColorNormal="@color/color_orange" />
 
-        <Button
-            android:id="@+id/signup_profile_submit"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/signup_profile_sponge"
-            android:layout_alignStart="@+id/signup_profile_sponge"
-            android:layout_below="@+id/signup_profile_phone"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            android:text="@string/signup_profile_next" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                />
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                    android:id="@+id/signup_profile_sponge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:shrinkWidth="0.7" />
+
+                <EditText
+                    android:id="@+id/signup_profile_first"
+                    style="@style/edittext_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/signup_profile_sponge"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/signup_profile_sponge"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:hint="@string/signup_profile_first_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:nextFocusForward="@+id/registration_info_last" />
+
+                <EditText
+                    android:id="@+id/signup_profile_last"
+                    style="@style/edittext_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/signup_profile_sponge"
+                    android:layout_alignStart="@+id/signup_profile_sponge"
+                    android:layout_below="@+id/signup_profile_first"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:hint="@string/signup_profile_last_name"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:nextFocusForward="@+id/registration_info_phone" />
+
+                <EditText
+                    android:id="@+id/signup_profile_phone"
+                    style="@style/edittext_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/signup_profile_sponge"
+                    android:layout_alignStart="@+id/signup_profile_sponge"
+                    android:layout_below="@+id/signup_profile_last"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:hint="@string/signup_profile_phone_number"
+                    android:imeOptions="actionDone"
+                    android:inputType="phone"
+                    android:nextFocusForward="@+id/signup_profile_first" />
+
+                <Button
+                    android:id="@+id/signup_profile_submit"
+                    style="@style/button_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/signup_profile_sponge"
+                    android:layout_alignStart="@+id/signup_profile_sponge"
+                    android:layout_below="@+id/signup_profile_phone"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:text="@string/signup_profile_next" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>

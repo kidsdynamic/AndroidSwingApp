@@ -133,7 +133,9 @@ public class ActivityMain extends AppCompatActivity
             for(WatchContact.Kid kid : kids) {
                 kidList += kid.mMacId + ", ";
             }
-            kidList = kidList.substring(0, kidList.length()-2);
+            if(kidList.length() > 2) {
+                kidList = kidList.substring(0, kidList.length()-2);
+            }
             mFirebaseAnalytics.setUserProperty(LogEvent.UserProperty.MAC_ID_LIST, kidList);
         }
 

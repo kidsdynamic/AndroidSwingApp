@@ -35,6 +35,7 @@ public class FragmentCalendarPicker extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_calendar_picker, container, false);
 
+
         mViewSelector = (ViewCalendarSelector) mViewMain.findViewById(R.id.calendar_picker_selector);
         mViewSelector.setOnSelectListener(mSelectorListener);
 

@@ -8,9 +8,11 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -182,7 +184,7 @@ public class FragmentProfileKid extends ViewFragment {
                 File photoFile = null;
                 File storageDir;
                 try {
-                    storageDir = mActivityMain.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
                     photoFile = File.createTempFile("photo", ".jpg", storageDir);
                     boolean detr = photoFile.delete();
                 } catch (IOException e) {
@@ -190,7 +192,14 @@ public class FragmentProfileKid extends ViewFragment {
                 }
 
                 if (photoFile != null) {
-                    mPhotoUri = Uri.fromFile(photoFile);
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        Log.d("ID: ", BuildConfig.APPLICATION_ID + ".provider");
+                        mPhotoUri = FileProvider.getUriForFile((ActivityMain) getActivity(), BuildConfig.APPLICATION_ID + ".fileProvider", photoFile);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } else {
+                        mPhotoUri = Uri.fromFile(photoFile);
+                    }
+
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, mPhotoUri);
                     startActivityForResult(intent, ACTIVITY_RESULT_CAMERA_REQUEST);
                 }

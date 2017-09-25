@@ -12,6 +12,7 @@ abstract public class ViewFragment extends Fragment {
     final static String BUNDLE_KEY_MAIL = "MAIL";
     final static String BUNDLE_KEY_PASSWORD = "PASSWORD";
     final static String BUNDLE_KEY_AVATAR = "AVATAR";
+    final static String BUNDLE_KEY_KID_NAME = "KID_NAME";
     final static String BUNDLE_KEY_DATE = "DATE";
     final static String BUNDLE_KEY_START_DATE = "START_DATE";
 

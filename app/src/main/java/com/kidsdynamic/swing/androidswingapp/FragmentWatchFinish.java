@@ -1,13 +1,16 @@
 package com.kidsdynamic.swing.androidswingapp;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by 03543 on 2017/1/15.
@@ -22,14 +25,21 @@ public class FragmentWatchFinish extends ViewFragment {
     private Button mViewAnother;
     private ImageView mViewBack;
     private String mAvatarFilename = "";
+    private String deviceName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        InputMethodManager imm = (InputMethodManager) mActivityMain.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
+
         Bundle arg = getArguments();
-        if (arg != null)
+        if (arg != null) {
             mAvatarFilename = getArguments().getString(ViewFragment.BUNDLE_KEY_AVATAR, "");
+            deviceName = getArguments().getString(ViewFragment.BUNDLE_KEY_KID_NAME, "");
+        }
     }
 
     @Override
@@ -46,6 +56,9 @@ public class FragmentWatchFinish extends ViewFragment {
         mViewAnother.setOnClickListener(mAnotherOnClickListener);
 
         mViewPhoto = (ViewCircle) mViewMain.findViewById(R.id.watch_finish_photo);
+
+        TextView name = (TextView) mViewMain.findViewById(R.id.watch_finish_name);
+        name.setText(deviceName);
 
         return mViewMain;
     }

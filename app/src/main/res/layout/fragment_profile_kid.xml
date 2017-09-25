@@ -7,76 +7,91 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_weight="4">
+        android:layout_height="match_parent">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/profile_kid_photo_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewCircle
-            android:id="@+id/profile_kid_photo"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/profile_kid_photo_sponge"
-            android:layout_alignStart="@+id/profile_kid_photo_sponge"
-            android:layout_gravity="center"
-            app:crossWidth="2dp"
-            app:strokeColorNormal="@color/color_orange" />
-    </RelativeLayout>
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="10dp"
-        android:layout_weight="1"
-        android:background="@drawable/contact_background">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="4">
 
-        <EditText
-            android:id="@+id/profile_kid_name"
-            style="@style/edittext_profile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:enabled="false"
-            android:hint="@string/profile_kid_name" />
-    </LinearLayout>
+                <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                    android:id="@+id/profile_kid_photo_sponge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:shrinkWidth="0.7" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="40dp"
-        android:layout_weight="3" />
+                <com.kidsdynamic.swing.androidswingapp.ViewCircle
+                    android:id="@+id/profile_kid_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignEnd="@+id/profile_kid_photo_sponge"
+                    android:layout_alignStart="@+id/profile_kid_photo_sponge"
+                    android:layout_gravity="center"
+                    app:crossWidth="2dp"
+                    app:strokeColorNormal="@color/color_orange" />
+            </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/contact_background">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/profile_kid_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
+                <EditText
+                    android:id="@+id/profile_kid_name"
+                    style="@style/edittext_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:enabled="false"
+                    android:hint="@string/profile_kid_name" />
+            </LinearLayout>
 
-        <Button
-            android:id="@+id/profile_kid_remove"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/profile_kid_sponge"
-            android:layout_alignStart="@+id/profile_kid_sponge"
-            android:layout_centerVertical="true"
-            android:text="@string/profile_kid_remove" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="40dp"
+                android:layout_weight="3" />
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
+                <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                    android:id="@+id/profile_kid_sponge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:shrinkWidth="0.7" />
+
+                <Button
+                    android:id="@+id/profile_kid_remove"
+                    style="@style/button_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/profile_kid_sponge"
+                    android:layout_alignStart="@+id/profile_kid_sponge"
+                    android:layout_centerVertical="true"
+                    android:text="@string/profile_kid_remove" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
 </LinearLayout>

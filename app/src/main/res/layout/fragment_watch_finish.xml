@@ -1,81 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/fragment_back"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="fitStart"
-        android:src="@mipmap/icon_left" />
+        android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_finish_photo_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
-
-        <com.kidsdynamic.swing.androidswingapp.ViewCircle
-            android:id="@+id/watch_finish_photo"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/watch_finish_photo_sponge"
-            android:layout_alignStart="@+id/watch_finish_photo_sponge"
-            android:layout_gravity="center"
-            app:strokeColorNormal="@color/color_orange" />
-    </RelativeLayout>
+            android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/watch_finish_name"
-        style="@style/textview_photo_name"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="7">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <com.kidsdynamic.swing.androidswingapp.ViewSponge
-            android:id="@+id/watch_finish_sponge"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:shrinkWidth="0.7" />
+                <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                    android:id="@+id/watch_finish_photo_sponge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:shrinkWidth="0.7" />
 
-        <Button
-            android:id="@+id/watch_finish_dashboard"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/watch_finish_sponge"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/watch_finish_sponge"
-            android:layout_marginBottom="10dp"
-            android:text="@string/watch_finish_dashboard" />
+                <com.kidsdynamic.swing.androidswingapp.ViewCircle
+                    android:id="@+id/watch_finish_photo"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_alignEnd="@+id/watch_finish_photo_sponge"
+                    android:layout_alignStart="@+id/watch_finish_photo_sponge"
+                    android:layout_gravity="center"
+                    app:strokeColorNormal="@color/color_orange" />
+            </RelativeLayout>
 
-        <Button
-            android:id="@+id/watch_finish_another"
-            style="@style/button_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/watch_finish_sponge"
-            android:layout_alignStart="@+id/watch_finish_sponge"
-            android:layout_below="@+id/watch_finish_dashboard"
-            android:layout_marginBottom="10dp"
-            android:text="@string/watch_finish_another" />
+            <TextView
+                android:id="@+id/watch_finish_name"
+                style="@style/textview_photo_name"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:layout_gravity="center"/>
 
-    </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="7">
+
+                <com.kidsdynamic.swing.androidswingapp.ViewSponge
+                    android:id="@+id/watch_finish_sponge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    app:shrinkWidth="0.7" />
+
+                <Button
+                    android:id="@+id/watch_finish_dashboard"
+                    style="@style/button_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/watch_finish_sponge"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignStart="@+id/watch_finish_sponge"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/watch_finish_dashboard" />
+
+                <Button
+                    android:id="@+id/watch_finish_another"
+                    style="@style/button_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/watch_finish_sponge"
+                    android:layout_alignStart="@+id/watch_finish_sponge"
+                    android:layout_below="@+id/watch_finish_dashboard"
+                    android:layout_marginBottom="10dp"
+                    android:text="@string/watch_finish_another" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
