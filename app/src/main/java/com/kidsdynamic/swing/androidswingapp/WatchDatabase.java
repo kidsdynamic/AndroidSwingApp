@@ -60,6 +60,7 @@ class WatchDatabase {
     private static String OUTDOOR_STEP = "OUTDOOR_STEP";
     private static String BATTERY_LIFE = "BATTERY_LIFE";
     private static String DATE_RECEIVED = "DATE_RECEIVED";
+    private static String FIRMWARE_VERSION = "FIRMWARE_VERSION";
 
 
     static final String CREATE_USER_TABLE =
@@ -83,6 +84,7 @@ class WatchDatabase {
                     DATE_CREATED + " INTEGER NOT NULL, " +
                     MAC_ID + " TEXT NOT NULL, " +
                     USER_ID + " INTEGER NOT NULL, " +
+                    FIRMWARE_VERSION + " TEXT, " +
                     PROFILE + " TEXT)";
 
     static final String CREATE_UPLOAD_TABLE =
@@ -239,6 +241,7 @@ class WatchDatabase {
         contentValues.put(MAC_ID, kid.mMacId);
         contentValues.put(USER_ID, kid.mUserId);
         contentValues.put(PROFILE, kid.mProfile);
+        contentValues.put(FIRMWARE_VERSION, kid.mFirmwareVersion);
 
         return mDatabase.insert(TABLE_KIDS, null, contentValues);
     }
@@ -252,6 +255,7 @@ class WatchDatabase {
         contentValues.put(MAC_ID, kid.mMacId);
         contentValues.put(USER_ID, kid.mUserId);
         contentValues.put(PROFILE, kid.mProfile);
+        contentValues.put(FIRMWARE_VERSION, kid.mFirmwareVersion);
 
         return mDatabase.update(TABLE_KIDS, contentValues, ID + "=" + kid.mId + " AND " + USER_ID + "=" + kid.mUserId, null);
     }
@@ -321,13 +325,14 @@ class WatchDatabase {
 
     private WatchContact.Kid cursorToKid(Cursor cursor) {
         WatchContact.Kid item = new WatchContact.Kid();
-
         item.mId = cursor.getInt(0);
         item.mName = cursor.getString(1);
         item.mDateCreated = cursor.getLong(2);
         item.mMacId = cursor.getString(3);
         item.mUserId = cursor.getInt(4);
-        item.mProfile = cursor.getString(5);
+        item.mFirmwareVersion = cursor.getString(5);
+        item.mProfile = cursor.getString(6);
+
 
         return item;
     }

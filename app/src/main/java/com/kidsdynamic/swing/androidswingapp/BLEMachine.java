@@ -19,6 +19,7 @@ class BLEMachine extends BLEControl {
     private onSearchListener mOnSearchListener = null;      // 搜尋裝置時的callback
     private onSyncListener mOnSyncListener = null;          // 同步時的callback
     private onBatteryListener mOnBatteryListener = null;    // 取得電量時的callback
+    private onFirmwareListener mOnFirmwareListener = null;    // 取得電量時的callback
     private boolean mRunning = false;                       // 狀態機是否運行中
     private ArrayList<WatchActivityRaw> mActivities;        // 同步時，由手表取得activity的暫存列表
 
@@ -76,6 +77,7 @@ class BLEMachine extends BLEControl {
     private static final int STATE_PRE_INIT = 13;
     private static final int STATE_BYPASS_ALERT = 14;
     private static final int STATE_CANCEL = 15;
+    private static final int STATE_GET_FIRMWARE_VERSION = 16;
 
     private Device mRelationDevice = new Device();          // 狀態機當前使用的手表
     private int mState;                                     // 狀態機的狀態
@@ -139,7 +141,7 @@ class BLEMachine extends BLEControl {
                         mRelationDevice.mState.mFoundSearchAddress = false;
                         Scan(true);
 
-                    } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery || mRelationDevice.mAction.mSendEvent) {
+                    } else if (mRelationDevice.mAction.mSync || mRelationDevice.mAction.mBattery || mRelationDevice.mAction.mFirmware || mRelationDevice.mAction.mSendEvent) {
                         setTimeout(10000);
                         //if (GetBondState(mRelationDevice.mAddress)) {
                         EnableBondStateReceiver(false);
@@ -202,6 +204,11 @@ class BLEMachine extends BLEControl {
                             mState = STATE_SET_TIME;
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.ACCEL_ENABLE, new byte[]{1});
                             Write(BLECustomAttributes.WATCH_SERVICE, BLECustomAttributes.TIME, timeInByte);
+                        } else if(mRelationDevice.mAction.mFirmware) {
+                            setTimeout(4500);
+                            mState = STATE_GET_FIRMWARE_VERSION;
+                            mRelationDevice.mState.mFirmwareUpdated = false;
+                            Read(BLECustomAttributes.DEVICE_SERVICE, BLECustomAttributes.FIRMWARE_VERSION);
                         } else {
                             setTimeout(4500);
                             mState = STATE_GET_BATTERY;
@@ -372,6 +379,16 @@ class BLEMachine extends BLEControl {
                         syncFailProcess();
                     }
                     break;
+
+                case STATE_GET_FIRMWARE_VERSION:
+                    if(mRelationDevice.mState.mFirmwareUpdated) {
+                        mRelationDevice.mAction.mFirmware = false;
+                        Disconnect();
+                        mOnFirmwareListener.onFirmwareVersion(new String(mRelationDevice.mState.mFirmwareVersion));
+                        mState = STATE_INIT;
+                    }
+
+                    break;
             }
 
             if (mHandler != null)
@@ -408,6 +425,10 @@ class BLEMachine extends BLEControl {
 
     interface onBatteryListener {
         void onBattery(byte value);
+    }
+
+    interface onFirmwareListener {
+        void onFirmwareVersion(String value);
     }
 
     /**
@@ -490,6 +511,18 @@ class BLEMachine extends BLEControl {
         return 0;
     }
 
+    /**
+     * 取得Device Firmware Version
+     * @return always 0
+     */
+    int FirmwareVersion(onFirmwareListener listener, String macAddress) {
+        mOnFirmwareListener = listener;
+        mRelationDevice = new Device("Swing", macAddress, 0);
+        Log.d("In", "Inerhere");
+        mRelationDevice.mAction.mFirmware = true;
+        return 0;
+    }
+
     boolean Cancel() {
         mRelationDevice.mAction.mCancel = true;
         return true;
@@ -511,11 +544,13 @@ class BLEMachine extends BLEControl {
         int mRssi;
         Action mAction;
         State mState;
+        String mFirmwareVersion;
 
         class Action {
             int mScanTime;
             boolean mSync;
             boolean mBattery;
+            boolean mFirmware;
             boolean mSendEvent;
             boolean mCancel;
         }
@@ -525,12 +560,14 @@ class BLEMachine extends BLEControl {
             boolean mConnected;
             boolean mDiscovered;
             byte[] mAddress;
+            byte[] mFirmwareVersion;
             byte[] mHeader;
             byte[] mTime;
             byte[] mData1;
             byte[] mData2;
             boolean mFoundSearchAddress;
             boolean mBatteryUpdated;
+            boolean mFirmwareUpdated;
             byte mBattery;
             boolean mAlertTimeDone;
             boolean mAlertDataDone;
@@ -542,6 +579,7 @@ class BLEMachine extends BLEControl {
             mAction.mSync = false;
             mAction.mSendEvent = false;
             mAction.mBattery = false;
+            mAction.mFirmware = false;
             mAction.mCancel = false;
             mState.mBonded = false;
             mState.mConnected = false;
@@ -554,6 +592,7 @@ class BLEMachine extends BLEControl {
         Device() {
             mName = "";
             mAddress = "";
+            mFirmwareVersion = "";
             mRssi = 0;
             mAction = new Action();
             mState = new State();
@@ -563,6 +602,16 @@ class BLEMachine extends BLEControl {
         Device(String name, String address, int rssi) {
             mName = name;
             mAddress = address;
+            mRssi = rssi;
+            mAction = new Action();
+            mState = new State();
+            resetFlag();
+        }
+
+        Device(String name, String address, String firmwareVersion, int rssi) {
+            mName = name;
+            mAddress = address;
+            mFirmwareVersion = firmwareVersion;
             mRssi = rssi;
             mAction = new Action();
             mState = new State();
@@ -658,6 +707,16 @@ class BLEMachine extends BLEControl {
 
                     mRelationDevice.mState.mBatteryUpdated = true;
                 }
+            } else if (service.toString().equals(BLECustomAttributes.DEVICE_SERVICE)) {
+                Log.d("INDEVICe", "INDEVICe " + characteristic.toString());
+                if(characteristic.toString().equals(BLECustomAttributes.FIRMWARE_VERSION)) {
+                    if (value != null) {
+                        Log.d("FIrmware", new String(value));
+                        mRelationDevice.mState.mFirmwareVersion = value;
+                    }
+                    mRelationDevice.mState.mFirmwareUpdated = true;
+                }
+
             }
         }
 

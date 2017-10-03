@@ -25,6 +25,7 @@ public class ServerGson {
         String name;
         String dateCreated;
         String macId;
+        String firmwareVersion;
         String profile;
         userData parent;
     }
@@ -236,15 +237,25 @@ public class ServerGson {
             private static class c {
                 String name;
                 String macId;
+                String firmwareVersion;
 
                 c(String pName, String pMacId) {
                     name = pName;
                     macId = pMacId;
                 }
+                c(String pName, String pMacId, String pFirmwareVersion) {
+                    name = pName;
+                    macId = pMacId;
+                    firmwareVersion = pFirmwareVersion;
+                }
             }
 
             public static String toJson(String pName, String pMacId) {
                 return new Gson().toJson(new c(pName, pMacId));
+            }
+
+            public static String toJson(String pName, String pMacId, String firmwareVersion) {
+                return new Gson().toJson(new c(pName, pMacId, firmwareVersion));
             }
 
             public static kidData fromJson(String json) {

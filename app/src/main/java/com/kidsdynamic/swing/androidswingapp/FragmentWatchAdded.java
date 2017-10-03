@@ -1,6 +1,7 @@
 package com.kidsdynamic.swing.androidswingapp;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ public class FragmentWatchAdded extends ViewFragment {
         mDevice = mActivityMain.mContactStack.isEmpty() ?
                 new WatchContact.Kid() :
                 (WatchContact.Kid) mActivityMain.mContactStack.pop();
+
+        Log.d("Register Device", mDevice.mFirmwareVersion);
     }
 
     @Override

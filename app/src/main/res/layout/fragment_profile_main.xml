@@ -71,7 +71,6 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
-                    android:visibility="gone"
                     app:crossColor="@color/color_white"
                     app:crossRatio="0.2"
                     app:crossWidth="2dp"
@@ -99,8 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/profile_main_shared"
-            android:visibility="invisible" />
+            android:text="@string/profile_main_shared" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -130,8 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/profile_main_request_to"
-            android:visibility="invisible" />
+            android:text="@string/profile_main_request_to" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"
@@ -152,7 +149,6 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="5dp"
                     android:layout_marginStart="5dp"
-                    android:visibility="gone"
                     app:crossColor="@color/color_white"
                     app:crossRatio="0.2"
                     app:crossWidth="2dp"
@@ -180,8 +176,7 @@
             style="@style/textview_profile_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:visibility="invisible" />
+            android:gravity="center" />
 
         <HorizontalScrollView
             android:layout_width="wrap_content"

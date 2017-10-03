@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.idescout.sql.SqlScoutServer;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -105,7 +106,10 @@ public class ActivityMain extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        SqlScoutServer.create(this, getPackageName());
+
+        if(BuildConfig.DEBUG) {
+            SqlScoutServer.create(this, getPackageName());
+        }
         mContext = this;
         mConfig = new ActivityConfig(this, null);
 

@@ -49,6 +49,7 @@ public class WatchContact implements Serializable {
         public String mName;
         public long mDateCreated;
         public String mMacId;
+        public String mFirmwareVersion;
         public String mProfile;
         public int mUserId;
         public boolean mBound = false;
@@ -61,6 +62,7 @@ public class WatchContact implements Serializable {
             mMacId = "";
             mUserId = 0;
             mProfile = "";
+            mFirmwareVersion = "";
 
             mBound = false;
         }
@@ -73,6 +75,7 @@ public class WatchContact implements Serializable {
             mMacId = "";
             mUserId = 0;
             mProfile = "";
+            mFirmwareVersion = "";
             mBound = false;
         }
 
