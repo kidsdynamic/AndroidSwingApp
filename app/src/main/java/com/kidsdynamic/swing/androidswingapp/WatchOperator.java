@@ -196,6 +196,10 @@ public class WatchOperator {
         mWatchDatabase.UploadBatteryAdd(battery);
     }
 
+    void updateFirmwareVersion(String firmwareVersion, String macId) {
+        mWatchDatabase.UpdateFirmwareVersion(firmwareVersion, macId);
+    }
+
     static long getTimeStamp(String dateString) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
         format.setTimeZone(TimeZone.getTimeZone("UTC"));

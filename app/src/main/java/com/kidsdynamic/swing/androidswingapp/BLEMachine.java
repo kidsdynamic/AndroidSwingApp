@@ -708,10 +708,8 @@ class BLEMachine extends BLEControl {
                     mRelationDevice.mState.mBatteryUpdated = true;
                 }
             } else if (service.toString().equals(BLECustomAttributes.DEVICE_SERVICE)) {
-                Log.d("INDEVICe", "INDEVICe " + characteristic.toString());
                 if(characteristic.toString().equals(BLECustomAttributes.FIRMWARE_VERSION)) {
                     if (value != null) {
-                        Log.d("FIrmware", new String(value));
                         mRelationDevice.mState.mFirmwareVersion = value;
                     }
                     mRelationDevice.mState.mFirmwareUpdated = true;

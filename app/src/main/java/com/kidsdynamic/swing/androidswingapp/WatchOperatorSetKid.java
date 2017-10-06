@@ -123,6 +123,7 @@ public class WatchOperatorSetKid {
 
             mServerMachine.deviceFirmwareUpload(firmwareVersion, ServerMachine.getMacID(mKid.mMacId));
             mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mKid.mMacId));
+            mOperator.updateFirmwareVersion(firmwareVersion, ServerMachine.getMacID(mKid.mMacId));
 
         }
     };

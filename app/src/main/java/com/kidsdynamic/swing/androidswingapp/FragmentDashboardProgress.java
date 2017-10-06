@@ -481,8 +481,12 @@ public class FragmentDashboardProgress extends ViewFragment {
     BLEMachine.onFirmwareListener mOnFirmwareListener = new BLEMachine.onFirmwareListener() {
         @Override
         public void onFirmwareVersion(String firmwareVersion) {
+            Log.d("Firmwareversion: ",  firmwareVersion + " " + ServerMachine.getMacID(mSearchResult.mAddress));
+
             mSearchResult.mFirmwareVersion = firmwareVersion;
             mActivityMain.mServiceMachine.deviceFirmwareUpload(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
+//            firmwareVersion = firmwareVersion.replace("-A", "-J");
+            mActivityMain.mOperator.updateFirmwareVersion(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
         }
     };
 

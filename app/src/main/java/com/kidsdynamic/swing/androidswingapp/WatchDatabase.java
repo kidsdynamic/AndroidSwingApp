@@ -373,6 +373,13 @@ class WatchDatabase {
         return mDatabase.insert(TABLE_BATTERY, null, contentValues);
     }
 
+    long UpdateFirmwareVersion(String firmwareVersion, String macId) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(FIRMWARE_VERSION, firmwareVersion);
+        return mDatabase.update(TABLE_KIDS, contentValues, MAC_ID + "='" + macId + "'", null);
+    }
+
     long UploadItemDone(WatchActivityRaw item) {
         ContentValues contentValues = new ContentValues();
 

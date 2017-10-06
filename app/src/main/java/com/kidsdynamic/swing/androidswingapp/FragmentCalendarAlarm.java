@@ -42,6 +42,9 @@ public class FragmentCalendarAlarm extends ViewFragment {
         mLineHeight = getResources().getDisplayMetrics().heightPixels / 16;
         mLineMarginStart = getResources().getDisplayMetrics().widthPixels / 16;
         mLineMarginEnd = getResources().getDisplayMetrics().widthPixels / 16;
+        if (!mActivityMain.mEventStack.isEmpty()) {
+            mEvent = mActivityMain.mEventStack.pop();
+        }
     }
 
     @Override
@@ -53,7 +56,8 @@ public class FragmentCalendarAlarm extends ViewFragment {
         
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_alert_container);
 
-        if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
+        WatchContact.Kid kid = mActivityMain.mOperator.getKid(mEvent.mKids.get(0));
+        if(kid.mFirmwareVersion != null && kid.mFirmwareVersion.contains("-J")) {
             addSeparator();
             addTitle(getResources().getString(R.string.calendar_alarm_agenda));
             addAlarm(WatchEvent.AlarmList_ja[0], mLineListener);
@@ -90,7 +94,6 @@ public class FragmentCalendarAlarm extends ViewFragment {
             for (int idx = 10; idx < WatchEvent.AlarmList.length; idx++)
                 addAlarm(WatchEvent.AlarmList[idx], mLineListener);
         }
-
 
         return mViewMain;
     }
