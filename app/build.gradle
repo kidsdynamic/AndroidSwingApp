@@ -7,8 +7,8 @@ android {
         applicationId "com.kidsdynamic.swing.android"
         minSdkVersion 19
         targetSdkVersion 24
-        versionCode 44
-        versionName "1.1.5"
+        versionCode 46
+        versionName "1.1.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

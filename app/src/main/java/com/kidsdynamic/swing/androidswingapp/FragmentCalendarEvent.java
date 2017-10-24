@@ -18,11 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -32,8 +30,6 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -589,7 +585,7 @@ public class FragmentCalendarEvent extends ViewFragment {
     private boolean loadAlarm() {
         WatchEvent.Alarm[] alertList;
         if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
-            alertList = WatchEvent.AlarmList_ja;
+            alertList = WatchEvent.AlarmList_new;
         } else {
             alertList = WatchEvent.AlarmList;
         }

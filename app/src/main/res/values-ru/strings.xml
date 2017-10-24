@@ -369,6 +369,8 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">Синхронизация</string>
+    <string name="event_alarm_lesson_time">Tiempo de la lección</string>
+    <string name="event_alarm_time_to_go_home">Tiempo de ir a casa</string>
 
 
 </resources>

@@ -485,7 +485,7 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             mSearchResult.mFirmwareVersion = firmwareVersion;
             mActivityMain.mServiceMachine.deviceFirmwareUpload(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
-//            firmwareVersion = firmwareVersion.replace("-A", "-J");
+            firmwareVersion = firmwareVersion.replace("KDV00", "KDV01");
             mActivityMain.mOperator.updateFirmwareVersion(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
         }
     };

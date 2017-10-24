@@ -369,5 +369,7 @@
     <string name="dialog_sync_header">Sync Data</string>
     <string name="dialog_sync_skip_button">Skip</string>
     <string name="dialog_sync_sync_button">接続</string>
+    <string name="event_alarm_lesson_time">習い事の時間です</string>
+    <string name="event_alarm_time_to_go_home">お家に帰る時間です</string>
 
 </resources>
