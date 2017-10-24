@@ -15,8 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 import static android.util.TypedValue.COMPLEX_UNIT_SP;
 
 /**
@@ -42,6 +40,9 @@ public class FragmentCalendarAlarm extends ViewFragment {
         mLineHeight = getResources().getDisplayMetrics().heightPixels / 16;
         mLineMarginStart = getResources().getDisplayMetrics().widthPixels / 16;
         mLineMarginEnd = getResources().getDisplayMetrics().widthPixels / 16;
+        if (!mActivityMain.mEventStack.isEmpty()) {
+            mEvent = mActivityMain.mEventStack.pop();
+        }
     }
 
     @Override
@@ -53,23 +54,26 @@ public class FragmentCalendarAlarm extends ViewFragment {
         
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_alert_container);
 
-        if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
+        WatchContact.Kid kid = mActivityMain.mOperator.getKid(mEvent.mKids.get(0));
+        if(kid.mFirmwareVersion != null && kid.mFirmwareVersion.contains("KDV01")) {
             addSeparator();
             addTitle(getResources().getString(R.string.calendar_alarm_agenda));
-            addAlarm(WatchEvent.AlarmList_ja[0], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[0], mLineListener);
             addTitle(getResources().getString(R.string.calendar_alarm_clock));
-            addAlarm(WatchEvent.AlarmList_ja[1], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[1], mLineListener);
             addRoutine(getResources().getString(R.string.calendar_alarm_morning));
-            addAlarm(WatchEvent.AlarmList_ja[2], mLineListener);
-            addAlarm(WatchEvent.AlarmList_ja[3], mLineListener);
-            addAlarm(WatchEvent.AlarmList_ja[4], mLineListener);
-            addAlarm(WatchEvent.AlarmList_ja[5], mLineListener);
-            addAlarm(WatchEvent.AlarmList_ja[6], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[2], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[3], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[4], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[5], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[6], mLineListener);
             addRoutine(getResources().getString(R.string.calendar_alarm_bed));
-            addAlarm(WatchEvent.AlarmList_ja[7], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[7], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[8], mLineListener);
+            addAlarm(WatchEvent.AlarmList_new[9], mLineListener);
             addRoutine(getResources().getString(R.string.calendar_alarm_activities));
-            for (int idx = 8; idx < WatchEvent.AlarmList_ja.length; idx++)
-                addAlarm(WatchEvent.AlarmList_ja[idx], mLineListener);
+            for (int idx = 10; idx < WatchEvent.AlarmList_new.length; idx++)
+                addAlarm(WatchEvent.AlarmList_new[idx], mLineListener);
         } else {
             addSeparator();
             addTitle(getResources().getString(R.string.calendar_alarm_agenda));
@@ -90,7 +94,6 @@ public class FragmentCalendarAlarm extends ViewFragment {
             for (int idx = 10; idx < WatchEvent.AlarmList.length; idx++)
                 addAlarm(WatchEvent.AlarmList[idx], mLineListener);
         }
-
 
         return mViewMain;
     }

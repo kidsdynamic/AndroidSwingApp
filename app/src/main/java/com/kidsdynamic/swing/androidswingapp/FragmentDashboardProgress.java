@@ -460,6 +460,7 @@ public class FragmentDashboardProgress extends ViewFragment {
                     mActivityMain.mOperator.pushUploadItem(res);
                 }
                 mSyncState = SYNC_STATE_SUCCESS;
+                mActivityMain.mBLEMachine.FirmwareVersion(mOnFirmwareListener, mSearchResult.mAddress);
             } else {
                 // Todo : first connect?
                 mSyncState = SYNC_STATE_FAIL;
@@ -474,6 +475,18 @@ public class FragmentDashboardProgress extends ViewFragment {
             mActivityMain.mOperator.mFocusBatteryValue = battery.batteryLife;
 
             mActivityMain.mOperator.pushUploadBattery(battery);
+        }
+    };
+
+    BLEMachine.onFirmwareListener mOnFirmwareListener = new BLEMachine.onFirmwareListener() {
+        @Override
+        public void onFirmwareVersion(String firmwareVersion) {
+            Log.d("Firmwareversion: ",  firmwareVersion + " " + ServerMachine.getMacID(mSearchResult.mAddress));
+
+            mSearchResult.mFirmwareVersion = firmwareVersion;
+            mActivityMain.mServiceMachine.deviceFirmwareUpload(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
+            firmwareVersion = firmwareVersion.replace("KDV00", "KDV01");
+            mActivityMain.mOperator.updateFirmwareVersion(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
         }
     };
 

@@ -330,6 +330,8 @@
     <string name="event_alarm_dinner_time">Dinner Time</string>
     <string name="event_alarm_afternoon_snack_time">Afternoon Snack Time</string>
     <string name="event_alarm_review_the_backpack">Review the Backpack</string>
+    <string name="event_alarm_lesson_time">Lesson Time</string>
+    <string name="event_alarm_time_to_go_home">Time to go Home</string>
 
     <!-- Events Repeat -->
     <string name="event_repeat_monthly">Monthly</string>

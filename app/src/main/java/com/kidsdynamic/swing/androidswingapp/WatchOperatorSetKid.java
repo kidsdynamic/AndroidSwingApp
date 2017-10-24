@@ -46,6 +46,7 @@ public class WatchOperatorSetKid {
             mKid.mName = response.name;
             mKid.mDateCreated = WatchOperator.getTimeStamp(response.dateCreated);
             mKid.mMacId = response.macId;
+            mKid.mFirmwareVersion = response.firmwareVersion;
             mKid.mUserId = response.parent.id;
             mOperator.setFocusKid(mKid);
 
@@ -54,7 +55,7 @@ public class WatchOperatorSetKid {
             if (mKid.mProfile == null)
                 mKid.mProfile = "";
 
-            mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mKid.mMacId));
+            mBLEMachine.FirmwareVersion(mOnFirmwareListener, ServerMachine.getMacAddress(mKid.mMacId));
         }
 
         @Override
@@ -111,6 +112,18 @@ public class WatchOperatorSetKid {
 
         @Override
         public void onBattery(WatchBattery battery) {
+
+        }
+    };
+
+    BLEMachine.onFirmwareListener mOnFirmwareListener = new BLEMachine.onFirmwareListener() {
+        @Override
+        public void onFirmwareVersion(String firmwareVersion) {
+            mKid.mFirmwareVersion = firmwareVersion;
+
+            mServerMachine.deviceFirmwareUpload(firmwareVersion, ServerMachine.getMacID(mKid.mMacId));
+            mBLEMachine.Sync(mOnSyncListener, ServerMachine.getMacAddress(mKid.mMacId));
+            mOperator.updateFirmwareVersion(firmwareVersion, ServerMachine.getMacID(mKid.mMacId));
 
         }
     };

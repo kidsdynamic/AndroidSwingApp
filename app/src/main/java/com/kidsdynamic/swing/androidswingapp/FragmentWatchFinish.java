@@ -32,9 +32,6 @@ public class FragmentWatchFinish extends ViewFragment {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
 
-        InputMethodManager imm = (InputMethodManager) mActivityMain.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
-
         Bundle arg = getArguments();
         if (arg != null) {
             mAvatarFilename = getArguments().getString(ViewFragment.BUNDLE_KEY_AVATAR, "");
@@ -46,8 +43,13 @@ public class FragmentWatchFinish extends ViewFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_watch_finish, container, false);
 
-        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
-        mViewBack.setOnClickListener(mBackOnClickListener);
+        InputMethodManager imm = (InputMethodManager) mActivityMain.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.hideSoftInputFromWindow(mViewMain.getWindowToken(), 0);
+        }
+
+//        mViewBack = (ImageView) mViewMain.findViewById(R.id.fragment_back);
+//        mViewBack.setOnClickListener(mBackOnClickListener);
 
         mViewDashboard = (Button)mViewMain.findViewById(R.id.watch_finish_dashboard);
         mViewDashboard.setOnClickListener(mDashboardOnClickListener);

@@ -78,6 +78,8 @@ public class ServerMachine {
 
     private final static String CMD_DEVICE_BATTERY_LIFE = SERVER_ADDRESS + "/kids/batteryStatus";
 
+    private final static String CMD_DEVICE_FIRMWARE_VERSION = SERVER_ADDRESS + "/fw/firmwareVersion";
+
     private final static String CMD_GET_AVATAR = BuildConfig.PHOTO_BASE_URL;
 
     final static String REQUEST_TAG = "SERVER_MACHINE";
@@ -435,6 +437,20 @@ public class ServerMachine {
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_DEVICE_BATTERY_LIFE, map, null), CMD_DEVICE_BATTERY_LIFE, listener));
     }
 
+    public interface deviceFirmwareUploadListener {
+        void onSuccess(int statusCode);
+        void onFail(String command, int statudCode);
+    }
+
+    public void deviceFirmwareUpload(String firmwareVersion, String macId) {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("json", ServerGson.kids.add.toJson(null, macId, firmwareVersion));
+        Log.d("Firmware Data", "JSON " + ServerGson.kids.add.toJson(null, macId, firmwareVersion));
+
+        mTaskQueue.add(new TaskItem(NewRequest(Request.Method.PUT, CMD_DEVICE_FIRMWARE_VERSION, map, null), CMD_DEVICE_FIRMWARE_VERSION, null));
+    }
+
     public interface eventAddListener {
         void onSuccess(int statusCode, ServerGson.event.add.response response);
 
@@ -445,7 +461,6 @@ public class ServerMachine {
                          String color, String description, int alert, String repeat,
                          int timezoneOffset, List<String> todo) {
         Map<String, String> map = new HashMap<>();
-        Log.d("TEST", "JSON " + ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, repeat, timezoneOffset, todo));
         map.put("json", ServerGson.event.add.toJson(kidId, name, startDate, endDate, color, description, alert, repeat, timezoneOffset, todo));
         mTaskQueue.add(new TaskItem(NewRequest(Request.Method.POST, CMD_EVENT_ADD, map, null), CMD_EVENT_ADD, listener));
     }
