@@ -554,4 +554,10 @@ public class ActivityMain extends AppCompatActivity
 
         mFirebaseAnalytics.logEvent(logName, bundle);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("Result", String.valueOf(requestCode));
+    }
 }

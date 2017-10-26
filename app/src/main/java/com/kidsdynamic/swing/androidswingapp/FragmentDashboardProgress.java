@@ -2,9 +2,15 @@ package com.kidsdynamic.swing.androidswingapp;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,17 +61,52 @@ public class FragmentDashboardProgress extends ViewFragment {
     private int mSyncState = SYNC_STATE_INIT;
     private boolean mActivityUpdateFinish = false;
     private boolean mServerSyncFinish = false;
+    private BluetoothAdapter mBluetoothAdapter;
+
+    private int REQUEST_ENABLE_BT = 1;
+    private boolean devicesEnabled = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivityMain = (ActivityMain) getActivity();
+
+        mBluetoothAdapter = ((BluetoothManager) mActivityMain.getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter();
+        if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            devicesEnabled = false;
+        }
+
+        final LocationManager manager = (LocationManager) mActivityMain.getSystemService(Context.LOCATION_SERVICE);
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Log.d("Message", "Your GPS seems to be disabled, do you want to enable it?");
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, final int id) {
+                            dialog.cancel();
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
+
+            devicesEnabled = false;
+        }
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mViewMain = inflater.inflate(R.layout.fragment_dashboard_progress, container, false);
-
         mViewProgress = (ViewCircle) mViewMain.findViewById(R.id.dashboard_progress_progress);
 
         mViewLabel = (TextView) mViewMain.findViewById(R.id.dashboard_progress_title);
