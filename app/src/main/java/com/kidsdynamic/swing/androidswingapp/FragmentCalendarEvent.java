@@ -405,7 +405,10 @@ public class FragmentCalendarEvent extends ViewFragment {
         @Override
         public void onClick(View view) {
             mActivityMain.mEventStack.push(mEvent);
-            mActivityMain.selectFragment(FragmentCalendarAlarm.class.getName(), null);
+
+            Bundle bundle = new Bundle();
+            bundle.putInt("kidId", mEvent.mKids.get(0));
+            mActivityMain.selectFragment(FragmentCalendarAlarm.class.getName(), bundle);
         }
     };
 

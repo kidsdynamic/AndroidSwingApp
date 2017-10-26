@@ -31,6 +31,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
     private int mLineMarginEnd = 10;
 
     private WatchEvent mEvent;
+    private int kidId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,9 +41,8 @@ public class FragmentCalendarAlarm extends ViewFragment {
         mLineHeight = getResources().getDisplayMetrics().heightPixels / 16;
         mLineMarginStart = getResources().getDisplayMetrics().widthPixels / 16;
         mLineMarginEnd = getResources().getDisplayMetrics().widthPixels / 16;
-        if (!mActivityMain.mEventStack.isEmpty()) {
-            mEvent = mActivityMain.mEventStack.pop();
-        }
+
+        kidId = getArguments().getInt("kidId");
     }
 
     @Override
@@ -54,7 +54,7 @@ public class FragmentCalendarAlarm extends ViewFragment {
         
         mViewContainer = (LinearLayout) mViewMain.findViewById(R.id.calendar_alert_container);
 
-        WatchContact.Kid kid = mActivityMain.mOperator.getKid(mEvent.mKids.get(0));
+        WatchContact.Kid kid = mActivityMain.mOperator.getKid(kidId);
         if(kid.mFirmwareVersion != null && kid.mFirmwareVersion.contains("KDV01")) {
             addSeparator();
             addTitle(getResources().getString(R.string.calendar_alarm_agenda));
