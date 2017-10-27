@@ -372,4 +372,5 @@
     <string name="dialog_sync_sync_button">Sincronizar</string>
     <string name="event_alarm_lesson_time">Время урока</string>
     <string name="event_alarm_time_to_go_home">Пора домой</string>
+    <string name="dashboard_progress_enable_gps">por favor active su GPS</string>
 </resources>

@@ -82,14 +82,14 @@ public class FragmentDashboardProgress extends ViewFragment {
         if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             Log.d("Message", "Your GPS seems to be disabled, do you want to enable it?");
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+            builder.setMessage(R.string.dashboard_progress_enable_gps)
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.watch_have_yes, new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
                             startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                         }
                     })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    .setNegativeButton(R.string.watch_have_no, new DialogInterface.OnClickListener() {
                         public void onClick(final DialogInterface dialog, final int id) {
                             dialog.cancel();
                         }
@@ -526,7 +526,6 @@ public class FragmentDashboardProgress extends ViewFragment {
 
             mSearchResult.mFirmwareVersion = firmwareVersion;
             mActivityMain.mServiceMachine.deviceFirmwareUpload(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
-            firmwareVersion = firmwareVersion.replace("KDV00", "KDV01");
             mActivityMain.mOperator.updateFirmwareVersion(firmwareVersion, ServerMachine.getMacID(mSearchResult.mAddress));
         }
     };

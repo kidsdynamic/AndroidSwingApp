@@ -371,6 +371,7 @@
     <string name="dialog_sync_sync_button">同步</string>
     <string name="event_alarm_lesson_time">課程時間</string>
     <string name="event_alarm_time_to_go_home">回家囉</string>
+    <string name="dashboard_progress_enable_gps">" 請啟動GPS"</string>
 
 </resources>
 

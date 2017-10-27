@@ -587,11 +587,14 @@ public class FragmentCalendarEvent extends ViewFragment {
 
     private boolean loadAlarm() {
         WatchEvent.Alarm[] alertList;
-        if(mActivityMain.language.equals(Locale.JAPAN.getLanguage())) {
+        WatchContact.Kid kid = mActivityMain.mOperator.getKid(mEvent.mKids.get(0));
+        if (kid.mFirmwareVersion != null && kid.mFirmwareVersion.contains("KDV01")) {
             alertList = WatchEvent.AlarmList_new;
         } else {
             alertList = WatchEvent.AlarmList;
+
         }
+
         for (WatchEvent.Alarm target : alertList) {
             if (target.mId == mEvent.mAlert) {
                 mEvent.mAlert = target.mId;
