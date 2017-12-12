@@ -10,8 +10,8 @@
     <string name="title_calendar">カレンダー</string>
     <string name="title_dashboard">運動記録</string>
     <string name="title_photo">写真</string>
-    <string name="title_profile">個人資料	</string>
-    <string name="title_option">オープション</string>
+    <string name="title_profile">プロフィール</string>
+    <string name="title_option">オプション</string>
     <string name="title_password">パスワード</string>
     <string name="title_request_from">からリクエストが来ました</string>
     <string name="title_request_to">リクエストを送信する</string>
@@ -78,7 +78,7 @@
     <string name="dashboard_progress_searching">貴方の時計を\n検索しています</string>
     <string name="dashboard_progress_found">貴方の時計\n見つけました。</string>
     <string name="dashboard_progress_sync_now">接続を始めます</string>
-    <string name="dashboard_progress_syncing">接続ています</string>
+    <string name="dashboard_progress_syncing">接続しています</string>
     <string name="dashboard_progress_completed">接続しました</string>
     <string name="dashboard_progress_dashboard">イベント・レコードを開きます</string>
     <string name="dashboard_progress_not_found">あなたの時計が\n見つかりません</string>
@@ -149,7 +149,7 @@
     <string name="profile_option_about">概要</string>
     <string name="profile_option_contact_us">お問い合わせ</string>
     <string name="profile_option_privacy_policy">個人情報保護政策</string>
-    <string name="profile_option_manual">説明書</string>
+    <string name="profile_option_manual">ユーザーガイド</string>
     <string name="profile_option_version">バージョン（版）</string>
 
     <!-- FragmentProfilePassword -->
